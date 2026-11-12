@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "cd client && npm ci",
+  "buildCommand": "cd client && npm run build && rm -rf dist/vercel && mkdir -p dist/vercel/admin && cp -r dist/admin/* dist/vercel/admin/ && cp dist/admin/favicon.ico dist/vercel/favicon.ico && cp dist/admin/apple-touch-icon.png dist/vercel/apple-touch-icon.png",
+  "outputDirectory": "client/dist/vercel",
+  "redirects": [
+    { "source": "/", "destination": "/admin/", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/admin/(.*)", "destination": "/admin/index.html" }
+  ]
+}
