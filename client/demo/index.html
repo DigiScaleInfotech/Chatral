@@ -1,0 +1,31 @@
+<!doctype html>
+<!-- Local test storefront: http://localhost:5600/?key=pk_...&api=http://localhost:4100 -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Store</title>
+  <style>
+    body { font-family: Georgia, serif; margin: 0; background: #fafafa; color: #222; }
+    header { padding: 20px 24px; background: #222; color: #fff; display: flex; gap: 20px; flex-wrap: wrap; }
+    header a { color: #ddd; }
+    main { padding: 24px; max-width: 900px; }
+    /* Hostile theme CSS: the widget must be unaffected (Shadow DOM). */
+    button { background: hotpink !important; border: 5px solid lime !important; font-size: 30px !important; }
+    div { line-height: 3; }
+  </style>
+</head>
+<body>
+  <header><b id="store">Demo store</b><a href="#" onclick="nav('/products/ring');return false">Product (SPA nav)</a><a href="#" onclick="nav('/checkout');return false">Checkout (SPA nav)</a></header>
+  <main><h1 id="title">Home</h1><p>This page has deliberately hostile CSS to check widget isolation.</p><button>Theme button</button></main>
+  <script>
+    const p = new URLSearchParams(location.search);
+    document.getElementById('store').textContent = p.get('name') || 'Demo store';
+    function nav(path) { history.pushState({}, '', path + location.search); document.getElementById('title').textContent = path; document.title = path; }
+    const s = document.createElement('script');
+    s.src = (p.get('api') || 'http://localhost:4100') + '/widget/chat.js';
+    s.async = true;
+    s.dataset.store = p.get('key') || '';
+    document.body.appendChild(s);
+  </script>
+</body>
+</html>

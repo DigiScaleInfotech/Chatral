@@ -1,0 +1,539 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// SUPER_ADMIN manages the whole platform. Everyone else gets per-store roles via StoreMember.
+enum GlobalRole {
+  SUPER_ADMIN
+  USER
+}
+
+enum StoreRole {
+  OWNER // everything incl. owners, key rotation, retention
+  ADMIN // settings, widget, triggers, members (not owners)
+  SUPERVISOR // all conversations, reassign, saved replies, reports
+  AGENT // own + unassigned conversations
+}
+
+enum Presence {
+  ONLINE
+  AWAY
+  OFFLINE
+}
+
+enum ConvFolder {
+  INBOX
+  TRASH // moved out of the inbox; restorable; permanent delete only from here or Spam
+  SPAM
+}
+
+enum ConvStatus {
+  OPEN
+  PENDING
+  RESOLVED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum SenderType {
+  VISITOR
+  AGENT
+  BOT // automated (trigger) messages
+  SYSTEM // assignment / status events
+  NOTE // internal agent notes, never sent to the visitor
+}
+
+enum ConfigStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum ExecStatus {
+  SCHEDULED
+  RUNNING
+  SUCCEEDED
+  SKIPPED
+  FAILED
+  CANCELLED
+}
+
+enum JobStatus {
+  PENDING
+  RUNNING
+  DONE
+  FAILED
+  CANCELLED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String
+  passwordHash String
+  role         GlobalRole    @default(USER)
+  isActive     Boolean       @default(true)
+  avatarUrl    String?
+  tokenVersion Int           @default(0) // bump to revoke all sessions
+  memberships  StoreMember[]
+  pushDevices  PushDevice[]
+  createdAt    DateTime      @default(now())
+}
+
+/// Phones registered by the mobile app for push notifications (Expo push tokens).
+model PushDevice {
+  id         String   @id @default(cuid())
+  userId     String
+  token      String   @unique // "ExponentPushToken[...]"; one row per phone
+  platform   String   // "ios" | "android"
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Store {
+  id                 String         @id @default(cuid())
+  name               String
+  publicKey          String         @unique
+  chatLinkId         String         @unique // 8-digit id for the direct "open chat" link, e.g. https://yourshop.com/#lc-01234567
+  previousKey        String?        @unique // still accepted until previousKeyExpires (key rotation grace)
+  previousKeyExpires DateTime?
+  allowedOrigins     String[]
+  timezone           String         @default("UTC")
+  isActive           Boolean        @default(true)
+  widgetEnabled       Boolean        @default(true) // master switch: false = widget hidden on every website
+  retentionDays      Int            @default(30)
+  notifyEmails       String[]
+  emailOnNewChat     Boolean        @default(true)
+  emailOnOffline     Boolean        @default(true)
+  emailConfig        String? // encrypted SMTP JSON; falls back to platform SMTP
+  publishedVersion   Int?
+  lastWidgetSeenAt   DateTime?
+  lastWidgetOrigin   String?
+  lastRejectedOrigin String?
+  lastRejectedAt     DateTime?
+  members            StoreMember[]
+  configs            WidgetConfig[]
+  visitors           Visitor[]
+  conversations      Conversation[]
+  triggers           Trigger[]
+  savedReplies       SavedReply[]
+  webhooks           Webhook[]
+  tickets            Ticket[]
+  shopifyDomain      String? // <handle>.myshopify.com
+  shopifyToken       String? // encrypted Admin API access token (ENC_KEY)
+  ticketSeq          Int            @default(0) // last ticket number issued (per-store #1, #2, ...)
+  createdAt          DateTime       @default(now())
+}
+
+model StoreMember {
+  userId         String
+  storeId        String
+  role           StoreRole
+  presence       Presence  @default(OFFLINE)
+  maxChats       Int       @default(10)
+  emailNotify    Boolean   @default(true)
+  lastAssignedAt DateTime?
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  store          Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, storeId])
+  @@index([storeId])
+}
+
+// One DRAFT row per store + immutable PUBLISHED versions. The embed snippet never changes.
+model WidgetConfig {
+  id          String       @id @default(cuid())
+  storeId     String
+  version     Int // 0 for the draft
+  status      ConfigStatus
+  config      Json
+  note        String?
+  createdById String?
+  createdAt   DateTime     @default(now())
+  store       Store        @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@unique([storeId, version])
+}
+
+model Visitor {
+  id               String            @id @default(cuid())
+  storeId          String
+  tokenHash        String // sha256 of the random token kept in the visitor's browser
+  name             String?
+  email            String?
+  firstSeenAt      DateTime          @default(now())
+  lastSeenAt       DateTime          @default(now())
+  sessionStartedAt DateTime          @default(now())
+  visits           Int               @default(1)
+  sessionPageViews Int               @default(0)
+  currentUrl       String?
+  currentTitle     String?
+  referrer         String?
+  device           String?
+  ip               String? // last IP seen (trigger conditions)
+  userAgent        String? // last browser user agent (trigger conditions)
+  country          String? // ISO country code, approximate (from IP)
+  city             String? // approximate (from IP); may be empty for some networks
+  region           String? // state/province name from the IP database; approximate, often absent
+  timezone         String? // IANA zone from the IP database; approximate
+  landingUrl       String? // first page ever seen (first-touch; never overwritten)
+  firstReferrer    String? // referrer on that first page (first-touch; never overwritten)
+  firstUtmSource   String? // first-touch UTM (campaign analytics; never overwritten)
+  firstUtmMedium   String?
+  firstUtmCampaign String?
+  utmSource        String? // current-session UTM (refreshed like `referrer` on each new session)
+  utmMedium        String?
+  utmCampaign      String?
+  isBot            Boolean           @default(false) // confirmed automated crawler / bot
+  trafficType      String            @default("HUMAN") // "HUMAN" | "BOT" | "UNKNOWN"
+  attributes       Json? // pre-chat answers: { key: { label, type, value } } (validated server-side)
+  bannedAt         DateTime? // set = this visitor may not send messages (enforced server-side)
+  bannedById       String?
+  banReason        String?
+  store            Store             @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  pageViews        VisitorPageView[]
+  conversations    Conversation[]
+
+  @@unique([storeId, tokenHash])
+  @@index([storeId, lastSeenAt])
+  @@index([storeId, isBot, lastSeenAt])
+}
+
+model Conversation {
+  id                   String       @id @default(cuid())
+  storeId              String
+  visitorId            String
+  status               ConvStatus   @default(OPEN)
+  priority             Priority     @default(NORMAL)
+  assigneeId           String?
+  tags                 String[]
+  isOffline            Boolean      @default(false) // started from the offline form
+  lastSeq              Int          @default(0)
+  // Retention: only qualifying visitor activity moves these.
+  lastActivityAt       DateTime     @default(now())
+  expiresAt            DateTime
+  lastMessageAt        DateTime     @default(now())
+  lastMessagePreview   String?
+  lastVisitorMessageAt DateTime?
+  lastAgentMessageAt   DateTime?
+  firstResponseAt      DateTime?
+  resolvedAt           DateTime?
+  unreadForAgent       Int          @default(0)
+  unreadForVisitor     Int          @default(0)
+  visitorDeliveredSeq  Int          @default(0)
+  visitorReadSeq       Int          @default(0)
+  agentReadSeq         Int          @default(0)
+  folder               ConvFolder   @default(INBOX)
+  folderChangedAt      DateTime?
+  createdAt            DateTime     @default(now())
+  store                Store        @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  visitor              Visitor      @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  messages             Message[]
+  attachments          Attachment[]
+
+  @@index([storeId, folder, status, lastMessageAt])
+  @@index([storeId, status, lastMessageAt])
+  @@index([storeId, assigneeId])
+  @@index([visitorId, expiresAt])
+  @@index([expiresAt])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  storeId        String
+  conversationId String
+  seq            Int
+  senderType     SenderType
+  senderId       String?
+  senderName     String?
+  senderAvatar   String?
+  body           String
+  meta           Json? // suggestedReplies, contact form, attachment ref
+  clientMsgId    String?
+  attachmentId   String?
+  triggerId      String?
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, seq])
+  @@unique([conversationId, clientMsgId])
+  @@index([storeId, createdAt])
+}
+
+model Attachment {
+  id             String       @id @default(cuid())
+  storeId        String
+  conversationId String
+  filename       String
+  mime           String
+  size           Int
+  storagePath    String
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+}
+
+enum ReplyAccess {
+  PUBLIC // whole store team; usable by triggers
+  PRIVATE // only the owner sees and uses it
+}
+
+model SavedReply {
+  id        String      @id @default(cuid())
+  storeId   String
+  shortcut  String
+  title     String
+  body      String
+  access    ReplyAccess @default(PUBLIC)
+  ownerId   String? // creator; required for PRIVATE
+  createdAt DateTime    @default(now())
+  store     Store       @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@unique([storeId, shortcut])
+  @@index([storeId, ownerId])
+}
+
+model Trigger {
+  id              String             @id @default(cuid())
+  storeId         String
+  name            String
+  description     String?
+  enabled         Boolean            @default(true)
+  kind            String             @default("BASIC") // BASIC | ADVANCED
+  event           String
+  delaySeconds    Int                @default(0)
+  timerFrom       String             @default("EVENT") // EVENT | LAST_VISITOR | LAST_MESSAGE: what the Delay is counted from
+  match           String             @default("ALL") // ALL | ANY
+  conditions      Json               @default("[]")
+  actions         Json               @default("[]")
+  frequency       String             @default("ONCE_PER_SESSION")
+  cooldownSeconds Int                @default(0)
+  version         Int                @default(1)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  store           Store              @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  executions      TriggerExecution[]
+
+  @@index([storeId, event, enabled])
+}
+
+model TriggerExecution {
+  id             String     @id @default(cuid())
+  storeId        String
+  triggerId      String
+  triggerVersion Int
+  visitorId      String?
+  conversationId String?
+  event          String
+  status         ExecStatus
+  reason         String?
+  dedupeKey      String     @unique
+  depth          Int        @default(0)
+  scheduledFor   DateTime
+  executedAt     DateTime?
+  details        Json?
+  createdAt      DateTime   @default(now())
+  trigger        Trigger    @relation(fields: [triggerId], references: [id], onDelete: Cascade)
+
+  @@index([storeId, createdAt])
+  @@index([triggerId, visitorId, status])
+  @@index([conversationId])
+}
+
+// Durable background queue (Postgres, FOR UPDATE SKIP LOCKED).
+model Job {
+  id          String    @id @default(cuid())
+  storeId     String?
+  type        String
+  payload     Json
+  runAt       DateTime  @default(now())
+  status      JobStatus @default(PENDING)
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5)
+  lockedAt    DateTime?
+  lockedBy    String?
+  lastError   String?
+  dedupeKey   String?   @unique
+  createdAt   DateTime  @default(now())
+  finishedAt  DateTime?
+
+  @@index([status, runAt])
+  @@index([storeId, type])
+}
+
+// Only webhooks an admin registered (and approved) can be called by triggers.
+model Webhook {
+  id         String            @id @default(cuid())
+  storeId    String
+  name       String
+  url        String
+  secret     String // encrypted HMAC signing secret
+  events     String[]
+  enabled    Boolean           @default(true)
+  createdAt  DateTime          @default(now())
+  store      Store             @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  deliveries WebhookDelivery[]
+}
+
+model WebhookDelivery {
+  id         String   @id @default(cuid())
+  webhookId  String
+  event      String
+  status     String // SUCCESS | FAILED
+  httpStatus Int?
+  error      String?
+  createdAt  DateTime @default(now())
+  webhook    Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId, createdAt])
+}
+
+model UsageDaily {
+  storeId     String
+  day         DateTime @db.Date
+  widgetLoads Int      @default(0)
+  pageViews   Int      @default(0)
+
+  @@id([storeId, day])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  storeId   String?
+  userId    String?
+  action    String
+  target    String?
+  meta      Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([storeId, createdAt])
+}
+
+// ---------- Tickets (email-based support threads) ----------
+// Not subject to the 30-day chat retention: a ticket is an explicit support record. A ticket made
+// from a chat keeps a transcript snapshot, so it survives the chat being swept.
+
+enum TicketStatus {
+  OPEN
+  PENDING // waiting on the customer
+  CLOSED
+}
+
+enum TicketSender {
+  AGENT // emailed to the customer
+  CUSTOMER // recorded from the customer (original offline message / chat)
+  NOTE // internal, never emailed
+  SYSTEM // created / status / assignment events
+}
+
+enum EmailStatus {
+  NONE // not an outbound email (notes, system, customer)
+  QUEUED
+  SENT
+  FAILED
+}
+
+model Ticket {
+  id                 String             @id @default(cuid())
+  storeId            String
+  number             Int
+  subject            String
+  contactName        String?
+  contactEmail       String
+  cc                 String[]
+  status             TicketStatus       @default(OPEN)
+  priority           Priority           @default(NORMAL)
+  assigneeId         String?
+  tags               String[]
+  conversationId     String? // source chat, if any (plain id: the chat may be swept by retention)
+  visitorId          String?
+  createdById        String?
+  requestId          String // client-generated; makes "create" safe to retry
+  lastMessageAt      DateTime           @default(now())
+  lastMessagePreview String?
+  closedAt           DateTime?
+  createdAt          DateTime           @default(now())
+  store              Store              @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  messages           TicketMessage[]
+  attachments        TicketAttachment[]
+
+  @@unique([storeId, number])
+  @@unique([storeId, requestId])
+  @@index([storeId, status, lastMessageAt])
+  @@index([storeId, assigneeId])
+  @@index([storeId, conversationId])
+}
+
+model TicketMessage {
+  id             String             @id @default(cuid())
+  storeId        String
+  ticketId       String
+  senderType     TicketSender
+  senderId       String?
+  senderName     String?
+  body           String
+  clientMsgId    String?
+  emailStatus    EmailStatus        @default(NONE)
+  emailError     String?
+  emailMessageId String? // RFC 5322 Message-ID we sent, for threading
+  sentAt         DateTime?
+  createdAt      DateTime           @default(now())
+  ticket         Ticket             @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  attachments    TicketAttachment[]
+
+  @@unique([ticketId, clientMsgId])
+  @@index([ticketId, createdAt])
+}
+
+model TicketAttachment {
+  id           String         @id @default(cuid())
+  storeId      String
+  ticketId     String? // null until the message it was uploaded for is sent
+  messageId    String?
+  uploadedById String?
+  filename     String
+  mime         String
+  size         Int
+  storagePath  String
+  createdAt    DateTime       @default(now())
+  ticket       Ticket?        @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  message      TicketMessage? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([storeId, ticketId])
+}
+
+// Page navigation history shown to agents in the conversation ("Visitor navigated to ...").
+// Deleted by the retention sweep after the store's retentionDays.
+model VisitorPageView {
+  id          String   @id @default(cuid())
+  storeId     String
+  visitorId   String
+  url         String
+  title       String?
+  isLanding   Boolean  @default(false) // first page view of this visitor's session (session-level landing page)
+  source      String?  // traffic-source classification snapshot at view time (see services/attribution.js)
+  newSession  Boolean  @default(false) // this view started a new session (>30 min gap) — for new/returning rollups
+  isBot       Boolean  @default(false) // confirmed bot traffic
+  trafficType String   @default("HUMAN") // "HUMAN" | "BOT" | "UNKNOWN"
+  createdAt   DateTime @default(now())
+  visitor     Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+
+  @@index([visitorId, createdAt])
+  @@index([storeId, createdAt])
+  @@index([storeId, isLanding, createdAt])
+  @@index([storeId, isBot, createdAt])
+}
