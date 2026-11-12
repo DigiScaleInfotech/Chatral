@@ -66,7 +66,6 @@ export function createServer() {
   app.use('/admin', express.static(path.join(clientDist, 'admin')));
   app.get('/admin/*', (req, res) => res.sendFile(path.join(clientDist, 'admin/index.html')));
   app.get('/favicon.ico', (req, res) => res.sendFile(path.join(clientDist, 'admin/favicon.ico')));
-  app.get('/favicon.png', (req, res) => res.sendFile(path.join(clientDist, 'admin/favicon.png')));
   app.get('/apple-touch-icon.png', (req, res) => res.sendFile(path.join(clientDist, 'admin/apple-touch-icon.png')));
   app.get('/', (req, res) => res.redirect('/admin/'));
   app.get('/health', (req, res) => res.json({ ok: true }));
