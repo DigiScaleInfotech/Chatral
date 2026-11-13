@@ -5,8 +5,8 @@ import { prisma } from './config.js';
 const email = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
 const password = process.env.ADMIN_PASSWORD || '';
 if (!email || password.length < 10) {
-  console.error('Set ADMIN_EMAIL and ADMIN_PASSWORD (10+ chars) in .env first.');
-  process.exit(1);
+  console.log('Skipping seed: ADMIN_EMAIL or ADMIN_PASSWORD (10+ chars) not set.');
+  process.exit(0);
 }
 const existing = await prisma.user.findUnique({ where: { email } });
 if (existing) {
