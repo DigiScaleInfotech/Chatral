@@ -271,7 +271,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Animated Liquid Wave Background Styles */}
+      {/* Animated Liquid Wave & Marquee Background Styles */}
       <style>{`
         @keyframes liquidFlowLeft {
           0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
@@ -287,6 +287,13 @@ export default function LandingPage() {
           0% { opacity: 0.65; transform: scale(1); }
           50% { opacity: 0.85; transform: scale(1.04); }
           100% { opacity: 0.65; transform: scale(1); }
+        }
+        @keyframes marqueeScroll {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        .testimonials-marquee:hover {
+          animation-play-state: paused !important;
         }
       `}</style>
 
@@ -1806,141 +1813,286 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6. Testimonials (Relatik Exact Quotes & Clean Grid) */}
-      <section id="testimonials" style={{ padding: '80px 24px', background: '#ffffff', borderTop: '1px solid #e6e7eb' }}>
-        <div style={{ maxWidth: 1040, margin: '0 auto' }}>
+      {/* 5. Testimonials (Exact Relatik Infinite Marquee Carousel from Image 2) */}
+      <section id="testimonials" style={{ padding: isMobile ? '60px 0' : '96px 0', background: '#ffffff', borderTop: '1px solid #e6e7eb', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto', textAlign: 'center', padding: '0 24px', marginBottom: 44 }}>
           
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '4px 12px',
-                background: '#eaf2ff',
-                border: '1px solid #d3e4ff',
-                borderRadius: 999,
-                marginBottom: 12,
-              }}
-            >
-              <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                Testimonials
-              </span>
-            </div>
-            <Typography.Title
-              level={2}
-              style={{
-                color: '#0c0d10',
-                fontSize: isMobile ? 26 : 38,
-                fontWeight: 800,
-                letterSpacing: '-0.025em',
-                margin: '0 0 12px',
-              }}
-            >
-              Loved by fast-growing brands
-            </Typography.Title>
-            <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15, maxWidth: 540, margin: '0 auto' }}>
-              See why modern e-commerce and SaaS teams trust Chatral for their daily customer operations.
-            </Typography.Paragraph>
+          {/* Badge */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '4px 12px',
+              background: '#eaf2ff',
+              border: '1px solid rgba(43, 127, 255, 0.2)',
+              borderRadius: 999,
+              marginBottom: 16,
+            }}
+          >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
+            <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Testimonials
+            </span>
           </div>
 
-          <Row gutter={[20, 20]}>
+          <Typography.Title
+            level={2}
+            style={{
+              color: '#0c0d10',
+              fontSize: isMobile ? 28 : 42,
+              fontWeight: 800,
+              letterSpacing: '-0.035em',
+              lineHeight: 1.15,
+              margin: '0 0 14px',
+            }}
+          >
+            Loved by teams who sell
+          </Typography.Title>
+          <Typography.Paragraph
+            style={{
+              color: '#5b5f6b',
+              fontSize: isMobile ? 14.5 : 16,
+              maxWidth: 580,
+              margin: '0 auto',
+              lineHeight: 1.55,
+              fontWeight: 400,
+            }}
+          >
+            Founders, sales leaders, and support teams use Chatral to stay close to their customers.
+          </Typography.Paragraph>
+        </div>
+
+        {/* Marquee Carousel Track with Edge Fade Masks */}
+        <div
+          style={{
+            width: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            padding: '12px 0 24px',
+            maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+          }}
+        >
+          <div
+            className="testimonials-marquee"
+            style={{
+              display: 'flex',
+              gap: 20,
+              width: 'max-content',
+              animation: 'marqueeScroll 45s linear infinite',
+              cursor: 'grab',
+            }}
+          >
             {[
               {
-                title: 'Clean, modern, and so easy to set up',
-                quote: '“I’ve tried a dozen live chat tools, and this is the first one my team adopted without a fight. Everything just makes sense.”',
-                author: 'Alex B.',
-                role: 'Startup Founder',
-                avatarBg: '#2b7fff',
-              },
-              {
                 title: 'Streamlined our workflow instantly',
-                quote: '“We switched two months ago and the difference is night and day. Managing visitors and follow-ups has never been this effortless.”',
+                quote: 'We switched two months ago and the difference is night and day. Managing leads and follow-ups has never been this effortless.',
                 author: 'Julia T.',
                 role: 'Sales Director',
-                avatarBg: '#16a34a',
+                initials: 'JT',
+                avatarBg: '#ede9fe',
+                avatarColor: '#7c3aed',
               },
               {
                 title: 'Exactly what our team needed',
-                quote: '“The interface is clean, intuitive, and fast. Our sales team actually enjoys using it — which says a lot.”',
+                quote: 'The interface is clean, intuitive, and fast. Our sales team actually enjoys using it — which says a lot.',
                 author: 'Mark R.',
                 role: 'Head of Growth',
-                avatarBg: '#7c3aed',
+                initials: 'MR',
+                avatarBg: '#dcfce7',
+                avatarColor: '#15803d',
               },
               {
                 title: 'Increased our productivity by 30%',
-                quote: '“With automated reminders and real-time visitor alerts, we no longer let promising deals slip through the cracks.”',
+                quote: 'With automated reminders and real-time updates, we no longer let promising deals slip through the cracks.',
                 author: 'Anika S.',
                 role: 'CRM Operations Manager',
-                avatarBg: '#d97706',
+                initials: 'AS',
+                avatarBg: '#ffedd5',
+                avatarColor: '#c2410c',
               },
               {
                 title: 'Fast, reliable, and beautiful',
-                quote: '“It’s rare to find software that looks this good and performs this well. Chatral checks every box for our customer support.”',
+                quote: 'It’s rare to find software that looks this good and performs this well. Chatral checks every box for customer support.',
                 author: 'Sophie D.',
                 role: 'Marketing Manager',
-                avatarBg: '#0284c7',
+                initials: 'SD',
+                avatarBg: '#e0f2fe',
+                avatarColor: '#0284c7',
               },
               {
                 title: 'Support team is next level',
-                quote: '“Beyond the product itself, the onboarding and ongoing support from DigiScale Infotech have been outstanding from day one.”',
+                quote: 'Beyond the product itself, the onboarding and ongoing support from DigiScale Infotech have been outstanding from day one.',
                 author: 'Daniel K.',
                 role: 'Customer Success Lead',
-                avatarBg: '#db2777',
+                initials: 'DK',
+                avatarBg: '#fce7f3',
+                avatarColor: '#db2777',
               },
-            ].map((t, i) => (
-              <Col xs={24} md={8} key={i}>
-                <div
-                  style={{
-                    background: '#f7f8fa',
-                    border: '1px solid #e6e7eb',
-                    borderRadius: 16,
-                    padding: '24px 22px',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <div>
-                    {/* 5 Stars */}
-                    <div style={{ display: 'flex', gap: 3, color: '#f59e0b', fontSize: 13, marginBottom: 12 }}>
-                      {[...Array(5)].map((_, s) => <StarFilled key={s} />)}
+              {
+                title: 'Clean, modern, and so easy to set up',
+                quote: 'I’ve tried a dozen live chat tools, and this is the first one my team adopted without a fight. Everything just makes sense.',
+                author: 'Alex B.',
+                role: 'Startup Founder',
+                initials: 'AB',
+                avatarBg: '#e0f2fe',
+                avatarColor: '#2563eb',
+              },
+              // Duplicate once to enable seamless infinite scroll loop
+              {
+                title: 'Streamlined our workflow instantly',
+                quote: 'We switched two months ago and the difference is night and day. Managing leads and follow-ups has never been this effortless.',
+                author: 'Julia T.',
+                role: 'Sales Director',
+                initials: 'JT',
+                avatarBg: '#ede9fe',
+                avatarColor: '#7c3aed',
+              },
+              {
+                title: 'Exactly what our team needed',
+                quote: 'The interface is clean, intuitive, and fast. Our sales team actually enjoys using it — which says a lot.',
+                author: 'Mark R.',
+                role: 'Head of Growth',
+                initials: 'MR',
+                avatarBg: '#dcfce7',
+                avatarColor: '#15803d',
+              },
+              {
+                title: 'Increased our productivity by 30%',
+                quote: 'With automated reminders and real-time updates, we no longer let promising deals slip through the cracks.',
+                author: 'Anika S.',
+                role: 'CRM Operations Manager',
+                initials: 'AS',
+                avatarBg: '#ffedd5',
+                avatarColor: '#c2410c',
+              },
+              {
+                title: 'Fast, reliable, and beautiful',
+                quote: 'It’s rare to find software that looks this good and performs this well. Chatral checks every box for customer support.',
+                author: 'Sophie D.',
+                role: 'Marketing Manager',
+                initials: 'SD',
+                avatarBg: '#e0f2fe',
+                avatarColor: '#0284c7',
+              },
+              {
+                title: 'Support team is next level',
+                quote: 'Beyond the product itself, the onboarding and ongoing support from DigiScale Infotech have been outstanding from day one.',
+                author: 'Daniel K.',
+                role: 'Customer Success Lead',
+                initials: 'DK',
+                avatarBg: '#fce7f3',
+                avatarColor: '#db2777',
+              },
+              {
+                title: 'Clean, modern, and so easy to set up',
+                quote: 'I’ve tried a dozen live chat tools, and this is the first one my team adopted without a fight. Everything just makes sense.',
+                author: 'Alex B.',
+                role: 'Startup Founder',
+                initials: 'AB',
+                avatarBg: '#e0f2fe',
+                avatarColor: '#2563eb',
+              },
+            ].map((t, idx) => (
+              <div
+                key={idx}
+                style={{
+                  width: isMobile ? 300 : 350,
+                  flexShrink: 0,
+                  background: '#ffffff',
+                  border: '1px solid #e8e9ee',
+                  borderRadius: 24,
+                  padding: '30px 26px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  textAlign: 'left',
+                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
+                  transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#c7d2fe';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(43, 127, 255, 0.08)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e8e9ee';
+                  e.currentTarget.style.boxShadow = '0px 2px 4px 0px rgba(12, 13, 16, 0.02)';
+                }}
+              >
+                <div>
+                  {/* Top: 5 Blue Stars + Light Blue Quotation Mark */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                    <div style={{ display: 'flex', gap: 3, color: '#2b7fff', fontSize: 13 }}>
+                      {[...Array(5)].map((_, s) => (
+                        <StarFilled key={s} />
+                      ))}
                     </div>
-                    <div style={{ fontWeight: 700, fontSize: 14.5, color: '#0c0d10', marginBottom: 8 }}>
-                      {t.title}
-                    </div>
-                    <div style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6 }}>
-                      {t.quote}
-                    </div>
+                    {/* Quotation mark svg */}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#dbeafe">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                    </svg>
                   </div>
 
-                  <Flex align="center" gap={10} style={{ marginTop: 20 }}>
-                    <div
-                      style={{
-                        width: 34,
-                        height: 34,
-                        borderRadius: '50%',
-                        background: t.avatarBg,
-                        color: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 700,
-                        fontSize: 12,
-                      }}
-                    >
-                      {t.author.slice(0, 1)}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: 13, color: '#0c0d10' }}>{t.author}</div>
-                      <div style={{ fontSize: 11.5, color: '#6b707c' }}>{t.role}</div>
-                    </div>
-                  </Flex>
+                  {/* Title */}
+                  <Typography.Title
+                    level={4}
+                    style={{
+                      color: '#0c0d10',
+                      fontSize: 16.5,
+                      fontWeight: 700,
+                      letterSpacing: '-0.02em',
+                      margin: '0 0 8px',
+                      lineHeight: 1.35,
+                    }}
+                  >
+                    {t.title}
+                  </Typography.Title>
+
+                  {/* Quote */}
+                  <Typography.Paragraph
+                    style={{
+                      color: '#5b5f6b',
+                      fontSize: 13.5,
+                      lineHeight: 1.55,
+                      margin: 0,
+                    }}
+                  >
+                    {t.quote}
+                  </Typography.Paragraph>
                 </div>
-              </Col>
+
+                {/* Author Footer */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 24 }}>
+                  <div
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      background: t.avatarBg,
+                      color: t.avatarColor,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 700,
+                      fontSize: 11,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: '#0c0d10', lineHeight: 1.2 }}>
+                      {t.author}
+                    </div>
+                    <div style={{ fontSize: 11.5, color: '#9aa0ac', marginTop: 2 }}>
+                      {t.role}
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
-          </Row>
+          </div>
         </div>
       </section>
 
