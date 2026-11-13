@@ -22,55 +22,157 @@ export default function PrivacyPolicy() {
         WebkitFontSmoothing: 'antialiased',
       }}
     >
-      {/* Standard Header matching site aesthetic */}
+      {/* 1. Header / Navbar - Exact Match to Landing Page Design */}
       <header
         style={{
-          borderBottom: '1px solid #ebecee',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          background: 'rgba(247, 248, 250, 0.9)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottom: '1px solid #e6e7eb',
+          width: '100%',
           padding: isMobile ? '0 16px' : '0 32px',
-          height: isMobile ? 66 : 76,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: '#ffffff',
         }}
       >
-        <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-          <ChatralFullLogo height={isMobile ? 32 : 38} dark={false} />
-        </Link>
-
-        <Link
-          to="/"
+        <div
           style={{
-            display: 'inline-flex',
+            maxWidth: 1180,
+            margin: '0 auto',
+            height: isMobile ? 66 : 76,
+            display: 'flex',
             alignItems: 'center',
-            gap: 6,
-            padding: isMobile ? '7px 14px' : '8px 18px',
-            borderRadius: 999,
-            border: '1px solid #d0d5dd',
-            background: '#ffffff',
-            color: '#344054',
-            fontSize: 13.5,
-            fontWeight: 500,
-            textDecoration: 'none',
-            transition: 'all 0.15s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f9fafb';
-            e.currentTarget.style.borderColor = '#98a2b3';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = '#ffffff';
-            e.currentTarget.style.borderColor = '#d0d5dd';
+            justifyContent: 'space-between',
           }}
         >
-          <span>←</span>
-          <span>Back to Home</span>
-        </Link>
+          {/* Official Chatral Logo */}
+          <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+            <ChatralFullLogo height={isMobile ? 32 : 38} dark={false} />
+          </Link>
+
+          {/* Center Nav Links: Features, How it works, Testimonials, FAQ, Pricing */}
+          {!isMobile && (
+            <div style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
+              <Link
+                to="/#features"
+                style={{
+                  color: '#5b5f6b',
+                  fontSize: 14.5,
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'color 0.15s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+              >
+                Features
+              </Link>
+              <Link
+                to="/#how-it-works"
+                style={{
+                  color: '#5b5f6b',
+                  fontSize: 14.5,
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'color 0.15s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+              >
+                How it works
+              </Link>
+              <Link
+                to="/#testimonials"
+                style={{
+                  color: '#5b5f6b',
+                  fontSize: 14.5,
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'color 0.15s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+              >
+                Testimonials
+              </Link>
+              <Link
+                to="/#faq"
+                style={{
+                  color: '#5b5f6b',
+                  fontSize: 14.5,
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'color 0.15s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+              >
+                FAQ
+              </Link>
+              <Link
+                to="/#pricing"
+                style={{
+                  color: '#5b5f6b',
+                  fontSize: 14.5,
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'color 0.15s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+              >
+                Pricing
+              </Link>
+            </div>
+          )}
+
+          {/* Right Button: Signature Black Button with Arrow */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Link
+              to="/login?mode=signup"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                background: '#0c0d10',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: 12,
+                padding: '10px 22px',
+                height: 42,
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: 'pointer',
+                textDecoration: 'none',
+                boxShadow: '0px 1px 2px 0px rgba(12, 13, 16, 0.12), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.12)',
+                transition: 'all 0.15s ease',
+                fontFamily: 'inherit',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#1e2025';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#0c0d10';
+                e.currentTarget.style.transform = 'none';
+              }}
+            >
+              <span>Start Free</span>
+              <span style={{ fontSize: 13 }}>→</span>
+            </Link>
+          </div>
+        </div>
       </header>
 
       {/* Main Legal Content */}
       <main style={{ maxWidth: 840, margin: '0 auto', padding: isMobile ? '36px 20px 60px' : '52px 24px 80px' }}>
-        {/* Simple Page Title - No extra badges or marketing text */}
+        {/* Simple Page Title */}
         <h1
           style={{
             fontSize: isMobile ? 30 : 38,
