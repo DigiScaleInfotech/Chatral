@@ -1652,9 +1652,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4. How It Works (Relatik 3 Simple Steps with Pill Numbers) */}
-      <section id="how-it-works" style={{ padding: '80px 24px', background: '#ffffff', borderTop: '1px solid #e6e7eb', borderBottom: '1px solid #e6e7eb' }}>
-        <div style={{ maxWidth: 1040, margin: '0 auto', textAlign: 'center' }}>
+      {/* 4. How It Works (Exact Relatik Design from Image 1) */}
+      <section id="how-it-works" style={{ padding: isMobile ? '60px 16px' : '96px 24px', background: '#ffffff', borderTop: '1px solid #e6e7eb' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto', textAlign: 'center' }}>
+          
+          {/* Header */}
           <div
             style={{
               display: 'inline-flex',
@@ -1662,119 +1664,145 @@ export default function LandingPage() {
               gap: 6,
               padding: '4px 12px',
               background: '#eaf2ff',
-              border: '1px solid #d3e4ff',
+              border: '1px solid rgba(43, 127, 255, 0.2)',
               borderRadius: 999,
-              marginBottom: 12,
+              marginBottom: 16,
             }}
           >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
             <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              How It Works
+              How it works
             </span>
           </div>
+
           <Typography.Title
             level={2}
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 26 : 38,
+              fontSize: isMobile ? 28 : 42,
               fontWeight: 800,
-              letterSpacing: '-0.025em',
-              margin: '0 0 12px',
+              letterSpacing: '-0.035em',
+              lineHeight: 1.15,
+              margin: '0 0 14px',
             }}
           >
-            Get started in 3 simple steps
+            From sign-up to success in minutes
           </Typography.Title>
-          <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15, maxWidth: 540, margin: '0 auto 48px' }}>
-            Set up your workspace and start chatting with customers in less than 2 minutes.
+          <Typography.Paragraph
+            style={{
+              color: '#5b5f6b',
+              fontSize: isMobile ? 14.5 : 16,
+              maxWidth: 580,
+              margin: '0 auto 48px',
+              lineHeight: 1.55,
+              fontWeight: 400,
+            }}
+          >
+            Three simple steps to a workspace your whole team will love using.
           </Typography.Paragraph>
 
-          <Row gutter={[24, 24]}>
+          <Row gutter={[20, 20]}>
             {[
               {
                 step: '01',
-                title: 'Create your workspace',
-                desc: 'Sign up with your email and set up your workspace in minutes. Pick a store name and invite your team.',
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <line x1="19" y1="8" x2="19" y2="14" />
+                    <line x1="22" y1="11" x2="16" y2="11" />
+                  </svg>
+                ),
+                title: 'Create your account',
+                desc: 'Sign up with your email and set up your workspace in minutes. Pick a pipeline layout and invite your team.',
               },
               {
                 step: '02',
-                title: 'Embed the 1-line script',
-                desc: 'Paste a single lightweight asynchronous script tag into your Shopify theme, WordPress header, or HTML site.',
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                ),
+                title: 'Import & organize leads',
+                desc: 'Bring in contacts from spreadsheets or your favorite tools. Sort them into stages, assign owners, and set priorities.',
               },
               {
                 step: '03',
-                title: 'Start chatting & selling',
-                desc: 'Your widget is instantly live. Receive sound notifications, engage shoppers with triggers, and boost conversions.',
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                ),
+                title: 'Automate & grow',
+                desc: 'Add workflows, reminders, and follow-ups. Track progress in real time and close more deals with less effort.',
               },
             ].map((s, i) => (
               <Col xs={24} md={8} key={i}>
                 <div
                   style={{
-                    background: '#f7f8fa',
-                    border: '1px solid #e6e7eb',
-                    borderRadius: 18,
-                    padding: '32px 24px',
+                    background: '#ffffff',
+                    border: '1px solid #e8e9ee',
+                    borderRadius: 24,
+                    padding: '32px 28px',
                     textAlign: 'left',
                     height: '100%',
-                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                   }}
                 >
-                  <div
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 38,
-                      height: 38,
-                      borderRadius: 10,
-                      background: '#ffffff',
-                      border: '1px solid #e6e7eb',
-                      fontWeight: 800,
-                      fontSize: 14,
-                      color: '#2b7fff',
-                      marginBottom: 20,
-                    }}
-                  >
-                    {s.step}
+                  {/* Top Row: Icon on left, Step number on right */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 12,
+                        background: '#f0f5ff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {s.icon}
+                    </div>
+                    <span style={{ color: '#9aa0ac', fontSize: 13, fontWeight: 500, letterSpacing: '0.02em' }}>
+                      {s.step}
+                    </span>
                   </div>
-                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17, fontWeight: 700, marginBottom: 10 }}>
-                    {s.title}
-                  </Typography.Title>
-                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.6, margin: 0 }}>
-                    {s.desc}
-                  </Typography.Paragraph>
+
+                  {/* Title & Description below */}
+                  <div style={{ marginTop: 28 }}>
+                    <Typography.Title
+                      level={3}
+                      style={{
+                        color: '#0c0d10',
+                        fontSize: 19,
+                        fontWeight: 700,
+                        letterSpacing: '-0.02em',
+                        margin: '0 0 8px',
+                      }}
+                    >
+                      {s.title}
+                    </Typography.Title>
+                    <Typography.Paragraph
+                      style={{
+                        color: '#5b5f6b',
+                        fontSize: 13.5,
+                        lineHeight: 1.55,
+                        margin: 0,
+                      }}
+                    >
+                      {s.desc}
+                    </Typography.Paragraph>
+                  </div>
                 </div>
               </Col>
             ))}
           </Row>
-        </div>
-      </section>
-
-      {/* 5. Relatik Numbers / Stats Banner */}
-      <section style={{ padding: '60px 24px', background: '#f7f8fa' }}>
-        <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <div
-            style={{
-              background: '#ffffff',
-              border: '1px solid #e6e7eb',
-              borderRadius: 20,
-              padding: isMobile ? '30px 20px' : '40px 36px',
-              textAlign: 'center',
-            }}
-          >
-            <Row gutter={[24, 24]} align="middle">
-              <Col xs={24} sm={8}>
-                <div style={{ fontSize: 36, fontWeight: 800, color: '#0c0d10', letterSpacing: '-0.03em' }}>150,000+</div>
-                <div style={{ fontSize: 13, color: '#5b5f6b', marginTop: 4 }}>conversations tracked weekly</div>
-              </Col>
-              <Col xs={24} sm={8}>
-                <div style={{ fontSize: 36, fontWeight: 800, color: '#2b7fff', letterSpacing: '-0.03em' }}>&lt; 14s</div>
-                <div style={{ fontSize: 13, color: '#5b5f6b', marginTop: 4 }}>average first response time</div>
-              </Col>
-              <Col xs={24} sm={8}>
-                <div style={{ fontSize: 36, fontWeight: 800, color: '#16a34a', letterSpacing: '-0.03em' }}>99.98%</div>
-                <div style={{ fontSize: 13, color: '#5b5f6b', marginTop: 4 }}>platform SLA uptime</div>
-              </Col>
-            </Row>
-          </div>
         </div>
       </section>
 
