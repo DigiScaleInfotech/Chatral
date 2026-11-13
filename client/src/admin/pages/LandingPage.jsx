@@ -1333,17 +1333,17 @@ export default function LandingPage() {
             </Typography.Paragraph>
           </div>
 
-          {/* Relatik 5-Card Bento Grid */}
+          {/* Relatik 6-Card Bento Grid (3x2 Balanced Grid) */}
           <Row gutter={[20, 20]}>
             
-            {/* Bento Card 1: Live Visitor Tracking */}
-            <Col xs={24} md={12}>
+            {/* Card 1: Live visitor tracking */}
+            <Col xs={24} md={8}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e8e9ee',
                   borderRadius: 24,
-                  padding: isMobile ? '26px 20px' : '32px 28px',
+                  padding: '30px 28px',
                   height: '100%',
                   minHeight: 180,
                   boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
@@ -1367,18 +1367,18 @@ export default function LandingPage() {
                   level={3}
                   style={{
                     color: '#0c0d10',
-                    fontSize: 20,
+                    fontSize: 19,
                     fontWeight: 700,
                     letterSpacing: '-0.02em',
                     margin: '0 0 8px',
                   }}
                 >
-                  Live Visitor Tracking
+                  Live visitor tracking
                 </Typography.Title>
                 <Typography.Paragraph
                   style={{
                     color: '#5b5f6b',
-                    fontSize: 14,
+                    fontSize: 13.5,
                     lineHeight: 1.55,
                     margin: 0,
                   }}
@@ -1388,14 +1388,14 @@ export default function LandingPage() {
               </div>
             </Col>
 
-            {/* Bento Card 2: Unified Operator Inbox */}
-            <Col xs={24} md={12}>
+            {/* Card 2: Unified operator inbox */}
+            <Col xs={24} md={8}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e8e9ee',
                   borderRadius: 24,
-                  padding: isMobile ? '26px 20px' : '32px 28px',
+                  padding: '30px 28px',
                   height: '100%',
                   minHeight: 180,
                   boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
@@ -1413,29 +1413,81 @@ export default function LandingPage() {
                     marginBottom: 14,
                   }}
                 >
-                  <RiseOutlined style={{ fontSize: 18, color: '#10b981' }} />
+                  <MessageOutlined style={{ fontSize: 18, color: '#10b981' }} />
                 </div>
                 <Typography.Title
                   level={3}
                   style={{
                     color: '#0c0d10',
-                    fontSize: 20,
+                    fontSize: 19,
                     fontWeight: 700,
                     letterSpacing: '-0.02em',
                     margin: '0 0 8px',
                   }}
                 >
-                  Unified Operator Inbox
+                  Unified operator inbox
                 </Typography.Title>
                 <Typography.Paragraph
                   style={{
                     color: '#5b5f6b',
-                    fontSize: 14,
+                    fontSize: 13.5,
                     lineHeight: 1.55,
                     margin: 0,
                   }}
                 >
                   Manage all customer conversations in one calm, lightning-fast workspace with live typing preview and instant status tracking.
+                </Typography.Paragraph>
+              </div>
+            </Col>
+
+            {/* Card 3: Multi-store management */}
+            <Col xs={24} md={8}>
+              <div
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #e8e9ee',
+                  borderRadius: 24,
+                  padding: '30px 28px',
+                  height: '100%',
+                  minHeight: 180,
+                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
+                }}
+              >
+                <div
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: 10,
+                    background: '#ecfeff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 14,
+                  }}
+                >
+                  <ShopOutlined style={{ fontSize: 18, color: '#0891b2' }} />
+                </div>
+                <Typography.Title
+                  level={3}
+                  style={{
+                    color: '#0c0d10',
+                    fontSize: 19,
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 8px',
+                  }}
+                >
+                  Multi-store management
+                </Typography.Title>
+                <Typography.Paragraph
+                  style={{
+                    color: '#5b5f6b',
+                    fontSize: 13.5,
+                    lineHeight: 1.55,
+                    margin: 0,
+                  }}
+                >
+                  Connect and manage multiple websites, Shopify stores, and customer domains effortlessly from one unified master dashboard.
                 </Typography.Paragraph>
               </div>
             </Col>
