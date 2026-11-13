@@ -1283,11 +1283,11 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Features Bento Grid (Exact Relatik 5-Card Bento Layout) */}
-      <section id="features" style={{ padding: '80px 24px', background: '#f7f8fa' }}>
-        <div style={{ maxWidth: 1040, margin: '0 auto' }}>
+      <section id="features" style={{ padding: isMobile ? '60px 16px' : '96px 24px', background: '#f7f8fa' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
           
           {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 44 }}>
+          <div style={{ textAlign: 'center', marginBottom: isMobile ? 36 : 48 }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -1295,9 +1295,9 @@ export default function LandingPage() {
                 gap: 6,
                 padding: '4px 12px',
                 background: '#eaf2ff',
-                border: '1px solid #d3e4ff',
+                border: '1px solid rgba(43, 127, 255, 0.2)',
                 borderRadius: 999,
-                marginBottom: 14,
+                marginBottom: 16,
               }}
             >
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
@@ -1309,35 +1309,46 @@ export default function LandingPage() {
               level={2}
               style={{
                 color: '#0c0d10',
-                fontSize: isMobile ? 28 : 40,
+                fontSize: isMobile ? 28 : 42,
                 fontWeight: 800,
-                letterSpacing: '-0.03em',
-                margin: '0 0 12px',
+                letterSpacing: '-0.035em',
+                lineHeight: 1.15,
+                margin: '0 0 14px',
               }}
             >
               Everything you need to close more deals
             </Typography.Title>
-            <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: isMobile ? 14.5 : 16, maxWidth: 580, margin: '0 auto', lineHeight: 1.55 }}>
-              Every tool you need to track, manage, and grow customer relationships — from first contact to automation — without the clutter.
+            <Typography.Paragraph
+              style={{
+                color: '#5b5f6b',
+                fontSize: isMobile ? 14.5 : 16,
+                maxWidth: 620,
+                margin: '0 auto',
+                lineHeight: 1.55,
+                fontWeight: 400,
+              }}
+            >
+              Every tool you need to track, manage, and grow customer relationships —<br className={isMobile ? 'none' : ''} />
+              from first contact to automation — without the clutter.
             </Typography.Paragraph>
           </div>
 
           {/* Relatik 5-Card Bento Grid */}
           <Row gutter={[20, 20]}>
             
-            {/* Bento Card 1: Lead management (Top Left - Large Hero Card) */}
+            {/* Bento Card 1: Lead management (Top Left - ~60% Hero Card) */}
             <Col xs={24} md={14}>
               <div
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 20,
-                  padding: isMobile ? '22px 18px' : '28px 26px',
+                  border: '1px solid #e8e9ee',
+                  borderRadius: 24,
+                  padding: isMobile ? '24px 20px' : '32px 32px 28px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                 }}
               >
                 <div>
@@ -1350,15 +1361,32 @@ export default function LandingPage() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginBottom: 16,
+                      marginBottom: 14,
                     }}
                   >
                     <GlobalOutlined style={{ fontSize: 18, color: '#2b7fff' }} />
                   </div>
-                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 18, fontWeight: 700, marginBottom: 6 }}>
+                  <Typography.Title
+                    level={3}
+                    style={{
+                      color: '#0c0d10',
+                      fontSize: 20,
+                      fontWeight: 700,
+                      letterSpacing: '-0.02em',
+                      margin: '0 0 8px',
+                    }}
+                  >
                     Lead management
                   </Typography.Title>
-                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.5, margin: 0, maxWidth: 460 }}>
+                  <Typography.Paragraph
+                    style={{
+                      color: '#5b5f6b',
+                      fontSize: 13.5,
+                      lineHeight: 1.5,
+                      margin: '0 0 24px',
+                      maxWidth: 480,
+                    }}
+                  >
                     Track every lead from first contact to closed deal with customizable visitor pipelines — no spreadsheets required.
                   </Typography.Paragraph>
                 </div>
@@ -1366,28 +1394,55 @@ export default function LandingPage() {
                 {/* In-Card Visual Mockup: Leads Pipeline Table */}
                 <div
                   style={{
-                    marginTop: 24,
                     background: '#ffffff',
-                    borderRadius: 14,
-                    border: '1px solid #e6e7eb',
-                    padding: '14px 16px',
+                    borderRadius: 16,
+                    border: '1px solid #eef0f3',
+                    padding: isMobile ? '12px' : '16px 18px',
                     boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
                   }}
                 >
                   {/* Table Header Row with Tabs */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0c0d10' }}>Leads</span>
-                      <span style={{ background: '#f1f2f5', color: '#5b5f6b', fontSize: 10.5, fontWeight: 600, padding: '1px 6px', borderRadius: 999 }}>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: '#0c0d10' }}>Leads</span>
+                      <span
+                        style={{
+                          background: '#f1f3f6',
+                          color: '#5b5f6b',
+                          fontSize: 11,
+                          fontWeight: 600,
+                          padding: '1px 7px',
+                          borderRadius: 999,
+                        }}
+                      >
                         248
                       </span>
                     </div>
-                    <div style={{ display: 'flex', gap: 4, background: '#f8fafc', padding: 2, borderRadius: 6, border: '1px solid #f1f2f5' }}>
-                      <span style={{ background: '#ffffff', color: '#0c0d10', fontSize: 10.5, fontWeight: 600, padding: '2px 8px', borderRadius: 5, boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 2,
+                        background: '#f8fafc',
+                        padding: 3,
+                        borderRadius: 8,
+                        border: '1px solid #f1f2f5',
+                      }}
+                    >
+                      <span
+                        style={{
+                          background: '#ffffff',
+                          color: '#0c0d10',
+                          fontSize: 11,
+                          fontWeight: 600,
+                          padding: '2px 9px',
+                          borderRadius: 6,
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                        }}
+                      >
                         All
                       </span>
-                      <span style={{ color: '#6b707c', fontSize: 10.5, padding: '2px 8px' }}>New · 32</span>
-                      <span style={{ color: '#6b707c', fontSize: 10.5, padding: '2px 8px' }}>Hot · 14</span>
+                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>New · 32</span>
+                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>Hot · 14</span>
                     </div>
                   </div>
 
@@ -1395,56 +1450,129 @@ export default function LandingPage() {
                   <div
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: '2fr 1.2fr 1fr 1fr',
+                      gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.2fr 1.1fr 1fr',
                       fontSize: 10,
                       fontWeight: 700,
-                      color: '#94a3b8',
-                      letterSpacing: '0.04em',
+                      color: '#9aa0ac',
+                      letterSpacing: '0.05em',
                       padding: '4px 6px 8px',
-                      borderBottom: '1px solid #f1f2f5',
+                      borderBottom: '1px solid #f2f3f7',
                     }}
                   >
                     <span>NAME</span>
-                    <span>SOURCE</span>
+                    {!isMobile && <span>SOURCE</span>}
                     <span>SCORE</span>
                     <span style={{ textAlign: 'right' }}>STATUS</span>
                   </div>
 
                   {/* Rows */}
                   {[
-                    { name: 'Elena Hart', role: 'Brightloop · Head of Ops', avatar: 'EH', bg: '#f3e8ff', color: '#7e22ce', source: 'Website', score: 98, status: 'Hot', statusBg: '#fef2f2', statusColor: '#dc2626' },
-                    { name: 'Owen Malik', role: 'Haven & Co · VP Product', avatar: 'OM', bg: '#e0f2fe', color: '#0284c7', source: 'Referral', score: 92, status: 'Hot', statusBg: '#fef2f2', statusColor: '#dc2626' },
-                    { name: 'Rina Nakamura', role: 'Kestrel · Growth Lead', avatar: 'RN', bg: '#dcfce7', color: '#15803d', source: 'LinkedIn', score: 84, status: 'Warm', statusBg: '#fffbeb', statusColor: '#d97706' },
+                    {
+                      name: 'Elena Hart',
+                      role: 'Brightloop · Head of Ops',
+                      avatar: 'EH',
+                      bg: '#ede9fe',
+                      color: '#7c3aed',
+                      source: 'Website',
+                      score: 98,
+                      barW: 38,
+                      status: 'Hot',
+                      statusBg: '#fef2f2',
+                      statusBorder: '#fee2e2',
+                      statusColor: '#ef4444',
+                    },
+                    {
+                      name: 'Owen Malik',
+                      role: 'Haven & Co · VP Product',
+                      avatar: 'OM',
+                      bg: '#e0f2fe',
+                      color: '#0284c7',
+                      source: 'Referral',
+                      score: 92,
+                      barW: 34,
+                      status: 'Hot',
+                      statusBg: '#fef2f2',
+                      statusBorder: '#fee2e2',
+                      statusColor: '#ef4444',
+                    },
+                    {
+                      name: 'Rina Nakamura',
+                      role: 'Kestrel · Growth Lead',
+                      avatar: 'RN',
+                      bg: '#dcfce7',
+                      color: '#16a34a',
+                      source: 'LinkedIn',
+                      score: 84,
+                      barW: 28,
+                      status: 'Warm',
+                      statusBg: '#fffbeb',
+                      statusBorder: '#fef3c7',
+                      statusColor: '#d97706',
+                    },
                   ].map((row, idx) => (
                     <div
                       key={idx}
                       style={{
                         display: 'grid',
-                        gridTemplateColumns: '2fr 1.2fr 1fr 1fr',
+                        gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.2fr 1.1fr 1fr',
                         alignItems: 'center',
-                        padding: '9px 6px',
-                        fontSize: 11.5,
+                        padding: '10px 6px',
+                        fontSize: 12,
                         borderBottom: idx === 2 ? 'none' : '1px solid #f8fafc',
                       }}
                     >
+                      {/* Name & Avatar */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ width: 22, height: 22, borderRadius: '50%', background: row.bg, color: row.color, fontSize: 9.5, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div
+                          style={{
+                            width: 24,
+                            height: 24,
+                            borderRadius: '50%',
+                            background: row.bg,
+                            color: row.color,
+                            fontSize: 9.5,
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
                           {row.avatar}
                         </div>
-                        <div>
-                          <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 11.5 }}>{row.name}</div>
-                          <div style={{ color: '#94a3b8', fontSize: 9.5 }}>{row.role}</div>
+                        <div style={{ overflow: 'hidden' }}>
+                          <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 12, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            {row.name}
+                          </div>
+                          <div style={{ color: '#9aa0ac', fontSize: 10, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            {row.role}
+                          </div>
                         </div>
                       </div>
-                      <span style={{ color: '#5b5f6b', fontSize: 11 }}>{row.source}</span>
+
+                      {/* Source */}
+                      {!isMobile && <span style={{ color: '#5b5f6b', fontSize: 11.5 }}>{row.source}</span>}
+
+                      {/* Score & Progress bar */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ fontWeight: 700, color: '#0c0d10', fontSize: 11 }}>{row.score}</span>
-                        <div style={{ width: 32, height: 4, background: '#f1f2f5', borderRadius: 999, overflow: 'hidden' }}>
-                          <div style={{ width: `${row.score}%`, height: '100%', background: '#16a34a', borderRadius: 999 }} />
-                        </div>
+                        <span style={{ fontWeight: 700, color: '#0c0d10', fontSize: 11.5 }}>{row.score}</span>
+                        <div style={{ width: row.barW, height: 4, background: '#10b981', borderRadius: 999 }} />
                       </div>
+
+                      {/* Status pill */}
                       <div style={{ textAlign: 'right' }}>
-                        <span style={{ display: 'inline-block', background: row.statusBg, color: row.statusColor, padding: '2px 7px', borderRadius: 999, fontSize: 10, fontWeight: 600 }}>
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            background: row.statusBg,
+                            border: `1px solid ${row.statusBorder}`,
+                            color: row.statusColor,
+                            padding: '2px 8px',
+                            borderRadius: 999,
+                            fontSize: 10.5,
+                            fontWeight: 600,
+                          }}
+                        >
                           • {row.status}
                         </span>
                       </div>
@@ -1454,19 +1582,19 @@ export default function LandingPage() {
               </div>
             </Col>
 
-            {/* Bento Card 2: Pipeline overview (Top Right Hero Card) */}
+            {/* Bento Card 2: Pipeline overview (Top Right - ~40% Hero Card) */}
             <Col xs={24} md={10}>
               <div
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 20,
-                  padding: isMobile ? '22px 18px' : '28px 26px',
+                  border: '1px solid #e8e9ee',
+                  borderRadius: 24,
+                  padding: isMobile ? '24px 20px' : '32px 32px 28px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                 }}
               >
                 <div>
@@ -1475,84 +1603,163 @@ export default function LandingPage() {
                       width: 38,
                       height: 38,
                       borderRadius: 10,
-                      background: '#f0fdf4',
+                      background: '#ecfdf5',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginBottom: 16,
+                      marginBottom: 14,
                     }}
                   >
-                    <RiseOutlined style={{ fontSize: 18, color: '#16a34a' }} />
+                    <RiseOutlined style={{ fontSize: 18, color: '#10b981' }} />
                   </div>
-                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 18, fontWeight: 700, marginBottom: 6 }}>
+                  <Typography.Title
+                    level={3}
+                    style={{
+                      color: '#0c0d10',
+                      fontSize: 20,
+                      fontWeight: 700,
+                      letterSpacing: '-0.02em',
+                      margin: '0 0 8px',
+                    }}
+                  >
                     Pipeline overview
                   </Typography.Title>
-                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.5, margin: 0 }}>
+                  <Typography.Paragraph
+                    style={{
+                      color: '#5b5f6b',
+                      fontSize: 13.5,
+                      lineHeight: 1.5,
+                      margin: '0 0 24px',
+                    }}
+                  >
                     See your whole sales pipeline at a glance. Monitor stages, spot bottlenecks, and keep deals moving.
                   </Typography.Paragraph>
                 </div>
 
-                {/* In-Card Visual Mockup: Mini Kanban Pipeline */}
+                {/* In-Card Visual Mockup: Mini Kanban Board */}
                 <div
                   style={{
-                    marginTop: 24,
-                    background: '#f8fafc',
-                    borderRadius: 14,
-                    border: '1px solid #e6e7eb',
-                    padding: '12px 14px',
+                    background: '#ffffff',
+                    borderRadius: 16,
+                    border: '1px solid #eef0f3',
+                    padding: isMobile ? '12px' : '16px 18px',
+                    boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <div style={{ fontSize: 11.5 }}>
+                  {/* Kanban Header */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <div style={{ fontSize: 12.5 }}>
                       <span style={{ fontWeight: 700, color: '#0c0d10' }}>New business</span>
-                      <span style={{ color: '#94a3b8', marginLeft: 6 }}>$227k open</span>
+                      <span style={{ color: '#9aa0ac', marginLeft: 6, fontSize: 11 }}>$227k open</span>
                     </div>
-                    <div style={{ display: 'flex', gap: 2, background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 6, padding: 2 }}>
-                      <span style={{ background: '#f1f2f5', color: '#0c0d10', fontSize: 10, fontWeight: 600, padding: '1px 6px', borderRadius: 4 }}>Board</span>
-                      <span style={{ color: '#94a3b8', fontSize: 10, padding: '1px 6px' }}>List</span>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 2,
+                        background: '#f8fafc',
+                        border: '1px solid #f1f2f5',
+                        borderRadius: 7,
+                        padding: 2,
+                      }}
+                    >
+                      <span
+                        style={{
+                          background: '#ffffff',
+                          color: '#0c0d10',
+                          fontSize: 10.5,
+                          fontWeight: 600,
+                          padding: '2px 8px',
+                          borderRadius: 5,
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                        }}
+                      >
+                        Board
+                      </span>
+                      <span style={{ color: '#9aa0ac', fontSize: 10.5, padding: '2px 8px', cursor: 'pointer' }}>List</span>
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  {/* 2 Kanban Columns */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     {/* Col 1: Qualified */}
-                    <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 8, padding: 8 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#6b707c', marginBottom: 6 }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#6b707c', marginBottom: 6 }}>
                         <span style={{ fontWeight: 600 }}>Qualified · 4</span>
-                        <span>$64k</span>
+                        <span style={{ color: '#9aa0ac' }}>$64k</span>
                       </div>
-                      <div style={{ background: '#fafbfd', border: '1px solid #f1f2f5', borderRadius: 6, padding: '6px 8px', marginBottom: 6 }}>
-                        <div style={{ fontSize: 11, fontWeight: 600, color: '#0c0d10' }}>Lumora</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, marginTop: 2 }}>
+                      
+                      <div
+                        style={{
+                          background: '#ffffff',
+                          border: '1px solid #eef0f3',
+                          borderRadius: 8,
+                          padding: '8px 10px',
+                          marginBottom: 8,
+                        }}
+                      >
+                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>Lumora</div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, marginTop: 3 }}>
                           <span style={{ color: '#2b7fff', fontWeight: 600 }}>$18,500</span>
-                          <span style={{ color: '#94a3b8' }}>Oct 28</span>
+                          <span style={{ color: '#9aa0ac' }}>Oct 28</span>
                         </div>
                       </div>
-                      <div style={{ background: '#fafbfd', border: '1px solid #f1f2f5', borderRadius: 6, padding: '6px 8px' }}>
-                        <div style={{ fontSize: 11, fontWeight: 600, color: '#0c0d10' }}>Orbitly</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, marginTop: 2 }}>
+
+                      <div
+                        style={{
+                          background: '#ffffff',
+                          border: '1px solid #eef0f3',
+                          borderRadius: 8,
+                          padding: '8px 10px',
+                        }}
+                      >
+                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>Orbitly</div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, marginTop: 3 }}>
                           <span style={{ color: '#2b7fff', fontWeight: 600 }}>$9,200</span>
-                          <span style={{ color: '#94a3b8' }}>Nov 02</span>
+                          <span style={{ color: '#9aa0ac' }}>Nov 02</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Col 2: Proposal */}
-                    <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 8, padding: 8 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#6b707c', marginBottom: 6 }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#6b707c', marginBottom: 6 }}>
                         <span style={{ fontWeight: 600 }}>Proposal · 3</span>
-                        <span>$82k</span>
+                        <span style={{ color: '#9aa0ac' }}>$82k</span>
                       </div>
-                      <div style={{ background: '#ffffff', border: '1.5px solid #2b7fff', borderRadius: 6, padding: '6px 8px', marginBottom: 6, boxShadow: '0 2px 6px rgba(43, 127, 255, 0.08)' }}>
+
+                      {/* Active Proposal Card with Blue Accent */}
+                      <div
+                        style={{
+                          background: '#ffffff',
+                          border: '1.5px solid #2b7fff',
+                          borderRadius: 8,
+                          padding: '8px 10px',
+                          marginBottom: 8,
+                          boxShadow: '0 2px 8px rgba(43, 127, 255, 0.12)',
+                        }}
+                      >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 11, fontWeight: 700, color: '#0c0d10' }}>Haven & Co</span>
-                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#2b7fff' }} />
+                          <span style={{ fontSize: 11.5, fontWeight: 700, color: '#0c0d10' }}>Haven & Co</span>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, marginTop: 2 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, marginTop: 3 }}>
                           <span style={{ color: '#2b7fff', fontWeight: 700 }}>$32,000</span>
-                          <span style={{ color: '#94a3b8' }}>Nov 08</span>
+                          <span style={{ color: '#9aa0ac' }}>Nov 08</span>
                         </div>
                       </div>
-                      <div style={{ border: '1px dashed #cbd5e1', borderRadius: 6, padding: '6px', textAlign: 'center', fontSize: 10, color: '#94a3b8' }}>
+
+                      {/* Dashed Drop Placeholder */}
+                      <div
+                        style={{
+                          border: '1px dashed #cbd5e1',
+                          borderRadius: 8,
+                          padding: '9px 8px',
+                          textAlign: 'center',
+                          fontSize: 10.5,
+                          color: '#9aa0ac',
+                          background: '#fafbfd',
+                        }}
+                      >
                         + Drop here
                       </div>
                     </div>
@@ -1566,11 +1773,12 @@ export default function LandingPage() {
               <div
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 20,
-                  padding: '24px 22px',
+                  border: '1px solid #e8e9ee',
+                  borderRadius: 24,
+                  padding: '30px 28px',
                   height: '100%',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  minHeight: 180,
+                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                 }}
               >
                 <div
@@ -1578,19 +1786,35 @@ export default function LandingPage() {
                     width: 38,
                     height: 38,
                     borderRadius: 10,
-                    background: '#f5f3ff',
+                    background: '#f3e8ff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginBottom: 16,
+                    marginBottom: 14,
                   }}
                 >
-                  <BarChartOutlined style={{ fontSize: 18, color: '#7c3aed' }} />
+                  <BarChartOutlined style={{ fontSize: 18, color: '#8b5cf6' }} />
                 </div>
-                <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17, fontWeight: 700, marginBottom: 6 }}>
+                <Typography.Title
+                  level={3}
+                  style={{
+                    color: '#0c0d10',
+                    fontSize: 19,
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 8px',
+                  }}
+                >
                   Analytics & insights
                 </Typography.Title>
-                <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.5, margin: 0 }}>
+                <Typography.Paragraph
+                  style={{
+                    color: '#5b5f6b',
+                    fontSize: 13.5,
+                    lineHeight: 1.55,
+                    margin: 0,
+                  }}
+                >
                   Real-time reports and dashboards that show what’s working, agent response SLA, and where to focus next.
                 </Typography.Paragraph>
               </div>
@@ -1601,11 +1825,12 @@ export default function LandingPage() {
               <div
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 20,
-                  padding: '24px 22px',
+                  border: '1px solid #e8e9ee',
+                  borderRadius: 24,
+                  padding: '30px 28px',
                   height: '100%',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  minHeight: 180,
+                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                 }}
               >
                 <div
@@ -1613,19 +1838,35 @@ export default function LandingPage() {
                     width: 38,
                     height: 38,
                     borderRadius: 10,
-                    background: '#fffbeb',
+                    background: '#fef3c7',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginBottom: 16,
+                    marginBottom: 14,
                   }}
                 >
-                  <ThunderboltOutlined style={{ fontSize: 18, color: '#d97706' }} />
+                  <ThunderboltOutlined style={{ fontSize: 18, color: '#f59e0b' }} />
                 </div>
-                <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17, fontWeight: 700, marginBottom: 6 }}>
+                <Typography.Title
+                  level={3}
+                  style={{
+                    color: '#0c0d10',
+                    fontSize: 19,
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 8px',
+                  }}
+                >
                   Automated workflows
                 </Typography.Title>
-                <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.5, margin: 0 }}>
+                <Typography.Paragraph
+                  style={{
+                    color: '#5b5f6b',
+                    fontSize: 13.5,
+                    lineHeight: 1.55,
+                    margin: 0,
+                  }}
+                >
                   Put sales greetings on autopilot with smart behavioral triggers, so your team can focus on closing deals.
                 </Typography.Paragraph>
               </div>
@@ -1636,11 +1877,12 @@ export default function LandingPage() {
               <div
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 20,
-                  padding: '24px 22px',
+                  border: '1px solid #e8e9ee',
+                  borderRadius: 24,
+                  padding: '30px 28px',
                   height: '100%',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  minHeight: 180,
+                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                 }}
               >
                 <div
@@ -1648,19 +1890,35 @@ export default function LandingPage() {
                     width: 38,
                     height: 38,
                     borderRadius: 10,
-                    background: '#fdf2f8',
+                    background: '#fce7f3',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginBottom: 16,
+                    marginBottom: 14,
                   }}
                 >
-                  <TeamOutlined style={{ fontSize: 18, color: '#db2777' }} />
+                  <TeamOutlined style={{ fontSize: 18, color: '#ec4899' }} />
                 </div>
-                <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17, fontWeight: 700, marginBottom: 6 }}>
+                <Typography.Title
+                  level={3}
+                  style={{
+                    color: '#0c0d10',
+                    fontSize: 19,
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 8px',
+                  }}
+                >
                   Team collaboration
                 </Typography.Title>
-                <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.5, margin: 0 }}>
+                <Typography.Paragraph
+                  style={{
+                    color: '#5b5f6b',
+                    fontSize: 13.5,
+                    lineHeight: 1.55,
+                    margin: 0,
+                  }}
+                >
                   Assign chats, leave internal whisper notes, use canned shortcuts, and stay aligned with real-time updates.
                 </Typography.Paragraph>
               </div>
