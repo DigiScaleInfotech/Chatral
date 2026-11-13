@@ -108,7 +108,7 @@ export default function SoundControl() {
   return (
     <Popover trigger="click" placement="bottomRight" content={content}>
       <Tooltip title={label}>
-        <Badge dot={!muted && status === 'blocked'} color="orange">
+        <Badge dot={!muted && status === 'blocked'} color="orange" offset={[-4, 6]}>
           <Button type="text" icon={icon} aria-label={label} />
         </Badge>
       </Tooltip>
