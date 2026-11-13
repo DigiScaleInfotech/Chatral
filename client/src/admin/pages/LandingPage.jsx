@@ -38,27 +38,6 @@ export default function LandingPage() {
   };
   const [currency, setCurrency] = useState(() => (detectIsIndia() ? 'INR' : 'USD'));
 
-  const [demoInput, setDemoInput] = useState('');
-  const [demoMessages, setDemoMessages] = useState([
-    { sender: 'bot', text: 'Hi! 👋 Looking to connect with our sales team?', time: 'Just now' },
-    { sender: 'visitor', text: 'Hey! Does Chatral include Shopify real-time sync?', time: 'Just now' },
-    { sender: 'agent', text: 'Yes, absolutely! Order history, customer spend & active cart sync automatically.', time: 'Just now' },
-  ]);
-
-  const handleDemoSend = (e) => {
-    e?.preventDefault();
-    if (!demoInput.trim()) return;
-    const msg = demoInput.trim();
-    setDemoInput('');
-    setDemoMessages((prev) => [...prev, { sender: 'visitor', text: msg, time: 'Just now' }]);
-    setTimeout(() => {
-      setDemoMessages((prev) => [
-        ...prev,
-        { sender: 'agent', text: 'Thanks for asking! Our operator inbox connects directly to your store in under 2 minutes.', time: 'Just now' },
-      ]);
-    }, 600);
-  };
-
   const handleCopySnippet = () => {
     navigator.clipboard?.writeText('<script async src="https://chatral.app/widget.js" data-chatral-store="store_live_992"></script>');
     setCopiedSnippet(true);
@@ -504,7 +483,7 @@ export default function LandingPage() {
               </svg>
             </button>
             <button
-              onClick={() => scrollTo('demo')}
+              onClick={() => scrollTo('pricing')}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -2167,7 +2146,7 @@ export default function LandingPage() {
 
               {/* Contact us Button */}
               <button
-                onClick={() => scrollTo('demo')}
+                onClick={() => scrollTo('pricing')}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -2306,137 +2285,6 @@ export default function LandingPage() {
               </div>
             </Col>
           </Row>
-        </div>
-      </section>
-
-      {/* 7. Interactive Playground Widget (Experience Chatral live) */}
-      <section id="demo" style={{ padding: '80px 24px', background: '#f7f8fa', borderTop: '1px solid #e6e7eb' }}>
-        <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '4px 12px',
-              background: '#eaf2ff',
-              border: '1px solid #d3e4ff',
-              borderRadius: 999,
-              marginBottom: 12,
-            }}
-          >
-            <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Interactive Demo
-            </span>
-          </div>
-          <Typography.Title
-            level={2}
-            style={{
-              color: '#0c0d10',
-              fontSize: isMobile ? 24 : 34,
-              fontWeight: 800,
-              letterSpacing: '-0.025em',
-              margin: '0 0 12px',
-            }}
-          >
-            Experience the visitor chat widget
-          </Typography.Title>
-          <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 14.5, marginBottom: 32 }}>
-            Send a message below to test the instant real-time response and clean interface.
-          </Typography.Paragraph>
-
-          <div
-            style={{
-              background: '#ffffff',
-              border: '1px solid #e6e7eb',
-              borderRadius: 18,
-              boxShadow: '0 16px 36px -10px rgba(12, 13, 16, 0.06)',
-              overflow: 'hidden',
-              textAlign: 'left',
-            }}
-          >
-            {/* Widget Bar */}
-            <div style={{ background: '#2b7fff', padding: '14px 18px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Flex gap={10} align="center">
-                <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#ffffff', color: '#2b7fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 14 }}>
-                  C
-                </div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>Chatral Support</div>
-                  <div style={{ fontSize: 11, opacity: 0.9 }}>🟢 Active now • Replies in under 1 min</div>
-                </div>
-              </Flex>
-              <Tag color="default" style={{ background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', fontSize: 10.5, borderRadius: 999 }}>
-                Demo Mode
-              </Tag>
-            </div>
-
-            {/* Chat Body */}
-            <div style={{ padding: 16, minHeight: 220, maxHeight: 300, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 10, background: '#f7f8fa' }}>
-              {demoMessages.map((m, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    alignSelf: m.sender === 'visitor' ? 'flex-end' : 'flex-start',
-                    maxWidth: '82%',
-                    background: m.sender === 'visitor' ? '#2b7fff' : '#ffffff',
-                    color: m.sender === 'visitor' ? '#ffffff' : '#0c0d10',
-                    border: m.sender === 'visitor' ? 'none' : '1px solid #e6e7eb',
-                    padding: '8px 12px',
-                    borderRadius: m.sender === 'visitor' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                    fontSize: 12.5,
-                    lineHeight: 1.5,
-                    boxShadow: '0 1px 3px rgba(12, 13, 16, 0.03)',
-                  }}
-                >
-                  {m.text}
-                </div>
-              ))}
-            </div>
-
-            {/* Quick Prompts */}
-            <div style={{ padding: '8px 14px', background: '#ffffff', borderTop: '1px solid #f1f2f5', display: 'flex', gap: 6, overflowX: 'auto' }}>
-              {['Pricing plans?', 'How to install on Shopify?', 'Is there a free trial?'].map((q, i) => (
-                <Button
-                  key={i}
-                  size="small"
-                  onClick={() => {
-                    setDemoMessages((p) => [...p, { sender: 'visitor', text: q, time: 'Just now' }]);
-                    setTimeout(() => {
-                      setDemoMessages((p) => [
-                        ...p,
-                        { sender: 'agent', text: `Great question regarding: "${q}". Chatral takes under 2 minutes to install and comes with a 7-day free trial!`, time: 'Just now' },
-                      ]);
-                    }, 500);
-                  }}
-                  style={{ background: '#f7f8fa', borderColor: '#e6e7eb', color: '#5b5f6b', fontSize: 11.5, height: 26 }}
-                >
-                  {q}
-                </Button>
-              ))}
-            </div>
-
-            {/* Input Bar */}
-            <form onSubmit={handleDemoSend} style={{ display: 'flex', padding: 10, background: '#ffffff', borderTop: '1px solid #e6e7eb' }}>
-              <input
-                type="text"
-                value={demoInput}
-                onChange={(e) => setDemoInput(e.target.value)}
-                placeholder="Type your message..."
-                style={{
-                  flex: 1,
-                  background: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  color: '#0c0d10',
-                  fontSize: 13,
-                  padding: '6px 10px',
-                }}
-              />
-              <Button type="primary" htmlType="submit" icon={<SendOutlined />} style={{ background: '#2b7fff', fontSize: 12, height: 32 }}>
-                Send
-              </Button>
-            </form>
-          </div>
         </div>
       </section>
 
@@ -2645,63 +2493,91 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 10. Relatik Signature CTA Banner (Radial Gradient Card) */}
-      <section style={{ padding: '60px 24px 80px', background: '#f7f8fa' }}>
+      {/* 9. Relatik Signature CTA Banner (Exact Match to Image 2) */}
+      <section style={{ padding: isMobile ? '40px 16px 70px' : '60px 24px 96px', background: '#f7f8fa' }}>
         <div
           style={{
             maxWidth: 1040,
             margin: '0 auto',
-            background: 'radial-gradient(70% 100% at 50% 0%, #2b7fff 0%, #0c0d10 72%)',
-            borderRadius: 24,
-            padding: isMobile ? '44px 20px' : '64px 40px',
+            background: 'radial-gradient(75% 100% at 50% -10%, #1e5eff 0%, #0d2870 38%, #07090e 75%, #050608 100%)',
+            borderRadius: 32,
+            padding: isMobile ? '56px 20px' : '92px 48px',
             textAlign: 'center',
-            boxShadow: '0px 24px 48px -16px rgba(12, 13, 16, 0.35)',
+            boxShadow: '0 30px 80px -20px rgba(12, 13, 16, 0.45), 0 12px 36px -10px rgba(30, 94, 255, 0.35)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
             position: 'relative',
             overflow: 'hidden',
           }}
         >
+          {/* Subtle top shimmer accent */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '60%',
+              height: 1,
+              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent)',
+            }}
+          />
+
           <Typography.Title
             level={2}
             style={{
               color: '#ffffff',
-              fontSize: isMobile ? 26 : 42,
+              fontSize: isMobile ? 28 : 46,
               fontWeight: 800,
-              letterSpacing: '-0.025em',
-              margin: '0 0 14px',
+              letterSpacing: '-0.035em',
+              lineHeight: 1.15,
+              margin: '0 0 16px',
             }}
           >
             Ready to build better customer relationships?
           </Typography.Title>
           <Typography.Paragraph
             style={{
-              color: 'rgba(255, 255, 255, 0.76)',
-              fontSize: 15.5,
-              maxWidth: 540,
-              margin: '0 auto 32px',
+              color: 'rgba(255, 255, 255, 0.68)',
+              fontSize: isMobile ? 14.5 : 15.5,
+              maxWidth: 520,
+              margin: '0 auto 36px',
               lineHeight: 1.6,
+              fontWeight: 400,
             }}
           >
             Start your free 7-day trial today. No credit card required — set up your workspace in minutes.
           </Typography.Paragraph>
-          <Button
-            type="primary"
-            size="large"
-            icon={<ArrowRightOutlined />}
+
+          <button
             onClick={() => nav('/login?mode=signup')}
             style={{
-              height: 48,
-              padding: '0 32px',
-              fontSize: 14.5,
-              fontWeight: 700,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
               background: '#ffffff',
               color: '#0c0d10',
               border: 'none',
-              borderRadius: 10,
-              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
+              borderRadius: 12,
+              padding: '13px 28px',
+              fontSize: 14.5,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
+              transition: 'all 0.15s ease',
+              fontFamily: 'inherit',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 255, 255, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'none';
+              e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.25)';
             }}
           >
-            Start Free Trial
-          </Button>
+            <span style={{ fontSize: 16 }}>→</span>
+            <span>Start Free Trial</span>
+          </button>
         </div>
       </section>
 
