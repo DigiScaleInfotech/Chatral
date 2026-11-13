@@ -24,7 +24,64 @@ export default function LandingPage() {
   const [copiedSnippet, setCopiedSnippet] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [openFaq, setOpenFaq] = useState(null);
-  const [heroActiveConv, setHeroActiveConv] = useState(false);
+  const [heroActiveConvId, setHeroActiveConvId] = useState('chatral');
+
+  const heroConversations = {
+    chatral: {
+      id: 'chatral',
+      name: 'Chatral Visitor',
+      initials: 'CV',
+      avatarBg: '#f1f5f9',
+      avatarColor: '#64748b',
+      time: '6m',
+      preview: 'Hello! We want to integrate Chatral live chat...',
+      channel: 'Website Live Widget',
+      location: 'Gujarat, India 🇮🇳',
+      page: '/pricing',
+      browser: 'Chrome • macOS',
+      messages: [
+        { sender: 'visitor', name: 'Visitor', time: '6m ago', text: 'Hello! We want to integrate Chatral live chat into our website. How quickly can we install it?' },
+        { sender: 'agent', name: 'Support Agent', time: '4m ago', text: 'Hi! It takes under 2 minutes. Simply copy the lightweight widget script tag into your website HTML, and live chat is instantly online!' },
+        { sender: 'visitor', name: 'Visitor', time: 'Just now', text: 'That is amazingly simple, thanks for the fast help!' },
+      ],
+    },
+    sarah: {
+      id: 'sarah',
+      name: 'Sarah Jenkins',
+      initials: 'SJ',
+      avatarBg: '#e0f2fe',
+      avatarColor: '#0369a1',
+      time: '24m',
+      preview: 'Can we customize the chat widget colors and logo?',
+      channel: 'Online Store Widget',
+      location: 'Mumbai, India 🇮🇳',
+      page: '/products',
+      browser: 'Safari • iOS',
+      messages: [
+        { sender: 'visitor', name: 'Sarah Jenkins', time: '24m ago', text: 'Hi there! Can we customize the chat widget theme color and brand logo to match our store?' },
+        { sender: 'agent', name: 'Support Agent', time: '20m ago', text: 'Yes Sarah! You can fully customize widget colors, logo, welcome messages, sounds, and business hours from Widget Design.' },
+        { sender: 'visitor', name: 'Sarah Jenkins', time: '18m ago', text: 'Super helpful! Setting it up on our store today. Thanks!' },
+      ],
+    },
+    alex: {
+      id: 'alex',
+      name: 'Alex Cooper',
+      initials: 'AC',
+      avatarBg: '#fef3c7',
+      avatarColor: '#b45309',
+      time: '1h',
+      preview: 'How do automated chat triggers work for visitors?',
+      channel: 'Website Live Widget',
+      location: 'London, UK 🇬🇧',
+      page: '/features',
+      browser: 'Firefox • Windows',
+      messages: [
+        { sender: 'visitor', name: 'Alex Cooper', time: '1h ago', text: 'Hey team, how do automated triggers and proactive chat invitations work for web visitors?' },
+        { sender: 'agent', name: 'Support Agent', time: '55m ago', text: 'Hi Alex! You can set triggers based on time on page (e.g. 30 seconds) or exit intent to pop up a friendly greeting automatically and boost sales.' },
+        { sender: 'visitor', name: 'Alex Cooper', time: '50m ago', text: 'Perfect, exactly what our team was looking for. Thank you!' },
+      ],
+    },
+  };
 
   // Auto-detect India for INR currency, otherwise USD
   const detectIsIndia = () => {
@@ -741,7 +798,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Bottom Active Store Box */}
+              {/* Bottom Active Store Box - Chatral */}
               <div
                 style={{
                   background: '#0d1524',
@@ -755,7 +812,7 @@ export default function LandingPage() {
                   ACTIVE STORE
                 </div>
                 <div style={{ fontSize: 13, fontWeight: 600, color: '#ffffff', marginTop: 3 }}>
-                  Digiscaleinfotech
+                  Chatral
                 </div>
               </div>
             </div>
@@ -782,7 +839,7 @@ export default function LandingPage() {
                   background: '#ffffff',
                 }}
               >
-                {/* Left controls */}
+                {/* Left controls - Chatral store dropdown */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <button
                     style={{
@@ -816,7 +873,7 @@ export default function LandingPage() {
                       color: '#0f172a',
                     }}
                   >
-                    <span>Digiscaleinfotech</span>
+                    <span>Chatral</span>
                     <span style={{ fontSize: 10, color: '#94a3b8' }}>▾</span>
                   </div>
 
@@ -835,7 +892,7 @@ export default function LandingPage() {
                   </span>
                 </div>
 
-                {/* Right controls */}
+                {/* Right controls - Profile circle with 'C' */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <div style={{ color: '#64748b', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -860,12 +917,12 @@ export default function LandingPage() {
                       boxShadow: '0 1px 3px rgba(147, 51, 234, 0.3)',
                     }}
                   >
-                    P
+                    C
                   </div>
                 </div>
               </div>
 
-              {/* Workspace 3-Column Content Area (fills remaining height: 608px) */}
+              {/* Workspace 3-Column Content Area */}
               <div
                 style={{
                   flex: 1,
@@ -1026,169 +1083,77 @@ export default function LandingPage() {
                     </div>
                   </div>
 
-                  {/* Conversation List Cards */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 2 }}>
-                    {/* Card 1: Chatral (Primary from Image 2) */}
-                    <div
-                      onClick={() => setHeroActiveConv(!heroActiveConv)}
-                      style={{
-                        border: heroActiveConv ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
-                        borderRadius: 8,
-                        padding: '10px 10px',
-                        background: heroActiveConv ? '#f8fafc' : '#ffffff',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                        boxShadow: heroActiveConv ? '0 2px 6px rgba(37, 99, 235, 0.08)' : 'none',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                        <input type="checkbox" checked={heroActiveConv} readOnly style={{ marginTop: 4, cursor: 'pointer' }} />
+                  {/* Conversation List Cards (clean without extra unassign/support/feature tags) */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 2 }}>
+                    {Object.values(heroConversations).map((conv) => {
+                      const isSelected = heroActiveConvId === conv.id;
+                      return (
                         <div
+                          key={conv.id}
+                          onClick={() => setHeroActiveConvId((prev) => (prev === conv.id ? null : conv.id))}
                           style={{
-                            width: 28,
-                            height: 28,
-                            borderRadius: '50%',
-                            background: '#f1f5f9',
-                            border: '1px solid #e2e8f0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                            color: '#64748b',
+                            border: isSelected ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
+                            borderRadius: 8,
+                            padding: '10px 10px',
+                            background: isSelected ? '#f8fafc' : '#ffffff',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                            boxShadow: isSelected ? '0 2px 6px rgba(37, 99, 235, 0.08)' : 'none',
                           }}
                         >
-                          <UserOutlined style={{ fontSize: 12 }} />
-                        </div>
-
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>Chatral</span>
-                            <span style={{ fontSize: 11, color: '#94a3b8' }}>6 minutes</span>
-                          </div>
-                          <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            Attachment
-                          </div>
-                          <div style={{ marginTop: 6 }}>
-                            <span
+                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              readOnly
+                              style={{ marginTop: 4, cursor: 'pointer' }}
+                            />
+                            <div
                               style={{
-                                background: '#eff6ff',
-                                color: '#4f46e5',
-                                border: '1px solid #c7d2fe',
-                                borderRadius: 4,
-                                padding: '1px 7px',
-                                fontSize: 10,
-                                fontWeight: 500,
+                                width: 28,
+                                height: 28,
+                                borderRadius: '50%',
+                                background: conv.avatarBg,
+                                border: '1px solid #e2e8f0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                color: conv.avatarColor,
+                                fontSize: 11,
+                                fontWeight: 700,
                               }}
                             >
-                              Unassigned
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                              {conv.initials === 'CV' ? <UserOutlined style={{ fontSize: 12 }} /> : conv.initials}
+                            </div>
 
-                    {/* Card 2: Sarah Jenkins */}
-                    <div
-                      style={{
-                        border: '1px solid #f1f3f7',
-                        borderRadius: 8,
-                        padding: '10px 10px',
-                        background: '#ffffff',
-                        opacity: 0.85,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                        <input type="checkbox" readOnly style={{ marginTop: 4 }} />
-                        <div
-                          style={{
-                            width: 28,
-                            height: 28,
-                            borderRadius: '50%',
-                            background: '#e0f2fe',
-                            border: '1px solid #bae6fd',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                            color: '#0369a1',
-                            fontSize: 11,
-                            fontWeight: 700,
-                          }}
-                        >
-                          SJ
-                        </div>
-
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: 600, fontSize: 12.5, color: '#0f172a' }}>Sarah Jenkins</span>
-                            <span style={{ fontSize: 10.5, color: '#94a3b8' }}>24m</span>
-                          </div>
-                          <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            Can we integrate with Shopify?
-                          </div>
-                          <div style={{ marginTop: 5 }}>
-                            <span style={{ background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: 4, padding: '1px 6px', fontSize: 9.5, fontWeight: 500 }}>
-                              Support
-                            </span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>{conv.name}</span>
+                                <span style={{ fontSize: 11, color: '#94a3b8' }}>{conv.time}</span>
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: 11.5,
+                                  color: '#64748b',
+                                  marginTop: 3,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                              >
+                                {conv.preview}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Card 3: Alex Cooper */}
-                    <div
-                      style={{
-                        border: '1px solid #f1f3f7',
-                        borderRadius: 8,
-                        padding: '10px 10px',
-                        background: '#ffffff',
-                        opacity: 0.8,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                        <input type="checkbox" readOnly style={{ marginTop: 4 }} />
-                        <div
-                          style={{
-                            width: 28,
-                            height: 28,
-                            borderRadius: '50%',
-                            background: '#fef3c7',
-                            border: '1px solid #fde68a',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                            color: '#b45309',
-                            fontSize: 11,
-                            fontWeight: 700,
-                          }}
-                        >
-                          AC
-                        </div>
-
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: 600, fontSize: 12.5, color: '#0f172a' }}>Alex Cooper</span>
-                            <span style={{ fontSize: 10.5, color: '#94a3b8' }}>1h</span>
-                          </div>
-                          <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            How do custom triggers work?
-                          </div>
-                          <div style={{ marginTop: 5 }}>
-                            <span style={{ background: '#f5f3ff', color: '#7c3aed', border: '1px solid #ddd6fe', borderRadius: 4, padding: '1px 6px', fontSize: 9.5, fontWeight: 500 }}>
-                              Feature
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
 
                   {/* Interactive Helper Hint */}
                   <div style={{ fontSize: 10.5, color: '#94a3b8', textAlign: 'center', marginTop: 'auto', padding: '6px 0' }}>
-                    💡 {heroActiveConv ? 'Click again to view default empty state' : 'Click conversation card to preview live chat'}
+                    💡 Click any chat above to view the live conversation
                   </div>
                 </div>
 
@@ -1196,18 +1161,19 @@ export default function LandingPage() {
                 <div
                   style={{
                     flex: 1,
+                    minWidth: 0,
                     borderRight: isMobile ? 'none' : '1px solid #f1f3f7',
-                    background: heroActiveConv ? '#f8fafc' : '#ffffff',
-                    display: isMobile && !heroActiveConv ? 'none' : 'flex',
+                    background: heroActiveConvId ? '#f8fafc' : '#ffffff',
+                    display: isMobile && !heroActiveConvId ? 'none' : 'flex',
                     flexDirection: 'column',
-                    justifyContent: heroActiveConv ? 'space-between' : 'center',
-                    alignItems: heroActiveConv ? 'stretch' : 'center',
-                    padding: heroActiveConv ? 0 : 24,
+                    justifyContent: heroActiveConvId ? 'space-between' : 'center',
+                    alignItems: heroActiveConvId ? 'stretch' : 'center',
+                    padding: heroActiveConvId ? 0 : 24,
                     height: '100%',
                   }}
                 >
-                  {!heroActiveConv ? (
-                    /* Default state matching Image 2 */
+                  {!heroActiveConvId || !heroConversations[heroActiveConvId] ? (
+                    /* Default empty state matching Image 2 */
                     <div style={{ textAlign: 'center' }}>
                       <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
                         <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" />
@@ -1220,127 +1186,114 @@ export default function LandingPage() {
                       </div>
                     </div>
                   ) : (
-                    /* Active chat conversation */
-                    <>
-                      {/* Chat Header */}
-                      <div
-                        style={{
-                          height: 50,
-                          borderBottom: '1px solid #eef2f6',
-                          background: '#ffffff',
-                          padding: '0 18px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
-                          <span style={{ fontSize: 13.5, fontWeight: 700, color: '#0f172a' }}>Chatral Visitor</span>
-                          <span style={{ fontSize: 11, color: '#64748b' }}>• Live on Digiscaleinfotech</span>
-                        </div>
-                        <span style={{ fontSize: 11.5, color: '#2563eb', fontWeight: 600, cursor: 'pointer' }}>Resolve chat</span>
-                      </div>
-
-                      {/* Chat Messages Body */}
-                      <div style={{ flex: 1, padding: 20, display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
-                        {/* Visitor Message */}
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
-                          <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>Visitor • 6m ago</div>
+                    /* Active chat conversation for selected customer */
+                    (() => {
+                      const activeConv = heroConversations[heroActiveConvId];
+                      return (
+                        <>
+                          {/* Chat Header - Fixed single line without awkward wrapping */}
                           <div
                             style={{
+                              height: 52,
+                              borderBottom: '1px solid #eef2f6',
                               background: '#ffffff',
-                              border: '1px solid #e2e8f0',
-                              borderRadius: '4px 14px 14px 14px',
-                              padding: '11px 15px',
-                              fontSize: 12.5,
-                              color: '#0f172a',
-                              lineHeight: 1.5,
-                              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+                              padding: '0 16px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              flexShrink: 0,
+                              minWidth: 0,
                             }}
                           >
-                            Hello! We want to integrate Chatral live chat into our website. How quickly can we install it?
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
+                              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
+                              <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                                {activeConv.name}
+                              </span>
+                              <span style={{ fontSize: 11.5, color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                • Live on Chatral
+                              </span>
+                            </div>
+                            <span style={{ fontSize: 11.5, color: '#2563eb', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: 12 }}>
+                              Resolve chat
+                            </span>
                           </div>
-                        </div>
 
-                        {/* Agent Reply */}
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', maxWidth: '85%', alignSelf: 'flex-end' }}>
-                          <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>Support Agent • 4m ago</div>
-                          <div
-                            style={{
-                              background: '#2563eb',
-                              color: '#ffffff',
-                              borderRadius: '14px 4px 14px 14px',
-                              padding: '11px 15px',
-                              fontSize: 12.5,
-                              lineHeight: 1.5,
-                              boxShadow: '0 1px 3px rgba(37,99,235,0.2)',
-                            }}
-                          >
-                            Hi! It takes under 2 minutes. Simply copy the lightweight widget script tag into your website's HTML, and live chat is instantly online!
+                          {/* Chat Messages Body */}
+                          <div style={{ flex: 1, padding: 20, display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto' }}>
+                            {activeConv.messages.map((msg, idx) => (
+                              <div
+                                key={idx}
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: msg.sender === 'visitor' ? 'flex-start' : 'flex-end',
+                                  maxWidth: msg.sender === 'visitor' ? '82%' : '85%',
+                                  alignSelf: msg.sender === 'visitor' ? 'flex-start' : 'flex-end',
+                                }}
+                              >
+                                <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>
+                                  {msg.name} • {msg.time}
+                                </div>
+                                <div
+                                  style={{
+                                    background: msg.sender === 'visitor' ? '#ffffff' : '#2563eb',
+                                    color: msg.sender === 'visitor' ? '#0f172a' : '#ffffff',
+                                    border: msg.sender === 'visitor' ? '1px solid #e2e8f0' : 'none',
+                                    borderRadius: msg.sender === 'visitor' ? '4px 14px 14px 14px' : '14px 4px 14px 14px',
+                                    padding: '10px 14px',
+                                    fontSize: 12.5,
+                                    lineHeight: 1.5,
+                                    boxShadow: msg.sender === 'visitor' ? '0 1px 2px rgba(0,0,0,0.03)' : '0 1px 3px rgba(37,99,235,0.2)',
+                                  }}
+                                >
+                                  {msg.text}
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        </div>
 
-                        {/* Visitor Response */}
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
-                          <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>Visitor • Just now</div>
-                          <div
-                            style={{
-                              background: '#ffffff',
-                              border: '1px solid #e2e8f0',
-                              borderRadius: '4px 14px 14px 14px',
-                              padding: '11px 15px',
-                              fontSize: 12.5,
-                              color: '#0f172a',
-                              lineHeight: 1.5,
-                              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-                            }}
-                          >
-                            That is amazingly simple, thanks for the fast help!
+                          {/* Chat Input Bar */}
+                          <div style={{ padding: '12px 16px', background: '#ffffff', borderTop: '1px solid #eef2f6', flexShrink: 0 }}>
+                            <div
+                              style={{
+                                border: '1px solid #e2e8f0',
+                                borderRadius: 8,
+                                padding: '8px 12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                background: '#fafbfd',
+                              }}
+                            >
+                              <span style={{ fontSize: 12, color: '#94a3b8' }}>Type a reply or use saved replies...</span>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b' }}>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                                <div style={{ background: '#2563eb', color: '#ffffff', borderRadius: 6, padding: '4px 10px', fontSize: 11, fontWeight: 600 }}>Send</div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-
-                      {/* Chat Input Bar */}
-                      <div style={{ padding: '14px 18px', background: '#ffffff', borderTop: '1px solid #eef2f6', flexShrink: 0 }}>
-                        <div
-                          style={{
-                            border: '1px solid #e2e8f0',
-                            borderRadius: 8,
-                            padding: '9px 14px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            background: '#fafbfd',
-                          }}
-                        >
-                          <span style={{ fontSize: 12, color: '#94a3b8' }}>Type a reply or use saved replies...</span>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b' }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                            <div style={{ background: '#2563eb', color: '#ffffff', borderRadius: 6, padding: '5px 12px', fontSize: 11, fontWeight: 600 }}>Send</div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
+                        </>
+                      );
+                    })()
                   )}
                 </div>
 
                 {/* Column 3: Right Details Panel */}
                 <div
                   style={{
-                    width: isMobile ? '0' : 240,
+                    width: isMobile ? '0' : 235,
                     display: isMobile ? 'none' : 'flex',
                     flexDirection: 'column',
-                    justifyContent: heroActiveConv ? 'flex-start' : 'center',
-                    alignItems: heroActiveConv ? 'stretch' : 'center',
+                    justifyContent: heroActiveConvId ? 'flex-start' : 'center',
+                    alignItems: heroActiveConvId ? 'stretch' : 'center',
                     background: '#ffffff',
-                    padding: heroActiveConv ? 18 : 24,
+                    padding: heroActiveConvId ? 16 : 24,
                     height: '100%',
                     flexShrink: 0,
                   }}
                 >
-                  {!heroActiveConv ? (
+                  {!heroActiveConvId || !heroConversations[heroActiveConvId] ? (
                     /* Default state matching Image 2 */
                     <div style={{ textAlign: 'center' }}>
                       <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
@@ -1354,39 +1307,44 @@ export default function LandingPage() {
                       </div>
                     </div>
                   ) : (
-                    /* Active Visitor Details */
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                      <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', borderBottom: '1px solid #f1f3f7', paddingBottom: 8 }}>
-                        Visitor Details
-                      </div>
+                    /* Active Visitor Details dynamically reflecting selected customer */
+                    (() => {
+                      const activeConv = heroConversations[heroActiveConvId];
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                          <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', borderBottom: '1px solid #f1f3f7', paddingBottom: 8 }}>
+                            Visitor Details
+                          </div>
 
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 11.5 }}>
-                        <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>NAME</div>
-                          <div style={{ color: '#0f172a', fontWeight: 600, marginTop: 2 }}>Chatral Visitor</div>
-                        </div>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 11.5 }}>
+                            <div>
+                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>NAME</div>
+                              <div style={{ color: '#0f172a', fontWeight: 600, marginTop: 2 }}>{activeConv.name}</div>
+                            </div>
 
-                        <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>CHANNEL</div>
-                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>Live Chat Widget</div>
-                        </div>
+                            <div>
+                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>CHANNEL</div>
+                              <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>{activeConv.channel}</div>
+                            </div>
 
-                        <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>LOCATION</div>
-                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>Gujarat, India 🇮🇳</div>
-                        </div>
+                            <div>
+                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>LOCATION</div>
+                              <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>{activeConv.location}</div>
+                            </div>
 
-                        <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>ACTIVE PAGE</div>
-                          <div style={{ color: '#2563eb', fontWeight: 500, marginTop: 2 }}>/pricing</div>
-                        </div>
+                            <div>
+                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>ACTIVE PAGE</div>
+                              <div style={{ color: '#2563eb', fontWeight: 500, marginTop: 2 }}>{activeConv.page}</div>
+                            </div>
 
-                        <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>BROWSER & DEVICE</div>
-                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>Chrome • macOS</div>
+                            <div>
+                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>BROWSER & DEVICE</div>
+                              <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>{activeConv.browser}</div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      );
+                    })()
                   )}
                 </div>
               </div>
