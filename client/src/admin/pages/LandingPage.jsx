@@ -24,6 +24,20 @@ export default function LandingPage() {
   const [copiedSnippet, setCopiedSnippet] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [openFaq, setOpenFaq] = useState(null);
+
+  // Auto-detect India for INR currency, otherwise USD
+  const detectIsIndia = () => {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      if (tz.includes('Calcutta') || tz.includes('Kolkata')) return true;
+      if (navigator.languages?.some((l) => l.endsWith('-IN') || l.includes('IN'))) return true;
+    } catch (e) {
+      // fallback
+    }
+    return false;
+  };
+  const [currency, setCurrency] = useState(() => (detectIsIndia() ? 'INR' : 'USD'));
+
   const [demoInput, setDemoInput] = useState('');
   const [demoMessages, setDemoMessages] = useState([
     { sender: 'bot', text: 'Hi! 👋 Looking to connect with our sales team?', time: 'Just now' },
@@ -518,7 +532,7 @@ export default function LandingPage() {
           {/* Relatik Trust Checkmarks */}
           <Flex justify="center" gap={22} wrap="wrap" style={{ color: '#6b707c', fontSize: 13, fontWeight: 400 }}>
             <span>✓ No credit card required</span>
-            <span>✓ 14-day free trial</span>
+            <span>✓ 7-day free trial</span>
             <span>✓ Cancel anytime</span>
           </Flex>
         </div>
@@ -2205,7 +2219,7 @@ export default function LandingPage() {
                   },
                   {
                     q: 'Can I try Chatral for free?',
-                    a: 'Yes! Every plan includes a 14-day free trial with full access to all features — no credit card required. Cancel anytime with a single click.',
+                    a: 'Yes! Every plan starts with a full-access 7-day free trial — no credit card required. Cancel anytime with a single click.',
                   },
                 ].map((item, idx) => {
                   const isOpen = openFaq === idx;
@@ -2390,7 +2404,7 @@ export default function LandingPage() {
                     setTimeout(() => {
                       setDemoMessages((p) => [
                         ...p,
-                        { sender: 'agent', text: `Great question regarding: "${q}". Chatral takes under 2 minutes to install and comes with a 14-day free trial!`, time: 'Just now' },
+                        { sender: 'agent', text: `Great question regarding: "${q}". Chatral takes under 2 minutes to install and comes with a 7-day free trial!`, time: 'Just now' },
                       ]);
                     }, 500);
                   }}
@@ -2426,9 +2440,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 8. Pricing Plans (Relatik Exact Styling) */}
+      {/* 8. Pricing Plans (Relatik Exact Styling - 7-Day Free Trial + Starter Growth) */}
       <section id="pricing" style={{ padding: '80px 24px', background: '#ffffff', borderTop: '1px solid #e6e7eb' }}>
-        <div style={{ maxWidth: 1040, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
           
           <div
             style={{
@@ -2460,15 +2474,15 @@ export default function LandingPage() {
             Simple, transparent pricing
           </Typography.Title>
           <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15, maxWidth: 540, margin: '0 auto 36px' }}>
-            Choose the plan that fits your business. All plans include a 14-day free trial.
+            Get started with a full-access 7-day free trial. Upgrade anytime to keep conversations flowing.
           </Typography.Paragraph>
 
-          {/* Relatik Monthly / Annual Toggle Switch */}
-          <div style={{ marginBottom: 44 }}>
+          {/* Billing Cycle + Currency Switcher */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 44 }}>
             <Segmented
               options={[
                 { label: 'Monthly', value: 'monthly' },
-                { label: 'Annual (Save 20%)', value: 'annual' },
+                { label: 'Annual (Save 25%)', value: 'annual' },
               ]}
               value={billingCycle}
               onChange={setBillingCycle}
@@ -2481,35 +2495,60 @@ export default function LandingPage() {
                 fontSize: 13,
               }}
             />
+
+            <Segmented
+              options={[
+                { label: '$ USD', value: 'USD' },
+                { label: '₹ INR', value: 'INR' },
+              ]}
+              value={currency}
+              onChange={setCurrency}
+              style={{
+                background: '#f1f2f5',
+                padding: 3,
+                borderRadius: 10,
+                color: '#0c0d10',
+                fontWeight: 600,
+                fontSize: 13,
+              }}
+            />
           </div>
 
-          <Row gutter={[20, 20]} align="stretch">
-            {/* Free Plan */}
-            <Col xs={24} md={8}>
+          <Row gutter={[24, 24]} justify="center" align="stretch">
+            {/* 1. 7-Day Free Trial Plan */}
+            <Col xs={24} md={12} lg={10}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e6e7eb',
                   borderRadius: 20,
-                  padding: 28,
+                  padding: '32px 28px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   textAlign: 'left',
+                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
+                  transition: 'border-color 0.2s ease',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#cbd5e1')}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#e6e7eb')}
               >
-                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Free Forever</div>
+                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>7-Day Free Trial</div>
                 <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
-                  $0 <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+                  {currency === 'INR' ? '₹0' : '$0'}{' '}
+                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ 7 days free</span>
                 </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20 }}>
-                  Essential live chat for individual websites and solo founders.
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                  Full access to all features free for 7 days. Test on your website with zero risk.
                 </div>
-                <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 16px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+                <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 18px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Full Access for 7 Days</b></div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 1 Active Store</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Real-Time Visitor Presence</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Automated Sales Triggers</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Sound & Desktop Alerts</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Standard Web Chat Widget</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
                 </div>
@@ -2517,21 +2556,24 @@ export default function LandingPage() {
                   block
                   size="middle"
                   onClick={() => nav('/login?mode=signup')}
-                  style={{ background: '#f7f8fa', borderColor: '#e6e7eb', color: '#0c0d10', fontWeight: 600, height: 42, borderRadius: 10, fontSize: 13.5 }}
+                  style={{ background: '#f7f8fa', borderColor: '#e6e7eb', color: '#0c0d10', fontWeight: 600, height: 44, borderRadius: 10, fontSize: 13.5 }}
                 >
-                  Start Free
+                  Start 7-Day Free Trial
                 </Button>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                  No credit card required
+                </div>
               </div>
             </Col>
 
-            {/* Starter Plan (Relatik Featured / Most Popular) */}
-            <Col xs={24} md={8}>
+            {/* 2. Starter Growth Plan (Starts at $5 / mo) */}
+            <Col xs={24} md={12} lg={10}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '2px solid #2b7fff',
                   borderRadius: 20,
-                  padding: 28,
+                  padding: '32px 28px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -2558,21 +2600,24 @@ export default function LandingPage() {
                 </div>
                 <div style={{ fontWeight: 700, color: '#2b7fff', fontSize: 16 }}>Starter Growth</div>
                 <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
-                  {billingCycle === 'annual' ? '$9' : '$12'}{' '}
+                  {currency === 'INR'
+                    ? (billingCycle === 'annual' ? '₹399' : '₹499')
+                    : (billingCycle === 'annual' ? '$5' : '$7')}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20 }}>
-                  For growing e-commerce stores needing automated sales triggers and radar.
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                  Everything you need to turn visitors into buyers with multi-store and no branding.
                 </div>
-                <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 16px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+                <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 18px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>3 Active Stores</b></div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Automated Sales Triggers</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Real-Time Live Visitor Radar</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Remove "Powered by Chatral"</b></div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Shopify & E-commerce Integration</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Priority 24/7 Support</div>
                 </div>
                 <Button
                   type="primary"
@@ -2583,57 +2628,17 @@ export default function LandingPage() {
                     background: '#2b7fff',
                     border: 'none',
                     fontWeight: 600,
-                    height: 42,
+                    height: 44,
                     borderRadius: 10,
                     fontSize: 13.5,
                     boxShadow: '0 4px 14px rgba(43, 127, 255, 0.25)',
                   }}
                 >
-                  Start 14-Day Free Trial
+                  Start 7-Day Free Trial
                 </Button>
-              </div>
-            </Col>
-
-            {/* Pro / Business Plan */}
-            <Col xs={24} md={8}>
-              <div
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 20,
-                  padding: 28,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  textAlign: 'left',
-                }}
-              >
-                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business Pro</div>
-                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
-                  {billingCycle === 'annual' ? '$19' : '$24'}{' '}
-                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                  Includes 7-day free trial • Cancel anytime
                 </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20 }}>
-                  Maximum power, multi-store operations, deep Shopify sync, and white-label.
-                </div>
-                <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 16px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Unlimited Stores</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Deep Shopify & Order Integration</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Advanced Analytics & Reports</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Bot Detection & Traffic Filter</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>100% White-Label Branding</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 24/7 Dedicated Support</div>
-                </div>
-                <Button
-                  block
-                  size="middle"
-                  onClick={() => nav('/login?mode=signup')}
-                  style={{ background: '#f7f8fa', borderColor: '#e6e7eb', color: '#0c0d10', fontWeight: 600, height: 42, borderRadius: 10, fontSize: 13.5 }}
-                >
-                  Start 14-Day Free Trial
-                </Button>
               </div>
             </Col>
           </Row>
@@ -2676,7 +2681,7 @@ export default function LandingPage() {
               lineHeight: 1.6,
             }}
           >
-            Start your free 14-day trial today. No credit card required — set up your workspace in minutes.
+            Start your free 7-day trial today. No credit card required — set up your workspace in minutes.
           </Typography.Paragraph>
           <Button
             type="primary"
