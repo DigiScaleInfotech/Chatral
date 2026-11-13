@@ -175,35 +175,43 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   const page = () => ({ url: location.href, title: document.title, referrer: document.referrer, device: isMobile() ? 'mobile' : 'desktop' });
 
   // ---------- boot ----------
-  const boot = useCallback(async () => {
-    tag.current = store.get(`lc_k_${storeKey}`);
-    if (!tag.current) {
-      tag.current = (await call('/tag')).tag;
-      store.set(`lc_k_${storeKey}`, tag.current);
-    }
-    token.current = store.get(`lc_v_${tag.current}`);
-    const s = await call('/session', { method: 'POST', body: { token: token.current, ...page() } });
-    if (s.visitorToken) { token.current = s.visitorToken; store.set(`lc_v_${s.tag}`, s.visitorToken); }
-    if (s.rotatedKey) console.warn('[livechat] This embed uses an old store key. Update the snippet from your dashboard.');
-    setCfg(s.config);
-    window.__livechatLoadFont?.(s.config.font.family);
-    setVisitor(s.visitor);
-    setAvail(s.availability);
-    if (s.conversation) {
-      setConv({ id: s.conversation.id, status: s.conversation.status });
-      lastSeq.current = s.conversation.lastSeq;
-      setAgentReadSeq(s.conversation.agentReadSeq);
-      setMessages(s.conversation.messages.map(withFormState));
-      setUnread(s.conversation.unreadForVisitor);
-      if (openRef.current && !resumed.current) {
-        resumed.current = true;
-        call('/resume', { method: 'POST', body: { conversationId: s.conversation.id } }).catch(() => {});
+  const boot = useCallback(async (retryCount = 0) => {
+    try {
+      tag.current = store.get(`lc_k_${storeKey}`);
+      if (!tag.current) {
+        tag.current = (await call('/tag')).tag;
+        store.set(`lc_k_${storeKey}`, tag.current);
       }
-    } else {
-      setConv(null); setMessages([]);
-      if (s.proactive) showProactive(s.proactive, false);
+      token.current = store.get(`lc_v_${tag.current}`);
+      const s = await call('/session', { method: 'POST', body: { token: token.current, ...page() } });
+      if (s.visitorToken) { token.current = s.visitorToken; store.set(`lc_v_${s.tag}`, s.visitorToken); }
+      if (s.rotatedKey) console.warn('[livechat] This embed uses an old store key. Update the snippet from your dashboard.');
+      setCfg(s.config);
+      window.__livechatLoadFont?.(s.config.font.family);
+      setVisitor(s.visitor);
+      setAvail(s.availability);
+      if (s.conversation) {
+        setConv({ id: s.conversation.id, status: s.conversation.status });
+        lastSeq.current = s.conversation.lastSeq;
+        setAgentReadSeq(s.conversation.agentReadSeq);
+        setMessages(s.conversation.messages.map(withFormState));
+        setUnread(s.conversation.unreadForVisitor);
+        if (openRef.current && !resumed.current) {
+          resumed.current = true;
+          call('/resume', { method: 'POST', body: { conversationId: s.conversation.id } }).catch(() => {});
+        }
+      } else {
+        setConv(null); setMessages([]);
+        if (s.proactive) showProactive(s.proactive, false);
+      }
+      connect();
+    } catch (err) {
+      console.warn('[livechat] Widget boot attempt failed:', err?.message || err);
+      // Auto-retry up to 4 times (every 3.5s) if backend is waking up or temporary network hiccup
+      if (retryCount < 4) {
+        setTimeout(() => boot(retryCount + 1), 3500);
+      }
     }
-    connect();
   }, [call, storeKey]);
 
   const withFormState = (m) => (m.meta?.form ? { ...m, formDone: store.get(`lc_form_${m.id}`) === '1' } : m);

@@ -176,6 +176,8 @@ export async function checkOrigin(store, origin) {
   if (!origin) return process.env.NODE_ENV === 'test';
   if (origin === adminOrigin || origin === new URL(config.apiUrl).origin) return true; // dashboard preview / pop-out window
   const host = originHost(origin);
+  // Seamlessly allow local development (localhost, 127.0.0.1) and Vercel preview/production deployments
+  if (host === 'localhost' || host === '127.0.0.1' || (host && host.endsWith('.vercel.app'))) return true;
   if (host && store.allowedOrigins.length && originAllowed(origin, store.allowedOrigins)) return true;
   await prisma.store.update({ where: { id: store.id }, data: { lastRejectedOrigin: hostOf(origin), lastRejectedAt: clock.now() } }).catch(() => {});
   return false;
