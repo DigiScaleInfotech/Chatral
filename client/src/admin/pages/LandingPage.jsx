@@ -2539,9 +2539,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 10. Relatik Signature Footer (Exact 1:1 Match to Image 1) */}
-      <footer style={{ background: '#ffffff', borderTop: '1px solid #ebecee', padding: isMobile ? '56px 20px 32px' : '72px 24px 36px' }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
+      {/* 10. Relatik Signature Footer with Official Chatral Logo */}
+      <footer style={{ background: '#ffffff', borderTop: '1px solid #ebecee', padding: isMobile ? '56px 20px 36px' : '80px 24px 44px' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           {/* Top Row: Brand on Left, 3 Nav Columns on Right */}
           <div
             style={{
@@ -2552,30 +2552,12 @@ export default function LandingPage() {
               gap: isMobile ? 36 : 48,
             }}
           >
-            {/* Left Column: Brand Logo + Tagline */}
-            <div style={{ maxWidth: 300 }}>
-              <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-                <div
-                  style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: 6,
-                    background: '#0c0d10',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#ffffff',
-                    fontSize: 13,
-                    fontWeight: 700,
-                  }}
-                >
-                  ⌘
-                </div>
-                <span style={{ fontSize: 16.5, fontWeight: 700, color: '#0c0d10', letterSpacing: '-0.02em' }}>
-                  chatral
-                </span>
+            {/* Left Column: Official Chatral Brand Logo + Tagline */}
+            <div style={{ maxWidth: 340 }}>
+              <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+                <ChatralFullLogo height={isMobile ? 32 : 38} dark={false} />
               </Link>
-              <div style={{ color: '#6b707c', fontSize: 13.5, lineHeight: 1.55, marginTop: 18 }}>
+              <div style={{ color: '#5b6170', fontSize: 15, lineHeight: 1.6, marginTop: 18 }}>
                 The simple live chat for teams that care<br />about relationships.
               </div>
             </div>
@@ -2584,14 +2566,14 @@ export default function LandingPage() {
             <div
               style={{
                 display: 'flex',
-                gap: isMobile ? 36 : 76,
+                gap: isMobile ? 36 : 84,
                 flexWrap: 'wrap',
               }}
             >
               {/* Product */}
-              <div style={{ minWidth: 100 }}>
-                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 13.5, marginBottom: 16 }}>Product</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 13.5 }}>
+              <div style={{ minWidth: 110 }}>
+                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 15.5, marginBottom: 18 }}>Product</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 13, fontSize: 15 }}>
                   <a
                     onClick={() => scrollTo('features')}
                     style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
@@ -2628,9 +2610,9 @@ export default function LandingPage() {
               </div>
 
               {/* Company */}
-              <div style={{ minWidth: 100 }}>
-                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 13.5, marginBottom: 16 }}>Company</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 13.5 }}>
+              <div style={{ minWidth: 110 }}>
+                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 15.5, marginBottom: 18 }}>Company</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 13, fontSize: 15 }}>
                   <a
                     onClick={() => scrollTo('testimonials')}
                     style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
@@ -2651,9 +2633,9 @@ export default function LandingPage() {
               </div>
 
               {/* Legal */}
-              <div style={{ minWidth: 100 }}>
-                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 13.5, marginBottom: 16 }}>Legal</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 13.5 }}>
+              <div style={{ minWidth: 110 }}>
+                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 15.5, marginBottom: 18 }}>Legal</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 13, fontSize: 15 }}>
                   <Link
                     to="/privacy"
                     style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
@@ -2676,7 +2658,7 @@ export default function LandingPage() {
           </div>
 
           {/* Bottom Divider */}
-          <div style={{ borderTop: '1px solid #ebecee', margin: '48px 0 24px' }} />
+          <div style={{ borderTop: '1px solid #ebecee', margin: '52px 0 28px' }} />
 
           {/* Bottom Copyright & Social Icons */}
           <div
@@ -2685,15 +2667,15 @@ export default function LandingPage() {
               flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'space-between',
               alignItems: isMobile ? 'flex-start' : 'center',
-              gap: 14,
+              gap: 16,
             }}
           >
-            <div style={{ color: '#8c92a4', fontSize: 12.5, fontWeight: 400 }}>
-              &copy; {new Date().getFullYear()} Chatral. All rights reserved. &nbsp;&nbsp; Made by <span style={{ color: '#0c0d10', fontWeight: 500 }}>DigiScale Infotech</span>
+            <div style={{ color: '#717684', fontSize: 14, fontWeight: 400 }}>
+              &copy; {new Date().getFullYear()} Chatral. All rights reserved. &nbsp;&nbsp; Made by <span style={{ color: '#0c0d10', fontWeight: 600 }}>DigiScale Infotech</span>
             </div>
 
             {/* Social Icons (X / Twitter and LinkedIn) */}
-            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
               <a
                 href="https://x.com"
                 target="_blank"
@@ -2703,7 +2685,7 @@ export default function LandingPage() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = '#717684')}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
@@ -2717,7 +2699,7 @@ export default function LandingPage() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = '#717684')}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 1.6 1.6 1.6 1.6 0 0 0-1.6-1.6z" />
                 </svg>
               </a>

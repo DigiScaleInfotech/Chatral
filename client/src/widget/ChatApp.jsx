@@ -439,6 +439,39 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     return () => document.removeEventListener('click', onClick, true);
   }, [cfg, open]);
 
+  // Close chat when clicking outside the chat window or pressing Escape
+  useEffect(() => {
+    if (!open) return undefined;
+    const onPointerDown = (e) => {
+      const path = e.composedPath ? e.composedPath() : [e.target];
+      const inside = path.some((el) => {
+        if (!el || !el.classList) return false;
+        return el.classList.contains('lc-panel') || el.classList.contains('lc-launcher');
+      });
+      if (!inside) {
+        setOpen(false);
+        store.sset(`lc_open_${storeKey}`, '0');
+      }
+    };
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        store.sset(`lc_open_${storeKey}`, '0');
+      }
+    };
+
+    const timer = setTimeout(() => {
+      document.addEventListener('pointerdown', onPointerDown, true);
+    }, 60);
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('pointerdown', onPointerDown, true);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open, storeKey]);
+
   // Fix for iOS Safari/Chrome getting stuck zoomed in after focusing a form field (see preventStuckZoom above).
   useEffect(() => {
     const host = document.getElementById(`livechat-${storeKey}`);
