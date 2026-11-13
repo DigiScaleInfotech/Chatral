@@ -61,103 +61,43 @@ export default function LandingPage() {
         MozOsxFontSmoothing: 'grayscale',
       }}
     >
-      {/* 1. Navigation Header (Exact Relatik Navbar) */}
+      {/* 1. Navigation Header (Slightly taller, featuring official Chatral logo) */}
       <nav
         style={{
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          background: 'rgba(247, 248, 250, 0.82)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(247, 248, 250, 0.88)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
           borderBottom: '1px solid #e6e7eb',
           width: '100%',
-          padding: '0 24px',
+          padding: isMobile ? '0 16px' : '0 32px',
         }}
       >
         <div
           style={{
-            maxWidth: 1140,
+            maxWidth: 1160,
             margin: '0 auto',
-            height: 64,
+            height: isMobile ? 66 : 76,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
         >
-          {/* Relatik Logo: Black Squircle Icon + Lowercase Wordmark */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                background: '#0c0d10',
-                borderRadius: 9,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
-            >
-              {/* Relatik Geometric Clover Icon */}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M 2.625 0 C 4.075 0 5.25 1.175 5.25 2.625 C 5.25 4.075 4.075 5.25 2.625 5.25 L 0 5.25 L 0 2.625 C 0 1.175 1.175 0 2.625 0 Z"
-                  stroke="#ffffff"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  transform="translate(14.25 4.5)"
-                />
-                <path
-                  d="M 5.25 5.25 L 2.625 5.25 C 1.175 5.25 0 4.075 0 2.625 L 0 2.625 C 0 1.175 1.175 0 2.625 0 C 4.075 0 5.25 1.175 5.25 2.625 L 5.25 5.25 Z"
-                  stroke="#ffffff"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  transform="translate(4.5 4.5)"
-                />
-                <path
-                  d="M 0 0 L 2.625 0 C 4.075 0 5.25 1.175 5.25 2.625 L 5.25 2.625 C 5.25 4.075 4.075 5.25 2.625 5.25 L 2.625 5.25 C 1.175 5.25 0 4.075 0 2.625 L 0 0 Z"
-                  stroke="#ffffff"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  transform="translate(14.25 14.25)"
-                />
-                <path
-                  d="M 2.625 5.25 C 1.175 5.25 0 4.075 0 2.625 L 0 2.625 C 0 1.175 1.175 0 2.625 0 L 5.25 0 L 5.25 0 L 5.25 2.625 C 5.25 4.075 4.075 5.25 2.625 5.25 Z"
-                  stroke="#ffffff"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  transform="translate(4.5 14.25)"
-                />
-                <rect x="9.75" y="9.75" width="4.5" height="4.5" stroke="#ffffff" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <span
-              style={{
-                fontFamily: '"Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                fontSize: 19,
-                fontWeight: 600,
-                letterSpacing: '-0.03em',
-                lineHeight: '1em',
-                color: '#0c0d10',
-              }}
-            >
-              chatral
-            </span>
+          {/* Official Chatral Brand Logo */}
+          <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+            <ChatralFullLogo height={isMobile ? 30 : 36} dark={false} />
           </Link>
 
           {/* Relatik Center Nav Links: Features, How it works, Testimonials, FAQ, Pricing */}
           {!isMobile && (
-            <Flex gap={32} align="center">
+            <Flex gap={36} align="center">
               <a
                 onClick={() => scrollTo('features')}
                 style={{
                   color: '#5b5f6b',
-                  fontSize: 14,
+                  fontSize: 14.5,
                   fontWeight: 500,
                   cursor: 'pointer',
                   transition: 'color 0.15s',
@@ -172,7 +112,7 @@ export default function LandingPage() {
                 onClick={() => scrollTo('how-it-works')}
                 style={{
                   color: '#5b5f6b',
-                  fontSize: 14,
+                  fontSize: 14.5,
                   fontWeight: 500,
                   cursor: 'pointer',
                   transition: 'color 0.15s',
@@ -187,7 +127,7 @@ export default function LandingPage() {
                 onClick={() => scrollTo('testimonials')}
                 style={{
                   color: '#5b5f6b',
-                  fontSize: 14,
+                  fontSize: 14.5,
                   fontWeight: 500,
                   cursor: 'pointer',
                   transition: 'color 0.15s',
@@ -202,7 +142,7 @@ export default function LandingPage() {
                 onClick={() => scrollTo('faq')}
                 style={{
                   color: '#5b5f6b',
-                  fontSize: 14,
+                  fontSize: 14.5,
                   fontWeight: 500,
                   cursor: 'pointer',
                   transition: 'color 0.15s',
@@ -217,7 +157,7 @@ export default function LandingPage() {
                 onClick={() => scrollTo('pricing')}
                 style={{
                   color: '#5b5f6b',
-                  fontSize: 14,
+                  fontSize: 14.5,
                   fontWeight: 500,
                   cursor: 'pointer',
                   transition: 'color 0.15s',
@@ -231,7 +171,7 @@ export default function LandingPage() {
             </Flex>
           )}
 
-          {/* Relatik Right Button: Signature Black Button with Arrow */}
+          {/* Right Button: Signature Black Button with Arrow */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <button
               onClick={() => nav('/login?mode=signup')}
@@ -243,9 +183,9 @@ export default function LandingPage() {
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: 12,
-                padding: '8px 18px',
-                height: 38,
-                fontSize: 13.5,
+                padding: '10px 20px',
+                height: 42,
+                fontSize: 14,
                 fontWeight: 600,
                 cursor: 'pointer',
                 boxShadow: '0px 1px 2px 0px rgba(12, 13, 16, 0.12), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.12)',
