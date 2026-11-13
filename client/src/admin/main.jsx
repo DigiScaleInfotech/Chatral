@@ -37,6 +37,9 @@ import Reports from './pages/Reports.jsx';
 import Analytics from './pages/Analytics.jsx';
 import Settings from './pages/Settings.jsx';
 import Platform from './pages/Platform.jsx';
+import LandingPage from './pages/LandingPage.jsx';
+import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
+import TermsOfService from './pages/TermsOfService.jsx';
 
 const Ctx = createContext(null);
 export const useApp = () => useContext(Ctx);
@@ -477,12 +480,22 @@ function Shell() {
   );
 }
 
+function RootRoute() {
+  const token = localStorage.getItem('token');
+  if (token) return <Shell />;
+  return <LandingPage />;
+}
+
 createRoot(document.getElementById('root')).render(
   <ConfigProvider theme={theme}>
     <AntApp>
       <BrowserRouter basename="/admin">
         <Routes>
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<RootRoute />} />
           <Route path="/*" element={<Shell />} />
         </Routes>
       </BrowserRouter>
