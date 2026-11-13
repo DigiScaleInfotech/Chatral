@@ -10,8 +10,22 @@ export function connectSocket() {
   stopped = false;
   const token = localStorage.getItem('token');
   if (!token || (ws && ws.readyState <= 1)) return;
-  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  const sock = new WebSocket(`${proto}://${location.host}/ws/agent?token=${encodeURIComponent(token)}`);
+  const rawApiUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || (typeof location !== 'undefined' && location.host.endsWith('.vercel.app') ? 'https://chatral-backend.onrender.com' : '');
+  let wsUrl;
+  if (rawApiUrl) {
+    try {
+      const parsed = new URL(rawApiUrl);
+      const wsProto = parsed.protocol === 'https:' ? 'wss' : 'ws';
+      wsUrl = `${wsProto}://${parsed.host}/ws/agent?token=${encodeURIComponent(token)}`;
+    } catch {
+      const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+      wsUrl = `${proto}://${location.host}/ws/agent?token=${encodeURIComponent(token)}`;
+    }
+  } else {
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    wsUrl = `${proto}://${location.host}/ws/agent?token=${encodeURIComponent(token)}`;
+  }
+  const sock = new WebSocket(wsUrl);
   ws = sock;
   sock.onopen = () => {
     const was = retry;

@@ -33,7 +33,19 @@ export function createServer() {
 
   // Widget API is called from merchant sites; the per-store origin allowlist is enforced inside the routes.
   app.use('/api/widget', cors({ origin: true, allowedHeaders: ['Content-Type', 'X-Visitor-Token', 'X-Filename'], maxAge: 600 }), widgetRoutes);
-  const adminCors = cors({ origin: new URL(config.adminUrl).origin });
+  const adminCors = cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      try {
+        if (origin === new URL(config.adminUrl).origin) return callback(null, true);
+      } catch {}
+      if (origin.endsWith('.vercel.app') || origin.startsWith('http://localhost:')) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  });
   app.use('/api/auth', adminCors, authRoutes);
   app.use('/api', adminCors, adminRoutes, inboxRoutes, ticketRoutes, triggerRoutes, reportRoutes, analyticsRoutes);
 

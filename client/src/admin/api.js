@@ -1,6 +1,7 @@
-// Same-origin in production (served by the API at /admin); proxied by Vite in dev.
+// Same-origin in production (served by the API at /admin); proxied by Vite in dev or Vercel rewrites.
 export async function api(path, { method = 'GET', body, raw, headers = {} } = {}) {
-  const res = await fetch(`/api${path}`, {
+  const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ? import.meta.env.VITE_API_URL.replace(/\/$/, '') : '';
+  const res = await fetch(`${baseUrl}/api${path}`, {
     method,
     headers: { ...(raw ? {} : { 'Content-Type': 'application/json' }), Authorization: `Bearer ${localStorage.getItem('token') || ''}`, ...headers },
     body: raw || (body !== undefined ? JSON.stringify(body) : undefined),

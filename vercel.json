@@ -12,6 +12,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://chatral-backend.onrender.com/api/$1"
+    },
+    {
       "source": "/admin/(.*)",
       "destination": "/admin/index.html"
     }
