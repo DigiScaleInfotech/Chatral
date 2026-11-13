@@ -494,40 +494,41 @@ export default function LandingPage() {
         </div>
 
         {/* Hero Dashboard Showcase (Official Chatral Live Chat Platform UI) */}
-        <div style={{ maxWidth: 1140, margin: '48px auto 0' }}>
+        <div style={{ maxWidth: 1080, margin: '48px auto 0' }}>
           <div
             style={{
               background: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: 18,
+              border: '1px solid #e6e7eb',
+              borderRadius: 20,
               overflow: 'hidden',
-              boxShadow: '0 25px 65px -15px rgba(15, 23, 42, 0.14), 0 2px 8px rgba(15, 23, 42, 0.04)',
+              boxShadow: '0 24px 60px -12px rgba(12, 13, 16, 0.1), 0 2px 6px rgba(12, 13, 16, 0.04)',
               textAlign: 'left',
               display: 'flex',
-              minHeight: 560,
+              minHeight: isMobile ? 520 : 660,
+              height: isMobile ? 'auto' : 660,
             }}
           >
             {/* 1. Dark Left Navigation Sidebar (matching Chatral app shell) */}
             <div
               style={{
-                width: 220,
+                width: 200,
                 flexShrink: 0,
                 background: '#070b13',
                 borderRight: '1px solid #172133',
                 display: isMobile ? 'none' : 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                padding: '16px 12px 14px',
+                padding: '16px 10px 14px',
               }}
             >
               <div>
                 {/* Brand Logo in Sidebar */}
                 <div style={{ display: 'flex', alignItems: 'center', padding: '4px 8px 18px' }}>
-                  <ChatralFullLogo height={24} dark={true} />
+                  <ChatralFullLogo height={22} dark={true} />
                 </div>
 
                 {/* Sidebar Menu Items */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {/* 1. Inbox (Active) */}
                   <div
                     style={{
@@ -537,14 +538,14 @@ export default function LandingPage() {
                       background: '#162238',
                       color: '#ffffff',
                       borderRadius: 7,
-                      padding: '8px 12px',
+                      padding: '7px 10px',
                       fontWeight: 600,
-                      fontSize: 13,
+                      fontSize: 12.5,
                       cursor: 'pointer',
                       boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                     </svg>
                     <span>Inbox</span>
@@ -558,12 +559,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                       <polyline points="22,6 12,13 2,6"/>
                     </svg>
@@ -578,12 +579,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                       <circle cx="12" cy="12" r="3"/>
                     </svg>
@@ -598,12 +599,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                       <polyline points="14 2 14 8 20 8"/>
                       <line x1="16" y1="13" x2="8" y2="13"/>
@@ -620,12 +621,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                     </svg>
                     <span>Triggers</span>
@@ -639,12 +640,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="13.5" cy="6.5" r=".5"/>
                       <circle cx="17.5" cy="10.5" r=".5"/>
                       <circle cx="8.5" cy="7.5" r=".5"/>
@@ -662,12 +663,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="18" y1="20" x2="18" y2="10"/>
                       <line x1="12" y1="20" x2="12" y2="4"/>
                       <line x1="6" y1="20" x2="6" y2="14"/>
@@ -683,12 +684,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
                       <polyline points="17 6 23 6 23 12"/>
                     </svg>
@@ -703,19 +704,19 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="3"/>
                       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                     </svg>
                     <span>Store settings</span>
                   </div>
 
-                  <div style={{ borderTop: '1px solid #1a2436', margin: '8px 4px' }} />
+                  <div style={{ borderTop: '1px solid #1a2436', margin: '6px 4px' }} />
 
                   {/* 10. Platform */}
                   <div
@@ -725,12 +726,12 @@ export default function LandingPage() {
                       gap: 10,
                       color: '#94a3b8',
                       borderRadius: 7,
-                      padding: '8px 12px',
-                      fontSize: 13,
+                      padding: '7px 10px',
+                      fontSize: 12.5,
                       cursor: 'pointer',
                     }}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
                       <line x1="8" y1="21" x2="16" y2="21"/>
                       <line x1="12" y1="17" x2="12" y2="21"/>
@@ -774,7 +775,7 @@ export default function LandingPage() {
                 style={{
                   height: 52,
                   borderBottom: '1px solid #f1f3f7',
-                  padding: '0 16px',
+                  padding: '0 18px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -864,26 +865,27 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Workspace 3-Column Content Area */}
+              {/* Workspace 3-Column Content Area (fills remaining height: 608px) */}
               <div
                 style={{
                   flex: 1,
                   display: 'flex',
-                  minHeight: 520,
+                  height: isMobile ? 'auto' : 608,
                   overflow: 'hidden',
                 }}
               >
                 {/* Column 1: Conversations List */}
                 <div
                   style={{
-                    width: isMobile ? '100%' : 310,
+                    width: isMobile ? '100%' : 295,
                     flexShrink: 0,
                     borderRight: '1px solid #f1f3f7',
                     background: '#ffffff',
                     padding: '14px 12px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 11,
+                    gap: 10,
+                    overflowY: 'auto',
                   }}
                 >
                   {/* Conversations Header */}
@@ -1024,60 +1026,161 @@ export default function LandingPage() {
                     </div>
                   </div>
 
-                  {/* Conversation Card 1: Chatral (Interactive demo) */}
-                  <div
-                    onClick={() => setHeroActiveConv(!heroActiveConv)}
-                    style={{
-                      border: heroActiveConv ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
-                      borderRadius: 8,
-                      padding: '10px 10px',
-                      background: heroActiveConv ? '#f8fafc' : '#ffffff',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                      boxShadow: heroActiveConv ? '0 2px 6px rgba(37, 99, 235, 0.08)' : 'none',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                      <input type="checkbox" checked={heroActiveConv} readOnly style={{ marginTop: 4, cursor: 'pointer' }} />
-                      <div
-                        style={{
-                          width: 28,
-                          height: 28,
-                          borderRadius: '50%',
-                          background: '#f1f5f9',
-                          border: '1px solid #e2e8f0',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                          color: '#64748b',
-                        }}
-                      >
-                        <UserOutlined style={{ fontSize: 12 }} />
-                      </div>
+                  {/* Conversation List Cards */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 2 }}>
+                    {/* Card 1: Chatral (Primary from Image 2) */}
+                    <div
+                      onClick={() => setHeroActiveConv(!heroActiveConv)}
+                      style={{
+                        border: heroActiveConv ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
+                        borderRadius: 8,
+                        padding: '10px 10px',
+                        background: heroActiveConv ? '#f8fafc' : '#ffffff',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                        boxShadow: heroActiveConv ? '0 2px 6px rgba(37, 99, 235, 0.08)' : 'none',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                        <input type="checkbox" checked={heroActiveConv} readOnly style={{ marginTop: 4, cursor: 'pointer' }} />
+                        <div
+                          style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: '50%',
+                            background: '#f1f5f9',
+                            border: '1px solid #e2e8f0',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            color: '#64748b',
+                          }}
+                        >
+                          <UserOutlined style={{ fontSize: 12 }} />
+                        </div>
 
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>Chatral</span>
-                          <span style={{ fontSize: 11, color: '#94a3b8' }}>6 minutes</span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>Chatral</span>
+                            <span style={{ fontSize: 11, color: '#94a3b8' }}>6 minutes</span>
+                          </div>
+                          <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            Attachment
+                          </div>
+                          <div style={{ marginTop: 6 }}>
+                            <span
+                              style={{
+                                background: '#eff6ff',
+                                color: '#4f46e5',
+                                border: '1px solid #c7d2fe',
+                                borderRadius: 4,
+                                padding: '1px 7px',
+                                fontSize: 10,
+                                fontWeight: 500,
+                              }}
+                            >
+                              Unassigned
+                            </span>
+                          </div>
                         </div>
-                        <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          Attachment
+                      </div>
+                    </div>
+
+                    {/* Card 2: Sarah Jenkins */}
+                    <div
+                      style={{
+                        border: '1px solid #f1f3f7',
+                        borderRadius: 8,
+                        padding: '10px 10px',
+                        background: '#ffffff',
+                        opacity: 0.85,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                        <input type="checkbox" readOnly style={{ marginTop: 4 }} />
+                        <div
+                          style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: '50%',
+                            background: '#e0f2fe',
+                            border: '1px solid #bae6fd',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            color: '#0369a1',
+                            fontSize: 11,
+                            fontWeight: 700,
+                          }}
+                        >
+                          SJ
                         </div>
-                        <div style={{ marginTop: 6 }}>
-                          <span
-                            style={{
-                              background: '#eff6ff',
-                              color: '#4f46e5',
-                              border: '1px solid #c7d2fe',
-                              borderRadius: 4,
-                              padding: '1px 7px',
-                              fontSize: 10,
-                              fontWeight: 500,
-                            }}
-                          >
-                            Unassigned
-                          </span>
+
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 600, fontSize: 12.5, color: '#0f172a' }}>Sarah Jenkins</span>
+                            <span style={{ fontSize: 10.5, color: '#94a3b8' }}>24m</span>
+                          </div>
+                          <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            Can we integrate with Shopify?
+                          </div>
+                          <div style={{ marginTop: 5 }}>
+                            <span style={{ background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: 4, padding: '1px 6px', fontSize: 9.5, fontWeight: 500 }}>
+                              Support
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card 3: Alex Cooper */}
+                    <div
+                      style={{
+                        border: '1px solid #f1f3f7',
+                        borderRadius: 8,
+                        padding: '10px 10px',
+                        background: '#ffffff',
+                        opacity: 0.8,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                        <input type="checkbox" readOnly style={{ marginTop: 4 }} />
+                        <div
+                          style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: '50%',
+                            background: '#fef3c7',
+                            border: '1px solid #fde68a',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            color: '#b45309',
+                            fontSize: 11,
+                            fontWeight: 700,
+                          }}
+                        >
+                          AC
+                        </div>
+
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 600, fontSize: 12.5, color: '#0f172a' }}>Alex Cooper</span>
+                            <span style={{ fontSize: 10.5, color: '#94a3b8' }}>1h</span>
+                          </div>
+                          <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            How do custom triggers work?
+                          </div>
+                          <div style={{ marginTop: 5 }}>
+                            <span style={{ background: '#f5f3ff', color: '#7c3aed', border: '1px solid #ddd6fe', borderRadius: 4, padding: '1px 6px', fontSize: 9.5, fontWeight: 500 }}>
+                              Feature
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1100,19 +1203,19 @@ export default function LandingPage() {
                     justifyContent: heroActiveConv ? 'space-between' : 'center',
                     alignItems: heroActiveConv ? 'stretch' : 'center',
                     padding: heroActiveConv ? 0 : 24,
-                    minHeight: 460,
+                    height: '100%',
                   }}
                 >
                   {!heroActiveConv ? (
                     /* Default state matching Image 2 */
                     <div style={{ textAlign: 'center' }}>
-                      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
+                      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
                         <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" />
                         <polyline points="21 8 16 3 8 3 3 8" />
                         <line x1="3" y1="8" x2="21" y2="8" />
                         <path d="M10 12h4" />
                       </svg>
-                      <div style={{ fontSize: 13, color: '#64748b', marginTop: 12, fontWeight: 400 }}>
+                      <div style={{ fontSize: 13.5, color: '#64748b', marginTop: 14, fontWeight: 400 }}>
                         Select a conversation to start chatting
                       </div>
                     </div>
@@ -1122,25 +1225,26 @@ export default function LandingPage() {
                       {/* Chat Header */}
                       <div
                         style={{
-                          height: 48,
+                          height: 50,
                           borderBottom: '1px solid #eef2f6',
                           background: '#ffffff',
-                          padding: '0 16px',
+                          padding: '0 18px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
+                          flexShrink: 0,
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
-                          <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>Chatral Visitor</span>
+                          <span style={{ fontSize: 13.5, fontWeight: 700, color: '#0f172a' }}>Chatral Visitor</span>
                           <span style={{ fontSize: 11, color: '#64748b' }}>• Live on Digiscaleinfotech</span>
                         </div>
-                        <span style={{ fontSize: 11, color: '#2563eb', fontWeight: 600 }}>Resolve chat</span>
+                        <span style={{ fontSize: 11.5, color: '#2563eb', fontWeight: 600, cursor: 'pointer' }}>Resolve chat</span>
                       </div>
 
                       {/* Chat Messages Body */}
-                      <div style={{ flex: 1, padding: 18, display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto' }}>
+                      <div style={{ flex: 1, padding: 20, display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
                         {/* Visitor Message */}
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
                           <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>Visitor • 6m ago</div>
@@ -1149,10 +1253,10 @@ export default function LandingPage() {
                               background: '#ffffff',
                               border: '1px solid #e2e8f0',
                               borderRadius: '4px 14px 14px 14px',
-                              padding: '10px 14px',
+                              padding: '11px 15px',
                               fontSize: 12.5,
                               color: '#0f172a',
-                              lineHeight: 1.45,
+                              lineHeight: 1.5,
                               boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
                             }}
                           >
@@ -1168,9 +1272,9 @@ export default function LandingPage() {
                               background: '#2563eb',
                               color: '#ffffff',
                               borderRadius: '14px 4px 14px 14px',
-                              padding: '10px 14px',
+                              padding: '11px 15px',
                               fontSize: 12.5,
-                              lineHeight: 1.45,
+                              lineHeight: 1.5,
                               boxShadow: '0 1px 3px rgba(37,99,235,0.2)',
                             }}
                           >
@@ -1186,10 +1290,10 @@ export default function LandingPage() {
                               background: '#ffffff',
                               border: '1px solid #e2e8f0',
                               borderRadius: '4px 14px 14px 14px',
-                              padding: '10px 14px',
+                              padding: '11px 15px',
                               fontSize: 12.5,
                               color: '#0f172a',
-                              lineHeight: 1.45,
+                              lineHeight: 1.5,
                               boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
                             }}
                           >
@@ -1199,12 +1303,12 @@ export default function LandingPage() {
                       </div>
 
                       {/* Chat Input Bar */}
-                      <div style={{ padding: '12px 16px', background: '#ffffff', borderTop: '1px solid #eef2f6' }}>
+                      <div style={{ padding: '14px 18px', background: '#ffffff', borderTop: '1px solid #eef2f6', flexShrink: 0 }}>
                         <div
                           style={{
                             border: '1px solid #e2e8f0',
                             borderRadius: 8,
-                            padding: '8px 12px',
+                            padding: '9px 14px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -1214,7 +1318,7 @@ export default function LandingPage() {
                           <span style={{ fontSize: 12, color: '#94a3b8' }}>Type a reply or use saved replies...</span>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b' }}>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                            <div style={{ background: '#2563eb', color: '#ffffff', borderRadius: 6, padding: '4px 10px', fontSize: 11, fontWeight: 600 }}>Send</div>
+                            <div style={{ background: '#2563eb', color: '#ffffff', borderRadius: 6, padding: '5px 12px', fontSize: 11, fontWeight: 600 }}>Send</div>
                           </div>
                         </div>
                       </div>
@@ -1225,26 +1329,27 @@ export default function LandingPage() {
                 {/* Column 3: Right Details Panel */}
                 <div
                   style={{
-                    width: isMobile ? '0' : 250,
+                    width: isMobile ? '0' : 240,
                     display: isMobile ? 'none' : 'flex',
                     flexDirection: 'column',
                     justifyContent: heroActiveConv ? 'flex-start' : 'center',
                     alignItems: heroActiveConv ? 'stretch' : 'center',
                     background: '#ffffff',
-                    padding: heroActiveConv ? 16 : 24,
-                    minHeight: 460,
+                    padding: heroActiveConv ? 18 : 24,
+                    height: '100%',
+                    flexShrink: 0,
                   }}
                 >
                   {!heroActiveConv ? (
                     /* Default state matching Image 2 */
                     <div style={{ textAlign: 'center' }}>
-                      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
+                      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
                         <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" />
                         <polyline points="21 8 16 3 8 3 3 8" />
                         <line x1="3" y1="8" x2="21" y2="8" />
                         <path d="M10 12h4" />
                       </svg>
-                      <div style={{ fontSize: 13, color: '#64748b', marginTop: 12, fontWeight: 400 }}>
+                      <div style={{ fontSize: 13.5, color: '#64748b', marginTop: 14, fontWeight: 400 }}>
                         No active conversation
                       </div>
                     </div>
@@ -1255,30 +1360,30 @@ export default function LandingPage() {
                         Visitor Details
                       </div>
 
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 11.5 }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 11.5 }}>
                         <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10 }}>NAME</div>
-                          <div style={{ color: '#0f172a', fontWeight: 600, marginTop: 1 }}>Chatral Visitor</div>
+                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>NAME</div>
+                          <div style={{ color: '#0f172a', fontWeight: 600, marginTop: 2 }}>Chatral Visitor</div>
                         </div>
 
                         <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10 }}>CHANNEL</div>
-                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 1 }}>Live Chat Widget</div>
+                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>CHANNEL</div>
+                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>Live Chat Widget</div>
                         </div>
 
                         <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10 }}>LOCATION</div>
-                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 1 }}>Gujarat, India 🇮🇳</div>
+                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>LOCATION</div>
+                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>Gujarat, India 🇮🇳</div>
                         </div>
 
                         <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10 }}>ACTIVE PAGE</div>
-                          <div style={{ color: '#2563eb', fontWeight: 500, marginTop: 1 }}>/pricing</div>
+                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>ACTIVE PAGE</div>
+                          <div style={{ color: '#2563eb', fontWeight: 500, marginTop: 2 }}>/pricing</div>
                         </div>
 
                         <div>
-                          <div style={{ color: '#94a3b8', fontSize: 10 }}>BROWSER & DEVICE</div>
-                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 1 }}>Chrome • macOS</div>
+                          <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>BROWSER & DEVICE</div>
+                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>Chrome • macOS</div>
                         </div>
                       </div>
                     </div>
