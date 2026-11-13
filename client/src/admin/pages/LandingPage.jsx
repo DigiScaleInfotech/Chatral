@@ -2540,8 +2540,8 @@ export default function LandingPage() {
       </section>
 
       {/* 10. Relatik Signature Footer with Official Chatral Logo */}
-      <footer style={{ background: '#ffffff', borderTop: '1px solid #ebecee', padding: isMobile ? '64px 20px 40px' : '90px 24px 50px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <footer style={{ background: '#ffffff', borderTop: '1px solid #ebecee', padding: isMobile ? '52px 20px 32px' : '68px 24px 36px' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           {/* Top Row: Brand on Left, 3 Nav Columns on Right */}
           <div
             style={{
@@ -2549,15 +2549,15 @@ export default function LandingPage() {
               flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'space-between',
               alignItems: 'flex-start',
-              gap: isMobile ? 40 : 54,
+              gap: isMobile ? 36 : 48,
             }}
           >
             {/* Left Column: Official Chatral Brand Logo + Tagline */}
-            <div style={{ maxWidth: 360 }}>
+            <div style={{ maxWidth: 320 }}>
               <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-                <ChatralFullLogo height={isMobile ? 36 : 42} dark={false} />
+                <ChatralFullLogo height={isMobile ? 30 : 34} dark={false} />
               </Link>
-              <div style={{ color: '#475467', fontSize: 17, lineHeight: 1.6, marginTop: 20 }}>
+              <div style={{ color: '#6b707c', fontSize: 14, lineHeight: 1.55, marginTop: 16 }}>
                 The simple live chat for teams that care<br />about relationships.
               </div>
             </div>
@@ -2566,43 +2566,43 @@ export default function LandingPage() {
             <div
               style={{
                 display: 'flex',
-                gap: isMobile ? 44 : 96,
+                gap: isMobile ? 36 : 80,
                 flexWrap: 'wrap',
               }}
             >
               {/* Product */}
-              <div style={{ minWidth: 120 }}>
-                <div style={{ fontWeight: 700, color: '#101828', fontSize: 18, marginBottom: 20 }}>Product</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 15, fontSize: 16.5 }}>
+              <div style={{ minWidth: 105 }}>
+                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 14.5, marginBottom: 16 }}>Product</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 14 }}>
                   <a
                     onClick={() => scrollTo('features')}
-                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     Features
                   </a>
                   <a
                     onClick={() => scrollTo('how-it-works')}
-                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     How it works
                   </a>
                   <a
                     onClick={() => scrollTo('pricing')}
-                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     Pricing
                   </a>
                   <a
                     onClick={() => scrollTo('faq')}
-                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     FAQ
                   </a>
@@ -2610,22 +2610,22 @@ export default function LandingPage() {
               </div>
 
               {/* Company */}
-              <div style={{ minWidth: 120 }}>
-                <div style={{ fontWeight: 700, color: '#101828', fontSize: 18, marginBottom: 20 }}>Company</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 15, fontSize: 16.5 }}>
+              <div style={{ minWidth: 105 }}>
+                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 14.5, marginBottom: 16 }}>Company</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 14 }}>
                   <a
                     onClick={() => scrollTo('testimonials')}
-                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     Testimonials
                   </a>
                   <a
                     href="mailto:digiscaleinfotech@gmail.com"
-                    style={{ color: '#475467', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     Contact
                   </a>
@@ -2633,22 +2633,22 @@ export default function LandingPage() {
               </div>
 
               {/* Legal */}
-              <div style={{ minWidth: 120 }}>
-                <div style={{ fontWeight: 700, color: '#101828', fontSize: 18, marginBottom: 20 }}>Legal</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 15, fontSize: 16.5 }}>
+              <div style={{ minWidth: 105 }}>
+                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 14.5, marginBottom: 16 }}>Legal</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 14 }}>
                   <Link
                     to="/privacy"
-                    style={{ color: '#475467', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     Privacy policy
                   </Link>
                   <Link
                     to="/terms"
-                    style={{ color: '#475467', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
+                    style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
                   >
                     Terms of service
                   </Link>
@@ -2658,7 +2658,7 @@ export default function LandingPage() {
           </div>
 
           {/* Bottom Divider */}
-          <div style={{ borderTop: '1px solid #ebecee', margin: '56px 0 32px' }} />
+          <div style={{ borderTop: '1px solid #ebecee', margin: '44px 0 24px' }} />
 
           {/* Bottom Copyright & Social Icons */}
           <div
@@ -2667,26 +2667,26 @@ export default function LandingPage() {
               flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'space-between',
               alignItems: isMobile ? 'flex-start' : 'center',
-              gap: 16,
+              gap: 14,
             }}
           >
-            <div style={{ color: '#667085', fontSize: 15.5, fontWeight: 400 }}>
-              &copy; {new Date().getFullYear()} Chatral. All rights reserved. &nbsp;&nbsp; Made by <span style={{ color: '#101828', fontWeight: 700 }}>DigiScale Infotech</span>
+            <div style={{ color: '#8c92a4', fontSize: 13, fontWeight: 400 }}>
+              &copy; {new Date().getFullYear()} Chatral. All rights reserved.
             </div>
 
-            {/* Social Icons (X / Twitter and LinkedIn) */}
-            <div style={{ display: 'flex', gap: 22, alignItems: 'center' }}>
+            {/* Social Icons (Instagram and LinkedIn) */}
+            <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
               <a
-                href="https://x.com"
+                href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                aria-label="X (Twitter)"
-                style={{ color: '#667085', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#667085')}
+                aria-label="Instagram"
+                style={{ color: '#717684', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#717684')}
               >
-                <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                 </svg>
               </a>
 
@@ -2695,11 +2695,11 @@ export default function LandingPage() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
-                style={{ color: '#667085', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#667085')}
+                style={{ color: '#717684', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#717684')}
               >
-                <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 1.6 1.6 1.6 1.6 0 0 0-1.6-1.6z" />
                 </svg>
               </a>
