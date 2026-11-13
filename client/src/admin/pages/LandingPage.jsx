@@ -24,6 +24,7 @@ export default function LandingPage() {
   const [copiedSnippet, setCopiedSnippet] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [openFaq, setOpenFaq] = useState(null);
+  const [heroActiveConv, setHeroActiveConv] = useState(false);
 
   // Auto-detect India for INR currency, otherwise USD
   const detectIsIndia = () => {
@@ -492,27 +493,27 @@ export default function LandingPage() {
           </Flex>
         </div>
 
-        {/* Hero Dashboard Showcase (Relatik CRM App UI Preview) */}
-        <div style={{ maxWidth: 1080, margin: '48px auto 0' }}>
+        {/* Hero Dashboard Showcase (Official Chatral Live Chat Platform UI) */}
+        <div style={{ maxWidth: 1140, margin: '48px auto 0' }}>
           <div
             style={{
               background: '#ffffff',
-              border: '1px solid #e6e7eb',
-              borderRadius: 20,
+              border: '1px solid #e2e8f0',
+              borderRadius: 18,
               overflow: 'hidden',
-              boxShadow: '0 24px 60px -12px rgba(12, 13, 16, 0.1), 0 2px 6px rgba(12, 13, 16, 0.04)',
+              boxShadow: '0 25px 65px -15px rgba(15, 23, 42, 0.14), 0 2px 8px rgba(15, 23, 42, 0.04)',
               textAlign: 'left',
               display: 'flex',
-              minHeight: 520,
+              minHeight: 560,
             }}
           >
-            {/* Left Sidebar (210px) */}
+            {/* 1. Dark Left Navigation Sidebar (matching Chatral app shell) */}
             <div
               style={{
-                width: 200,
+                width: 220,
                 flexShrink: 0,
-                background: '#ffffff',
-                borderRight: '1px solid #f1f2f5',
+                background: '#070b13',
+                borderRight: '1px solid #172133',
                 display: isMobile ? 'none' : 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -520,720 +521,768 @@ export default function LandingPage() {
               }}
             >
               <div>
-                {/* Chatral Logo in Sidebar */}
-                <div style={{ display: 'flex', alignItems: 'center', padding: '4px 8px 16px' }}>
-                  <ChatralFullLogo height={22} dark={false} />
+                {/* Brand Logo in Sidebar */}
+                <div style={{ display: 'flex', alignItems: 'center', padding: '4px 8px 18px' }}>
+                  <ChatralFullLogo height={24} dark={true} />
                 </div>
 
-                {/* Main Navigation Items */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {/* Sidebar Menu Items */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  {/* 1. Inbox (Active) */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
-                      background: '#f1f2f5',
-                      borderRadius: 8,
-                      padding: '7px 10px',
-                      color: '#0c0d10',
+                      gap: 10,
+                      background: '#162238',
+                      color: '#ffffff',
+                      borderRadius: 7,
+                      padding: '8px 12px',
                       fontWeight: 600,
-                      fontSize: 12.5,
+                      fontSize: 13,
                       cursor: 'pointer',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
                     }}
                   >
-                    <span style={{ fontSize: 13 }}>⊞</span>
-                    <span>Overview</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>Inbox</span>
                   </div>
 
+                  {/* 2. Tickets */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      borderRadius: 8,
-                      padding: '7px 10px',
-                      color: '#5b5f6b',
-                      fontSize: 12.5,
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 13 }}>👥</span>
-                      <span>Contacts</span>
-                    </span>
-                    <span style={{ fontSize: 11, color: '#94a3b8' }}>1,284</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                      <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <span>Tickets</span>
                   </div>
 
+                  {/* 3. Visitors */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      borderRadius: 8,
-                      padding: '7px 10px',
-                      color: '#5b5f6b',
-                      fontSize: 12.5,
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 13 }}>💼</span>
-                      <span>Deals</span>
-                    </span>
-                    <span style={{ fontSize: 11, color: '#94a3b8' }}>96</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <span>Visitors</span>
                   </div>
 
+                  {/* 4. Saved replies */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      borderRadius: 8,
-                      padding: '7px 10px',
-                      color: '#5b5f6b',
-                      fontSize: 12.5,
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 13 }}>☑</span>
-                      <span>Tasks</span>
-                    </span>
-                    <span style={{ fontSize: 11, color: '#94a3b8' }}>12</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    <span>Saved replies</span>
                   </div>
 
+                  {/* 5. Triggers */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      borderRadius: 8,
-                      padding: '7px 10px',
-                      color: '#5b5f6b',
-                      fontSize: 12.5,
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 13 }}>💬</span>
-                      <span>Inbox</span>
-                    </span>
-                    <span
-                      style={{
-                        background: '#eaf2ff',
-                        color: '#2b7fff',
-                        borderRadius: 999,
-                        padding: '1px 7px',
-                        fontSize: 10.5,
-                        fontWeight: 700,
-                      }}
-                    >
-                      4
-                    </span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                    <span>Triggers</span>
                   </div>
 
+                  {/* 6. Widget design */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
-                      borderRadius: 8,
-                      padding: '7px 10px',
-                      color: '#5b5f6b',
-                      fontSize: 12.5,
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ fontSize: 13 }}>📊</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="13.5" cy="6.5" r=".5"/>
+                      <circle cx="17.5" cy="10.5" r=".5"/>
+                      <circle cx="8.5" cy="7.5" r=".5"/>
+                      <circle cx="6.5" cy="12.5" r=".5"/>
+                      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+                    </svg>
+                    <span>Widget design</span>
+                  </div>
+
+                  {/* 7. Reports */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"/>
+                      <line x1="12" y1="20" x2="12" y2="4"/>
+                      <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
                     <span>Reports</span>
                   </div>
-                </div>
 
-                {/* Pipelines Section */}
-                <div
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    color: '#94a3b8',
-                    letterSpacing: '0.06em',
-                    padding: '18px 10px 8px',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  Pipelines
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  {/* 8. Activity Analytics */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
-                      padding: '6px 10px',
-                      fontSize: 12,
-                      color: '#0c0d10',
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
-                    <span>New business</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                      <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    <span>Activity Analytics</span>
                   </div>
+
+                  {/* 9. Store settings */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
-                      padding: '6px 10px',
-                      fontSize: 12,
-                      color: '#5b5f6b',
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6' }} />
-                    <span>Expansion</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>Store settings</span>
                   </div>
+
+                  <div style={{ borderTop: '1px solid #1a2436', margin: '8px 4px' }} />
+
+                  {/* 10. Platform */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
-                      padding: '6px 10px',
-                      fontSize: 12,
-                      color: '#5b5f6b',
+                      gap: 10,
+                      color: '#94a3b8',
+                      borderRadius: 7,
+                      padding: '8px 12px',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
-                    <span>Partnerships</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                      <line x1="8" y1="21" x2="16" y2="21"/>
+                      <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                    <span>Platform</span>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Trial Box */}
+              {/* Bottom Active Store Box */}
               <div
                 style={{
-                  background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 12,
-                  padding: '12px 14px',
-                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
+                  background: '#0d1524',
+                  border: '1px solid #1b283d',
+                  borderRadius: 10,
+                  padding: '10px 12px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.25)',
                 }}
               >
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#0c0d10' }}>Trial · 9 days left</div>
-                <div style={{ fontSize: 10.5, color: '#6b707c', marginTop: 4, lineHeight: 1.35 }}>
-                  Invite your team to get the most out of Chatral.
+                <div style={{ fontSize: 9.5, fontWeight: 700, color: '#64748b', letterSpacing: '0.06em' }}>
+                  ACTIVE STORE
                 </div>
-                <div style={{ marginTop: 10, height: 4, background: '#f1f2f5', borderRadius: 999, overflow: 'hidden' }}>
-                  <div style={{ width: '65%', height: '100%', background: '#2b7fff', borderRadius: 999 }} />
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#ffffff', marginTop: 3 }}>
+                  Digiscaleinfotech
                 </div>
               </div>
             </div>
 
-            {/* Right Main Content Area */}
+            {/* 2. Right Main Layout (Top Header + 3-Column Workspace) */}
             <div
               style={{
                 flex: 1,
-                background: '#fafbfd',
-                padding: isMobile ? 12 : 20,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 16,
-                position: 'relative',
                 minWidth: 0,
+                background: '#ffffff',
               }}
             >
-              {/* Header: Title, Search, Date, New deal, AS Avatar */}
+              {/* Top Header Bar */}
               <div
                 style={{
+                  height: 52,
+                  borderBottom: '1px solid #f1f3f7',
+                  padding: '0 16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: 12,
-                  flexWrap: 'wrap',
+                  background: '#ffffff',
                 }}
               >
-                <span style={{ fontSize: 15, fontWeight: 700, color: '#0c0d10' }}>Overview</span>
-
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  {/* Search input */}
-                  <div
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid #e6e7eb',
-                      borderRadius: 8,
-                      padding: '5px 12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      fontSize: 12,
-                      color: '#6b707c',
-                      width: isMobile ? 180 : 230,
-                    }}
-                  >
-                    <SearchOutlined style={{ fontSize: 12, color: '#94a3b8' }} />
-                    <span style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      Search contacts, deals...
-                    </span>
-                    <span style={{ fontSize: 10, color: '#94a3b8', background: '#f1f2f5', padding: '1px 5px', borderRadius: 4 }}>
-                      ⌘K
-                    </span>
-                  </div>
-
-                  {/* Last 30 days pill */}
-                  <div
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid #e6e7eb',
-                      borderRadius: 8,
-                      padding: '5px 10px',
-                      fontSize: 11.5,
-                      fontWeight: 500,
-                      color: '#0c0d10',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                    }}
-                  >
-                    <span>📅</span>
-                    <span>Last 30 days</span>
-                  </div>
-
-                  {/* + New deal button */}
+                {/* Left controls */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <button
                     style={{
-                      background: '#0c0d10',
-                      color: '#ffffff',
+                      background: 'none',
                       border: 'none',
-                      borderRadius: 8,
-                      padding: '6px 12px',
-                      fontSize: 11.5,
-                      fontWeight: 600,
                       cursor: 'pointer',
-                      display: 'inline-flex',
+                      padding: 4,
+                      display: 'flex',
                       alignItems: 'center',
-                      gap: 4,
-                      boxShadow: '0 1px 2px rgba(12, 13, 16, 0.08)',
+                      color: '#64748b',
                     }}
                   >
-                    <span>+</span>
-                    <span>New deal</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="3" y1="12" x2="21" y2="12"/>
+                      <line x1="3" y1="6" x2="21" y2="6"/>
+                      <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
                   </button>
 
-                  {/* AS Avatar */}
                   <div
                     style={{
-                      width: 26,
-                      height: 26,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      padding: '4px 10px',
+                      borderRadius: 6,
+                      border: '1px solid #e2e8f0',
+                      background: '#ffffff',
+                      fontSize: 12.5,
+                      fontWeight: 500,
+                      color: '#0f172a',
+                    }}
+                  >
+                    <span>Digiscaleinfotech</span>
+                    <span style={{ fontSize: 10, color: '#94a3b8' }}>▾</span>
+                  </div>
+
+                  <span
+                    style={{
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 4,
+                      padding: '2px 8px',
+                      fontSize: 11,
+                      fontWeight: 500,
+                      color: '#475569',
+                    }}
+                  >
+                    Super admin
+                  </span>
+                </div>
+
+                {/* Right controls */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <div style={{ color: '#64748b', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                    </svg>
+                  </div>
+
+                  <div
+                    style={{
+                      width: 28,
+                      height: 28,
                       borderRadius: '50%',
-                      background: '#fed7aa',
-                      color: '#9a3412',
-                      fontSize: 10.5,
+                      background: '#9333ea',
+                      color: '#ffffff',
+                      fontSize: 12,
                       fontWeight: 700,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: '1.5px solid #ffffff',
-                      boxShadow: '0 1px 2px rgba(12, 13, 16, 0.08)',
+                      boxShadow: '0 1px 3px rgba(147, 51, 234, 0.3)',
                     }}
                   >
-                    AS
+                    P
                   </div>
                 </div>
               </div>
 
-              {/* 4 Metric Cards */}
-              <Row gutter={[12, 12]}>
-                {/* 1. Pipeline value */}
-                <Col xs={12} sm={6}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
-                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Pipeline value</div>
-                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
-                      $482,900
-                    </div>
-                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
-                      <span>↑ 12.4%</span>
-                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>vs last month</span>
-                    </div>
-                  </div>
-                </Col>
-
-                {/* 2. Deals won */}
-                <Col xs={12} sm={6}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
-                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Deals won</div>
-                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
-                      38
-                    </div>
-                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
-                      <span>↑ 8</span>
-                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>vs last month</span>
-                    </div>
-                  </div>
-                </Col>
-
-                {/* 3. Win rate */}
-                <Col xs={12} sm={6}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
-                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Win rate</div>
-                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
-                      32.6%
-                    </div>
-                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
-                      <span>↑ 2.1 pt</span>
-                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>vs last month</span>
-                    </div>
-                  </div>
-                </Col>
-
-                {/* 4. Avg. response time */}
-                <Col xs={12} sm={6}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
-                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Avg. response time</div>
-                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
-                      1h 12m
-                    </div>
-                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
-                      <span>↑ 18%</span>
-                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>faster</span>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-
-              {/* Middle Row: Revenue Wave Chart & Pipeline by stage */}
-              <Row gutter={[12, 12]}>
-                {/* Left: Revenue chart */}
-                <Col xs={24} md={15}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '16px 18px', position: 'relative' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
-                      <div>
-                        <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Revenue</div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 2 }}>
-                          <span style={{ fontSize: 18, fontWeight: 700, color: '#0c0d10', letterSpacing: '-0.02em' }}>$128,450</span>
-                          <span style={{ fontSize: 10.5, fontWeight: 600, color: '#16a34a', background: '#dcfce7', padding: '1px 6px', borderRadius: 999 }}>
-                            ↑ 18.2%
-                          </span>
-                        </div>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: '#6b707c' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
-                          This year
-                        </span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#cbd5e1' }} />
-                          Last year
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* SVG Chart area */}
-                    <div style={{ position: 'relative', width: '100%', height: 125 }}>
-                      <svg viewBox="0 0 540 120" style={{ width: '100%', height: '100%', overflow: 'visible' }} preserveAspectRatio="none">
-                        <defs>
-                          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#2b7fff" stopOpacity="0.22" />
-                            <stop offset="100%" stopColor="#2b7fff" stopOpacity="0.0" />
-                          </linearGradient>
-                        </defs>
-                        {/* Horizontal guide lines */}
-                        <line x1="0" y1="30" x2="540" y2="30" stroke="#f1f2f5" strokeWidth="1" />
-                        <line x1="0" y1="70" x2="540" y2="70" stroke="#f1f2f5" strokeWidth="1" />
-                        <line x1="0" y1="110" x2="540" y2="110" stroke="#f1f2f5" strokeWidth="1" />
-
-                        {/* Last year dashed line */}
-                        <path
-                          d="M 0,105 Q 45,98 90,102 T 180,95 T 270,90 T 360,78 T 450,72 T 540,65"
-                          fill="none"
-                          stroke="#cbd5e1"
-                          strokeWidth="1.5"
-                          strokeDasharray="4 4"
-                        />
-
-                        {/* This year filled area */}
-                        <path
-                          d="M 0,95 C 45,95 70,82 110,80 C 150,78 180,88 220,72 C 260,56 290,62 330,55 C 370,48 400,52 440,32 C 475,18 510,12 540,8 L 540,120 L 0,120 Z"
-                          fill="url(#chartGrad)"
-                        />
-
-                        {/* This year smooth curve line */}
-                        <path
-                          d="M 0,95 C 45,95 70,82 110,80 C 150,78 180,88 220,72 C 260,56 290,62 330,55 C 370,48 400,52 440,32 C 475,18 510,12 540,8"
-                          fill="none"
-                          stroke="#2b7fff"
-                          strokeWidth="2.5"
-                        />
-
-                        {/* Point marker on November (x=460, y=24) */}
-                        <circle cx="460" cy="24" r="5" fill="#2b7fff" stroke="#ffffff" strokeWidth="2.5" />
-                      </svg>
-
-                      {/* Floating Tooltip Bubble over November point */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: 4,
-                          right: '10%',
-                          background: '#0c0d10',
-                          color: '#ffffff',
-                          padding: '6px 10px',
-                          borderRadius: 8,
-                          fontSize: 10.5,
-                          boxShadow: '0 8px 18px rgba(12, 13, 16, 0.25)',
-                          pointerEvents: 'none',
-                          zIndex: 2,
-                        }}
-                      >
-                        <div style={{ color: '#94a3b8', fontSize: 9.5 }}>November</div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700, marginTop: 1 }}>
-                          <span>$11,920</span>
-                          <span style={{ color: '#4ade80', fontSize: 9.5 }}>↑ 21%</span>
-                        </div>
-                        {/* Tooltip triangle tail */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            bottom: -4,
-                            left: '50%',
-                            transform: 'translateX(-50%) rotate(45deg)',
-                            width: 8,
-                            height: 8,
-                            background: '#0c0d10',
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* X axis months */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10, fontSize: 10, color: '#94a3b8' }}>
-                      {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m) => (
-                        <span key={m}>{m}</span>
-                      ))}
-                    </div>
-                  </div>
-                </Col>
-
-                {/* Right: Pipeline by stage */}
-                <Col xs={24} md={9}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '16px 18px', height: '100%' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                      <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0c0d10' }}>Pipeline by stage</span>
-                      <span style={{ fontSize: 11, color: '#94a3b8' }}>86 deals</span>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
-                      {[
-                        { label: 'Lead', count: 124, pct: 100 },
-                        { label: 'Qualified', count: 68, pct: 68 },
-                        { label: 'Proposal', count: 41, pct: 45 },
-                        { label: 'Negotiation', count: 19, pct: 26 },
-                        { label: 'Won', count: 12, pct: 18 },
-                      ].map((stage, idx) => (
-                        <div key={idx}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 4 }}>
-                            <span style={{ color: '#0c0d10', fontWeight: 500 }}>{stage.label}</span>
-                            <span style={{ color: '#6b707c', fontWeight: 600 }}>{stage.count}</span>
-                          </div>
-                          <div style={{ height: 6, background: '#f1f2f5', borderRadius: 999, overflow: 'hidden' }}>
-                            <div
-                              style={{
-                                width: `${stage.pct}%`,
-                                height: '100%',
-                                background: '#2b7fff',
-                                borderRadius: 999,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-
-              {/* Bottom Card: Recent Deals Table */}
-              <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '16px 18px', position: 'relative' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0c0d10' }}>Recent deals</span>
-                  <span style={{ fontSize: 11.5, color: '#2b7fff', fontWeight: 600, cursor: 'pointer' }}>View all</span>
-                </div>
-
-                {/* Table columns header */}
+              {/* Workspace 3-Column Content Area */}
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  minHeight: 520,
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Column 1: Conversations List */}
                 <div
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: isMobile ? '1fr 1fr' : '2fr 1.5fr 1.2fr 1fr 1fr',
-                    padding: '6px 8px',
-                    fontSize: 10.5,
-                    color: '#94a3b8',
-                    fontWeight: 600,
-                    borderBottom: '1px solid #f1f2f5',
+                    width: isMobile ? '100%' : 310,
+                    flexShrink: 0,
+                    borderRight: '1px solid #f1f3f7',
+                    background: '#ffffff',
+                    padding: '14px 12px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 11,
                   }}
                 >
-                  <span>Company</span>
-                  {!isMobile && <span>Owner</span>}
-                  <span>Stage</span>
-                  {!isMobile && <span>Close date</span>}
-                  <span style={{ textAlign: 'right' }}>Value</span>
-                </div>
+                  {/* Conversations Header */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>Conversations</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#94a3b8' }}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                      </div>
+                    </div>
+                    <span
+                      style={{
+                        background: '#eff6ff',
+                        color: '#2563eb',
+                        border: '1px solid #dbeafe',
+                        borderRadius: 4,
+                        padding: '2px 7px',
+                        fontSize: 10.5,
+                        fontWeight: 600,
+                      }}
+                    >
+                      Super Admin
+                    </span>
+                  </div>
 
-                {/* Table rows */}
-                {[
-                  {
-                    company: 'Brightloop',
-                    icon: 'B',
-                    iconBg: '#2b7fff',
-                    owner: 'Julia T.',
-                    ownerAvatar: 'JT',
-                    ownerBg: '#ede9fe',
-                    ownerColor: '#6d28d9',
-                    stage: 'Negotiation',
-                    stageBg: '#f3e8ff',
-                    stageColor: '#7e22ce',
-                    date: 'Oct 24',
-                    val: '$24,000',
-                  },
-                  {
-                    company: 'Fieldwork',
-                    icon: 'F',
-                    iconBg: '#10b981',
-                    owner: 'Mark R.',
-                    ownerAvatar: 'MR',
-                    ownerBg: '#dcfce7',
-                    ownerColor: '#15803d',
-                    stage: 'Won',
-                    stageBg: '#dcfce7',
-                    stageColor: '#15803d',
-                    date: 'Oct 19',
-                    val: '$12,400',
-                  },
-                  {
-                    company: 'Kestrel Labs',
-                    icon: 'K',
-                    iconBg: '#8b5cf6',
-                    owner: 'Sophie D.',
-                    ownerAvatar: 'SD',
-                    ownerBg: '#ffedd5',
-                    ownerColor: '#c2410c',
-                    stage: 'Proposal',
-                    stageBg: '#ffedd5',
-                    stageColor: '#c2410c',
-                    date: 'Oct 15',
-                    val: '$18,500',
-                  },
-                ].map((deal, idx) => (
+                  {/* Search bar */}
                   <div
-                    key={idx}
                     style={{
-                      display: 'grid',
-                      gridTemplateColumns: isMobile ? '1fr 1fr' : '2fr 1.5fr 1.2fr 1fr 1fr',
-                      padding: '10px 8px',
+                      display: 'flex',
                       alignItems: 'center',
-                      fontSize: 12,
-                      borderBottom: idx === 2 ? 'none' : '1px solid #f8fafc',
+                      gap: 8,
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 6,
+                      padding: '6px 10px',
+                      background: '#ffffff',
                     }}
                   >
-                    {/* Company */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <SearchOutlined style={{ color: '#94a3b8', fontSize: 12 }} />
+                    <span style={{ color: '#94a3b8', fontSize: 11.5, flex: 1, whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                      Search name, email or message
+                    </span>
+                  </div>
+
+                  {/* Segmented Sub-tabs */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      background: '#f1f5f9',
+                      borderRadius: 6,
+                      padding: 3,
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        textAlign: 'center',
+                        background: '#ffffff',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
+                        color: '#0f172a',
+                        fontWeight: 600,
+                        fontSize: 11.5,
+                        padding: '3px 0',
+                        borderRadius: 4,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Inbox
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        textAlign: 'center',
+                        color: '#64748b',
+                        fontSize: 11.5,
+                        padding: '3px 0',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Trash
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        textAlign: 'center',
+                        color: '#64748b',
+                        fontSize: 11.5,
+                        padding: '3px 0',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Spam
+                    </div>
+                  </div>
+
+                  {/* Status filter chips */}
+                  <div style={{ display: 'flex', gap: 10, fontSize: 11.5, padding: '1px 2px' }}>
+                    <span style={{ color: '#2563eb', fontWeight: 600, cursor: 'pointer' }}>Open 1</span>
+                    <span style={{ color: '#64748b', cursor: 'pointer' }}>Pending 0</span>
+                    <span style={{ color: '#64748b', cursor: 'pointer' }}>Resolved 0</span>
+                    <span style={{ color: '#64748b', cursor: 'pointer' }}>All 1</span>
+                  </div>
+
+                  {/* Dropdowns row */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <div
+                      style={{
+                        border: '1px solid #e2e8f0',
+                        borderRadius: 6,
+                        padding: '3px 8px',
+                        fontSize: 11,
+                        color: '#475569',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                        background: '#ffffff',
+                      }}
+                    >
+                      <span>All assignees</span>
+                      <span style={{ fontSize: 9, color: '#94a3b8' }}>▾</span>
+                    </div>
+
+                    <div
+                      style={{
+                        border: '1px solid #e2e8f0',
+                        borderRadius: 6,
+                        padding: '3px 8px',
+                        fontSize: 11,
+                        color: '#475569',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                        background: '#ffffff',
+                      }}
+                    >
+                      <span>Filter tag</span>
+                      <span style={{ fontSize: 9, color: '#94a3b8' }}>▾</span>
+                    </div>
+                  </div>
+
+                  {/* Conversation Card 1: Chatral (Interactive demo) */}
+                  <div
+                    onClick={() => setHeroActiveConv(!heroActiveConv)}
+                    style={{
+                      border: heroActiveConv ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
+                      borderRadius: 8,
+                      padding: '10px 10px',
+                      background: heroActiveConv ? '#f8fafc' : '#ffffff',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      boxShadow: heroActiveConv ? '0 2px 6px rgba(37, 99, 235, 0.08)' : 'none',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                      <input type="checkbox" checked={heroActiveConv} readOnly style={{ marginTop: 4, cursor: 'pointer' }} />
                       <div
                         style={{
-                          width: 22,
-                          height: 22,
-                          borderRadius: 6,
-                          background: deal.iconBg,
-                          color: '#ffffff',
-                          fontSize: 11,
-                          fontWeight: 700,
+                          width: 28,
+                          height: 28,
+                          borderRadius: '50%',
+                          background: '#f1f5f9',
+                          border: '1px solid #e2e8f0',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
+                          flexShrink: 0,
+                          color: '#64748b',
                         }}
                       >
-                        {deal.icon}
+                        <UserOutlined style={{ fontSize: 12 }} />
                       </div>
-                      <span style={{ fontWeight: 600, color: '#0c0d10' }}>{deal.company}</span>
-                    </div>
 
-                    {/* Owner */}
-                    {!isMobile && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <div
-                          style={{
-                            width: 18,
-                            height: 18,
-                            borderRadius: '50%',
-                            background: deal.ownerBg,
-                            color: deal.ownerColor,
-                            fontSize: 9,
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          {deal.ownerAvatar}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>Chatral</span>
+                          <span style={{ fontSize: 11, color: '#94a3b8' }}>6 minutes</span>
                         </div>
-                        <span style={{ color: '#5b5f6b' }}>{deal.owner}</span>
+                        <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          Attachment
+                        </div>
+                        <div style={{ marginTop: 6 }}>
+                          <span
+                            style={{
+                              background: '#eff6ff',
+                              color: '#4f46e5',
+                              border: '1px solid #c7d2fe',
+                              borderRadius: 4,
+                              padding: '1px 7px',
+                              fontSize: 10,
+                              fontWeight: 500,
+                            }}
+                          >
+                            Unassigned
+                          </span>
+                        </div>
                       </div>
-                    )}
-
-                    {/* Stage */}
-                    <div>
-                      <span
-                        style={{
-                          display: 'inline-block',
-                          background: deal.stageBg,
-                          color: deal.stageColor,
-                          padding: '2px 8px',
-                          borderRadius: 6,
-                          fontSize: 11,
-                          fontWeight: 500,
-                        }}
-                      >
-                        {deal.stage}
-                      </span>
                     </div>
-
-                    {/* Close date */}
-                    {!isMobile && <span style={{ color: '#6b707c' }}>{deal.date}</span>}
-
-                    {/* Value */}
-                    <span style={{ fontWeight: 700, color: '#0c0d10', textAlign: 'right' }}>{deal.val}</span>
                   </div>
-                ))}
 
-                {/* Floating Toast Notification at bottom-right of Mockup */}
+                  {/* Interactive Helper Hint */}
+                  <div style={{ fontSize: 10.5, color: '#94a3b8', textAlign: 'center', marginTop: 'auto', padding: '6px 0' }}>
+                    💡 {heroActiveConv ? 'Click again to view default empty state' : 'Click conversation card to preview live chat'}
+                  </div>
+                </div>
+
+                {/* Column 2: Middle Chat Area */}
                 <div
                   style={{
-                    position: 'absolute',
-                    bottom: 14,
-                    right: 16,
-                    background: '#ffffff',
-                    border: '1px solid #e6e7eb',
-                    borderRadius: 12,
-                    padding: '8px 12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    boxShadow: '0 12px 24px -4px rgba(12, 13, 16, 0.12), 0 2px 6px rgba(12, 13, 16, 0.04)',
-                    zIndex: 5,
+                    flex: 1,
+                    borderRight: isMobile ? 'none' : '1px solid #f1f3f7',
+                    background: heroActiveConv ? '#f8fafc' : '#ffffff',
+                    display: isMobile && !heroActiveConv ? 'none' : 'flex',
+                    flexDirection: 'column',
+                    justifyContent: heroActiveConv ? 'space-between' : 'center',
+                    alignItems: heroActiveConv ? 'stretch' : 'center',
+                    padding: heroActiveConv ? 0 : 24,
+                    minHeight: 460,
                   }}
                 >
-                  <span style={{ fontSize: 16 }}>📅</span>
-                  <div>
-                    <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0c0d10' }}>
-                      Meeting booked - Kestrel
+                  {!heroActiveConv ? (
+                    /* Default state matching Image 2 */
+                    <div style={{ textAlign: 'center' }}>
+                      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
+                        <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" />
+                        <polyline points="21 8 16 3 8 3 3 8" />
+                        <line x1="3" y1="8" x2="21" y2="8" />
+                        <path d="M10 12h4" />
+                      </svg>
+                      <div style={{ fontSize: 13, color: '#64748b', marginTop: 12, fontWeight: 400 }}>
+                        Select a conversation to start chatting
+                      </div>
                     </div>
-                    <div style={{ fontSize: 10, color: '#6b707c', marginTop: 1 }}>
-                      Tomorrow, 10:00 • 3m ago
+                  ) : (
+                    /* Active chat conversation */
+                    <>
+                      {/* Chat Header */}
+                      <div
+                        style={{
+                          height: 48,
+                          borderBottom: '1px solid #eef2f6',
+                          background: '#ffffff',
+                          padding: '0 16px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
+                          <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>Chatral Visitor</span>
+                          <span style={{ fontSize: 11, color: '#64748b' }}>• Live on Digiscaleinfotech</span>
+                        </div>
+                        <span style={{ fontSize: 11, color: '#2563eb', fontWeight: 600 }}>Resolve chat</span>
+                      </div>
+
+                      {/* Chat Messages Body */}
+                      <div style={{ flex: 1, padding: 18, display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto' }}>
+                        {/* Visitor Message */}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
+                          <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>Visitor • 6m ago</div>
+                          <div
+                            style={{
+                              background: '#ffffff',
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '4px 14px 14px 14px',
+                              padding: '10px 14px',
+                              fontSize: 12.5,
+                              color: '#0f172a',
+                              lineHeight: 1.45,
+                              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+                            }}
+                          >
+                            Hello! We want to integrate Chatral live chat into our website. How quickly can we install it?
+                          </div>
+                        </div>
+
+                        {/* Agent Reply */}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', maxWidth: '85%', alignSelf: 'flex-end' }}>
+                          <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>Support Agent • 4m ago</div>
+                          <div
+                            style={{
+                              background: '#2563eb',
+                              color: '#ffffff',
+                              borderRadius: '14px 4px 14px 14px',
+                              padding: '10px 14px',
+                              fontSize: 12.5,
+                              lineHeight: 1.45,
+                              boxShadow: '0 1px 3px rgba(37,99,235,0.2)',
+                            }}
+                          >
+                            Hi! It takes under 2 minutes. Simply copy the lightweight widget script tag into your website's HTML, and live chat is instantly online!
+                          </div>
+                        </div>
+
+                        {/* Visitor Response */}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
+                          <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>Visitor • Just now</div>
+                          <div
+                            style={{
+                              background: '#ffffff',
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '4px 14px 14px 14px',
+                              padding: '10px 14px',
+                              fontSize: 12.5,
+                              color: '#0f172a',
+                              lineHeight: 1.45,
+                              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+                            }}
+                          >
+                            That is amazingly simple, thanks for the fast help!
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Chat Input Bar */}
+                      <div style={{ padding: '12px 16px', background: '#ffffff', borderTop: '1px solid #eef2f6' }}>
+                        <div
+                          style={{
+                            border: '1px solid #e2e8f0',
+                            borderRadius: 8,
+                            padding: '8px 12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            background: '#fafbfd',
+                          }}
+                        >
+                          <span style={{ fontSize: 12, color: '#94a3b8' }}>Type a reply or use saved replies...</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b' }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                            <div style={{ background: '#2563eb', color: '#ffffff', borderRadius: 6, padding: '4px 10px', fontSize: 11, fontWeight: 600 }}>Send</div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Column 3: Right Details Panel */}
+                <div
+                  style={{
+                    width: isMobile ? '0' : 250,
+                    display: isMobile ? 'none' : 'flex',
+                    flexDirection: 'column',
+                    justifyContent: heroActiveConv ? 'flex-start' : 'center',
+                    alignItems: heroActiveConv ? 'stretch' : 'center',
+                    background: '#ffffff',
+                    padding: heroActiveConv ? 16 : 24,
+                    minHeight: 460,
+                  }}
+                >
+                  {!heroActiveConv ? (
+                    /* Default state matching Image 2 */
+                    <div style={{ textAlign: 'center' }}>
+                      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
+                        <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" />
+                        <polyline points="21 8 16 3 8 3 3 8" />
+                        <line x1="3" y1="8" x2="21" y2="8" />
+                        <path d="M10 12h4" />
+                      </svg>
+                      <div style={{ fontSize: 13, color: '#64748b', marginTop: 12, fontWeight: 400 }}>
+                        No active conversation
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    /* Active Visitor Details */
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', borderBottom: '1px solid #f1f3f7', paddingBottom: 8 }}>
+                        Visitor Details
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 11.5 }}>
+                        <div>
+                          <div style={{ color: '#94a3b8', fontSize: 10 }}>NAME</div>
+                          <div style={{ color: '#0f172a', fontWeight: 600, marginTop: 1 }}>Chatral Visitor</div>
+                        </div>
+
+                        <div>
+                          <div style={{ color: '#94a3b8', fontSize: 10 }}>CHANNEL</div>
+                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 1 }}>Live Chat Widget</div>
+                        </div>
+
+                        <div>
+                          <div style={{ color: '#94a3b8', fontSize: 10 }}>LOCATION</div>
+                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 1 }}>Gujarat, India 🇮🇳</div>
+                        </div>
+
+                        <div>
+                          <div style={{ color: '#94a3b8', fontSize: 10 }}>ACTIVE PAGE</div>
+                          <div style={{ color: '#2563eb', fontWeight: 500, marginTop: 1 }}>/pricing</div>
+                        </div>
+
+                        <div>
+                          <div style={{ color: '#94a3b8', fontSize: 10 }}>BROWSER & DEVICE</div>
+                          <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 1 }}>Chrome • macOS</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
