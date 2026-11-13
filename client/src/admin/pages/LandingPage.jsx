@@ -1336,473 +1336,107 @@ export default function LandingPage() {
           {/* Relatik 5-Card Bento Grid */}
           <Row gutter={[20, 20]}>
             
-            {/* Bento Card 1: Live Visitor Tracking (Top Left - ~60% Hero Card) */}
-            <Col xs={24} md={14}>
+            {/* Bento Card 1: Live Visitor Tracking */}
+            <Col xs={24} md={12}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e8e9ee',
                   borderRadius: 24,
-                  padding: isMobile ? '24px 20px' : '32px 32px 28px',
+                  padding: isMobile ? '26px 20px' : '32px 28px',
                   height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
+                  minHeight: 180,
                   boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                 }}
               >
-                <div>
-                  <div
-                    style={{
-                      width: 38,
-                      height: 38,
-                      borderRadius: 10,
-                      background: '#eaf2ff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 14,
-                    }}
-                  >
-                    <GlobalOutlined style={{ fontSize: 18, color: '#2b7fff' }} />
-                  </div>
-                  <Typography.Title
-                    level={3}
-                    style={{
-                      color: '#0c0d10',
-                      fontSize: 20,
-                      fontWeight: 700,
-                      letterSpacing: '-0.02em',
-                      margin: '0 0 8px',
-                    }}
-                  >
-                    Live Visitor Tracking
-                  </Typography.Title>
-                  <Typography.Paragraph
-                    style={{
-                      color: '#5b5f6b',
-                      fontSize: 13.5,
-                      lineHeight: 1.5,
-                      margin: '0 0 24px',
-                      maxWidth: 500,
-                    }}
-                  >
-                    Track visitors on your site in real-time, see their active browsing journey, and initiate sales chats before they leave.
-                  </Typography.Paragraph>
-                </div>
-
-                {/* In-Card Visual Mockup: Real-Time Live Visitors Radar Table */}
                 <div
                   style={{
-                    background: '#ffffff',
-                    borderRadius: 16,
-                    border: '1px solid #eef0f3',
-                    padding: isMobile ? '12px' : '16px 18px',
-                    boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
+                    width: 38,
+                    height: 38,
+                    borderRadius: 10,
+                    background: '#eaf2ff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 14,
                   }}
                 >
-                  {/* Table Header Row with Tabs */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: '#0c0d10' }}>Live Visitors</span>
-                      <span
-                        style={{
-                          background: '#ecfdf5',
-                          color: '#16a34a',
-                          fontSize: 11,
-                          fontWeight: 600,
-                          padding: '1px 8px',
-                          borderRadius: 999,
-                        }}
-                      >
-                        ● 42 Online
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: 2,
-                        background: '#f8fafc',
-                        padding: 3,
-                        borderRadius: 8,
-                        border: '1px solid #f1f2f5',
-                      }}
-                    >
-                      <span
-                        style={{
-                          background: '#ffffff',
-                          color: '#0c0d10',
-                          fontSize: 11,
-                          fontWeight: 600,
-                          padding: '2px 9px',
-                          borderRadius: 6,
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                        }}
-                      >
-                        All
-                      </span>
-                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>Pricing · 14</span>
-                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>Checkout · 6</span>
-                    </div>
-                  </div>
-
-                  {/* Column Labels */}
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.3fr 1fr 1fr',
-                      fontSize: 10,
-                      fontWeight: 700,
-                      color: '#9aa0ac',
-                      letterSpacing: '0.05em',
-                      padding: '4px 6px 8px',
-                      borderBottom: '1px solid #f2f3f7',
-                    }}
-                  >
-                    <span>VISITOR</span>
-                    {!isMobile && <span>ACTIVE PAGE</span>}
-                    <span>TIME</span>
-                    <span style={{ textAlign: 'right' }}>ACTION</span>
-                  </div>
-
-                  {/* Rows */}
-                  {[
-                    {
-                      name: 'Jaydeep Patel',
-                      sub: 'Surat, IN • Chrome',
-                      avatar: 'JP',
-                      bg: '#e0f2fe',
-                      color: '#0284c7',
-                      page: '/checkout',
-                      pageBg: '#fef3c7',
-                      pageColor: '#d97706',
-                      time: '2m 14s',
-                      action: 'Start Chat',
-                      actionType: 'button',
-                    },
-                    {
-                      name: 'Elena Rostova',
-                      sub: 'Berlin, DE • Safari',
-                      avatar: 'ER',
-                      bg: '#ede9fe',
-                      color: '#7c3aed',
-                      page: '/pricing',
-                      pageBg: '#eaf2ff',
-                      pageColor: '#2b7fff',
-                      time: '1m 45s',
-                      action: 'Start Chat',
-                      actionType: 'button',
-                    },
-                    {
-                      name: 'Owen Malik',
-                      sub: 'New York, US • Edge',
-                      avatar: 'OM',
-                      bg: '#dcfce7',
-                      color: '#16a34a',
-                      page: '/cart',
-                      pageBg: '#f0fdf4',
-                      pageColor: '#16a34a',
-                      time: '3m 20s',
-                      action: '● Active',
-                      actionType: 'badge',
-                    },
-                  ].map((row, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.3fr 1fr 1fr',
-                        alignItems: 'center',
-                        padding: '10px 6px',
-                        fontSize: 12,
-                        borderBottom: idx === 2 ? 'none' : '1px solid #f8fafc',
-                      }}
-                    >
-                      {/* Visitor Name & Location */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div
-                          style={{
-                            width: 24,
-                            height: 24,
-                            borderRadius: '50%',
-                            background: row.bg,
-                            color: row.color,
-                            fontSize: 9.5,
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                          }}
-                        >
-                          {row.avatar}
-                        </div>
-                        <div style={{ overflow: 'hidden' }}>
-                          <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 12, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                            {row.name}
-                          </div>
-                          <div style={{ color: '#9aa0ac', fontSize: 10, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                            {row.sub}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Page */}
-                      {!isMobile && (
-                        <div>
-                          <span
-                            style={{
-                              background: row.pageBg,
-                              color: row.pageColor,
-                              padding: '2px 7px',
-                              borderRadius: 6,
-                              fontSize: 10.5,
-                              fontWeight: 600,
-                            }}
-                          >
-                            {row.page}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Time */}
-                      <span style={{ color: '#5b5f6b', fontSize: 11.5 }}>{row.time}</span>
-
-                      {/* Action */}
-                      <div style={{ textAlign: 'right' }}>
-                        {row.actionType === 'button' ? (
-                          <button
-                            style={{
-                              background: '#2b7fff',
-                              color: '#ffffff',
-                              border: 'none',
-                              borderRadius: 6,
-                              padding: '3px 8px',
-                              fontSize: 10.5,
-                              fontWeight: 600,
-                              cursor: 'pointer',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 4,
-                            }}
-                          >
-                            <span>💬</span>
-                            <span>Chat</span>
-                          </button>
-                        ) : (
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              background: '#f0fdf4',
-                              color: '#16a34a',
-                              padding: '2px 8px',
-                              borderRadius: 999,
-                              fontSize: 10.5,
-                              fontWeight: 600,
-                            }}
-                          >
-                            {row.action}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                  <GlobalOutlined style={{ fontSize: 18, color: '#2b7fff' }} />
                 </div>
+                <Typography.Title
+                  level={3}
+                  style={{
+                    color: '#0c0d10',
+                    fontSize: 20,
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 8px',
+                  }}
+                >
+                  Live Visitor Tracking
+                </Typography.Title>
+                <Typography.Paragraph
+                  style={{
+                    color: '#5b5f6b',
+                    fontSize: 14,
+                    lineHeight: 1.55,
+                    margin: 0,
+                  }}
+                >
+                  Track visitors on your site in real-time, see their active browsing journey, and initiate sales chats before they leave.
+                </Typography.Paragraph>
               </div>
             </Col>
 
-            {/* Bento Card 2: Unified Operator Inbox (Top Right - ~40% Hero Card) */}
-            <Col xs={24} md={10}>
+            {/* Bento Card 2: Unified Operator Inbox */}
+            <Col xs={24} md={12}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e8e9ee',
                   borderRadius: 24,
-                  padding: isMobile ? '24px 20px' : '32px 32px 28px',
+                  padding: isMobile ? '26px 20px' : '32px 28px',
                   height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
+                  minHeight: 180,
                   boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
                 }}
               >
-                <div>
-                  <div
-                    style={{
-                      width: 38,
-                      height: 38,
-                      borderRadius: 10,
-                      background: '#ecfdf5',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 14,
-                    }}
-                  >
-                    <RiseOutlined style={{ fontSize: 18, color: '#10b981' }} />
-                  </div>
-                  <Typography.Title
-                    level={3}
-                    style={{
-                      color: '#0c0d10',
-                      fontSize: 20,
-                      fontWeight: 700,
-                      letterSpacing: '-0.02em',
-                      margin: '0 0 8px',
-                    }}
-                  >
-                    Unified Operator Inbox
-                  </Typography.Title>
-                  <Typography.Paragraph
-                    style={{
-                      color: '#5b5f6b',
-                      fontSize: 13.5,
-                      lineHeight: 1.5,
-                      margin: '0 0 24px',
-                    }}
-                  >
-                    Manage all customer conversations in one calm, lightning-fast workspace with live typing preview and instant status tracking.
-                  </Typography.Paragraph>
-                </div>
-
-                {/* In-Card Visual Mockup: Mini Conversations Queue */}
                 <div
                   style={{
-                    background: '#ffffff',
-                    borderRadius: 16,
-                    border: '1px solid #eef0f3',
-                    padding: isMobile ? '12px' : '16px 18px',
-                    boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
+                    width: 38,
+                    height: 38,
+                    borderRadius: 10,
+                    background: '#ecfdf5',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 14,
                   }}
                 >
-                  {/* Kanban Header */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                    <div style={{ fontSize: 12.5 }}>
-                      <span style={{ fontWeight: 700, color: '#0c0d10' }}>Operator Inbox</span>
-                      <span style={{ color: '#9aa0ac', marginLeft: 6, fontSize: 11 }}>3 active</span>
-                    </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: 2,
-                        background: '#f8fafc',
-                        border: '1px solid #f1f2f5',
-                        borderRadius: 7,
-                        padding: 2,
-                      }}
-                    >
-                      <span
-                        style={{
-                          background: '#ffffff',
-                          color: '#0c0d10',
-                          fontSize: 10.5,
-                          fontWeight: 600,
-                          padding: '2px 8px',
-                          borderRadius: 5,
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                        }}
-                      >
-                        Queue
-                      </span>
-                      <span style={{ color: '#9aa0ac', fontSize: 10.5, padding: '2px 8px', cursor: 'pointer' }}>All</span>
-                    </div>
-                  </div>
-
-                  {/* 2 Kanban Columns */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    {/* Col 1: Active Conversations */}
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#6b707c', marginBottom: 6 }}>
-                        <span style={{ fontWeight: 600 }}>Active · 2</span>
-                        <span style={{ color: '#16a34a' }}>Live</span>
-                      </div>
-                      
-                      <div
-                        style={{
-                          background: '#ffffff',
-                          border: '1px solid #eef0f3',
-                          borderRadius: 8,
-                          padding: '8px 10px',
-                          marginBottom: 8,
-                        }}
-                      >
-                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>Sophia M.</div>
-                        <div style={{ fontSize: 10, color: '#6b707c', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          "Upgrade to Pro plan?"
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, marginTop: 4 }}>
-                          <span style={{ color: '#2b7fff', fontWeight: 600 }}>Typing...</span>
-                          <span style={{ color: '#9aa0ac' }}>12s ago</span>
-                        </div>
-                      </div>
-
-                      <div
-                        style={{
-                          background: '#ffffff',
-                          border: '1px solid #eef0f3',
-                          borderRadius: 8,
-                          padding: '8px 10px',
-                        }}
-                      >
-                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>David Chen</div>
-                        <div style={{ fontSize: 10, color: '#6b707c', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          "Shopify sync details"
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, marginTop: 4 }}>
-                          <span style={{ color: '#16a34a', fontWeight: 600 }}>Waiting</span>
-                          <span style={{ color: '#9aa0ac' }}>45s ago</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Col 2: Closed Deals */}
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#6b707c', marginBottom: 6 }}>
-                        <span style={{ fontWeight: 600 }}>Deals Won · 1</span>
-                        <span style={{ color: '#9aa0ac' }}>Today</span>
-                      </div>
-
-                      {/* Active Proposal Card with Blue Accent */}
-                      <div
-                        style={{
-                          background: '#ffffff',
-                          border: '1.5px solid #2b7fff',
-                          borderRadius: 8,
-                          padding: '8px 10px',
-                          marginBottom: 8,
-                          boxShadow: '0 2px 8px rgba(43, 127, 255, 0.12)',
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 11.5, fontWeight: 700, color: '#0c0d10' }}>Haven & Co</span>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#16a34a' }} />
-                        </div>
-                        <div style={{ fontSize: 10, color: '#16a34a', fontWeight: 600, marginTop: 2 }}>
-                          ✓ Converted to Pro
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, marginTop: 3 }}>
-                          <span style={{ color: '#2b7fff', fontWeight: 700 }}>$1,490/yr</span>
-                          <span style={{ color: '#9aa0ac' }}>Just now</span>
-                        </div>
-                      </div>
-
-                      {/* Dashed Drop Placeholder */}
-                      <div
-                        style={{
-                          border: '1px dashed #cbd5e1',
-                          borderRadius: 8,
-                          padding: '9px 8px',
-                          textAlign: 'center',
-                          fontSize: 10.5,
-                          color: '#9aa0ac',
-                          background: '#fafbfd',
-                        }}
-                      >
-                        + 8 Resolved
-                      </div>
-                    </div>
-                  </div>
+                  <RiseOutlined style={{ fontSize: 18, color: '#10b981' }} />
                 </div>
+                <Typography.Title
+                  level={3}
+                  style={{
+                    color: '#0c0d10',
+                    fontSize: 20,
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 8px',
+                  }}
+                >
+                  Unified Operator Inbox
+                </Typography.Title>
+                <Typography.Paragraph
+                  style={{
+                    color: '#5b5f6b',
+                    fontSize: 14,
+                    lineHeight: 1.55,
+                    margin: 0,
+                  }}
+                >
+                  Manage all customer conversations in one calm, lightning-fast workspace with live typing preview and instant status tracking.
+                </Typography.Paragraph>
               </div>
             </Col>
 
