@@ -15,6 +15,88 @@ import { ChatralFullLogo } from '../components/BrandLogo.jsx';
 
 const { useBreakpoint } = Grid;
 
+const TRUSTED_COMPANIES = [
+  {
+    name: 'Brightloop',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M 9 9 C 9.414 9 9.75 9.336 9.75 9.75 C 9.75 10.578 9.078 11.25 8.25 11.25 C 7.007 11.25 6 10.243 6 9 C 6 7.343 7.343 6 9 6 C 11.071 6 12.75 7.679 12.75 9.75 C 12.75 12.235 10.735 14.25 8.25 14.25 C 5.351 14.25 3 11.899 3 9 C 3 5.686 5.686 3 9 3 C 12.728 3 15.75 6.022 15.75 9.75 C 15.75 13.892 12.392 17.25 8.25 17.25 C 3.694 17.25 0 13.556 0 9 C 0 4.029 4.029 0 9 0 C 14.385 0 18.75 4.365 18.75 9.75" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(3.75 3.75)" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Fieldwork',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M 1.482 14.268 C -3.008 6.786 2.982 -0.696 15.698 0.052 C 16.446 12.772 8.964 18.758 1.482 14.268 Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(4.5 3.75)" />
+        <path d="M 11.25 0 L 0 11.25" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(3.75 9)" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Kestrel',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <circle cx="15.375" cy="6.375" r="1.125" fill="currentColor" />
+        <path d="M 8.25 7.08 L 8.25 4.959 C 8.25 2.261 10.407 0.013 13.101 0 C 15.33 -0.011 17.282 1.49 17.844 3.646 L 20.25 5.25 L 18 6.75 L 18 9 C 18 13.971 13.971 18 9 18 L 0.75 18 C 0.462 18 0.199 17.835 0.074 17.575 C -0.051 17.315 -0.016 17.006 0.165 16.781 Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(1.5 2.25)" />
+        <path d="M 6.875 0 L 0 8.25" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(5.125 12)" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Lumora',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M 21 0 L 0 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(1.5 15)" />
+        <path d="M 15 0 L 0 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(4.5 18.75)" />
+        <path d="M 0.188 7.488 C -0.434 5.06 0.519 2.502 2.577 1.072 C 4.635 -0.357 7.365 -0.357 9.424 1.072 C 11.482 2.502 12.434 5.06 11.813 7.488" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(6 7.512)" />
+        <path d="M 0 0 L 0.75 1.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(7.5 3.75)" />
+        <path d="M 0 0 L 1.5 0.75" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(2.25 9)" />
+        <path d="M 1.5 0 L 0 0.75" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(20.25 9)" />
+        <path d="M 0.75 0 L 0 1.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(15.75 3.75)" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Orbitly',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M 0 8.25 C 0 3.694 3.694 0 8.25 0 C 12.806 0 16.5 3.694 16.5 8.25 C 16.5 12.806 12.806 16.5 8.25 16.5 C 3.694 16.5 0 12.806 0 8.25 Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(3.75 3.75)" />
+        <path d="M 15.821 0.445 C 18.365 -0.231 20.266 -0.16 20.831 0.815 C 21.862 2.589 18.07 6.684 12.364 9.963 C 6.657 13.241 1.198 14.463 0.169 12.681 C -0.399 11.704 0.498 10.022 2.371 8.16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(1.5 5.25)" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Quanta',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M 5.325 11.176 C 1.066 6.917 -1.077 2.154 0.538 0.538 C 2.154 -1.077 6.917 1.066 11.176 5.325 C 15.435 9.584 17.577 14.346 15.962 15.962 C 14.346 17.577 9.584 15.435 5.325 11.176 Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(3.75 3.75)" />
+        <path d="M 0.538 15.962 C -1.077 14.346 1.066 9.584 5.325 5.325 C 9.584 1.066 14.346 -1.077 15.962 0.538 C 17.577 2.154 15.435 6.917 11.176 11.176 C 6.917 15.435 2.154 17.577 0.538 15.962 Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(3.75 3.75)" />
+        <circle cx="12" cy="12" r="1.125" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Vellum',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M 14.25 0 L 0 14.25" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(3 6.75)" />
+        <path d="M 7.719 15.531 C 7.579 15.671 7.388 15.75 7.19 15.75 L 0 15.75 L 0 8.561 C 0 8.362 0.079 8.171 0.219 8.031 L 6.788 1.538 C 8.838 -0.513 12.162 -0.513 14.213 1.538 C 16.263 3.588 16.263 6.912 14.213 8.963 Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(6 2.25)" />
+        <path d="M 0 0 L 0 7.451" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(10.5 6.049)" />
+        <path d="M 0 0 L 7.425 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" transform="translate(12.75 11.25)" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Haven',
+    svg: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M 9.36 0.092 L 17.61 4.609 C 17.85 4.74 17.999 4.992 18 5.265 L 18 14.231 C 17.999 14.505 17.85 14.756 17.61 14.888 L 9.36 19.405 C 9.136 19.527 8.864 19.527 8.64 19.405 L 0.39 14.888 C 0.15 14.756 0.001 14.505 0 14.231 L 0 5.265 C 0.001 4.992 0.15 4.74 0.39 4.609 L 8.64 0.092 C 8.864 -0.031 9.136 -0.031 9.36 0.092 Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" transform="translate(3 2.252)" />
+      </svg>
+    ),
+  },
+];
+
 export default function LandingPage() {
   const nav = useNavigate();
   const screens = useBreakpoint();
@@ -287,6 +369,10 @@ export default function LandingPage() {
           0% { opacity: 0.65; transform: scale(1); }
           50% { opacity: 0.85; transform: scale(1.04); }
           100% { opacity: 0.65; transform: scale(1); }
+        }
+        @keyframes logoTickerScroll {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
       `}</style>
 
@@ -1277,6 +1363,92 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Relatik Trusted Logos Ticker Section */}
+        <div
+          style={{
+            maxWidth: 1240,
+            margin: isMobile ? '44px auto 0' : '64px auto 0',
+            padding: '0 20px',
+            textAlign: 'center',
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          <p
+            style={{
+              color: '#5b5f6b',
+              fontSize: isMobile ? 13 : 14,
+              fontWeight: 500,
+              letterSpacing: '-0.01em',
+              marginBottom: 28,
+            }}
+          >
+            Trusted by fast-growing teams around the world
+          </p>
+
+          {/* Marquee Ticker Track with Gradient Masks */}
+          <div
+            style={{
+              overflow: 'hidden',
+              position: 'relative',
+              width: '100%',
+              maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: isMobile ? 36 : 56,
+                width: 'max-content',
+                animation: 'logoTickerScroll 28s linear infinite',
+              }}
+            >
+              {[...TRUSTED_COMPANIES, ...TRUSTED_COMPANIES].map((company, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    color: '#0c0d10',
+                    opacity: 0.85,
+                    transition: 'opacity 0.2s ease, transform 0.2s ease',
+                    cursor: 'default',
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.85';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', color: '#0c0d10' }}>
+                    {company.svg}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: isMobile ? 15 : 16.5,
+                      fontWeight: 700,
+                      letterSpacing: '-0.025em',
+                      color: '#0c0d10',
+                      fontFamily: 'inherit',
+                    }}
+                  >
+                    {company.name}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
