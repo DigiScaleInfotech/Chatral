@@ -9,11 +9,11 @@ export default function TermsOfService() {
       <div style={{ maxWidth: 860, margin: '0 auto' }}>
         {/* Header */}
         <Flex justify="space-between" align="center" style={{ marginBottom: 28 }}>
-          <Link to="/landing">
-            <ChatralFullLogo height={34} dark={false} />
+          <Link to="/">
+            <ChatralFullLogo height={32} dark={false} />
           </Link>
-          <Link to="/landing">
-            <Button type="default" icon={<ArrowLeftOutlined />} style={{ color: '#475569', borderColor: '#cbd5e1' }}>
+          <Link to="/">
+            <Button type="default" icon={<ArrowLeftOutlined />} style={{ color: '#475569', borderColor: '#cbd5e1', fontSize: 13, height: 36 }}>
               Back to Home
             </Button>
           </Link>
