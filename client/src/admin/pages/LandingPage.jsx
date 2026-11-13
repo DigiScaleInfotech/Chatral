@@ -2506,12 +2506,12 @@ export default function LandingPage() {
                   Essential live chat for individual websites and solo founders.
                 </div>
                 <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 16px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 1 Active Store</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 2 Support Agents</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 30-Day Chat History</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Standard Web Widget</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Real-Time Visitor Presence</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Standard Web Chat Widget</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
                 </div>
                 <Button
                   block
@@ -2558,20 +2558,21 @@ export default function LandingPage() {
                 </div>
                 <div style={{ fontWeight: 700, color: '#2b7fff', fontSize: 16 }}>Starter Growth</div>
                 <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
-                  {billingCycle === 'annual' ? '$15' : '$19'}{' '}
+                  {billingCycle === 'annual' ? '$9' : '$12'}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20 }}>
-                  For growing e-commerce businesses needing sales triggers and radar.
+                  For growing e-commerce stores needing automated sales triggers and radar.
                 </div>
                 <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 16px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>3 Active Stores</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>5 Support Agents</b></div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Automated Sales Triggers</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Real-Time Live Visitor Radar</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Canned / Saved Shortcuts</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 1-Year Chat & Visitor History</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Sound & Desktop Alerts</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Remove "Powered by Chatral"</b></div>
                 </div>
                 <Button
                   type="primary"
@@ -2609,19 +2610,20 @@ export default function LandingPage() {
               >
                 <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business Pro</div>
                 <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
-                  {billingCycle === 'annual' ? '$39' : '$49'}{' '}
+                  {billingCycle === 'annual' ? '$19' : '$24'}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20 }}>
-                  Maximum power, deep Shopify sync, and white-label branding removal.
+                  Maximum power, multi-store operations, deep Shopify sync, and white-label.
                 </div>
                 <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 16px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Unlimited Stores</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>15 Support Agents</b></div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Deep Shopify & Order Integration</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>White-Label: Remove Branding</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Bot Detection & Quality Traffic Filter</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Advanced Analytics & Reports</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Bot Detection & Traffic Filter</div>
+                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>100% White-Label Branding</b></div>
                   <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 24/7 Dedicated Support</div>
                 </div>
                 <Button
@@ -2630,7 +2632,7 @@ export default function LandingPage() {
                   onClick={() => nav('/login?mode=signup')}
                   style={{ background: '#f7f8fa', borderColor: '#e6e7eb', color: '#0c0d10', fontWeight: 600, height: 42, borderRadius: 10, fontSize: 13.5 }}
                 >
-                  Contact for Pro Trial
+                  Start 14-Day Free Trial
                 </Button>
               </div>
             </Col>
