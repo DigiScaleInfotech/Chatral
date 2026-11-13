@@ -2581,58 +2581,167 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 11. Relatik Footer */}
-      <footer style={{ background: '#ffffff', borderTop: '1px solid #e6e7eb', padding: '50px 24px 28px' }}>
-        <div style={{ maxWidth: 1040, margin: '0 auto' }}>
-          <Row gutter={[28, 28]} justify="space-between">
-            <Col xs={24} md={8}>
-              <ChatralFullLogo height={28} dark={false} style={{ marginBottom: 12 }} />
-              <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6, maxWidth: 280 }}>
-                Customer messaging made simple. Real-time live chat for modern e-commerce and support teams.
-              </Typography.Paragraph>
-              <div style={{ color: '#81d43be3', fontSize: 11.5 }}>
-                Developed & operated by DigiScale Infotech.
+      {/* 10. Relatik Signature Footer (Exact Match to Image) */}
+      <footer style={{ background: '#ffffff', borderTop: '1px solid #f0f1f4', padding: isMobile ? '56px 20px 32px' : '72px 24px 36px' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
+          <Row gutter={isMobile ? [0, 36] : [48, 24]} justify="space-between" align="top">
+            {/* Left: Logo & Tagline */}
+            <Col xs={24} md={9}>
+              <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, textDecoration: 'none', marginBottom: 16 }}>
+                <div
+                  style={{
+                    width: 26,
+                    height: 26,
+                    borderRadius: 7,
+                    background: '#0c0d10',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#ffffff',
+                    fontSize: 14,
+                    fontWeight: 700,
+                  }}
+                >
+                  ⌘
+                </div>
+                <span style={{ fontSize: 18, fontWeight: 700, color: '#0c0d10', letterSpacing: '-0.02em' }}>
+                  chatral
+                </span>
+              </Link>
+              <div style={{ color: '#5b5f6b', fontSize: 14, lineHeight: 1.6, maxWidth: 290 }}>
+                The simple live chat for teams that care about relationships.
               </div>
             </Col>
 
-            <Col xs={12} sm={8} md={5}>
-              <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 13, marginBottom: 12 }}>Product</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13 }}>
-                <a onClick={() => scrollTo('features')} style={{ color: '#5b5f6b', cursor: 'pointer' }}>Features</a>
-                <a onClick={() => scrollTo('how-it-works')} style={{ color: '#5b5f6b', cursor: 'pointer' }}>How It Works</a>
-                <a onClick={() => scrollTo('testimonials')} style={{ color: '#5b5f6b', cursor: 'pointer' }}>Testimonials</a>
-                <a onClick={() => scrollTo('pricing')} style={{ color: '#5b5f6b', cursor: 'pointer' }}>Pricing</a>
-              </div>
-            </Col>
+            {/* Right: Product, Company, Legal Columns */}
+            <Col xs={24} md={14} lg={13}>
+              <Row gutter={[32, 32]}>
+                {/* Product */}
+                <Col xs={12} sm={8}>
+                  <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 14, marginBottom: 16 }}>Product</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 14 }}>
+                    <a
+                      onClick={() => scrollTo('features')}
+                      style={{ color: '#5b5f6b', cursor: 'pointer', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      Features
+                    </a>
+                    <a
+                      onClick={() => scrollTo('how-it-works')}
+                      style={{ color: '#5b5f6b', cursor: 'pointer', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      How it works
+                    </a>
+                    <a
+                      onClick={() => scrollTo('pricing')}
+                      style={{ color: '#5b5f6b', cursor: 'pointer', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      Pricing
+                    </a>
+                    <a
+                      onClick={() => scrollTo('faq')}
+                      style={{ color: '#5b5f6b', cursor: 'pointer', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      FAQ
+                    </a>
+                  </div>
+                </Col>
 
-            <Col xs={12} sm={8} md={5}>
-              <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 13, marginBottom: 12 }}>Legal</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13 }}>
-                <Link to="/privacy" style={{ color: '#5b5f6b' }}>Privacy Policy</Link>
-                <Link to="/terms" style={{ color: '#5b5f6b' }}>Terms of Service</Link>
-                <span style={{ color: '#81d43be3' }}>GDPR Compliant</span>
-              </div>
-            </Col>
+                {/* Company */}
+                <Col xs={12} sm={8}>
+                  <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 14, marginBottom: 16 }}>Company</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 14 }}>
+                    <a
+                      onClick={() => scrollTo('testimonials')}
+                      style={{ color: '#5b5f6b', cursor: 'pointer', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      Testimonials
+                    </a>
+                    <a
+                      href="mailto:digiscaleinfotech@gmail.com"
+                      style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      Contact
+                    </a>
+                  </div>
+                </Col>
 
-            <Col xs={24} sm={8} md={6}>
-              <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 13, marginBottom: 12 }}>Contact</div>
-              <div style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.7 }}>
-                <div>Email: <a href="mailto:digiscaleinfotech@gmail.com" style={{ color: '#2b7fff' }}>digiscaleinfotech@gmail.com</a></div>
-                <div>Support: Mon – Fri, 9am – 7pm IST</div>
-              </div>
+                {/* Legal */}
+                <Col xs={12} sm={8}>
+                  <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 14, marginBottom: 16 }}>Legal</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 14 }}>
+                    <Link
+                      to="/privacy"
+                      style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      Privacy policy
+                    </Link>
+                    <Link
+                      to="/terms"
+                      style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    >
+                      Terms of service
+                    </Link>
+                  </div>
+                </Col>
+              </Row>
             </Col>
           </Row>
 
-          <Divider style={{ borderColor: '#e6e7eb', margin: '32px 0 20px' }} />
+          {/* Bottom Divider */}
+          <div style={{ borderTop: '1px solid #f0f1f4', margin: '48px 0 24px' }} />
 
-          <Flex justify={isMobile ? 'center' : 'space-between'} align="center" wrap="wrap" gap={10}>
-            <div style={{ color: '#6b707c', fontSize: 12 }}>
-              &copy; {new Date().getFullYear()} DigiScale Infotech. All rights reserved. Chatral&trade;
+          {/* Bottom Copyright & Social Links */}
+          <Flex justify="space-between" align="center" wrap="wrap" gap={12}>
+            <div style={{ color: '#9aa0ac', fontSize: 13 }}>
+              &copy; {new Date().getFullYear()} Chatral. All rights reserved. &nbsp; Made by <span style={{ color: '#0c0d10', fontWeight: 500 }}>DigiScale Infotech</span>
             </div>
-            <Flex gap={16} style={{ fontSize: 12 }}>
-              <Link to="/privacy" style={{ color: '#5b5f6b' }}>Privacy</Link>
-              <Link to="/terms" style={{ color: '#5b5f6b' }}>Terms</Link>
-              <Link to="/login" style={{ color: '#5b5f6b' }}>Sign In</Link>
+
+            {/* Social Icons (X / Twitter and LinkedIn) */}
+            <Flex gap={16} align="center">
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="X (Twitter)"
+                style={{ color: '#6b707c', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#6b707c')}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn"
+                style={{ color: '#6b707c', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#6b707c')}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 1.6 1.6 1.6 1.6 0 0 0-1.6-1.6z" />
+                </svg>
+              </a>
             </Flex>
           </Flex>
         </div>
