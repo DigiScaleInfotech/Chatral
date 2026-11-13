@@ -271,310 +271,1012 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* 2. Hero Section (Relatik Typography & Minimalist Clean Feel) */}
-      <section style={{ padding: isMobile ? '48px 20px 36px' : '76px 24px 50px', textAlign: 'center' }}>
-        <div style={{ maxWidth: 840, margin: '0 auto' }}>
+      {/* Animated Liquid Wave Background Styles */}
+      <style>{`
+        @keyframes liquidFlowLeft {
+          0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+          50% { transform: translate3d(-35px, 25px, 0) scale(1.08) rotate(3deg); }
+          100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+        }
+        @keyframes liquidFlowRight {
+          0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+          50% { transform: translate3d(30px, -20px, 0) scale(1.06) rotate(-3deg); }
+          100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+        }
+        @keyframes liquidPulse {
+          0% { opacity: 0.65; transform: scale(1); }
+          50% { opacity: 0.85; transform: scale(1.04); }
+          100% { opacity: 0.65; transform: scale(1); }
+        }
+      `}</style>
+
+      {/* 2. Hero Section (Exact Relatik Design & Background Animation) */}
+      <section
+        style={{
+          position: 'relative',
+          padding: isMobile ? '56px 16px 40px' : '84px 24px 64px',
+          textAlign: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Relatik Silky Animated Liquid Gradient Layers */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '-20%',
+            left: '-15%',
+            width: '70vw',
+            height: '85vh',
+            background: 'radial-gradient(ellipse 60% 50% at 30% 40%, rgba(186, 230, 253, 0.8) 0%, rgba(191, 219, 254, 0.5) 45%, rgba(247, 248, 250, 0) 75%)',
+            filter: 'blur(55px)',
+            animation: 'liquidFlowLeft 14s ease-in-out infinite',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '-15%',
+            right: '-15%',
+            width: '70vw',
+            height: '90vh',
+            background: 'radial-gradient(ellipse 60% 50% at 70% 45%, rgba(199, 210, 254, 0.75) 0%, rgba(147, 197, 253, 0.45) 45%, rgba(247, 248, 250, 0) 75%)',
+            filter: 'blur(60px)',
+            animation: 'liquidFlowRight 16s ease-in-out infinite',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '0%',
+            left: '25%',
+            width: '50vw',
+            height: '50vh',
+            background: 'radial-gradient(circle at 50% 30%, rgba(224, 242, 254, 0.7) 0%, rgba(247, 248, 250, 0) 65%)',
+            filter: 'blur(45px)',
+            animation: 'liquidPulse 10s ease-in-out infinite',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        />
+
+        <div style={{ maxWidth: 860, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           
-          {/* Relatik Section Pill Tag */}
+          {/* Relatik Top Pill Badge with 3 Overlapping Avatars */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 8,
-              padding: '4px 14px',
-              background: '#eaf2ff',
-              border: '1px solid #d3e4ff',
+              gap: 10,
+              padding: '4px 14px 4px 6px',
+              background: 'rgba(255, 255, 255, 0.92)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid #e6e7eb',
               borderRadius: 999,
-              marginBottom: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(12, 13, 16, 0.04)',
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
-            <span style={{ color: '#2b7fff', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Customer Messaging Made Simple
+            {/* 3 Overlapping Avatar Circles */}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: '50%',
+                  background: '#fef08a',
+                  color: '#854d0e',
+                  fontSize: 9.5,
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1.5px solid #ffffff',
+                }}
+              >
+                AS
+              </div>
+              <div
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: '50%',
+                  background: '#fecdd3',
+                  color: '#9f1239',
+                  fontSize: 9.5,
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1.5px solid #ffffff',
+                  marginLeft: -6,
+                }}
+              >
+                SD
+              </div>
+              <div
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: '50%',
+                  background: '#e9d5ff',
+                  color: '#6b21a8',
+                  fontSize: 9.5,
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1.5px solid #ffffff',
+                  marginLeft: -6,
+                }}
+              >
+                DK
+              </div>
+            </div>
+            <span style={{ color: '#0c0d10', fontSize: 13, fontWeight: 500 }}>
+              Loved by 38,456 growing teams
             </span>
           </div>
 
-          {/* Relatik Big Title */}
+          {/* Relatik Big Title in 2 Clean Lines */}
           <Typography.Title
             level={1}
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 32 : 52,
+              fontSize: isMobile ? 36 : 58,
               fontWeight: 800,
-              lineHeight: 1.15,
-              letterSpacing: '-0.03em',
-              margin: '0 auto 18px',
+              lineHeight: 1.12,
+              letterSpacing: '-0.035em',
+              margin: '0 auto 20px',
               maxWidth: 780,
             }}
           >
-            Turn website visitors into paying customers with{' '}
-            <span style={{ color: '#2b7fff' }}>real-time live chat</span>
+            Customer management<br />made simple
           </Typography.Title>
 
-          {/* Relatik Subtitle */}
+          {/* Relatik Subtitle in 2 Clean Lines */}
           <Typography.Paragraph
             style={{
               color: '#5b5f6b',
-              fontSize: isMobile ? 15 : 16.5,
+              fontSize: isMobile ? 15 : 17,
               lineHeight: 1.6,
-              maxWidth: 580,
-              margin: '0 auto 32px',
+              maxWidth: 600,
+              margin: '0 auto 34px',
               fontWeight: 400,
             }}
           >
-            Chatral is a simple, modern live chat platform that keeps your visitors, customer data, and sales conversations organized in one place. Start your free 14-day trial.
+            All your customer data, tasks, and conversations — organized in one calm, fast workspace your whole team will actually use.
           </Typography.Paragraph>
 
-          {/* Relatik Hero CTAs */}
-          <Flex justify="center" gap={12} wrap="wrap" style={{ marginBottom: 24 }}>
-            <Button
-              type="primary"
-              size="large"
-              icon={<ArrowRightOutlined />}
+          {/* Relatik Hero CTA Buttons */}
+          <Flex justify="center" gap={12} wrap="wrap" style={{ marginBottom: 26 }}>
+            <button
               onClick={() => nav('/login?mode=signup')}
               style={{
-                height: 48,
-                padding: '0 28px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                background: '#0c0d10',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: 12,
+                padding: '12px 24px',
+                height: 46,
                 fontSize: 14.5,
                 fontWeight: 600,
-                background: '#2b7fff',
-                border: 'none',
-                borderRadius: 10,
-                boxShadow: '0 8px 24px rgba(43, 127, 255, 0.28)',
+                cursor: 'pointer',
+                boxShadow: '0px 1px 2px 0px rgba(12, 13, 16, 0.12), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.12)',
+                transition: 'opacity 0.15s ease',
+                fontFamily: 'inherit',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.88')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
-              Start Free Trial
-            </Button>
-            <Button
-              size="large"
+              <span>Start free trial</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </button>
+            <button
               onClick={() => scrollTo('demo')}
               style={{
-                height: 48,
-                padding: '0 24px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                background: '#ffffff',
+                color: '#0c0d10',
+                border: '1px solid #e6e7eb',
+                borderRadius: 12,
+                padding: '12px 24px',
+                height: 46,
                 fontSize: 14.5,
                 fontWeight: 600,
-                color: '#0c0d10',
-                background: '#ffffff',
-                border: '1px solid #e6e7eb',
-                borderRadius: 10,
-                boxShadow: '0 2px 6px rgba(12, 13, 16, 0.02)',
+                cursor: 'pointer',
+                boxShadow: '0px 1px 2px 0px rgba(12, 13, 16, 0.04)',
+                transition: 'all 0.15s ease',
+                fontFamily: 'inherit',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#cbd5e1')}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#e6e7eb')}
             >
-              Try Live Demo
-            </Button>
+              Book a demo
+            </button>
           </Flex>
 
-          {/* Relatik Trust micro-copy */}
-          <div style={{ color: '#6b707c', fontSize: 12.5, fontWeight: 400 }}>
-            No credit card required • 14-day free trial • Cancel anytime
-          </div>
+          {/* Relatik Trust Checkmarks */}
+          <Flex justify="center" gap={22} wrap="wrap" style={{ color: '#6b707c', fontSize: 13, fontWeight: 400 }}>
+            <span>✓ No credit card required</span>
+            <span>✓ 14-day free trial</span>
+            <span>✓ Cancel anytime</span>
+          </Flex>
         </div>
 
         {/* Hero Dashboard Showcase (Relatik CRM App UI Preview) */}
-        <div style={{ maxWidth: 1040, margin: '48px auto 0' }}>
+        <div style={{ maxWidth: 1080, margin: '48px auto 0' }}>
           <div
             style={{
               background: '#ffffff',
               border: '1px solid #e6e7eb',
               borderRadius: 20,
               overflow: 'hidden',
-              boxShadow: '0 24px 48px -12px rgba(12, 13, 16, 0.08), 0 1px 3px rgba(12, 13, 16, 0.04)',
+              boxShadow: '0 24px 60px -12px rgba(12, 13, 16, 0.1), 0 2px 6px rgba(12, 13, 16, 0.04)',
               textAlign: 'left',
+              display: 'flex',
+              minHeight: 520,
             }}
           >
-            {/* Relatik Top Navigation Bar inside dashboard */}
+            {/* Left Sidebar (210px) */}
             <div
               style={{
-                background: '#f7f8fa',
-                borderBottom: '1px solid #e6e7eb',
-                padding: '12px 20px',
-                display: 'flex',
-                alignItems: 'center',
+                width: 200,
+                flexShrink: 0,
+                background: '#ffffff',
+                borderRight: '1px solid #f1f2f5',
+                display: isMobile ? 'none' : 'flex',
+                flexDirection: 'column',
                 justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: 12,
+                padding: '16px 12px 14px',
               }}
             >
-              <Flex gap={12} align="center">
-                <Flex gap={6}>
-                  <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f56' }} />
-                  <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ffbd2e' }} />
-                  <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#27c93f' }} />
-                </Flex>
-                <Divider type="vertical" style={{ borderColor: '#e6e7eb', margin: '0 4px' }} />
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#0c0d10', fontWeight: 600 }}>
-                  <ShopOutlined style={{ color: '#2b7fff' }} /> Store Alpha (Live)
+              <div>
+                {/* Relatik Logo in Sidebar */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 8px 16px' }}>
+                  <div
+                    style={{
+                      width: 22,
+                      height: 22,
+                      borderRadius: 6,
+                      background: '#0c0d10',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#ffffff',
+                      fontSize: 13,
+                      fontWeight: 700,
+                    }}
+                  >
+                    ⌘
+                  </div>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: '#0c0d10', letterSpacing: '-0.02em' }}>
+                    chatral
+                  </span>
                 </div>
-              </Flex>
 
+                {/* Main Navigation Items */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      background: '#f1f2f5',
+                      borderRadius: 8,
+                      padding: '7px 10px',
+                      color: '#0c0d10',
+                      fontWeight: 600,
+                      fontSize: 12.5,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ fontSize: 13 }}>⊞</span>
+                    <span>Overview</span>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderRadius: 8,
+                      padding: '7px 10px',
+                      color: '#5b5f6b',
+                      fontSize: 12.5,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 13 }}>👥</span>
+                      <span>Contacts</span>
+                    </span>
+                    <span style={{ fontSize: 11, color: '#94a3b8' }}>1,284</span>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderRadius: 8,
+                      padding: '7px 10px',
+                      color: '#5b5f6b',
+                      fontSize: 12.5,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 13 }}>💼</span>
+                      <span>Deals</span>
+                    </span>
+                    <span style={{ fontSize: 11, color: '#94a3b8' }}>96</span>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderRadius: 8,
+                      padding: '7px 10px',
+                      color: '#5b5f6b',
+                      fontSize: 12.5,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 13 }}>☑</span>
+                      <span>Tasks</span>
+                    </span>
+                    <span style={{ fontSize: 11, color: '#94a3b8' }}>12</span>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderRadius: 8,
+                      padding: '7px 10px',
+                      color: '#5b5f6b',
+                      fontSize: 12.5,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 13 }}>💬</span>
+                      <span>Inbox</span>
+                    </span>
+                    <span
+                      style={{
+                        background: '#eaf2ff',
+                        color: '#2b7fff',
+                        borderRadius: 999,
+                        padding: '1px 7px',
+                        fontSize: 10.5,
+                        fontWeight: 700,
+                      }}
+                    >
+                      4
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      borderRadius: 8,
+                      padding: '7px 10px',
+                      color: '#5b5f6b',
+                      fontSize: 12.5,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ fontSize: 13 }}>📊</span>
+                    <span>Reports</span>
+                  </div>
+                </div>
+
+                {/* Pipelines Section */}
+                <div
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 700,
+                    color: '#94a3b8',
+                    letterSpacing: '0.06em',
+                    padding: '18px 10px 8px',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Pipelines
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      padding: '6px 10px',
+                      fontSize: 12,
+                      color: '#0c0d10',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
+                    <span>New business</span>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      padding: '6px 10px',
+                      fontSize: 12,
+                      color: '#5b5f6b',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6' }} />
+                    <span>Expansion</span>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      padding: '6px 10px',
+                      fontSize: 12,
+                      color: '#5b5f6b',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+                    <span>Partnerships</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Trial Box */}
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e6e7eb',
-                  borderRadius: 8,
-                  padding: '4px 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  fontSize: 11.5,
-                  color: '#6b707c',
+                  borderRadius: 12,
+                  padding: '12px 14px',
+                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
                 }}
               >
-                <SearchOutlined />
-                <span>Search visitors, Shopify orders, conversations...</span>
-                <span style={{ background: '#f1f2f5', padding: '1px 6px', borderRadius: 4, fontSize: 10, color: '#0c0d10' }}>⌘K</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#27c93f' }} />
-                <span style={{ fontSize: 11.5, color: '#16a34a', fontWeight: 600 }}>Connected</span>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#0c0d10' }}>Trial · 9 days left</div>
+                <div style={{ fontSize: 10.5, color: '#6b707c', marginTop: 4, lineHeight: 1.35 }}>
+                  Invite your team to get the most out of Chatral.
+                </div>
+                <div style={{ marginTop: 10, height: 4, background: '#f1f2f5', borderRadius: 999, overflow: 'hidden' }}>
+                  <div style={{ width: '65%', height: '100%', background: '#2b7fff', borderRadius: 999 }} />
+                </div>
               </div>
             </div>
 
-            {/* Relatik Dashboard Metrics Ribbon */}
+            {/* Right Main Content Area */}
             <div
               style={{
-                padding: '16px 20px',
-                borderBottom: '1px solid #f1f2f5',
-                background: '#ffffff',
+                flex: 1,
+                background: '#fafbfd',
+                padding: isMobile ? 12 : 20,
                 display: 'flex',
-                gap: 24,
-                flexWrap: 'wrap',
+                flexDirection: 'column',
+                gap: 16,
+                position: 'relative',
+                minWidth: 0,
               }}
             >
-              <div>
-                <div style={{ fontSize: 11, color: '#6b707c', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.04em' }}>
-                  Live Visitors
-                </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#0c0d10', marginTop: 2 }}>
-                  42 <span style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>+18%</span>
-                </div>
-              </div>
-              <Divider type="vertical" style={{ height: 36, borderColor: '#e6e7eb' }} />
-              <div>
-                <div style={{ fontSize: 11, color: '#6b707c', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.04em' }}>
-                  Avg. Response Time
-                </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#2b7fff', marginTop: 2 }}>
-                  14s <span style={{ fontSize: 11, color: '#5b5f6b', fontWeight: 400 }}>sub-second socket</span>
-                </div>
-              </div>
-              <Divider type="vertical" style={{ height: 36, borderColor: '#e6e7eb' }} />
-              <div>
-                <div style={{ fontSize: 11, color: '#6b707c', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.04em' }}>
-                  Deals Closed Today
-                </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#0c0d10', marginTop: 2 }}>
-                  $3,840.00 <span style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>Shopify sync</span>
-                </div>
-              </div>
-            </div>
+              {/* Header: Title, Search, Date, New deal, AS Avatar */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 12,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#0c0d10' }}>Overview</span>
 
-            {/* Main Workspace Split Preview */}
-            <div style={{ padding: isMobile ? 12 : 20, background: '#fafbfd' }}>
-              <Row gutter={[16, 16]}>
-                {/* Left: Conversations Queue */}
-                <Col xs={24} md={8}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: 12 }}>
-                    <div style={{ fontSize: 11, color: '#6b707c', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 10 }}>
-                      Active Conversations (3)
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {/* Search input */}
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #e6e7eb',
+                      borderRadius: 8,
+                      padding: '5px 12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      fontSize: 12,
+                      color: '#6b707c',
+                      width: isMobile ? 180 : 230,
+                    }}
+                  >
+                    <SearchOutlined style={{ fontSize: 12, color: '#94a3b8' }} />
+                    <span style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      Search contacts, deals...
+                    </span>
+                    <span style={{ fontSize: 10, color: '#94a3b8', background: '#f1f2f5', padding: '1px 5px', borderRadius: 4 }}>
+                      ⌘K
+                    </span>
+                  </div>
+
+                  {/* Last 30 days pill */}
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #e6e7eb',
+                      borderRadius: 8,
+                      padding: '5px 10px',
+                      fontSize: 11.5,
+                      fontWeight: 500,
+                      color: '#0c0d10',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                    }}
+                  >
+                    <span>📅</span>
+                    <span>Last 30 days</span>
+                  </div>
+
+                  {/* + New deal button */}
+                  <button
+                    style={{
+                      background: '#0c0d10',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: 8,
+                      padding: '6px 12px',
+                      fontSize: 11.5,
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      boxShadow: '0 1px 2px rgba(12, 13, 16, 0.08)',
+                    }}
+                  >
+                    <span>+</span>
+                    <span>New deal</span>
+                  </button>
+
+                  {/* AS Avatar */}
+                  <div
+                    style={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: '50%',
+                      background: '#fed7aa',
+                      color: '#9a3412',
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1.5px solid #ffffff',
+                      boxShadow: '0 1px 2px rgba(12, 13, 16, 0.08)',
+                    }}
+                  >
+                    AS
+                  </div>
+                </div>
+              </div>
+
+              {/* 4 Metric Cards */}
+              <Row gutter={[12, 12]}>
+                {/* 1. Pipeline value */}
+                <Col xs={12} sm={6}>
+                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Pipeline value</div>
+                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
+                      $482,900
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {[
-                        { name: 'Jaydeep Patel', msg: 'Added Starter plan to cart...', time: '1m', active: true, tag: 'High Intent' },
-                        { name: 'Rina Nakamura', msg: 'Do you ship to Tokyo?', time: '4m', active: false, tag: 'Inquiry' },
-                        { name: 'Theo Castillo', msg: 'How do I add team members?', time: '12m', active: false, tag: 'Support' },
-                      ].map((c, i) => (
+                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <span>↑ 12.4%</span>
+                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>vs last month</span>
+                    </div>
+                  </div>
+                </Col>
+
+                {/* 2. Deals won */}
+                <Col xs={12} sm={6}>
+                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Deals won</div>
+                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
+                      38
+                    </div>
+                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <span>↑ 8</span>
+                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>vs last month</span>
+                    </div>
+                  </div>
+                </Col>
+
+                {/* 3. Win rate */}
+                <Col xs={12} sm={6}>
+                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Win rate</div>
+                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
+                      32.6%
+                    </div>
+                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <span>↑ 2.1 pt</span>
+                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>vs last month</span>
+                    </div>
+                  </div>
+                </Col>
+
+                {/* 4. Avg. response time */}
+                <Col xs={12} sm={6}>
+                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Avg. response time</div>
+                    <div style={{ fontSize: 20, fontWeight: 700, color: '#0c0d10', margin: '4px 0 6px', letterSpacing: '-0.02em' }}>
+                      1h 12m
+                    </div>
+                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <span>↑ 18%</span>
+                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>faster</span>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+
+              {/* Middle Row: Revenue Wave Chart & Pipeline by stage */}
+              <Row gutter={[12, 12]}>
+                {/* Left: Revenue chart */}
+                <Col xs={24} md={15}>
+                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '16px 18px', position: 'relative' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+                      <div>
+                        <div style={{ fontSize: 11.5, color: '#6b707c', fontWeight: 500 }}>Revenue</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 2 }}>
+                          <span style={{ fontSize: 18, fontWeight: 700, color: '#0c0d10', letterSpacing: '-0.02em' }}>$128,450</span>
+                          <span style={{ fontSize: 10.5, fontWeight: 600, color: '#16a34a', background: '#dcfce7', padding: '1px 6px', borderRadius: 999 }}>
+                            ↑ 18.2%
+                          </span>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: '#6b707c' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
+                          This year
+                        </span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#cbd5e1' }} />
+                          Last year
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* SVG Chart area */}
+                    <div style={{ position: 'relative', width: '100%', height: 125 }}>
+                      <svg viewBox="0 0 540 120" style={{ width: '100%', height: '100%', overflow: 'visible' }} preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#2b7fff" stopOpacity="0.22" />
+                            <stop offset="100%" stopColor="#2b7fff" stopOpacity="0.0" />
+                          </linearGradient>
+                        </defs>
+                        {/* Horizontal guide lines */}
+                        <line x1="0" y1="30" x2="540" y2="30" stroke="#f1f2f5" strokeWidth="1" />
+                        <line x1="0" y1="70" x2="540" y2="70" stroke="#f1f2f5" strokeWidth="1" />
+                        <line x1="0" y1="110" x2="540" y2="110" stroke="#f1f2f5" strokeWidth="1" />
+
+                        {/* Last year dashed line */}
+                        <path
+                          d="M 0,105 Q 45,98 90,102 T 180,95 T 270,90 T 360,78 T 450,72 T 540,65"
+                          fill="none"
+                          stroke="#cbd5e1"
+                          strokeWidth="1.5"
+                          strokeDasharray="4 4"
+                        />
+
+                        {/* This year filled area */}
+                        <path
+                          d="M 0,95 C 45,95 70,82 110,80 C 150,78 180,88 220,72 C 260,56 290,62 330,55 C 370,48 400,52 440,32 C 475,18 510,12 540,8 L 540,120 L 0,120 Z"
+                          fill="url(#chartGrad)"
+                        />
+
+                        {/* This year smooth curve line */}
+                        <path
+                          d="M 0,95 C 45,95 70,82 110,80 C 150,78 180,88 220,72 C 260,56 290,62 330,55 C 370,48 400,52 440,32 C 475,18 510,12 540,8"
+                          fill="none"
+                          stroke="#2b7fff"
+                          strokeWidth="2.5"
+                        />
+
+                        {/* Point marker on November (x=460, y=24) */}
+                        <circle cx="460" cy="24" r="5" fill="#2b7fff" stroke="#ffffff" strokeWidth="2.5" />
+                      </svg>
+
+                      {/* Floating Tooltip Bubble over November point */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 4,
+                          right: '10%',
+                          background: '#0c0d10',
+                          color: '#ffffff',
+                          padding: '6px 10px',
+                          borderRadius: 8,
+                          fontSize: 10.5,
+                          boxShadow: '0 8px 18px rgba(12, 13, 16, 0.25)',
+                          pointerEvents: 'none',
+                          zIndex: 2,
+                        }}
+                      >
+                        <div style={{ color: '#94a3b8', fontSize: 9.5 }}>November</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700, marginTop: 1 }}>
+                          <span>$11,920</span>
+                          <span style={{ color: '#4ade80', fontSize: 9.5 }}>↑ 21%</span>
+                        </div>
+                        {/* Tooltip triangle tail */}
                         <div
-                          key={i}
                           style={{
-                            padding: '10px 12px',
-                            borderRadius: 8,
-                            background: c.active ? '#eaf2ff' : '#ffffff',
-                            border: c.active ? '1px solid #b3d1ff' : '1px solid #f1f2f5',
-                            cursor: 'pointer',
+                            position: 'absolute',
+                            bottom: -4,
+                            left: '50%',
+                            transform: 'translateX(-50%) rotate(45deg)',
+                            width: 8,
+                            height: 8,
+                            background: '#0c0d10',
                           }}
-                        >
-                          <Flex justify="space-between" align="center">
-                            <span style={{ fontWeight: 600, fontSize: 12.5, color: '#0c0d10' }}>{c.name}</span>
-                            <span style={{ fontSize: 10.5, color: '#6b707c' }}>{c.time}</span>
-                          </Flex>
-                          <div style={{ fontSize: 11.5, color: c.active ? '#2b7fff' : '#6b707c', marginTop: 3, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                            {c.msg}
+                        />
+                      </div>
+                    </div>
+
+                    {/* X axis months */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10, fontSize: 10, color: '#94a3b8' }}>
+                      {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m) => (
+                        <span key={m}>{m}</span>
+                      ))}
+                    </div>
+                  </div>
+                </Col>
+
+                {/* Right: Pipeline by stage */}
+                <Col xs={24} md={9}>
+                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '16px 18px', height: '100%' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                      <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0c0d10' }}>Pipeline by stage</span>
+                      <span style={{ fontSize: 11, color: '#94a3b8' }}>86 deals</span>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
+                      {[
+                        { label: 'Lead', count: 124, pct: 100 },
+                        { label: 'Qualified', count: 68, pct: 68 },
+                        { label: 'Proposal', count: 41, pct: 45 },
+                        { label: 'Negotiation', count: 19, pct: 26 },
+                        { label: 'Won', count: 12, pct: 18 },
+                      ].map((stage, idx) => (
+                        <div key={idx}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 4 }}>
+                            <span style={{ color: '#0c0d10', fontWeight: 500 }}>{stage.label}</span>
+                            <span style={{ color: '#6b707c', fontWeight: 600 }}>{stage.count}</span>
+                          </div>
+                          <div style={{ height: 6, background: '#f1f2f5', borderRadius: 999, overflow: 'hidden' }}>
+                            <div
+                              style={{
+                                width: `${stage.pct}%`,
+                                height: '100%',
+                                background: '#2b7fff',
+                                borderRadius: 999,
+                              }}
+                            />
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
                 </Col>
-
-                {/* Middle: Active Live Chat */}
-                <Col xs={24} md={10}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: 14, minHeight: 280, display: 'flex', flexDirection: 'column' }}>
-                    <Flex justify="space-between" align="center" style={{ paddingBottom: 10, borderBottom: '1px solid #f1f2f5' }}>
-                      <Flex gap={8} align="center">
-                        <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#2b7fff', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 11 }}>
-                          JP
-                        </div>
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: 12, color: '#0c0d10' }}>Jaydeep Patel</div>
-                          <div style={{ fontSize: 10.5, color: '#6b707c' }}>Surat, India • Chrome on macOS</div>
-                        </div>
-                      </Flex>
-                      <Tag color="processing" bordered={false} style={{ fontSize: 10, borderRadius: 999 }}>Active</Tag>
-                    </Flex>
-
-                    {/* Messages */}
-                    <div style={{ flex: 1, padding: '12px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#f1f2f5', padding: '8px 12px', borderRadius: '10px 10px 10px 2px', fontSize: 12, color: '#0c0d10' }}>
-                        Hello! Does Chatral include live Shopify customer history?
-                        <div style={{ fontSize: 9, color: '#81d43be3', marginTop: 3 }}>12:28 PM</div>
-                      </div>
-                      <div style={{ alignSelf: 'flex-end', maxWidth: '85%', background: '#2b7fff', color: '#fff', padding: '8px 12px', borderRadius: '10px 10px 2px 10px', fontSize: 12 }}>
-                        Hi Jaydeep! Yes, both Starter and Pro plans sync lifetime orders and active carts instantly!
-                        <div style={{ fontSize: 9, color: '#eaf2ff', marginTop: 3, textAlign: 'right' }}>12:29 PM • Read</div>
-                      </div>
-                    </div>
-
-                    <div style={{ background: '#f7f8fa', border: '1px solid #e6e7eb', borderRadius: 8, padding: '6px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 11.5, color: '#94a3b8' }}>Type a reply or press / for shortcuts...</span>
-                      <Button type="primary" size="small" icon={<SendOutlined />} style={{ background: '#2b7fff', height: 24, fontSize: 11 }}>Send</Button>
-                    </div>
-                  </div>
-                </Col>
-
-                {/* Right: Shopify & Visitor Intelligence */}
-                <Col xs={24} md={6}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: 12, height: '100%' }}>
-                    <div style={{ fontSize: 11, color: '#6b707c', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 10 }}>
-                      Customer Intelligence
-                    </div>
-                    <div style={{ background: '#f7f8fa', borderRadius: 8, padding: 10, border: '1px solid #e6e7eb', marginBottom: 10 }}>
-                      <Flex justify="space-between" style={{ marginBottom: 4 }}>
-                        <span style={{ fontSize: 11, color: '#6b707c' }}>Total Orders:</span>
-                        <strong style={{ fontSize: 11, color: '#0c0d10' }}>4 Orders</strong>
-                      </Flex>
-                      <Flex justify="space-between" style={{ marginBottom: 4 }}>
-                        <span style={{ fontSize: 11, color: '#6b707c' }}>Lifetime Spent:</span>
-                        <strong style={{ fontSize: 11, color: '#16a34a' }}>$489.00</strong>
-                      </Flex>
-                      <Flex justify="space-between">
-                        <span style={{ fontSize: 11, color: '#6b707c' }}>Active Cart:</span>
-                        <strong style={{ fontSize: 11, color: '#2b7fff' }}>$149.00</strong>
-                      </Flex>
-                    </div>
-
-                    <div style={{ fontSize: 11, fontWeight: 600, color: '#0c0d10', marginBottom: 6 }}>
-                      Journey Timeline
-                    </div>
-                    <div style={{ fontSize: 10.5, color: '#5b5f6b', display: 'flex', flexDirection: 'column', gap: 5 }}>
-                      <div>📍 12:25 PM • Google Search</div>
-                      <div>📄 12:26 PM • Viewed /pricing</div>
-                      <div>🛒 12:28 PM • Checkout trigger</div>
-                    </div>
-                  </div>
-                </Col>
               </Row>
+
+              {/* Bottom Card: Recent Deals Table */}
+              <div style={{ background: '#ffffff', border: '1px solid #e6e7eb', borderRadius: 12, padding: '16px 18px', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0c0d10' }}>Recent deals</span>
+                  <span style={{ fontSize: 11.5, color: '#2b7fff', fontWeight: 600, cursor: 'pointer' }}>View all</span>
+                </div>
+
+                {/* Table columns header */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr 1fr' : '2fr 1.5fr 1.2fr 1fr 1fr',
+                    padding: '6px 8px',
+                    fontSize: 10.5,
+                    color: '#94a3b8',
+                    fontWeight: 600,
+                    borderBottom: '1px solid #f1f2f5',
+                  }}
+                >
+                  <span>Company</span>
+                  {!isMobile && <span>Owner</span>}
+                  <span>Stage</span>
+                  {!isMobile && <span>Close date</span>}
+                  <span style={{ textAlign: 'right' }}>Value</span>
+                </div>
+
+                {/* Table rows */}
+                {[
+                  {
+                    company: 'Brightloop',
+                    icon: 'B',
+                    iconBg: '#2b7fff',
+                    owner: 'Julia T.',
+                    ownerAvatar: 'JT',
+                    ownerBg: '#ede9fe',
+                    ownerColor: '#6d28d9',
+                    stage: 'Negotiation',
+                    stageBg: '#f3e8ff',
+                    stageColor: '#7e22ce',
+                    date: 'Oct 24',
+                    val: '$24,000',
+                  },
+                  {
+                    company: 'Fieldwork',
+                    icon: 'F',
+                    iconBg: '#10b981',
+                    owner: 'Mark R.',
+                    ownerAvatar: 'MR',
+                    ownerBg: '#dcfce7',
+                    ownerColor: '#15803d',
+                    stage: 'Won',
+                    stageBg: '#dcfce7',
+                    stageColor: '#15803d',
+                    date: 'Oct 19',
+                    val: '$12,400',
+                  },
+                  {
+                    company: 'Kestrel Labs',
+                    icon: 'K',
+                    iconBg: '#8b5cf6',
+                    owner: 'Sophie D.',
+                    ownerAvatar: 'SD',
+                    ownerBg: '#ffedd5',
+                    ownerColor: '#c2410c',
+                    stage: 'Proposal',
+                    stageBg: '#ffedd5',
+                    stageColor: '#c2410c',
+                    date: 'Oct 15',
+                    val: '$18,500',
+                  },
+                ].map((deal, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: isMobile ? '1fr 1fr' : '2fr 1.5fr 1.2fr 1fr 1fr',
+                      padding: '10px 8px',
+                      alignItems: 'center',
+                      fontSize: 12,
+                      borderBottom: idx === 2 ? 'none' : '1px solid #f8fafc',
+                    }}
+                  >
+                    {/* Company */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div
+                        style={{
+                          width: 22,
+                          height: 22,
+                          borderRadius: 6,
+                          background: deal.iconBg,
+                          color: '#ffffff',
+                          fontSize: 11,
+                          fontWeight: 700,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {deal.icon}
+                      </div>
+                      <span style={{ fontWeight: 600, color: '#0c0d10' }}>{deal.company}</span>
+                    </div>
+
+                    {/* Owner */}
+                    {!isMobile && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div
+                          style={{
+                            width: 18,
+                            height: 18,
+                            borderRadius: '50%',
+                            background: deal.ownerBg,
+                            color: deal.ownerColor,
+                            fontSize: 9,
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          {deal.ownerAvatar}
+                        </div>
+                        <span style={{ color: '#5b5f6b' }}>{deal.owner}</span>
+                      </div>
+                    )}
+
+                    {/* Stage */}
+                    <div>
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          background: deal.stageBg,
+                          color: deal.stageColor,
+                          padding: '2px 8px',
+                          borderRadius: 6,
+                          fontSize: 11,
+                          fontWeight: 500,
+                        }}
+                      >
+                        {deal.stage}
+                      </span>
+                    </div>
+
+                    {/* Close date */}
+                    {!isMobile && <span style={{ color: '#6b707c' }}>{deal.date}</span>}
+
+                    {/* Value */}
+                    <span style={{ fontWeight: 700, color: '#0c0d10', textAlign: 'right' }}>{deal.val}</span>
+                  </div>
+                ))}
+
+                {/* Floating Toast Notification at bottom-right of Mockup */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 14,
+                    right: 16,
+                    background: '#ffffff',
+                    border: '1px solid #e6e7eb',
+                    borderRadius: 12,
+                    padding: '8px 12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    boxShadow: '0 12px 24px -4px rgba(12, 13, 16, 0.12), 0 2px 6px rgba(12, 13, 16, 0.04)',
+                    zIndex: 5,
+                  }}
+                >
+                  <span style={{ fontSize: 16 }}>📅</span>
+                  <div>
+                    <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0c0d10' }}>
+                      Meeting booked - Kestrel
+                    </div>
+                    <div style={{ fontSize: 10, color: '#6b707c', marginTop: 1 }}>
+                      Tomorrow, 10:00 • 3m ago
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
