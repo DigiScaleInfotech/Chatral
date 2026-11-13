@@ -10,7 +10,7 @@ export function connectSocket() {
   stopped = false;
   const token = localStorage.getItem('token');
   if (!token || (ws && ws.readyState <= 1)) return;
-  const rawApiUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || (typeof location !== 'undefined' && location.host.endsWith('.vercel.app') ? 'https://chatral-backend.onrender.com' : '');
+  const rawApiUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || (typeof location !== 'undefined' && (location.host.endsWith('.vercel.app') || (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1')) ? 'https://chatral-backend.onrender.com' : '');
   let wsUrl;
   if (rawApiUrl) {
     try {
