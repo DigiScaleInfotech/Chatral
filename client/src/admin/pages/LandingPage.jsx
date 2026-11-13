@@ -1336,7 +1336,7 @@ export default function LandingPage() {
           {/* Relatik 5-Card Bento Grid */}
           <Row gutter={[20, 20]}>
             
-            {/* Bento Card 1: Lead management (Top Left - ~60% Hero Card) */}
+            {/* Bento Card 1: Live Visitor Tracking (Top Left - ~60% Hero Card) */}
             <Col xs={24} md={14}>
               <div
                 style={{
@@ -1376,7 +1376,7 @@ export default function LandingPage() {
                       margin: '0 0 8px',
                     }}
                   >
-                    Lead management
+                    Live Visitor Tracking
                   </Typography.Title>
                   <Typography.Paragraph
                     style={{
@@ -1384,14 +1384,14 @@ export default function LandingPage() {
                       fontSize: 13.5,
                       lineHeight: 1.5,
                       margin: '0 0 24px',
-                      maxWidth: 480,
+                      maxWidth: 500,
                     }}
                   >
-                    Track every lead from first contact to closed deal with customizable visitor pipelines — no spreadsheets required.
+                    Track visitors on your site in real-time, see their active browsing journey, and initiate sales chats before they leave.
                   </Typography.Paragraph>
                 </div>
 
-                {/* In-Card Visual Mockup: Leads Pipeline Table */}
+                {/* In-Card Visual Mockup: Real-Time Live Visitors Radar Table */}
                 <div
                   style={{
                     background: '#ffffff',
@@ -1404,18 +1404,18 @@ export default function LandingPage() {
                   {/* Table Header Row with Tabs */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: '#0c0d10' }}>Leads</span>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: '#0c0d10' }}>Live Visitors</span>
                       <span
                         style={{
-                          background: '#f1f3f6',
-                          color: '#5b5f6b',
+                          background: '#ecfdf5',
+                          color: '#16a34a',
                           fontSize: 11,
                           fontWeight: 600,
-                          padding: '1px 7px',
+                          padding: '1px 8px',
                           borderRadius: 999,
                         }}
                       >
-                        248
+                        ● 42 Online
                       </span>
                     </div>
                     <div
@@ -1441,8 +1441,8 @@ export default function LandingPage() {
                       >
                         All
                       </span>
-                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>New · 32</span>
-                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>Hot · 14</span>
+                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>Pricing · 14</span>
+                      <span style={{ color: '#717684', fontSize: 11, padding: '2px 8px', cursor: 'pointer' }}>Checkout · 6</span>
                     </div>
                   </div>
 
@@ -1450,7 +1450,7 @@ export default function LandingPage() {
                   <div
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.2fr 1.1fr 1fr',
+                      gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.3fr 1fr 1fr',
                       fontSize: 10,
                       fontWeight: 700,
                       color: '#9aa0ac',
@@ -1459,69 +1459,66 @@ export default function LandingPage() {
                       borderBottom: '1px solid #f2f3f7',
                     }}
                   >
-                    <span>NAME</span>
-                    {!isMobile && <span>SOURCE</span>}
-                    <span>SCORE</span>
-                    <span style={{ textAlign: 'right' }}>STATUS</span>
+                    <span>VISITOR</span>
+                    {!isMobile && <span>ACTIVE PAGE</span>}
+                    <span>TIME</span>
+                    <span style={{ textAlign: 'right' }}>ACTION</span>
                   </div>
 
                   {/* Rows */}
                   {[
                     {
-                      name: 'Elena Hart',
-                      role: 'Brightloop · Head of Ops',
-                      avatar: 'EH',
+                      name: 'Jaydeep Patel',
+                      sub: 'Surat, IN • Chrome',
+                      avatar: 'JP',
+                      bg: '#e0f2fe',
+                      color: '#0284c7',
+                      page: '/checkout',
+                      pageBg: '#fef3c7',
+                      pageColor: '#d97706',
+                      time: '2m 14s',
+                      action: 'Start Chat',
+                      actionType: 'button',
+                    },
+                    {
+                      name: 'Elena Rostova',
+                      sub: 'Berlin, DE • Safari',
+                      avatar: 'ER',
                       bg: '#ede9fe',
                       color: '#7c3aed',
-                      source: 'Website',
-                      score: 98,
-                      barW: 38,
-                      status: 'Hot',
-                      statusBg: '#fef2f2',
-                      statusBorder: '#fee2e2',
-                      statusColor: '#ef4444',
+                      page: '/pricing',
+                      pageBg: '#eaf2ff',
+                      pageColor: '#2b7fff',
+                      time: '1m 45s',
+                      action: 'Start Chat',
+                      actionType: 'button',
                     },
                     {
                       name: 'Owen Malik',
-                      role: 'Haven & Co · VP Product',
+                      sub: 'New York, US • Edge',
                       avatar: 'OM',
-                      bg: '#e0f2fe',
-                      color: '#0284c7',
-                      source: 'Referral',
-                      score: 92,
-                      barW: 34,
-                      status: 'Hot',
-                      statusBg: '#fef2f2',
-                      statusBorder: '#fee2e2',
-                      statusColor: '#ef4444',
-                    },
-                    {
-                      name: 'Rina Nakamura',
-                      role: 'Kestrel · Growth Lead',
-                      avatar: 'RN',
                       bg: '#dcfce7',
                       color: '#16a34a',
-                      source: 'LinkedIn',
-                      score: 84,
-                      barW: 28,
-                      status: 'Warm',
-                      statusBg: '#fffbeb',
-                      statusBorder: '#fef3c7',
-                      statusColor: '#d97706',
+                      page: '/cart',
+                      pageBg: '#f0fdf4',
+                      pageColor: '#16a34a',
+                      time: '3m 20s',
+                      action: '● Active',
+                      actionType: 'badge',
                     },
                   ].map((row, idx) => (
                     <div
                       key={idx}
                       style={{
                         display: 'grid',
-                        gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.2fr 1.1fr 1fr',
+                        gridTemplateColumns: isMobile ? '1.8fr 1fr 1fr' : '2.2fr 1.3fr 1fr 1fr',
                         alignItems: 'center',
                         padding: '10px 6px',
                         fontSize: 12,
                         borderBottom: idx === 2 ? 'none' : '1px solid #f8fafc',
                       }}
                     >
-                      {/* Name & Avatar */}
+                      {/* Visitor Name & Location */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <div
                           style={{
@@ -1545,36 +1542,68 @@ export default function LandingPage() {
                             {row.name}
                           </div>
                           <div style={{ color: '#9aa0ac', fontSize: 10, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                            {row.role}
+                            {row.sub}
                           </div>
                         </div>
                       </div>
 
-                      {/* Source */}
-                      {!isMobile && <span style={{ color: '#5b5f6b', fontSize: 11.5 }}>{row.source}</span>}
+                      {/* Page */}
+                      {!isMobile && (
+                        <div>
+                          <span
+                            style={{
+                              background: row.pageBg,
+                              color: row.pageColor,
+                              padding: '2px 7px',
+                              borderRadius: 6,
+                              fontSize: 10.5,
+                              fontWeight: 600,
+                            }}
+                          >
+                            {row.page}
+                          </span>
+                        </div>
+                      )}
 
-                      {/* Score & Progress bar */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ fontWeight: 700, color: '#0c0d10', fontSize: 11.5 }}>{row.score}</span>
-                        <div style={{ width: row.barW, height: 4, background: '#10b981', borderRadius: 999 }} />
-                      </div>
+                      {/* Time */}
+                      <span style={{ color: '#5b5f6b', fontSize: 11.5 }}>{row.time}</span>
 
-                      {/* Status pill */}
+                      {/* Action */}
                       <div style={{ textAlign: 'right' }}>
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            background: row.statusBg,
-                            border: `1px solid ${row.statusBorder}`,
-                            color: row.statusColor,
-                            padding: '2px 8px',
-                            borderRadius: 999,
-                            fontSize: 10.5,
-                            fontWeight: 600,
-                          }}
-                        >
-                          • {row.status}
-                        </span>
+                        {row.actionType === 'button' ? (
+                          <button
+                            style={{
+                              background: '#2b7fff',
+                              color: '#ffffff',
+                              border: 'none',
+                              borderRadius: 6,
+                              padding: '3px 8px',
+                              fontSize: 10.5,
+                              fontWeight: 600,
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 4,
+                            }}
+                          >
+                            <span>💬</span>
+                            <span>Chat</span>
+                          </button>
+                        ) : (
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              background: '#f0fdf4',
+                              color: '#16a34a',
+                              padding: '2px 8px',
+                              borderRadius: 999,
+                              fontSize: 10.5,
+                              fontWeight: 600,
+                            }}
+                          >
+                            {row.action}
+                          </span>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -1582,7 +1611,7 @@ export default function LandingPage() {
               </div>
             </Col>
 
-            {/* Bento Card 2: Pipeline overview (Top Right - ~40% Hero Card) */}
+            {/* Bento Card 2: Unified Operator Inbox (Top Right - ~40% Hero Card) */}
             <Col xs={24} md={10}>
               <div
                 style={{
@@ -1622,7 +1651,7 @@ export default function LandingPage() {
                       margin: '0 0 8px',
                     }}
                   >
-                    Pipeline overview
+                    Unified Operator Inbox
                   </Typography.Title>
                   <Typography.Paragraph
                     style={{
@@ -1632,11 +1661,11 @@ export default function LandingPage() {
                       margin: '0 0 24px',
                     }}
                   >
-                    See your whole sales pipeline at a glance. Monitor stages, spot bottlenecks, and keep deals moving.
+                    Manage all customer conversations in one calm, lightning-fast workspace with live typing preview and instant status tracking.
                   </Typography.Paragraph>
                 </div>
 
-                {/* In-Card Visual Mockup: Mini Kanban Board */}
+                {/* In-Card Visual Mockup: Mini Conversations Queue */}
                 <div
                   style={{
                     background: '#ffffff',
@@ -1649,8 +1678,8 @@ export default function LandingPage() {
                   {/* Kanban Header */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                     <div style={{ fontSize: 12.5 }}>
-                      <span style={{ fontWeight: 700, color: '#0c0d10' }}>New business</span>
-                      <span style={{ color: '#9aa0ac', marginLeft: 6, fontSize: 11 }}>$227k open</span>
+                      <span style={{ fontWeight: 700, color: '#0c0d10' }}>Operator Inbox</span>
+                      <span style={{ color: '#9aa0ac', marginLeft: 6, fontSize: 11 }}>3 active</span>
                     </div>
                     <div
                       style={{
@@ -1673,19 +1702,19 @@ export default function LandingPage() {
                           boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                         }}
                       >
-                        Board
+                        Queue
                       </span>
-                      <span style={{ color: '#9aa0ac', fontSize: 10.5, padding: '2px 8px', cursor: 'pointer' }}>List</span>
+                      <span style={{ color: '#9aa0ac', fontSize: 10.5, padding: '2px 8px', cursor: 'pointer' }}>All</span>
                     </div>
                   </div>
 
                   {/* 2 Kanban Columns */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    {/* Col 1: Qualified */}
+                    {/* Col 1: Active Conversations */}
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#6b707c', marginBottom: 6 }}>
-                        <span style={{ fontWeight: 600 }}>Qualified · 4</span>
-                        <span style={{ color: '#9aa0ac' }}>$64k</span>
+                        <span style={{ fontWeight: 600 }}>Active · 2</span>
+                        <span style={{ color: '#16a34a' }}>Live</span>
                       </div>
                       
                       <div
@@ -1697,10 +1726,13 @@ export default function LandingPage() {
                           marginBottom: 8,
                         }}
                       >
-                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>Lumora</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, marginTop: 3 }}>
-                          <span style={{ color: '#2b7fff', fontWeight: 600 }}>$18,500</span>
-                          <span style={{ color: '#9aa0ac' }}>Oct 28</span>
+                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>Sophia M.</div>
+                        <div style={{ fontSize: 10, color: '#6b707c', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          "Upgrade to Pro plan?"
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, marginTop: 4 }}>
+                          <span style={{ color: '#2b7fff', fontWeight: 600 }}>Typing...</span>
+                          <span style={{ color: '#9aa0ac' }}>12s ago</span>
                         </div>
                       </div>
 
@@ -1712,19 +1744,22 @@ export default function LandingPage() {
                           padding: '8px 10px',
                         }}
                       >
-                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>Orbitly</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, marginTop: 3 }}>
-                          <span style={{ color: '#2b7fff', fontWeight: 600 }}>$9,200</span>
-                          <span style={{ color: '#9aa0ac' }}>Nov 02</span>
+                        <div style={{ fontSize: 11.5, fontWeight: 600, color: '#0c0d10' }}>David Chen</div>
+                        <div style={{ fontSize: 10, color: '#6b707c', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          "Shopify sync details"
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, marginTop: 4 }}>
+                          <span style={{ color: '#16a34a', fontWeight: 600 }}>Waiting</span>
+                          <span style={{ color: '#9aa0ac' }}>45s ago</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Col 2: Proposal */}
+                    {/* Col 2: Closed Deals */}
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#6b707c', marginBottom: 6 }}>
-                        <span style={{ fontWeight: 600 }}>Proposal · 3</span>
-                        <span style={{ color: '#9aa0ac' }}>$82k</span>
+                        <span style={{ fontWeight: 600 }}>Deals Won · 1</span>
+                        <span style={{ color: '#9aa0ac' }}>Today</span>
                       </div>
 
                       {/* Active Proposal Card with Blue Accent */}
@@ -1740,11 +1775,14 @@ export default function LandingPage() {
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <span style={{ fontSize: 11.5, fontWeight: 700, color: '#0c0d10' }}>Haven & Co</span>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#16a34a' }} />
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, marginTop: 3 }}>
-                          <span style={{ color: '#2b7fff', fontWeight: 700 }}>$32,000</span>
-                          <span style={{ color: '#9aa0ac' }}>Nov 08</span>
+                        <div style={{ fontSize: 10, color: '#16a34a', fontWeight: 600, marginTop: 2 }}>
+                          ✓ Converted to Pro
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, marginTop: 3 }}>
+                          <span style={{ color: '#2b7fff', fontWeight: 700 }}>$1,490/yr</span>
+                          <span style={{ color: '#9aa0ac' }}>Just now</span>
                         </div>
                       </div>
 
@@ -1760,7 +1798,7 @@ export default function LandingPage() {
                           background: '#fafbfd',
                         }}
                       >
-                        + Drop here
+                        + 8 Resolved
                       </div>
                     </div>
                   </div>
@@ -1815,7 +1853,7 @@ export default function LandingPage() {
                     margin: 0,
                   }}
                 >
-                  Real-time reports and dashboards that show what’s working, agent response SLA, and where to focus next.
+                  Real-time reports on first-response SLA, peak-hour chat volumes, and conversion metrics that show what drives revenue.
                 </Typography.Paragraph>
               </div>
             </Col>
@@ -1867,7 +1905,7 @@ export default function LandingPage() {
                     margin: 0,
                   }}
                 >
-                  Put sales greetings on autopilot with smart behavioral triggers, so your team can focus on closing deals.
+                  Put sales greetings on autopilot with smart exit-intent and cart-abandonment triggers, so your team focuses on closing deals.
                 </Typography.Paragraph>
               </div>
             </Col>
@@ -1919,7 +1957,7 @@ export default function LandingPage() {
                     margin: 0,
                   }}
                 >
-                  Assign chats, leave internal whisper notes, use canned shortcuts, and stay aligned with real-time updates.
+                  Assign chats, leave internal whisper notes, use canned /shortcuts, and stay perfectly aligned with your support team.
                 </Typography.Paragraph>
               </div>
             </Col>
