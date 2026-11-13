@@ -42,7 +42,8 @@ function friendly(issue) {
 }
 
 export function zodToResponse(err) {
-  const fields = err.errors.map((i) => ({ path: i.path, message: friendly(i) }));
+  const issues = err.issues || err.errors || [];
+  const fields = issues.map((i) => ({ path: i.path, message: friendly(i) }));
   const unique = [...new Set(fields.map((f) => f.message))];
   return {
     error: unique.length === 1 ? unique[0] : `Please fix ${unique.length} fields: ${unique.slice(0, 3).join('; ')}${unique.length > 3 ? '…' : ''}`,

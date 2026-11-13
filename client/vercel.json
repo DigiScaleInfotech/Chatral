@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build && rm -rf dist/vercel && mkdir -p dist/vercel/admin && cp -r dist/admin/* dist/vercel/admin/ && cp dist/admin/favicon.ico dist/vercel/favicon.ico && cp dist/admin/apple-touch-icon.png dist/vercel/apple-touch-icon.png",
+  "buildCommand": "npm run build:vercel",
   "outputDirectory": "dist/vercel",
   "redirects": [
     { "source": "/", "destination": "/admin/", "permanent": false }

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && vite build -c vite.widget.config.js",
+    "build:vercel": "npm run build && rm -rf dist/vercel && mkdir -p dist/vercel/admin && cp -r dist/admin/* dist/vercel/admin/ && mkdir -p dist/vercel/widget && cp -r dist/widget/* dist/vercel/widget/ && cp dist/admin/favicon.ico dist/vercel/favicon.ico && cp dist/admin/apple-touch-icon.png dist/vercel/apple-touch-icon.png",
     "test": "vitest run"
   },
   "dependencies": {
