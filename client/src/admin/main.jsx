@@ -496,10 +496,24 @@ function RootRoute() {
   return <LandingPage />;
 }
 
+function WidgetVisibilityManager() {
+  const location = useLocation();
+  useEffect(() => {
+    const isLanding = location.pathname === '/landing' || (location.pathname === '/' && !localStorage.getItem('token'));
+    const hosts = document.querySelectorAll('[id^="livechat-"]');
+    hosts.forEach((h) => {
+      h.style.display = isLanding ? 'block' : 'none';
+      h.style.visibility = isLanding ? 'visible' : 'hidden';
+    });
+  }, [location.pathname]);
+  return null;
+}
+
 createRoot(document.getElementById('root')).render(
   <ConfigProvider theme={theme}>
     <AntApp>
       <BrowserRouter basename="/admin">
+        <WidgetVisibilityManager />
         <Routes>
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />

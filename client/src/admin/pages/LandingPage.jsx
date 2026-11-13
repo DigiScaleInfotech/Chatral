@@ -38,12 +38,19 @@ export default function LandingPage() {
   };
   const [currency, setCurrency] = useState(() => (detectIsIndia() ? 'INR' : 'USD'));
 
-  // Ensure Chatral live chat widget is loaded and visible on Landing Page
+  // Ensure Chatral live chat widget is loaded and visible ONLY on Landing Page
   useEffect(() => {
-    const host = document.querySelector('[id^="livechat-"]');
-    if (host) host.style.display = 'block';
+    const showWidget = () => {
+      const hosts = document.querySelectorAll('[id^="livechat-"]');
+      hosts.forEach((h) => {
+        h.style.display = 'block';
+        h.style.visibility = 'visible';
+      });
+    };
 
-    const existing = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
+    showWidget();
+
+    let existing = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
     if (!existing) {
       const s = document.createElement('script');
       s.src = 'https://chatral-backend.onrender.com/widget/chat.js';
@@ -51,6 +58,20 @@ export default function LandingPage() {
       s.async = true;
       document.body.appendChild(s);
     }
+
+    const timer = setInterval(showWidget, 500);
+    const stopTimer = setTimeout(() => clearInterval(timer), 6000);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(stopTimer);
+      // Hide widget completely when leaving the Landing Page (Login, Sign up, Dashboard, etc.)
+      const hosts = document.querySelectorAll('[id^="livechat-"]');
+      hosts.forEach((h) => {
+        h.style.display = 'none';
+        h.style.visibility = 'hidden';
+      });
+    };
   }, []);
 
   const handleCopySnippet = () => {
