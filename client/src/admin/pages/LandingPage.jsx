@@ -1455,24 +1455,26 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Features Bento Grid (Relatik Signature Bento Layout) */}
-      <section id="features" style={{ padding: '80px 24px', background: '#f7f8fa' }}>
-        <div style={{ maxWidth: 1040, margin: '0 auto' }}>
+      <section id="features" style={{ padding: isMobile ? '64px 16px' : '96px 24px', background: '#f7f8fa' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
           
           {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
             <div
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
-                padding: '4px 12px',
-                background: '#eaf2ff',
-                border: '1px solid #d3e4ff',
+                padding: '4px 14px',
+                background: '#ffffff',
+                border: '1px solid #e6e7eb',
                 borderRadius: 999,
-                marginBottom: 12,
+                marginBottom: 16,
+                boxShadow: '0 1px 3px rgba(12, 13, 16, 0.04)',
               }}
             >
-              <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
+              <span style={{ color: '#0c0d10', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                 Features
               </span>
             </div>
@@ -1480,169 +1482,637 @@ export default function LandingPage() {
               level={2}
               style={{
                 color: '#0c0d10',
-                fontSize: isMobile ? 26 : 38,
+                fontSize: isMobile ? 28 : 42,
                 fontWeight: 800,
-                letterSpacing: '-0.025em',
-                margin: '0 0 12px',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.15,
+                margin: '0 0 14px',
               }}
             >
               Everything you need to close more deals
             </Typography.Title>
-            <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15, maxWidth: 540, margin: '0 auto' }}>
-              Built for speed and simplicity. Replace complex, bloated chat tools with an intuitive platform your team will actually love using.
+            <Typography.Paragraph
+              style={{
+                color: '#5b5f6b',
+                fontSize: isMobile ? 15 : 16.5,
+                lineHeight: 1.6,
+                maxWidth: 580,
+                margin: '0 auto',
+              }}
+            >
+              Every tool you need to track, manage, and grow customer relationships — from first contact to automation — without the clutter.
             </Typography.Paragraph>
           </div>
 
-          {/* Relatik Bento Grid */}
+          {/* Relatik Signature Bento Grid */}
           <Row gutter={[20, 20]}>
-            {/* Bento Card 1: Lead & Visitor Management (Large 2-column or prominent) */}
+            {/* Bento Card 1: Lead management (Large 14-col) */}
             <Col xs={24} md={14}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e6e7eb',
-                  borderRadius: 18,
-                  padding: '28px 26px',
+                  borderRadius: 20,
+                  padding: isMobile ? '22px 18px' : '28px 26px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.04), 0 10px 24px -8px rgba(12, 13, 16, 0.04)',
                   transition: 'all 0.2s ease',
                 }}
               >
                 <div>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: '#eaf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                    <GlobalOutlined style={{ fontSize: 20, color: '#2b7fff' }} />
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: '#eaf2ff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 16,
+                    }}
+                  >
+                    <GlobalOutlined style={{ fontSize: 19, color: '#2b7fff' }} />
                   </div>
-                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-                    Lead & Visitor Management
+                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 18.5, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.015em' }}>
+                    Lead management
                   </Typography.Title>
-                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.6, margin: 0, maxWidth: 440 }}>
+                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.6, margin: '0 0 24px', maxWidth: 480 }}>
                     Track every lead from first contact to closed deal with customizable visitor pipelines — no spreadsheets required.
                   </Typography.Paragraph>
                 </div>
 
-                {/* Relatik Mini Visual inside card */}
-                <div style={{ marginTop: 24, background: '#f7f8fa', borderRadius: 12, padding: 14, border: '1px solid #e6e7eb' }}>
-                  <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: '#0c0d10' }}>Live Radar • Active Page</span>
-                    <span style={{ fontSize: 10.5, color: '#16a34a', fontWeight: 600 }}>● 8 Active Now</span>
-                  </Flex>
-                  <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
-                    <Tag color="blue" bordered={false} style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6 }}>/checkout (Triggered)</Tag>
-                    <Tag color="cyan" bordered={false} style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6 }}>/pricing (2m 14s)</Tag>
-                    <Tag color="default" bordered={false} style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6 }}>/products/pro</Tag>
+                {/* Leads Preview UI Window */}
+                <div
+                  style={{
+                    background: '#f8fafc',
+                    borderRadius: 14,
+                    border: '1px solid #e6e7eb',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 8px rgba(12, 13, 16, 0.03)',
+                  }}
+                >
+                  {/* Window Bar */}
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      borderBottom: '1px solid #e6e7eb',
+                      padding: '10px 14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: 8,
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: '#0c0d10' }}>Leads</span>
+                      <span style={{ background: '#f1f2f5', color: '#5b5f6b', fontSize: 11, fontWeight: 600, padding: '1px 7px', borderRadius: 999 }}>
+                        248
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'flex', background: '#f1f2f5', padding: 2, borderRadius: 8, gap: 2 }}>
+                      <span style={{ background: '#ffffff', color: '#0c0d10', fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 6, boxShadow: '0 1px 2px rgba(12, 13, 16, 0.05)' }}>
+                        All
+                      </span>
+                      <span style={{ color: '#6b707c', fontSize: 11, fontWeight: 500, padding: '3px 8px' }}>
+                        New · 32
+                      </span>
+                      <span style={{ color: '#6b707c', fontSize: 11, fontWeight: 500, padding: '3px 8px' }}>
+                        Hot · 14
+                      </span>
+                    </div>
                   </div>
+
+                  {/* Table Headers */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: isMobile ? '2fr 1fr' : '2.2fr 1.4fr 1fr 1fr',
+                      padding: '8px 14px',
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                      color: '#94a3b8',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      borderBottom: '1px solid #f1f2f5',
+                      background: '#ffffff',
+                    }}
+                  >
+                    <span>Name</span>
+                    {!isMobile && <span>Source</span>}
+                    {!isMobile && <span>Score</span>}
+                    <span style={{ textAlign: 'right' }}>Status</span>
+                  </div>
+
+                  {/* Table Rows */}
+                  {[
+                    {
+                      name: 'Elena Hart',
+                      role: 'Brightloop · Head of Ops',
+                      avatar: 'EH',
+                      avatarBg: '#ede9fe',
+                      avatarColor: '#7c3aed',
+                      source: 'Website',
+                      score: '98',
+                      status: 'Hot',
+                      statusBg: '#fee2e2',
+                      statusColor: '#dc2626',
+                    },
+                    {
+                      name: 'Owen Malik',
+                      role: 'Haven & Co · VP Product',
+                      avatar: 'OM',
+                      avatarBg: '#e0f2fe',
+                      avatarColor: '#0284c7',
+                      source: 'Referral',
+                      score: '92',
+                      status: 'Hot',
+                      statusBg: '#fee2e2',
+                      statusColor: '#dc2626',
+                    },
+                    {
+                      name: 'Rina Nakamura',
+                      role: 'Kestrel · Growth Lead',
+                      avatar: 'RN',
+                      avatarBg: '#dcfce7',
+                      avatarColor: '#16a34a',
+                      source: 'LinkedIn',
+                      score: '84',
+                      status: 'Warm',
+                      statusBg: '#fef3c7',
+                      statusColor: '#d97706',
+                    },
+                  ].map((lead, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: isMobile ? '2fr 1fr' : '2.2fr 1.4fr 1fr 1fr',
+                        padding: '10px 14px',
+                        alignItems: 'center',
+                        fontSize: 12,
+                        background: '#ffffff',
+                        borderBottom: idx === 2 ? 'none' : '1px solid #f8fafc',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div
+                          style={{
+                            width: 24,
+                            height: 24,
+                            borderRadius: '50%',
+                            background: lead.avatarBg,
+                            color: lead.avatarColor,
+                            fontSize: 9.5,
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {lead.avatar}
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontWeight: 600, color: '#0c0d10', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {lead.name}
+                          </div>
+                          <div style={{ fontSize: 10, color: '#94a3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {lead.role}
+                          </div>
+                        </div>
+                      </div>
+
+                      {!isMobile && (
+                        <span style={{ color: '#5b5f6b', fontSize: 11.5 }}>{lead.source}</span>
+                      )}
+
+                      {!isMobile && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ fontWeight: 700, fontSize: 11.5, color: '#0c0d10' }}>{lead.score}</span>
+                          <div style={{ width: 34, height: 4, background: '#f1f2f5', borderRadius: 999 }}>
+                            <div style={{ width: `${lead.score}%`, height: '100%', background: '#16a34a', borderRadius: 999 }} />
+                          </div>
+                        </div>
+                      )}
+
+                      <div style={{ textAlign: 'right' }}>
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 4,
+                            background: lead.statusBg,
+                            color: lead.statusColor,
+                            padding: '2px 8px',
+                            borderRadius: 999,
+                            fontSize: 10.5,
+                            fontWeight: 600,
+                          }}
+                        >
+                          <span style={{ width: 4, height: 4, borderRadius: '50%', background: lead.statusColor }} />
+                          {lead.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </Col>
 
-            {/* Bento Card 2: Pipeline Overview */}
+            {/* Bento Card 2: Pipeline overview (10-col) */}
             <Col xs={24} md={10}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e6e7eb',
-                  borderRadius: 18,
-                  padding: '28px 26px',
+                  borderRadius: 20,
+                  padding: isMobile ? '22px 18px' : '28px 26px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.04), 0 10px 24px -8px rgba(12, 13, 16, 0.04)',
                 }}
               >
                 <div>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                    <RiseOutlined style={{ fontSize: 20, color: '#16a34a' }} />
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: '#f0fdf4',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 16,
+                    }}
+                  >
+                    <RiseOutlined style={{ fontSize: 19, color: '#16a34a' }} />
                   </div>
-                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-                    Pipeline & Conversation Overview
+                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 18.5, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.015em' }}>
+                    Pipeline overview
                   </Typography.Title>
-                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.6, margin: 0 }}>
-                    See your whole sales pipeline at a glance. Monitor response times, spot bottlenecks, and keep conversations moving.
+                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.6, margin: '0 0 24px' }}>
+                    See your whole sales pipeline at a glance. Monitor stages, spot bottlenecks, and keep deals moving.
                   </Typography.Paragraph>
                 </div>
 
-                <div style={{ marginTop: 24, background: '#f7f8fa', borderRadius: 12, padding: 12, border: '1px solid #e6e7eb' }}>
-                  <Flex justify="space-between" align="center">
-                    <span style={{ fontSize: 11, color: '#5b5f6b' }}>Avg. Response Speed</span>
-                    <strong style={{ fontSize: 12, color: '#16a34a' }}>&lt; 14 Seconds</strong>
-                  </Flex>
+                {/* Pipeline Preview Kanban Mockup */}
+                <div
+                  style={{
+                    background: '#f8fafc',
+                    borderRadius: 14,
+                    border: '1px solid #e6e7eb',
+                    padding: 12,
+                    boxShadow: '0 2px 8px rgba(12, 13, 16, 0.03)',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <div>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#0c0d10' }}>New business</span>
+                      <span style={{ fontSize: 11, color: '#94a3b8', marginLeft: 6 }}>$227k open</span>
+                    </div>
+                    <div style={{ display: 'flex', background: '#e2e8f0', padding: 2, borderRadius: 6, gap: 2 }}>
+                      <span style={{ background: '#ffffff', color: '#0c0d10', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 4 }}>
+                        Board
+                      </span>
+                      <span style={{ color: '#64748b', fontSize: 10, fontWeight: 500, padding: '2px 8px' }}>
+                        List
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    {/* Stage Column 1 */}
+                    <div style={{ background: '#f1f5f9', borderRadius: 10, padding: 8 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#475569', marginBottom: 8 }}>
+                        <span>Qualified · 4</span>
+                        <span>$64k</span>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, padding: '8px 10px', boxShadow: '0 1px 2px rgba(12, 13, 16, 0.03)' }}>
+                          <div style={{ fontWeight: 600, fontSize: 11.5, color: '#0c0d10' }}>Lumora</div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: '#2b7fff' }}>$18,500</span>
+                            <span style={{ fontSize: 9.5, color: '#94a3b8' }}>Oct 28</span>
+                          </div>
+                        </div>
+                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, padding: '8px 10px', boxShadow: '0 1px 2px rgba(12, 13, 16, 0.03)' }}>
+                          <div style={{ fontWeight: 600, fontSize: 11.5, color: '#0c0d10' }}>Orbitly</div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: '#2b7fff' }}>$9,200</span>
+                            <span style={{ fontSize: 9.5, color: '#94a3b8' }}>Nov 02</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stage Column 2 */}
+                    <div style={{ background: '#f1f5f9', borderRadius: 10, padding: 8 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#475569', marginBottom: 8 }}>
+                        <span>Proposal · 3</span>
+                        <span>$82k</span>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        <div
+                          style={{
+                            background: '#ffffff',
+                            border: '1.5px solid #2b7fff',
+                            borderRadius: 8,
+                            padding: '8px 10px',
+                            boxShadow: '0 4px 12px rgba(43, 127, 255, 0.12)',
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 700, fontSize: 11.5, color: '#0c0d10' }}>Haven & Co</span>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: '#2b7fff' }}>$32,000</span>
+                            <span style={{ fontSize: 9.5, color: '#94a3b8' }}>Nov 08</span>
+                          </div>
+                        </div>
+                        <div style={{ border: '1.5px dashed #cbd5e1', borderRadius: 8, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 10 }}>
+                          + Drop here
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Col>
 
-            {/* Bento Card 3: Analytics & Insights */}
+            {/* Bento Card 3: Analytics & insights (8-col) */}
             <Col xs={24} md={8}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e6e7eb',
-                  borderRadius: 18,
-                  padding: '28px 24px',
+                  borderRadius: 20,
+                  padding: isMobile ? '22px 18px' : '28px 24px',
                   height: '100%',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.04), 0 10px 24px -8px rgba(12, 13, 16, 0.04)',
                 }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f5f3ff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                  <BarChartOutlined style={{ fontSize: 20, color: '#7c3aed' }} />
+                <div>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: '#f5f3ff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 16,
+                    }}
+                  >
+                    <BarChartOutlined style={{ fontSize: 19, color: '#7c3aed' }} />
+                  </div>
+                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17.5, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.015em' }}>
+                    Analytics & insights
+                  </Typography.Title>
+                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6, margin: '0 0 20px' }}>
+                    Real-time reports and dashboards that show what’s working, agent response SLA, and where to focus next.
+                  </Typography.Paragraph>
                 </div>
-                <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17, fontWeight: 700, marginBottom: 8 }}>
-                  Analytics & Insights
-                </Typography.Title>
-                <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-                  Real-time reports and dashboards that show what’s working, agent response SLA, and where to focus next.
-                </Typography.Paragraph>
+
+                {/* Analytics Bar Chart Mockup */}
+                <div
+                  style={{
+                    background: '#f8fafc',
+                    borderRadius: 14,
+                    border: '1px solid #e6e7eb',
+                    padding: '14px 16px',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                    <div>
+                      <div style={{ fontSize: 10.5, color: '#64748b', fontWeight: 600 }}>REVENUE</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                        <span style={{ fontSize: 18, fontWeight: 800, color: '#0c0d10' }}>$128.4k</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, color: '#16a34a', background: '#dcfce7', padding: '1px 6px', borderRadius: 999 }}>
+                          ↑ 18.2%
+                        </span>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', background: '#e2e8f0', padding: 2, borderRadius: 6, gap: 2 }}>
+                      <span style={{ color: '#64748b', fontSize: 9.5, padding: '2px 5px' }}>W</span>
+                      <span style={{ background: '#ffffff', color: '#0c0d10', fontSize: 9.5, fontWeight: 700, padding: '2px 6px', borderRadius: 4 }}>M</span>
+                      <span style={{ color: '#64748b', fontSize: 9.5, padding: '2px 5px' }}>Q</span>
+                    </div>
+                  </div>
+
+                  {/* Vertical bars */}
+                  <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: 75, padding: '0 4px', borderBottom: '1px solid #e2e8f0' }}>
+                    {[
+                      { month: 'May', h: 32 },
+                      { month: 'Jun', h: 46 },
+                      { month: 'Jul', h: 40 },
+                      { month: 'Aug', h: 58 },
+                      { month: 'Sep', h: 68 },
+                      { month: 'Oct', h: 88, active: true },
+                    ].map((bar, i) => (
+                      <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: 24 }}>
+                        <div
+                          style={{
+                            width: 14,
+                            height: `${(bar.h / 100) * 65}px`,
+                            background: bar.active ? '#2b7fff' : '#cbd5e1',
+                            borderRadius: '4px 4px 0 0',
+                            transition: 'height 0.3s ease',
+                          }}
+                        />
+                        <span style={{ fontSize: 9, color: bar.active ? '#0c0d10' : '#94a3b8', fontWeight: bar.active ? 700 : 500 }}>
+                          {bar.month}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ marginTop: 8, display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#64748b' }}>
+                    <span>Top source</span>
+                    <strong style={{ color: '#0c0d10' }}>Website (64%)</strong>
+                  </div>
+                </div>
               </div>
             </Col>
 
-            {/* Bento Card 4: Automated Workflows */}
+            {/* Bento Card 4: Automated workflows (8-col) */}
             <Col xs={24} md={8}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e6e7eb',
-                  borderRadius: 18,
-                  padding: '28px 24px',
+                  borderRadius: 20,
+                  padding: isMobile ? '22px 18px' : '28px 24px',
                   height: '100%',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.04), 0 10px 24px -8px rgba(12, 13, 16, 0.04)',
                 }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: '#fffbeb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                  <ThunderboltOutlined style={{ fontSize: 20, color: '#d97706' }} />
+                <div>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: '#fffbeb',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 16,
+                    }}
+                  >
+                    <ThunderboltOutlined style={{ fontSize: 19, color: '#d97706' }} />
+                  </div>
+                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17.5, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.015em' }}>
+                    Automated workflows
+                  </Typography.Title>
+                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6, margin: '0 0 20px' }}>
+                    Put sales greetings on autopilot with smart behavioral triggers, so your team can focus on closing deals.
+                  </Typography.Paragraph>
                 </div>
-                <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17, fontWeight: 700, marginBottom: 8 }}>
-                  Automated Workflows
-                </Typography.Title>
-                <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-                  Put sales greetings on autopilot with smart behavioral triggers, so your team can focus on closing deals.
-                </Typography.Paragraph>
+
+                {/* Workflow Canvas Nodes Mockup */}
+                <div
+                  style={{
+                    background: '#f8fafc',
+                    borderRadius: 14,
+                    border: '1px solid #e6e7eb',
+                    padding: '12px 14px',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#0c0d10' }}>Proposal follow-up</span>
+                    <span style={{ background: '#dcfce7', color: '#16a34a', fontSize: 9.5, fontWeight: 700, padding: '1px 6px', borderRadius: 999 }}>
+                      ● Active
+                    </span>
+                  </div>
+
+                  {/* Flow Sequence */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                    {/* Node 1 */}
+                    <div style={{ width: '100%', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ background: '#fef3c7', color: '#b45309', padding: '1px 6px', borderRadius: 4, fontSize: 8.5, fontWeight: 800 }}>TRIGGER</span>
+                      <span style={{ fontSize: 10.5, color: '#0c0d10', fontWeight: 600 }}>Deal moves to Proposal</span>
+                    </div>
+
+                    {/* Connecting line */}
+                    <div style={{ width: 1.5, height: 10, background: '#2b7fff' }} />
+
+                    {/* Node 2 */}
+                    <div style={{ width: '100%', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ background: '#f1f5f9', color: '#475569', padding: '1px 6px', borderRadius: 4, fontSize: 8.5, fontWeight: 800 }}>WAIT</span>
+                      <span style={{ fontSize: 10.5, color: '#0c0d10', fontWeight: 600 }}>2 business days</span>
+                    </div>
+
+                    {/* Connecting line */}
+                    <div style={{ width: 1.5, height: 10, background: '#2b7fff' }} />
+
+                    {/* Branch Outcomes */}
+                    <div style={{ width: '100%', display: 'flex', gap: 6 }}>
+                      <div style={{ flex: 1, background: '#eaf2ff', border: '1px solid #bfdbfe', borderRadius: 6, padding: '4px 6px', textAlign: 'center', fontSize: 9.5, color: '#1d4ed8', fontWeight: 600 }}>
+                        YES → Email
+                      </div>
+                      <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 6, padding: '4px 6px', textAlign: 'center', fontSize: 9.5, color: '#64748b', fontWeight: 500 }}>
+                        NO → Close
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Col>
 
-            {/* Bento Card 5: Team Collaboration */}
+            {/* Bento Card 5: Team collaboration (8-col) */}
             <Col xs={24} md={8}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e6e7eb',
-                  borderRadius: 18,
-                  padding: '28px 24px',
+                  borderRadius: 20,
+                  padding: isMobile ? '22px 18px' : '28px 24px',
                   height: '100%',
-                  boxShadow: '0 2px 8px rgba(12, 13, 16, 0.02)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.04), 0 10px 24px -8px rgba(12, 13, 16, 0.04)',
                 }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: '#fdf2f8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                  <TeamOutlined style={{ fontSize: 20, color: '#db2777' }} />
+                <div>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: '#fdf2f8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 16,
+                    }}
+                  >
+                    <TeamOutlined style={{ fontSize: 19, color: '#db2777' }} />
+                  </div>
+                  <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17.5, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.015em' }}>
+                    Team collaboration
+                  </Typography.Title>
+                  <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6, margin: '0 0 20px' }}>
+                    Assign chats, leave internal whisper notes, use canned shortcuts, and stay aligned with real-time updates.
+                  </Typography.Paragraph>
                 </div>
-                <Typography.Title level={4} style={{ color: '#0c0d10', fontSize: 17, fontWeight: 700, marginBottom: 8 }}>
-                  Team Collaboration
-                </Typography.Title>
-                <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-                  Assign chats, leave internal whisper notes, use canned shortcuts, and stay aligned with real-time updates.
-                </Typography.Paragraph>
+
+                {/* Team Activity Feed Mockup */}
+                <div
+                  style={{
+                    background: '#f8fafc',
+                    borderRadius: 14,
+                    border: '1px solid #e6e7eb',
+                    padding: '12px 14px',
+                  }}
+                >
+                  {/* Deal Header */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid #e2e8f0' }}>
+                    <div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0c0d10' }}>Brightloop · $24,000</div>
+                      <div style={{ fontSize: 9.5, color: '#7e22ce' }}>Negotiation stage</div>
+                    </div>
+                    {/* Avatars Stack */}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ width: 18, height: 18, borderRadius: '50%', background: '#ede9fe', color: '#6d28d9', fontSize: 8, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fff' }}>JT</div>
+                      <div style={{ width: 18, height: 18, borderRadius: '50%', background: '#dcfce7', color: '#15803d', fontSize: 8, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fff', marginLeft: -4 }}>MR</div>
+                      <div style={{ width: 18, height: 18, borderRadius: '50%', background: '#fed7aa', color: '#c2410c', fontSize: 8, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fff', marginLeft: -4 }}>AS</div>
+                    </div>
+                  </div>
+
+                  {/* Internal Whisper Note */}
+                  <div style={{ background: '#fef3c7', borderRadius: 8, padding: '7px 9px', marginBottom: 8, border: '1px solid #fde68a' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, color: '#92400e', fontWeight: 600, marginBottom: 2 }}>
+                      <span>Julia T. (Whisper note)</span>
+                      <span>10:24</span>
+                    </div>
+                    <div style={{ fontSize: 10, color: '#78350f', lineHeight: 1.35 }}>
+                      @Mark sent revised proposal for 25 seats.
+                    </div>
+                  </div>
+
+                  {/* Checklist item */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10, color: '#0c0d10', background: '#ffffff', padding: '5px 8px', borderRadius: 6, border: '1px solid #e2e8f0' }}>
+                    <span style={{ color: '#16a34a', fontWeight: 700 }}>✓</span>
+                    <span style={{ fontWeight: 500 }}>Sent updated pricing link</span>
+                  </div>
+                </div>
               </div>
             </Col>
           </Row>
