@@ -125,6 +125,16 @@ function Shell() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  useEffect(() => {
+    // Hide customer visitor widget inside operator dashboard to prevent UI overlap
+    const host = document.querySelector('[id^="livechat-"]');
+    if (host) host.style.display = 'none';
+    return () => {
+      const h = document.querySelector('[id^="livechat-"]');
+      if (h) h.style.display = 'block';
+    };
+  }, []);
+
   const loadMe = () =>
     api('/auth/me').then((m) => {
       setMe(m);
