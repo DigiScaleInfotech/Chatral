@@ -23,6 +23,7 @@ export default function LandingPage() {
   const [billingCycle, setBillingCycle] = useState('annual');
   const [copiedSnippet, setCopiedSnippet] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const [openFaq, setOpenFaq] = useState(null);
   const [demoInput, setDemoInput] = useState('');
   const [demoMessages, setDemoMessages] = useState([
     { sender: 'bot', text: 'Hi! 👋 Looking to connect with our sales team?', time: 'Just now' },
@@ -2096,6 +2097,204 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 6. FAQ Section (Relatik Exact 2-Column Accordion from Image) */}
+      <section id="faq" style={{ padding: isMobile ? '60px 16px' : '96px 24px', background: '#f7f8fa', borderTop: '1px solid #e6e7eb' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
+          <Row gutter={isMobile ? [0, 40] : [64, 32]} align="top">
+            {/* Left Column: Badge, Heading, Subtitle & Button */}
+            <Col xs={24} md={10} style={{ textAlign: isMobile ? 'center' : 'left' }}>
+              {/* Badge */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '4px 12px',
+                  background: '#eaf2ff',
+                  border: '1px solid rgba(43, 127, 255, 0.2)',
+                  borderRadius: 999,
+                  marginBottom: 16,
+                }}
+              >
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
+                <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                  FAQ
+                </span>
+              </div>
+
+              {/* Title */}
+              <Typography.Title
+                level={2}
+                style={{
+                  color: '#0c0d10',
+                  fontSize: isMobile ? 32 : 46,
+                  fontWeight: 800,
+                  letterSpacing: '-0.035em',
+                  lineHeight: 1.12,
+                  margin: '0 0 16px',
+                }}
+              >
+                Questions<br />& answers
+              </Typography.Title>
+
+              {/* Description */}
+              <Typography.Paragraph
+                style={{
+                  color: '#5b5f6b',
+                  fontSize: isMobile ? 14.5 : 15.5,
+                  lineHeight: 1.6,
+                  maxWidth: isMobile ? '100%' : 340,
+                  margin: isMobile ? '0 auto 24px' : '0 0 28px',
+                  fontWeight: 400,
+                }}
+              >
+                Everything you need to know about Chatral. Can’t find what you’re looking for? Our team is happy to help.
+              </Typography.Paragraph>
+
+              {/* Contact us Button */}
+              <button
+                onClick={() => scrollTo('demo')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#ffffff',
+                  color: '#0c0d10',
+                  border: '1px solid #e6e7eb',
+                  borderRadius: 12,
+                  padding: '11px 24px',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 2px rgba(12, 13, 16, 0.04)',
+                  transition: 'all 0.15s ease',
+                  fontFamily: 'inherit',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#cbd5e1';
+                  e.currentTarget.style.background = '#f9fafb';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e6e7eb';
+                  e.currentTarget.style.background = '#ffffff';
+                }}
+              >
+                Contact us
+              </button>
+            </Col>
+
+            {/* Right Column: 5 Accordion Cards */}
+            <Col xs={24} md={14}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {[
+                  {
+                    q: 'What is Chatral?',
+                    a: 'Chatral is a calm, fast live chat and customer messaging platform designed to help e-commerce stores and modern teams engage visitors, track active shoppers, and close more deals in real time.',
+                  },
+                  {
+                    q: 'Who is Chatral for?',
+                    a: 'Chatral is built for online store owners, SaaS founders, sales leaders, and customer support teams who want a simple, clutter-free workspace that their entire team will actually enjoy using.',
+                  },
+                  {
+                    q: 'Do I need technical skills to use it?',
+                    a: 'No technical skills required at all. Setup takes less than 2 minutes: simply paste the 1-line lightweight script tag into your Shopify theme, WordPress site, or HTML header.',
+                  },
+                  {
+                    q: 'What features does Chatral offer?',
+                    a: 'Chatral provides real-time visitor tracking, unified operator inboxes, multi-store management, automated sales trigger greetings, canned replies, sound notifications, and fast analytics.',
+                  },
+                  {
+                    q: 'Can I try Chatral for free?',
+                    a: 'Yes! Every plan includes a 14-day free trial with full access to all features — no credit card required. Cancel anytime with a single click.',
+                  },
+                ].map((item, idx) => {
+                  const isOpen = openFaq === idx;
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      style={{
+                        background: '#ffffff',
+                        border: '1px solid',
+                        borderColor: isOpen ? '#c7d2fe' : '#e8e9ee',
+                        borderRadius: 16,
+                        padding: '20px 24px',
+                        cursor: 'pointer',
+                        boxShadow: isOpen
+                          ? '0 6px 20px rgba(43, 127, 255, 0.06)'
+                          : '0 1px 3px rgba(12, 13, 16, 0.02)',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isOpen) e.currentTarget.style.borderColor = '#cbd5e1';
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isOpen) e.currentTarget.style.borderColor = '#e8e9ee';
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: 16,
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: '#0c0d10',
+                            fontWeight: 600,
+                            fontSize: 15.5,
+                            letterSpacing: '-0.01em',
+                          }}
+                        >
+                          {item.q}
+                        </span>
+                        <div
+                          style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: '50%',
+                            background: isOpen ? '#eaf2ff' : '#f1f2f5',
+                            color: isOpen ? '#2b7fff' : '#5b5f6b',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: 16,
+                            fontWeight: 500,
+                            flexShrink: 0,
+                            transform: isOpen ? 'rotate(45deg)' : 'none',
+                            transition: 'all 0.2s ease',
+                          }}
+                        >
+                          +
+                        </div>
+                      </div>
+
+                      {isOpen && (
+                        <div
+                          style={{
+                            marginTop: 14,
+                            paddingTop: 14,
+                            borderTop: '1px solid #f1f2f5',
+                            color: '#5b5f6b',
+                            fontSize: 14,
+                            lineHeight: 1.65,
+                            fontWeight: 400,
+                          }}
+                        >
+                          {item.a}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </section>
+
       {/* 7. Interactive Playground Widget (Experience Chatral live) */}
       <section id="demo" style={{ padding: '80px 24px', background: '#f7f8fa', borderTop: '1px solid #e6e7eb' }}>
         <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
@@ -2436,98 +2635,6 @@ export default function LandingPage() {
               </div>
             </Col>
           </Row>
-        </div>
-      </section>
-
-      {/* 9. FAQ Section (Relatik Exact Accordion & Questions) */}
-      <section id="faq" style={{ padding: '80px 24px', background: '#f7f8fa' }}>
-        <div style={{ maxWidth: 760, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '4px 12px',
-                background: '#eaf2ff',
-                border: '1px solid #d3e4ff',
-                borderRadius: 999,
-                marginBottom: 12,
-              }}
-            >
-              <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                FAQ
-              </span>
-            </div>
-            <Typography.Title
-              level={2}
-              style={{
-                color: '#0c0d10',
-                fontSize: isMobile ? 26 : 38,
-                fontWeight: 800,
-                letterSpacing: '-0.025em',
-                margin: '0 0 10px',
-              }}
-            >
-              Frequently asked questions
-            </Typography.Title>
-            <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15 }}>
-              Have questions? We’re here to help.
-            </Typography.Paragraph>
-          </div>
-
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            style={{ background: 'transparent' }}
-            items={[
-              {
-                key: '1',
-                label: <span style={{ color: '#0c0d10', fontWeight: 600, fontSize: 14.5 }}>What is Chatral?</span>,
-                children: (
-                  <Typography.Text style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.65, display: 'block' }}>
-                    Chatral is a simple, modern live chat and customer messaging platform designed to help e-commerce stores and online businesses engage website visitors, track active customer journeys, and boost sales in real time.
-                  </Typography.Text>
-                ),
-              },
-              {
-                key: '2',
-                label: <span style={{ color: '#0c0d10', fontWeight: 600, fontSize: 14.5 }}>Who is Chatral for?</span>,
-                children: (
-                  <Typography.Text style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.65, display: 'block' }}>
-                    Chatral is built for online store owners, SaaS founders, and customer support teams who want a fast, clutter-free alternative to bloated legacy chat tools.
-                  </Typography.Text>
-                ),
-              },
-              {
-                key: '3',
-                label: <span style={{ color: '#0c0d10', fontWeight: 600, fontSize: 14.5 }}>Do I need technical skills to use it?</span>,
-                children: (
-                  <Typography.Text style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.65, display: 'block' }}>
-                    No technical skills are required. Setup takes under 2 minutes: simply copy the 1-line script tag from your dashboard and paste it into your Shopify theme, WordPress site, or HTML header.
-                  </Typography.Text>
-                ),
-              },
-              {
-                key: '4',
-                label: <span style={{ color: '#0c0d10', fontWeight: 600, fontSize: 14.5 }}>What features does Chatral offer?</span>,
-                children: (
-                  <Typography.Text style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.65, display: 'block' }}>
-                    Real-time WebSocket messaging, live visitor radar, automated sales triggers, Shopify order lookup, team roles & permissions, canned replies, sound notifications, and GDPR data isolation.
-                  </Typography.Text>
-                ),
-              },
-              {
-                key: '5',
-                label: <span style={{ color: '#0c0d10', fontWeight: 600, fontSize: 14.5 }}>Can I try Chatral for free?</span>,
-                children: (
-                  <Typography.Text style={{ color: '#5b5f6b', fontSize: 13.5, lineHeight: 1.65, display: 'block' }}>
-                    Yes! Every plan comes with a 14-day free trial — no credit card required. We also offer a Free Forever plan for single stores getting started.
-                  </Typography.Text>
-                ),
-              },
-            ]}
-          />
         </div>
       </section>
 
