@@ -2540,8 +2540,8 @@ export default function LandingPage() {
       </section>
 
       {/* 10. Relatik Signature Footer with Official Chatral Logo */}
-      <footer style={{ background: '#ffffff', borderTop: '1px solid #ebecee', padding: isMobile ? '56px 20px 36px' : '80px 24px 44px' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+      <footer style={{ background: '#ffffff', borderTop: '1px solid #ebecee', padding: isMobile ? '64px 20px 40px' : '90px 24px 50px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           {/* Top Row: Brand on Left, 3 Nav Columns on Right */}
           <div
             style={{
@@ -2549,15 +2549,15 @@ export default function LandingPage() {
               flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'space-between',
               alignItems: 'flex-start',
-              gap: isMobile ? 36 : 48,
+              gap: isMobile ? 40 : 54,
             }}
           >
             {/* Left Column: Official Chatral Brand Logo + Tagline */}
-            <div style={{ maxWidth: 340 }}>
+            <div style={{ maxWidth: 360 }}>
               <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-                <ChatralFullLogo height={isMobile ? 32 : 38} dark={false} />
+                <ChatralFullLogo height={isMobile ? 36 : 42} dark={false} />
               </Link>
-              <div style={{ color: '#5b6170', fontSize: 15, lineHeight: 1.6, marginTop: 18 }}>
+              <div style={{ color: '#475467', fontSize: 17, lineHeight: 1.6, marginTop: 20 }}>
                 The simple live chat for teams that care<br />about relationships.
               </div>
             </div>
@@ -2566,43 +2566,43 @@ export default function LandingPage() {
             <div
               style={{
                 display: 'flex',
-                gap: isMobile ? 36 : 84,
+                gap: isMobile ? 44 : 96,
                 flexWrap: 'wrap',
               }}
             >
               {/* Product */}
-              <div style={{ minWidth: 110 }}>
-                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 15.5, marginBottom: 18 }}>Product</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 13, fontSize: 15 }}>
+              <div style={{ minWidth: 120 }}>
+                <div style={{ fontWeight: 700, color: '#101828', fontSize: 18, marginBottom: 20 }}>Product</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 15, fontSize: 16.5 }}>
                   <a
                     onClick={() => scrollTo('features')}
-                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     Features
                   </a>
                   <a
                     onClick={() => scrollTo('how-it-works')}
-                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     How it works
                   </a>
                   <a
                     onClick={() => scrollTo('pricing')}
-                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     Pricing
                   </a>
                   <a
                     onClick={() => scrollTo('faq')}
-                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     FAQ
                   </a>
@@ -2610,22 +2610,22 @@ export default function LandingPage() {
               </div>
 
               {/* Company */}
-              <div style={{ minWidth: 110 }}>
-                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 15.5, marginBottom: 18 }}>Company</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 13, fontSize: 15 }}>
+              <div style={{ minWidth: 120 }}>
+                <div style={{ fontWeight: 700, color: '#101828', fontSize: 18, marginBottom: 20 }}>Company</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 15, fontSize: 16.5 }}>
                   <a
                     onClick={() => scrollTo('testimonials')}
-                    style={{ color: '#5b5f6b', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', cursor: 'pointer', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     Testimonials
                   </a>
                   <a
                     href="mailto:digiscaleinfotech@gmail.com"
-                    style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     Contact
                   </a>
@@ -2633,22 +2633,22 @@ export default function LandingPage() {
               </div>
 
               {/* Legal */}
-              <div style={{ minWidth: 110 }}>
-                <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 15.5, marginBottom: 18 }}>Legal</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 13, fontSize: 15 }}>
+              <div style={{ minWidth: 120 }}>
+                <div style={{ fontWeight: 700, color: '#101828', fontSize: 18, marginBottom: 20 }}>Legal</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 15, fontSize: 16.5 }}>
                   <Link
                     to="/privacy"
-                    style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     Privacy policy
                   </Link>
                   <Link
                     to="/terms"
-                    style={{ color: '#5b5f6b', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#5b5f6b')}
+                    style={{ color: '#475467', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#475467')}
                   >
                     Terms of service
                   </Link>
@@ -2658,7 +2658,7 @@ export default function LandingPage() {
           </div>
 
           {/* Bottom Divider */}
-          <div style={{ borderTop: '1px solid #ebecee', margin: '52px 0 28px' }} />
+          <div style={{ borderTop: '1px solid #ebecee', margin: '56px 0 32px' }} />
 
           {/* Bottom Copyright & Social Icons */}
           <div
@@ -2670,22 +2670,22 @@ export default function LandingPage() {
               gap: 16,
             }}
           >
-            <div style={{ color: '#717684', fontSize: 14, fontWeight: 400 }}>
-              &copy; {new Date().getFullYear()} Chatral. All rights reserved. &nbsp;&nbsp; Made by <span style={{ color: '#0c0d10', fontWeight: 600 }}>DigiScale Infotech</span>
+            <div style={{ color: '#667085', fontSize: 15.5, fontWeight: 400 }}>
+              &copy; {new Date().getFullYear()} Chatral. All rights reserved. &nbsp;&nbsp; Made by <span style={{ color: '#101828', fontWeight: 700 }}>DigiScale Infotech</span>
             </div>
 
             {/* Social Icons (X / Twitter and LinkedIn) */}
-            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 22, alignItems: 'center' }}>
               <a
                 href="https://x.com"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="X (Twitter)"
-                style={{ color: '#717684', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#717684')}
+                style={{ color: '#667085', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#667085')}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
@@ -2695,11 +2695,11 @@ export default function LandingPage() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
-                style={{ color: '#717684', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#0c0d10')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#717684')}
+                style={{ color: '#667085', display: 'flex', alignItems: 'center', transition: 'color 0.15s ease' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#101828')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#667085')}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 1.6 1.6 1.6 1.6 0 0 0-1.6-1.6z" />
                 </svg>
               </a>
