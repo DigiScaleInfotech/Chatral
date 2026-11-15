@@ -1118,25 +1118,30 @@ function SubscriptionPlan({ store, reload, can }) {
   const { message } = App.useApp();
   const plan = store.plan || 'TRIAL';
   const planExpiresAt = store.planExpiresAt;
-  const isExpired = planExpiresAt && new Date(planExpiresAt) < new Date();
-  const daysLeft = planExpiresAt ? Math.max(0, Math.ceil((new Date(planExpiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : null;
+  const isExpired = planExpiresAt ? new Date(planExpiresAt) < new Date() : false;
+  
+  // Safe calculation for days remaining
+  const now = new Date();
+  const daysLeft = planExpiresAt
+    ? Math.max(0, Math.ceil((new Date(planExpiresAt).getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+    : 7;
 
   const planName = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
-  const planColor = plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
 
   return (
-    <div style={{ maxWidth: 960 }}>
-      <Card style={{ marginBottom: 20 }}>
+    <div style={{ width: '100%' }}>
+      {/* Current Subscription Status Card */}
+      <Card style={{ marginBottom: 24, border: '1px solid #e2e8f0', borderRadius: 8 }}>
         <Flex justify="space-between" align="center" wrap gap={16}>
           <div>
-            <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 4 }}>
+            <div style={{ fontSize: 11, color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
               Current Store Subscription
             </div>
             <Flex align="center" gap={10}>
-              <Typography.Title level={4} style={{ margin: 0 }}>
+              <Typography.Title level={4} style={{ margin: 0, fontWeight: 700 }}>
                 {planName}
               </Typography.Title>
-              <Tag color={isExpired ? 'error' : planColor} bordered={false} style={{ fontWeight: 600 }}>
+              <Tag color={isExpired ? 'error' : 'blue'} bordered={false} style={{ fontWeight: 600 }}>
                 {isExpired ? 'Expired' : 'Active'}
               </Tag>
             </Flex>
@@ -1147,105 +1152,193 @@ function SubscriptionPlan({ store, reload, can }) {
                   : `Free trial active • ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining until expiration.`
                 : isExpired
                 ? 'Your monthly subscription has expired.'
-                : `Next billing / renewal date: ${planExpiresAt ? dayjs(planExpiresAt).format('MMMM D, YYYY') : 'Lifetime'}.`}
+                : `Next billing / renewal date: ${planExpiresAt ? dayjs(planExpiresAt).format('MMMM D, YYYY') : 'Active Subscription'}.`}
             </Typography.Text>
           </div>
+          {can('ADMIN') && plan === 'TRIAL' && (
+            <Button
+              type="primary"
+              style={{ background: '#2563eb' }}
+              onClick={() => message.info('Contact support at chatral.official@gmail.com to upgrade your plan')}
+            >
+              Upgrade Plan
+            </Button>
+          )}
         </Flex>
       </Card>
 
-      <Typography.Title level={5} style={{ margin: '0 0 16px' }}>
+      <Typography.Title level={5} style={{ margin: '0 0 18px', fontWeight: 700 }}>
         Available Subscription Plans
       </Typography.Title>
 
-      <Row gutter={[20, 20]}>
-        {/* 1. Free Trial */}
-        <Col xs={24} md={8}>
-          <Card
+      <Row gutter={[24, 24]} style={{ width: '100%', margin: 0 }}>
+        {/* 1. 7-Day Free Trial */}
+        <Col xs={24} lg={8} style={{ paddingLeft: 12, paddingRight: 12 }}>
+          <div
             style={{
-              height: '100%',
-              borderRadius: 8,
+              background: '#ffffff',
               border: plan === 'TRIAL' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+              borderRadius: 16,
+              padding: '28px 24px',
+              height: '100%',
               display: 'flex',
               flexDirection: 'column',
+              boxShadow: '0 4px 16px -2px rgba(12, 13, 16, 0.03)',
             }}
           >
-            <div style={{ fontWeight: 700, fontSize: 16 }}>7-Day Free Trial</div>
-            <div style={{ fontSize: 28, fontWeight: 800, margin: '8px 0 2px' }}>₹0</div>
-            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>Test on your site with zero risk</div>
-            <div style={{ fontSize: 13, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, flex: 1 }}>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> 1 Active Store</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Unlimited Live Chats</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Automated Triggers</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Sound & Desktop Alerts</div>
+            <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>7-Day Free Trial</div>
+            <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
+              ₹0 <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ 7 days free</span>
+            </div>
+            <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
+              Full access to all features free for 7 days. Test on your website with zero risk.
+            </div>
+            <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Full Access for 7 Days</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> 1 Active Store</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Standard Web Chat Widget</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
             </div>
             {plan === 'TRIAL' ? (
-              <Button disabled block>Current Plan</Button>
+              <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600 }}>
+                Current Active Plan
+              </Button>
             ) : (
-              <Button disabled block>Standard Trial</Button>
-            )}
-          </Card>
-        </Col>
-
-        {/* 2. Starter Growth */}
-        <Col xs={24} md={8}>
-          <Card
-            style={{
-              height: '100%',
-              borderRadius: 8,
-              border: plan === 'STARTER' ? '2px solid #16a34a' : '1px solid #e2e8f0',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <div style={{ fontWeight: 700, fontSize: 16, color: '#16a34a' }}>Starter Growth</div>
-            <div style={{ fontSize: 28, fontWeight: 800, margin: '8px 0 2px' }}>₹399 <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>/ mo</span></div>
-            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>Turn store visitors into buyers</div>
-            <div style={{ fontSize: 13, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, flex: 1 }}>
-              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> <b>3 Active Stores</b></div>
-              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> Unlimited Live Chats</div>
-              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> Automated Triggers & Canned</div>
-              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> <b>Remove "Chatral" Branding</b></div>
-              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> 24/7 Priority Support</div>
-            </div>
-            {plan === 'STARTER' ? (
-              <Button disabled block>Current Plan</Button>
-            ) : (
-              <Button type="primary" block style={{ background: '#16a34a', borderColor: '#16a34a' }} onClick={() => message.info('Contact administrator or chatral.official@gmail.com to activate Starter Growth')}>
-                Upgrade to Starter
+              <Button disabled block style={{ height: 42, borderRadius: 8 }}>
+                Standard Trial
               </Button>
             )}
-          </Card>
+            <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+              No credit card required
+            </div>
+          </div>
+        </Col>
+
+        {/* 2. Starter Growth (Most Popular) */}
+        <Col xs={24} lg={8} style={{ paddingLeft: 12, paddingRight: 12 }}>
+          <div
+            style={{
+              background: '#ffffff',
+              border: '2px solid #2563eb',
+              borderRadius: 16,
+              padding: '28px 24px',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              boxShadow: '0 12px 30px -4px rgba(37, 99, 235, 0.16)',
+            }}
+          >
+            <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)' }}>
+              <span
+                style={{
+                  background: '#2563eb',
+                  color: '#ffffff',
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  padding: '4px 14px',
+                  borderRadius: 999,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  boxShadow: '0 2px 8px rgba(37, 99, 235, 0.35)',
+                }}
+              >
+                Most Popular
+              </span>
+            </div>
+            <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
+            <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
+              ₹399 <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+            </div>
+            <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
+              Everything you need to turn visitors into buyers with multi-store and no branding.
+            </div>
+            <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>3 Active Stores</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Shopify & WooCommerce Integration</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
+            </div>
+            {plan === 'STARTER' ? (
+              <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600 }}>
+                Current Active Plan
+              </Button>
+            ) : (
+              <Button
+                type="primary"
+                block
+                style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
+                onClick={() => message.info('Contact support at chatral.official@gmail.com to upgrade to Starter Growth')}
+              >
+                Upgrade to Starter Growth
+              </Button>
+            )}
+            <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+              Includes 7-day free trial • Cancel anytime
+            </div>
+          </div>
         </Col>
 
         {/* 3. Business & Scale */}
-        <Col xs={24} md={8}>
-          <Card
+        <Col xs={24} lg={8} style={{ paddingLeft: 12, paddingRight: 12 }}>
+          <div
             style={{
+              background: '#ffffff',
+              border: plan === 'BUSINESS' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+              borderRadius: 16,
+              padding: '28px 24px',
               height: '100%',
-              borderRadius: 8,
-              border: plan === 'BUSINESS' ? '2px solid #7c3aed' : '1px solid #e2e8f0',
               display: 'flex',
               flexDirection: 'column',
+              boxShadow: '0 4px 16px -2px rgba(12, 13, 16, 0.03)',
             }}
           >
-            <div style={{ fontWeight: 700, fontSize: 16, color: '#7c3aed' }}>Business & Scale</div>
-            <div style={{ fontSize: 28, fontWeight: 800, margin: '8px 0 2px' }}>₹999 <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>/ mo</span></div>
-            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>For scaling agencies & multiple stores</div>
-            <div style={{ fontSize: 13, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, flex: 1 }}>
-              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> <b>Unlimited Active Stores</b></div>
-              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> Unlimited Team Members</div>
-              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> Everything in Starter Growth</div>
-              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> <b>1-on-1 Setup & Onboarding</b></div>
-              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> WhatsApp & Dedicated Manager</div>
+            <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
+            <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
+              ₹999 <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+            </div>
+            <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
+              For high-volume stores, scaling agencies & teams needing dedicated onboarding support.
+            </div>
+            <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Unlimited Active Stores</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Team Members & Roles</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Everything in Starter Growth</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>1-on-1 Setup & Onboarding Support</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Custom CSS & Brand White-labeling</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Advanced Analytics & Reports Export</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Dedicated Account Manager</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> WhatsApp & Priority Phone Support</div>
             </div>
             {plan === 'BUSINESS' ? (
-              <Button disabled block>Current Plan</Button>
+              <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600 }}>
+                Current Active Plan
+              </Button>
             ) : (
-              <Button type="primary" block style={{ background: '#7c3aed', borderColor: '#7c3aed' }} onClick={() => message.info('Contact administrator or chatral.official@gmail.com to activate Business & Scale')}>
-                Upgrade to Business
+              <Button
+                type="primary"
+                block
+                style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
+                onClick={() => message.info('Contact support at chatral.official@gmail.com to upgrade to Business & Scale')}
+              >
+                Upgrade to Business & Scale
               </Button>
             )}
-          </Card>
+            <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+              Includes 7-day free trial • Cancel anytime
+            </div>
+          </div>
         </Col>
       </Row>
     </div>
