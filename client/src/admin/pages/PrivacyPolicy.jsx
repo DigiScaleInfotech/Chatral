@@ -274,8 +274,8 @@ export default function PrivacyPolicy() {
             If you have any questions about this Privacy Policy or wish to exercise your data privacy rights, please contact our Data Protection Officer at:
           </p>
           <div style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75 }}>
-            <div><strong style={{ color: '#0c0d10' }}>Email:</strong> digiscaleinfotech@gmail.com</div>
-            <div><strong style={{ color: '#0c0d10' }}>Organization:</strong> DigiScale Infotech (Chatral Platform)</div>
+            <div><strong style={{ color: '#0c0d10' }}>Email:</strong> chatral.official@gmail.com</div>
+            <div><strong style={{ color: '#0c0d10' }}>Organization:</strong> Chatral Platform (DigiScale Infotech)</div>
           </div>
         </section>
       </main>
@@ -316,7 +316,7 @@ export default function PrivacyPolicy() {
                 <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 14.5, marginBottom: 16 }}>Company</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 14 }}>
                   <Link to="/#testimonials" style={{ color: '#5b5f6b', textDecoration: 'none' }}>Testimonials</Link>
-                  <a href="mailto:digiscaleinfotech@gmail.com" style={{ color: '#5b5f6b', textDecoration: 'none' }}>Contact</a>
+                  <a href="mailto:chatral.official@gmail.com" style={{ color: '#5b5f6b', textDecoration: 'none' }}>Contact</a>
                 </div>
               </div>
 

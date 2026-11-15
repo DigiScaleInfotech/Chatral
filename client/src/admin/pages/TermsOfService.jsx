@@ -266,7 +266,7 @@ export default function TermsOfService() {
             You may cancel your account at any time through your account settings or by submitting a written request. Upon termination, your right to use the service and embed the widget will immediately cease, and your store data will be deleted in accordance with our data retention schedule.
           </p>
           <div style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75 }}>
-            <div>For legal inquiries regarding these terms, contact us at: <span style={{ color: '#0c0d10', fontWeight: 600 }}>digiscaleinfotech@gmail.com</span></div>
+            <div>For legal inquiries regarding these terms, contact us at: <span style={{ color: '#0c0d10', fontWeight: 600 }}>chatral.official@gmail.com</span></div>
           </div>
         </section>
       </main>
@@ -307,7 +307,7 @@ export default function TermsOfService() {
                 <div style={{ fontWeight: 600, color: '#0c0d10', fontSize: 14.5, marginBottom: 16 }}>Company</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 14 }}>
                   <Link to="/#testimonials" style={{ color: '#5b5f6b', textDecoration: 'none' }}>Testimonials</Link>
-                  <a href="mailto:digiscaleinfotech@gmail.com" style={{ color: '#5b5f6b', textDecoration: 'none' }}>Contact</a>
+                  <a href="mailto:chatral.official@gmail.com" style={{ color: '#5b5f6b', textDecoration: 'none' }}>Contact</a>
                 </div>
               </div>
 

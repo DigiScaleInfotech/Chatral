@@ -19,7 +19,7 @@ router.post('/contact', async (req, res, next) => {
 
     console.log(`[contact] New inquiry from ${data.name} <${data.email}> [${data.topic}] - Company: ${data.company || 'N/A'}`);
 
-    // If SMTP is configured on the server, send email alert to digiscaleinfotech@gmail.com
+    // If SMTP is configured on the server, send email alert to chatral.official@gmail.com
     if (config.smtp?.host && config.smtp?.user) {
       try {
         const transporter = nodemailer.createTransport({
@@ -32,7 +32,7 @@ router.post('/contact', async (req, res, next) => {
 
         await transporter.sendMail({
           from: config.smtp.from || config.smtp.user,
-          to: 'digiscaleinfotech@gmail.com',
+          to: 'chatral.official@gmail.com',
           replyTo: data.email,
           subject: `[Chatral Contact Form] ${data.topic} - ${data.name}`,
           text: `You have received a new inquiry from the Chatral landing page.\n\nName: ${data.name}\nEmail: ${data.email}\nCompany: ${data.company || 'N/A'}\nTopic: ${data.topic}\n\nMessage:\n${data.message}\n\nSent at: ${new Date().toLocaleString()}`,
@@ -49,3 +49,4 @@ router.post('/contact', async (req, res, next) => {
 });
 
 export default router;
+

@@ -207,8 +207,8 @@ export default function LandingPage() {
     }
     setContactSubmitting(true);
     try {
-      // 1. Direct reliable delivery to digiscaleinfotech@gmail.com via FormSubmit AJAX
-      const formPromise = fetch('https://formsubmit.co/ajax/digiscaleinfotech@gmail.com', {
+      // 1. Direct reliable delivery to chatral.official@gmail.com via FormSubmit AJAX
+      const formPromise = fetch('https://formsubmit.co/ajax/chatral.official@gmail.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -2586,9 +2586,9 @@ export default function LandingPage() {
               },
               {
                 title: 'Best customer messaging tool in Gujarat',
-                quote: 'We recommend Chatral to all our e-commerce clients in Surat & Ahmedabad. Clean UI, honest pricing, and immediate support from the DigiScale Infotech team.',
+                quote: 'We recommend Chatral to all our e-commerce clients in Surat & Ahmedabad. Clean UI, honest pricing, and immediate support from the Chatral team.',
                 author: 'Rohan Vaghani',
-                role: 'Growth Lead, DigiScale Commerce (Surat)',
+                role: 'Growth Lead, Vaghani Commerce (Surat)',
                 initials: 'RV',
                 avatarBg: '#eff6ff',
                 avatarColor: '#1d4ed8',
@@ -2641,9 +2641,9 @@ export default function LandingPage() {
               },
               {
                 title: 'Best customer messaging tool in Gujarat',
-                quote: 'We recommend Chatral to all our e-commerce clients in Surat & Ahmedabad. Clean UI, honest pricing, and immediate support from the DigiScale Infotech team.',
+                quote: 'We recommend Chatral to all our e-commerce clients in Surat & Ahmedabad. Clean UI, honest pricing, and immediate support from the Chatral team.',
                 author: 'Rohan Vaghani',
-                role: 'Growth Lead, DigiScale Commerce (Surat)',
+                role: 'Growth Lead, Vaghani Commerce (Surat)',
                 initials: 'RV',
                 avatarBg: '#eff6ff',
                 avatarColor: '#1d4ed8',
@@ -3308,12 +3308,12 @@ export default function LandingPage() {
                       Direct Email
                     </div>
                     <a
-                      href="mailto:digiscaleinfotech@gmail.com"
+                      href="mailto:chatral.official@gmail.com"
                       style={{ fontSize: 15.5, fontWeight: 600, color: '#0f172a', textDecoration: 'none', transition: 'color 0.15s ease' }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#2563eb')}
                       onMouseLeave={(e) => (e.currentTarget.style.color = '#0f172a')}
                     >
-                      digiscaleinfotech@gmail.com
+                      chatral.official@gmail.com
                     </a>
                   </div>
                 </div>
