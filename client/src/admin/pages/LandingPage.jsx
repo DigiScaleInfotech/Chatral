@@ -446,11 +446,11 @@ export default function LandingPage() {
               <a onClick={() => scrollTo('how-it-works')} className="nav-menu-link">
                 <RollText text="How it works" secondaryColor="#2563eb" />
               </a>
-              <a onClick={() => scrollTo('pricing')} className="nav-menu-link">
-                <RollText text="Pricing" secondaryColor="#2563eb" />
-              </a>
               <a onClick={() => scrollTo('testimonials')} className="nav-menu-link">
                 <RollText text="Testimonials" secondaryColor="#2563eb" />
+              </a>
+              <a onClick={() => scrollTo('pricing')} className="nav-menu-link">
+                <RollText text="Pricing" secondaryColor="#2563eb" />
               </a>
               <a onClick={() => scrollTo('faq')} className="nav-menu-link">
                 <RollText text="FAQ" secondaryColor="#2563eb" />
@@ -1718,7 +1718,14 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Features Bento Grid (Exact Relatik 5-Card Bento Layout) */}
-      <section id="features" style={{ padding: isMobile ? '36px 16px' : '52px 24px', background: 'linear-gradient(180deg, #ffffff 0%, #f4f8fe 50%, #ffffff 100%)', borderTop: '1px solid #eef2f6' }}>
+      <section
+        id="features"
+        style={{
+          padding: isMobile ? '48px 16px' : '72px 24px',
+          background: 'radial-gradient(ellipse 90% 60% at 50% 0%, rgba(219, 234, 254, 0.45) 0%, rgba(240, 247, 255, 0.25) 50%, #ffffff 100%)',
+          borderTop: '1px solid #e2e8f0',
+        }}
+      >
         <div style={{ maxWidth: 1080, margin: '0 auto' }}>
           
           {/* Header */}
@@ -1728,15 +1735,15 @@ export default function LandingPage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
-                padding: '4px 12px',
+                padding: '4px 14px',
                 background: '#eaf2ff',
-                border: '1px solid rgba(43, 127, 255, 0.2)',
+                border: '1px solid rgba(37, 99, 235, 0.2)',
                 borderRadius: 999,
                 marginBottom: 16,
               }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
-              <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
+              <span style={{ color: '#2563eb', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                 Features
               </span>
             </div>
@@ -2087,8 +2094,15 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4. How It Works (Exact Relatik Design from Image 1) */}
-      <section id="how-it-works" style={{ padding: isMobile ? '36px 16px' : '52px 24px', background: '#ffffff', borderTop: '1px solid #e6e7eb' }}>
+      {/* 4. How It Works - High-Converting 3-Step Flow with Hero Blue Accent */}
+      <section
+        id="how-it-works"
+        style={{
+          padding: isMobile ? '48px 16px' : '72px 24px',
+          background: 'linear-gradient(180deg, #ffffff 0%, #f0f7ff 50%, #ffffff 100%)',
+          borderTop: '1px solid #e2e8f0',
+        }}
+      >
         <div style={{ maxWidth: 1080, margin: '0 auto', textAlign: 'center' }}>
           
           {/* Header */}
@@ -2097,15 +2111,15 @@ export default function LandingPage() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              padding: '4px 12px',
+              padding: '4px 14px',
               background: '#eaf2ff',
-              border: '1px solid rgba(43, 127, 255, 0.2)',
+              border: '1px solid rgba(37, 99, 235, 0.2)',
               borderRadius: 999,
               marginBottom: 16,
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
-            <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
+            <span style={{ color: '#2563eb', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               How it works
             </span>
           </div>
@@ -2136,12 +2150,12 @@ export default function LandingPage() {
             Three simple steps to a workspace your whole team will love using.
           </Typography.Paragraph>
 
-          <Row gutter={[20, 20]}>
+          <Row gutter={[24, 24]}>
             {[
               {
                 step: '01',
                 icon: (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
                     <line x1="19" y1="8" x2="19" y2="14" />
@@ -2154,7 +2168,7 @@ export default function LandingPage() {
               {
                 step: '02',
                 icon: (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
@@ -2166,7 +2180,7 @@ export default function LandingPage() {
               {
                 step: '03',
                 icon: (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                   </svg>
                 ),
@@ -2178,39 +2192,61 @@ export default function LandingPage() {
                 <div
                   style={{
                     background: '#ffffff',
-                    border: '1px solid #e8e9ee',
-                    borderRadius: 24,
-                    padding: '32px 28px',
+                    border: '1px solid #dbeafe',
+                    borderRadius: 20,
+                    padding: '34px 28px',
                     textAlign: 'left',
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
+                    boxShadow: '0 4px 20px -4px rgba(37, 99, 235, 0.06)',
+                    transition: 'all 0.22s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.borderColor = '#93c5fd';
+                    e.currentTarget.style.boxShadow = '0 12px 30px -6px rgba(37, 99, 235, 0.14)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.borderColor = '#dbeafe';
+                    e.currentTarget.style.boxShadow = '0 4px 20px -4px rgba(37, 99, 235, 0.06)';
                   }}
                 >
-                  {/* Top Row: Icon on left, Step number on right */}
+                  {/* Top Row: Icon on left with blue gradient, Step pill on right */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div
                       style={{
-                        width: 42,
-                        height: 42,
-                        borderRadius: 12,
-                        background: '#f0f5ff',
+                        width: 46,
+                        height: 46,
+                        borderRadius: 14,
+                        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.12)',
                       }}
                     >
                       {s.icon}
                     </div>
-                    <span style={{ color: '#9aa0ac', fontSize: 13, fontWeight: 500, letterSpacing: '0.02em' }}>
-                      {s.step}
+                    <span
+                      style={{
+                        color: '#2563eb',
+                        background: '#eff6ff',
+                        padding: '3px 10px',
+                        borderRadius: 999,
+                        fontSize: 12,
+                        fontWeight: 700,
+                        letterSpacing: '0.04em',
+                      }}
+                    >
+                      STEP {s.step}
                     </span>
                   </div>
 
                   {/* Title & Description below */}
-                  <div style={{ marginTop: 28 }}>
+                  <div style={{ marginTop: 26 }}>
                     <Typography.Title
                       level={3}
                       style={{
@@ -2218,7 +2254,7 @@ export default function LandingPage() {
                         fontSize: 19,
                         fontWeight: 700,
                         letterSpacing: '-0.02em',
-                        margin: '0 0 8px',
+                        margin: '0 0 10px',
                       }}
                     >
                       {s.title}
@@ -2226,8 +2262,8 @@ export default function LandingPage() {
                     <Typography.Paragraph
                       style={{
                         color: '#5b5f6b',
-                        fontSize: 13.5,
-                        lineHeight: 1.55,
+                        fontSize: 14,
+                        lineHeight: 1.6,
                         margin: 0,
                       }}
                     >
@@ -2241,216 +2277,16 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4. Pricing Plans (Relatik Exact Styling - 7-Day Free Trial + Starter Growth) */}
-      <section id="pricing" style={{ padding: isMobile ? '36px 16px' : '52px 24px', background: '#ffffff', borderTop: '1px solid #e6e7eb' }}>
-        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
-          
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '4px 12px',
-              background: '#eaf2ff',
-              border: '1px solid #d3e4ff',
-              borderRadius: 999,
-              marginBottom: 12,
-            }}
-          >
-            <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Pricing
-            </span>
-          </div>
-
-          <Typography.Title
-            level={2}
-            style={{
-              color: '#0c0d10',
-              fontSize: isMobile ? 26 : 38,
-              fontWeight: 800,
-              letterSpacing: '-0.025em',
-              margin: '0 0 12px',
-            }}
-          >
-            Simple, transparent pricing
-          </Typography.Title>
-          <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15, maxWidth: 540, margin: '0 auto 36px' }}>
-            Get started with a full-access 7-day free trial. Upgrade anytime to keep conversations flowing.
-          </Typography.Paragraph>
-
-          {/* Billing Cycle + Currency Switcher */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 44 }}>
-            <Segmented
-              options={[
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Annual (Save 25%)', value: 'annual' },
-              ]}
-              value={billingCycle}
-              onChange={setBillingCycle}
-              style={{
-                background: '#f1f2f5',
-                padding: 3,
-                borderRadius: 10,
-                color: '#0c0d10',
-                fontWeight: 600,
-                fontSize: 13,
-              }}
-            />
-
-            <Segmented
-              options={[
-                { label: '$ USD', value: 'USD' },
-                { label: '₹ INR', value: 'INR' },
-              ]}
-              value={currency}
-              onChange={setCurrency}
-              style={{
-                background: '#f1f2f5',
-                padding: 3,
-                borderRadius: 10,
-                color: '#0c0d10',
-                fontWeight: 600,
-                fontSize: 13,
-              }}
-            />
-          </div>
-
-          <Row gutter={[24, 24]} justify="center" align="stretch">
-            {/* 1. 7-Day Free Trial Plan */}
-            <Col xs={24} md={12} lg={10}>
-              <div
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid #e6e7eb',
-                  borderRadius: 20,
-                  padding: '32px 28px',
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  textAlign: 'left',
-                  boxShadow: '0 1px 3px rgba(12, 13, 16, 0.02)',
-                  transition: 'border-color 0.2s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#cbd5e1')}
-                onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#e6e7eb')}
-              >
-                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>7-Day Free Trial</div>
-                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
-                  {currency === 'INR' ? '₹0' : '$0'}{' '}
-                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ 7 days free</span>
-                </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
-                  Full access to all features free for 7 days. Test on your website with zero risk.
-                </div>
-                <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 18px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Full Access for 7 Days</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> 1 Active Store</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Automated Sales Triggers</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Standard Web Chat Widget</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
-                </div>
-                <button
-                  onClick={() => nav('/login?mode=signup')}
-                  className="btn-brand-secondary"
-                  style={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    height: 44,
-                    borderRadius: 10,
-                    fontSize: 13.5,
-                    fontFamily: 'inherit',
-                  }}
-                >
-                  <RollText text="Start 7-Day Free Trial" secondaryColor="#1d4ed8" />
-                </button>
-                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
-                  No credit card required
-                </div>
-              </div>
-            </Col>
-
-            {/* 2. Starter Growth Plan (Starts at $5 / mo) */}
-            <Col xs={24} md={12} lg={10}>
-              <div
-                style={{
-                  background: '#ffffff',
-                  border: '2px solid #2b7fff',
-                  borderRadius: 20,
-                  padding: '32px 28px',
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  textAlign: 'left',
-                  position: 'relative',
-                  boxShadow: '0 12px 32px -8px rgba(43, 127, 255, 0.18)',
-                }}
-              >
-                <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)' }}>
-                  <span
-                    style={{
-                      background: '#2b7fff',
-                      color: '#ffffff',
-                      fontSize: 10.5,
-                      fontWeight: 700,
-                      padding: '3px 14px',
-                      borderRadius: 999,
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    Most Popular
-                  </span>
-                </div>
-                <div style={{ fontWeight: 700, color: '#2b7fff', fontSize: 16 }}>Starter Growth</div>
-                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
-                  {currency === 'INR'
-                    ? (billingCycle === 'annual' ? '₹399' : '₹499')
-                    : (billingCycle === 'annual' ? '$5' : '$7')}{' '}
-                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
-                </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
-                  Everything you need to turn visitors into buyers with multi-store and no branding.
-                </div>
-                <Divider style={{ borderColor: '#f1f2f5', margin: '0 0 18px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>3 Active Stores</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Unlimited Live Chats</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Automated Sales Triggers</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Shopify & E-commerce Integration</div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
-                  <div><CheckOutlined style={{ color: '#2b7fff', marginRight: 8 }} /> Priority 24/7 Support</div>
-                </div>
-                <button
-                  onClick={() => nav('/login?mode=signup')}
-                  className="btn-brand-primary"
-                  style={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    height: 44,
-                    borderRadius: 10,
-                    fontSize: 13.5,
-                    fontFamily: 'inherit',
-                  }}
-                >
-                  <RollText text="Start 7-Day Free Trial" />
-                </button>
-                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
-                  Includes 7-day free trial • Cancel anytime
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </div>
-      </section>
-
-      {/* 5. Testimonials (Exact Relatik Infinite Marquee Carousel from Image 2) */}
-      <section id="testimonials" style={{ padding: isMobile ? '36px 0' : '52px 0', background: '#ffffff', borderTop: '1px solid #e6e7eb', overflow: 'hidden' }}>
+      {/* 5. Testimonials (Exact Relatik Infinite Marquee Carousel with Hero Blue Ambient Glow) */}
+      <section
+        id="testimonials"
+        style={{
+          padding: isMobile ? '48px 0' : '72px 0',
+          background: 'radial-gradient(ellipse 90% 60% at 50% 0%, rgba(224, 242, 254, 0.45) 0%, rgba(240, 247, 255, 0.3) 55%, #ffffff 100%)',
+          borderTop: '1px solid #e2e8f0',
+          overflow: 'hidden',
+        }}
+      >
         <div style={{ maxWidth: 1080, margin: '0 auto', textAlign: 'center', padding: '0 24px', marginBottom: 44 }}>
           
           {/* Badge */}
@@ -2459,15 +2295,15 @@ export default function LandingPage() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              padding: '4px 12px',
+              padding: '4px 14px',
               background: '#eaf2ff',
-              border: '1px solid rgba(43, 127, 255, 0.2)',
+              border: '1px solid rgba(37, 99, 235, 0.2)',
               borderRadius: 999,
               marginBottom: 16,
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
-            <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
+            <span style={{ color: '#2563eb', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Testimonials
             </span>
           </div>
@@ -2637,29 +2473,31 @@ export default function LandingPage() {
                   width: isMobile ? 300 : 350,
                   flexShrink: 0,
                   background: '#ffffff',
-                  border: '1px solid #e8e9ee',
-                  borderRadius: 24,
+                  border: '1px solid #e0eafc',
+                  borderRadius: 22,
                   padding: '30px 26px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   textAlign: 'left',
-                  boxShadow: '0px 2px 4px 0px rgba(12, 13, 16, 0.02)',
-                  transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                  boxShadow: '0 4px 16px -2px rgba(37, 99, 235, 0.05)',
+                  transition: 'border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#c7d2fe';
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(43, 127, 255, 0.08)';
+                  e.currentTarget.style.borderColor = '#93c5fd';
+                  e.currentTarget.style.boxShadow = '0 12px 30px -4px rgba(37, 99, 235, 0.12)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e8e9ee';
-                  e.currentTarget.style.boxShadow = '0px 2px 4px 0px rgba(12, 13, 16, 0.02)';
+                  e.currentTarget.style.borderColor = '#e0eafc';
+                  e.currentTarget.style.boxShadow = '0 4px 16px -2px rgba(37, 99, 235, 0.05)';
+                  e.currentTarget.style.transform = 'none';
                 }}
               >
                 <div>
                   {/* Top: 5 Blue Stars + Light Blue Quotation Mark */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <div style={{ display: 'flex', gap: 3, color: '#2b7fff', fontSize: 13 }}>
+                    <div style={{ display: 'flex', gap: 3, color: '#2563eb', fontSize: 13 }}>
                       {[...Array(5)].map((_, s) => (
                         <StarFilled key={s} />
                       ))}
@@ -2732,195 +2570,409 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6. FAQ Section (Relatik Exact 2-Column Accordion from Image) */}
-      <section id="faq" style={{ padding: isMobile ? '36px 16px' : '52px 24px', background: 'linear-gradient(180deg, #ffffff 0%, #f4f8fe 50%, #ffffff 100%)', borderTop: '1px solid #eef2f6' }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
-          <Row gutter={isMobile ? [0, 40] : [64, 32]} align="top">
-            {/* Left Column: Badge, Heading, Subtitle & Button */}
-            <Col xs={24} md={10} style={{ textAlign: isMobile ? 'center' : 'left' }}>
-              {/* Badge */}
+      {/* 6. Pricing Plans (Exact Relatik Styling with Hero Blue Ambient Glow) */}
+      <section
+        id="pricing"
+        style={{
+          padding: isMobile ? '48px 16px' : '72px 24px',
+          background: 'radial-gradient(ellipse 90% 50% at 50% -10%, rgba(219, 234, 254, 0.45) 0%, rgba(240, 247, 255, 0.25) 50%, #ffffff 100%)',
+          borderTop: '1px solid #e2e8f0',
+        }}
+      >
+        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
+          
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '4px 14px',
+              background: '#eaf2ff',
+              border: '1px solid rgba(37, 99, 235, 0.2)',
+              borderRadius: 999,
+              marginBottom: 14,
+            }}
+          >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
+            <span style={{ color: '#2563eb', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Pricing
+            </span>
+          </div>
+
+          <Typography.Title
+            level={2}
+            style={{
+              color: '#0c0d10',
+              fontSize: isMobile ? 26 : 38,
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              margin: '0 0 12px',
+            }}
+          >
+            Simple, transparent pricing
+          </Typography.Title>
+          <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15, maxWidth: 540, margin: '0 auto 36px' }}>
+            Get started with a full-access 7-day free trial. Upgrade anytime to keep conversations flowing.
+          </Typography.Paragraph>
+
+          {/* Billing Cycle + Currency Switcher */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 44 }}>
+            <Segmented
+              options={[
+                { label: 'Monthly', value: 'monthly' },
+                { label: 'Annual (Save 25%)', value: 'annual' },
+              ]}
+              value={billingCycle}
+              onChange={setBillingCycle}
+              style={{
+                background: '#eff6ff',
+                padding: 3,
+                borderRadius: 10,
+                color: '#0c0d10',
+                fontWeight: 600,
+                fontSize: 13,
+                border: '1px solid #dbeafe',
+              }}
+            />
+
+            <Segmented
+              options={[
+                { label: '$ USD', value: 'USD' },
+                { label: '₹ INR', value: 'INR' },
+              ]}
+              value={currency}
+              onChange={setCurrency}
+              style={{
+                background: '#eff6ff',
+                padding: 3,
+                borderRadius: 10,
+                color: '#0c0d10',
+                fontWeight: 600,
+                fontSize: 13,
+                border: '1px solid #dbeafe',
+              }}
+            />
+          </div>
+
+          <Row gutter={[24, 24]} justify="center" align="stretch">
+            {/* 1. 7-Day Free Trial Plan */}
+            <Col xs={24} md={12} lg={10}>
               <div
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  padding: '4px 12px',
-                  background: '#eaf2ff',
-                  border: '1px solid rgba(43, 127, 255, 0.2)',
-                  borderRadius: 999,
-                  marginBottom: 16,
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: 20,
+                  padding: '34px 28px',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  textAlign: 'left',
+                  boxShadow: '0 4px 16px -2px rgba(12, 13, 16, 0.03)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#93c5fd';
+                  e.currentTarget.style.boxShadow = '0 12px 30px -4px rgba(37, 99, 235, 0.08)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.boxShadow = '0 4px 16px -2px rgba(12, 13, 16, 0.03)';
                 }}
               >
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b7fff' }} />
-                <span style={{ color: '#2b7fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                  FAQ
-                </span>
+                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>7-Day Free Trial</div>
+                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
+                  {currency === 'INR' ? '₹0' : '$0'}{' '}
+                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ 7 days free</span>
+                </div>
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                  Full access to all features free for 7 days. Test on your website with zero risk.
+                </div>
+                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 18px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Full Access for 7 Days</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> 1 Active Store</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Standard Web Chat Widget</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
+                </div>
+                <button
+                  onClick={() => nav('/login?mode=signup')}
+                  className="btn-brand-secondary"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    height: 44,
+                    borderRadius: 10,
+                    fontSize: 13.5,
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  <RollText text="Start 7-Day Free Trial" secondaryColor="#1d4ed8" />
+                </button>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                  No credit card required
+                </div>
               </div>
-
-              {/* Title */}
-              <Typography.Title
-                level={2}
-                style={{
-                  color: '#0c0d10',
-                  fontSize: isMobile ? 32 : 46,
-                  fontWeight: 800,
-                  letterSpacing: '-0.035em',
-                  lineHeight: 1.12,
-                  margin: '0 0 16px',
-                }}
-              >
-                Questions<br />& answers
-              </Typography.Title>
-
-              {/* Description */}
-              <Typography.Paragraph
-                style={{
-                  color: '#5b5f6b',
-                  fontSize: isMobile ? 14.5 : 15.5,
-                  lineHeight: 1.6,
-                  maxWidth: isMobile ? '100%' : 340,
-                  margin: isMobile ? '0 auto 24px' : '0 0 28px',
-                  fontWeight: 400,
-                }}
-              >
-                Everything you need to know about Chatral. Can’t find what you’re looking for? Our team is happy to help.
-              </Typography.Paragraph>
-
-              {/* Contact us Button with Kinetic Text Roll Animation */}
-              <button
-                onClick={() => scrollTo('contact')}
-                className="btn-brand-secondary"
-                style={{
-                  padding: '12px 24px',
-                  fontSize: 14.5,
-                  fontFamily: 'inherit',
-                }}
-              >
-                <RollText text="Contact us" secondaryColor="#1d4ed8" />
-              </button>
             </Col>
 
-            {/* Right Column: 5 Accordion Cards */}
-            <Col xs={24} md={14}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {[
-                  {
-                    q: 'What is Chatral?',
-                    a: 'Chatral is a calm, fast live chat and customer messaging platform designed to help e-commerce stores and modern teams engage visitors, track active shoppers, and close more deals in real time.',
-                  },
-                  {
-                    q: 'Who is Chatral for?',
-                    a: 'Chatral is built for online store owners, SaaS founders, sales leaders, and customer support teams who want a simple, clutter-free workspace that their entire team will actually enjoy using.',
-                  },
-                  {
-                    q: 'Do I need technical skills to use it?',
-                    a: 'No technical skills required at all. Setup takes less than 2 minutes: simply paste the 1-line lightweight script tag into your Shopify theme, WordPress site, or HTML header.',
-                  },
-                  {
-                    q: 'What features does Chatral offer?',
-                    a: 'Chatral provides real-time visitor tracking, unified operator inboxes, multi-store management, automated sales trigger greetings, canned replies, sound notifications, and fast analytics.',
-                  },
-                  {
-                    q: 'Can I try Chatral for free?',
-                    a: 'Yes! Every plan starts with a full-access 7-day free trial — no credit card required. Cancel anytime with a single click.',
-                  },
-                ].map((item, idx) => {
-                  const isOpen = openFaq === idx;
-                  return (
-                    <div
-                      key={idx}
-                      onClick={() => setOpenFaq(isOpen ? null : idx)}
-                      style={{
-                        background: '#ffffff',
-                        border: '1px solid',
-                        borderColor: isOpen ? '#c7d2fe' : '#e8e9ee',
-                        borderRadius: 16,
-                        padding: '20px 24px',
-                        cursor: 'pointer',
-                        boxShadow: isOpen
-                          ? '0 6px 20px rgba(43, 127, 255, 0.06)'
-                          : '0 1px 3px rgba(12, 13, 16, 0.02)',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isOpen) e.currentTarget.style.borderColor = '#cbd5e1';
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isOpen) e.currentTarget.style.borderColor = '#e8e9ee';
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: 16,
-                        }}
-                      >
-                        <span
-                          style={{
-                            color: '#0c0d10',
-                            fontWeight: 600,
-                            fontSize: 15.5,
-                            letterSpacing: '-0.01em',
-                          }}
-                        >
-                          {item.q}
-                        </span>
-                        <div
-                          style={{
-                            width: 28,
-                            height: 28,
-                            borderRadius: '50%',
-                            background: isOpen ? '#eaf2ff' : '#f1f2f5',
-                            color: isOpen ? '#2b7fff' : '#5b5f6b',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: 16,
-                            fontWeight: 500,
-                            flexShrink: 0,
-                            transform: isOpen ? 'rotate(45deg)' : 'none',
-                            transition: 'all 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
-                          }}
-                        >
-                          +
-                        </div>
-                      </div>
-
-                      {/* Smooth animated accordion drawer using CSS Grid */}
-                      <div
-                        style={{
-                          display: 'grid',
-                          gridTemplateRows: isOpen ? '1fr' : '0fr',
-                          transition: 'grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                        }}
-                      >
-                        <div style={{ overflow: 'hidden' }}>
-                          <div
-                            style={{
-                              marginTop: 14,
-                              paddingTop: 14,
-                              borderTop: '1px solid #f1f2f5',
-                              color: '#5b5f6b',
-                              fontSize: 14,
-                              lineHeight: 1.65,
-                              fontWeight: 400,
-                              opacity: isOpen ? 1 : 0,
-                              transform: isOpen ? 'translateY(0)' : 'translateY(-6px)',
-                              transition: 'opacity 0.28s ease, transform 0.28s ease',
-                            }}
-                          >
-                            {item.a}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+            {/* 2. Starter Growth Plan (Starts at $5 / mo) */}
+            <Col xs={24} md={12} lg={10}>
+              <div
+                style={{
+                  background: '#ffffff',
+                  border: '2px solid #2563eb',
+                  borderRadius: 20,
+                  padding: '34px 28px',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  textAlign: 'left',
+                  position: 'relative',
+                  boxShadow: '0 16px 36px -8px rgba(37, 99, 235, 0.22)',
+                }}
+              >
+                <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)' }}>
+                  <span
+                    style={{
+                      background: '#2563eb',
+                      color: '#ffffff',
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                      padding: '4px 14px',
+                      borderRadius: 999,
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      boxShadow: '0 2px 8px rgba(37, 99, 235, 0.35)',
+                    }}
+                  >
+                    Most Popular
+                  </span>
+                </div>
+                <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
+                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
+                  {currency === 'INR'
+                    ? (billingCycle === 'annual' ? '₹399' : '₹499')
+                    : (billingCycle === 'annual' ? '$5' : '$7')}{' '}
+                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+                </div>
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                  Everything you need to turn visitors into buyers with multi-store and no branding.
+                </div>
+                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 18px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>3 Active Stores</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Shopify & E-commerce Integration</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
+                </div>
+                <button
+                  onClick={() => nav('/login?mode=signup')}
+                  className="btn-brand-primary"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    height: 44,
+                    borderRadius: 10,
+                    fontSize: 13.5,
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  <RollText text="Start 7-Day Free Trial" />
+                </button>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                  Includes 7-day free trial • Cancel anytime
+                </div>
               </div>
             </Col>
           </Row>
+        </div>
+      </section>
+
+      {/* 7. FAQ Section (Centered, Clean & Spacious with Hero Blue Ambient Glow) */}
+      <section
+        id="faq"
+        style={{
+          padding: isMobile ? '48px 16px' : '72px 24px',
+          background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(219, 234, 254, 0.4) 0%, rgba(240, 247, 255, 0.2) 50%, #ffffff 100%)',
+          borderTop: '1px solid #e2e8f0',
+        }}
+      >
+        <div style={{ maxWidth: 820, margin: '0 auto', textAlign: 'center' }}>
+          
+          {/* Badge */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '4px 14px',
+              background: '#eaf2ff',
+              border: '1px solid rgba(37, 99, 235, 0.2)',
+              borderRadius: 999,
+              marginBottom: 16,
+            }}
+          >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
+            <span style={{ color: '#2563eb', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              FAQ
+            </span>
+          </div>
+
+          {/* Title */}
+          <Typography.Title
+            level={2}
+            style={{
+              color: '#0c0d10',
+              fontSize: isMobile ? 28 : 42,
+              fontWeight: 800,
+              letterSpacing: '-0.035em',
+              lineHeight: 1.15,
+              margin: '0 0 14px',
+            }}
+          >
+            Frequently asked questions
+          </Typography.Title>
+
+          {/* Description */}
+          <Typography.Paragraph
+            style={{
+              color: '#5b5f6b',
+              fontSize: isMobile ? 14.5 : 16,
+              lineHeight: 1.6,
+              maxWidth: 540,
+              margin: '0 auto 40px',
+              fontWeight: 400,
+            }}
+          >
+            Everything you need to know about Chatral and getting started.
+          </Typography.Paragraph>
+
+          {/* Accordion Cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, textAlign: 'left' }}>
+            {[
+              {
+                q: 'What is Chatral?',
+                a: 'Chatral is a calm, fast live chat and customer messaging platform designed to help e-commerce stores and modern teams engage visitors, track active shoppers, and close more deals in real time.',
+              },
+              {
+                q: 'Who is Chatral for?',
+                a: 'Chatral is built for online store owners, SaaS founders, sales leaders, and customer support teams who want a simple, clutter-free workspace that their entire team will actually enjoy using.',
+              },
+              {
+                q: 'Do I need technical skills to use it?',
+                a: 'No technical skills required at all. Setup takes less than 2 minutes: simply paste the 1-line lightweight script tag into your Shopify theme, WordPress site, or HTML header.',
+              },
+              {
+                q: 'What features does Chatral offer?',
+                a: 'Chatral provides real-time visitor tracking, unified operator inboxes, multi-store management, automated sales trigger greetings, canned replies, sound notifications, and fast analytics.',
+              },
+              {
+                q: 'Can I try Chatral for free?',
+                a: 'Yes! Every plan starts with a full-access 7-day free trial — no credit card required. Cancel anytime with a single click.',
+              },
+            ].map((item, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  style={{
+                    background: '#ffffff',
+                    border: '1px solid',
+                    borderColor: isOpen ? '#93c5fd' : '#e2e8f0',
+                    borderRadius: 16,
+                    padding: '20px 24px',
+                    cursor: 'pointer',
+                    boxShadow: isOpen
+                      ? '0 8px 24px -4px rgba(37, 99, 235, 0.1)'
+                      : '0 2px 8px -2px rgba(12, 13, 16, 0.03)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isOpen) e.currentTarget.style.borderColor = '#93c5fd';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isOpen) e.currentTarget.style.borderColor = '#e2e8f0';
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 16,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: isOpen ? '#2563eb' : '#0c0d10',
+                        fontWeight: 600,
+                        fontSize: 15.5,
+                        letterSpacing: '-0.01em',
+                        transition: 'color 0.15s ease',
+                      }}
+                    >
+                      {item.q}
+                    </span>
+                    <div
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: '50%',
+                        background: isOpen ? '#eff6ff' : '#f1f5f9',
+                        color: isOpen ? '#2563eb' : '#64748b',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 16,
+                        fontWeight: 500,
+                        flexShrink: 0,
+                        transform: isOpen ? 'rotate(45deg)' : 'none',
+                        transition: 'all 0.24s cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    >
+                      +
+                    </div>
+                  </div>
+
+                  {/* Smooth animated accordion drawer using CSS Grid */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateRows: isOpen ? '1fr' : '0fr',
+                      transition: 'grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  >
+                    <div style={{ overflow: 'hidden' }}>
+                      <div
+                        style={{
+                          marginTop: 14,
+                          paddingTop: 14,
+                          borderTop: '1px solid #f1f5f9',
+                          color: '#5b5f6b',
+                          fontSize: 14,
+                          lineHeight: 1.65,
+                          fontWeight: 400,
+                          opacity: isOpen ? 1 : 0,
+                          transform: isOpen ? 'translateY(0)' : 'translateY(-6px)',
+                          transition: 'opacity 0.25s ease, transform 0.25s ease',
+                        }}
+                      >
+                        {item.a}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -2929,7 +2981,8 @@ export default function LandingPage() {
         id="contact"
         style={{
           padding: isMobile ? '56px 20px 64px' : '88px 32px 96px',
-          background: 'linear-gradient(180deg, #ffffff 0%, #f4f8fe 50%, #ffffff 100%)',
+          background: 'radial-gradient(ellipse 90% 60% at 50% 0%, rgba(219, 234, 254, 0.45) 0%, rgba(240, 247, 255, 0.25) 50%, #ffffff 100%)',
+          borderTop: '1px solid #e2e8f0',
           position: 'relative',
         }}
       >
@@ -2944,7 +2997,7 @@ export default function LandingPage() {
                   gap: 8,
                   padding: '5px 14px',
                   background: '#eaf2ff',
-                  border: '1px solid rgba(43, 127, 255, 0.2)',
+                  border: '1px solid rgba(37, 99, 235, 0.2)',
                   borderRadius: 999,
                   marginBottom: 18,
                 }}
@@ -3023,10 +3076,10 @@ export default function LandingPage() {
               <div
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #dbeafe',
                   borderRadius: 24,
                   padding: isMobile ? '32px 20px' : '44px 38px',
-                  boxShadow: '0 20px 48px -12px rgba(37, 99, 235, 0.1)',
+                  boxShadow: '0 20px 48px -12px rgba(37, 99, 235, 0.14)',
                   position: 'relative',
                 }}
               >
