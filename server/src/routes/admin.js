@@ -23,6 +23,9 @@ const emailList = z.array(z.string().trim().toLowerCase().email()).max(20);
 const storePublic = (s, role) => ({
   id: s.id, name: s.name, publicKey: s.publicKey, chatLinkId: s.chatLinkId, allowedOrigins: s.allowedOrigins, timezone: s.timezone, isActive: s.isActive, widgetEnabled: s.widgetEnabled,
   retentionDays: s.retentionDays, publishedVersion: s.publishedVersion, createdAt: s.createdAt,
+  plan: s.plan || 'TRIAL',
+  planStatus: s.planStatus || 'ACTIVE',
+  planExpiresAt: s.planExpiresAt || null,
   ...(RANK[role] >= RANK.ADMIN ? {
     notifyEmails: s.notifyEmails, emailOnNewChat: s.emailOnNewChat, emailOnOffline: s.emailOnOffline, hasOwnSmtp: !!s.emailConfig,
     previousKeyExpires: s.previousKeyExpires, lastWidgetSeenAt: s.lastWidgetSeenAt, lastWidgetOrigin: s.lastWidgetOrigin,
@@ -104,6 +107,25 @@ r.patch('/stores/:storeId', requireStore('ADMIN'), asyncRoute(async (req, res) =
   }
   await audit(req, 'store.updated', { storeId: store.id, meta: { fields: Object.keys(input) } });
   res.json(storePublic(store, req.storeRole));
+}));
+
+r.patch('/stores/:storeId/plan', requireSuper, asyncRoute(async (req, res) => {
+  const { plan, planStatus, planExpiresAt } = z.object({
+    plan: z.enum(['TRIAL', 'STARTER', 'BUSINESS']),
+    planStatus: z.enum(['ACTIVE', 'EXPIRED', 'CANCELLED']).optional(),
+    planExpiresAt: z.string().datetime().nullable().optional(),
+  }).parse(req.body);
+
+  const store = await prisma.store.update({
+    where: { id: req.params.storeId },
+    data: {
+      plan,
+      ...(planStatus ? { planStatus } : {}),
+      ...(planExpiresAt !== undefined ? { planExpiresAt: planExpiresAt ? new Date(planExpiresAt) : null } : {}),
+    },
+  });
+  await audit(req, 'store.plan_updated', { storeId: store.id, plan, planStatus });
+  res.json(storePublic(store, 'SUPER'));
 }));
 
 r.delete('/stores/:storeId', requireSuper, asyncRoute(async (req, res) => {

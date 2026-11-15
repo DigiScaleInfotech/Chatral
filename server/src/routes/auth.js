@@ -56,6 +56,8 @@ r.post('/register', loginLimiter, asyncRoute(async (req, res) => {
     }
 
     const storeName = `${name}'s Store`;
+    const trialDays = 7;
+    const planExpiresAt = new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000);
     const s = await tx.store.create({
       data: {
         name: storeName,
@@ -63,6 +65,9 @@ r.post('/register', loginLimiter, asyncRoute(async (req, res) => {
         timezone: 'Asia/Kolkata',
         publicKey: newPublicKey(),
         chatLinkId,
+        plan: 'TRIAL',
+        planStatus: 'ACTIVE',
+        planExpiresAt,
       },
     });
 
@@ -185,6 +190,8 @@ r.get('/me', requireAuth, asyncRoute(async (req, res) => {
         if (!(await prisma.store.findFirst({ where: { chatLinkId }, select: { id: true } }))) break;
         chatLinkId = newChatLinkId();
       }
+      const trialDays = 7;
+      const planExpiresAt = new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000);
       store = await prisma.store.create({
         data: {
           name: storeName,
@@ -192,6 +199,9 @@ r.get('/me', requireAuth, asyncRoute(async (req, res) => {
           timezone: 'Asia/Kolkata',
           publicKey: newPublicKey(),
           chatLinkId,
+          plan: 'TRIAL',
+          planStatus: 'ACTIVE',
+          planExpiresAt,
         },
       });
       const cfg = {
@@ -220,7 +230,7 @@ r.get('/me', requireAuth, asyncRoute(async (req, res) => {
 
   const stores = await prisma.store.findMany({
     where: req.user.role === 'SUPER_ADMIN' ? {} : { id: { in: req.user.memberships.map((m) => m.storeId) } },
-    select: { id: true, name: true, isActive: true },
+    select: { id: true, name: true, isActive: true, widgetEnabled: true, plan: true, planStatus: true, planExpiresAt: true },
     orderBy: { name: 'asc' },
   });
   res.json({ ...meView(req.user), stores });

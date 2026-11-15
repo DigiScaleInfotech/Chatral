@@ -8,7 +8,7 @@ import {
   CopyOutlined, CheckCircleFilled, CloseCircleFilled, ExclamationCircleFilled,
   ReloadOutlined, PlusOutlined, SettingOutlined, CodeOutlined, TeamOutlined,
   BellOutlined, ApiOutlined, SafetyCertificateOutlined, AuditOutlined,
-  KeyOutlined, CheckOutlined, ShopOutlined,
+  KeyOutlined, CheckOutlined, ShopOutlined, CreditCardOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { api, showError, ROLE_LABEL, TIMEZONE_OPTIONS } from '../api.js';
@@ -1111,6 +1111,148 @@ function Audit({ store }) {
 }
 
 // --------------------------------------------------------------------------
+// 9. Subscription & Billing Plans
+// --------------------------------------------------------------------------
+
+function SubscriptionPlan({ store, reload, can }) {
+  const { message } = App.useApp();
+  const plan = store.plan || 'TRIAL';
+  const planExpiresAt = store.planExpiresAt;
+  const isExpired = planExpiresAt && new Date(planExpiresAt) < new Date();
+  const daysLeft = planExpiresAt ? Math.max(0, Math.ceil((new Date(planExpiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : null;
+
+  const planName = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
+  const planColor = plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
+
+  return (
+    <div style={{ maxWidth: 960 }}>
+      <Card style={{ marginBottom: 20 }}>
+        <Flex justify="space-between" align="center" wrap gap={16}>
+          <div>
+            <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 4 }}>
+              Current Store Subscription
+            </div>
+            <Flex align="center" gap={10}>
+              <Typography.Title level={4} style={{ margin: 0 }}>
+                {planName}
+              </Typography.Title>
+              <Tag color={isExpired ? 'error' : planColor} bordered={false} style={{ fontWeight: 600 }}>
+                {isExpired ? 'Expired' : 'Active'}
+              </Tag>
+            </Flex>
+            <Typography.Text type="secondary" style={{ fontSize: 13, marginTop: 4, display: 'block' }}>
+              {plan === 'TRIAL'
+                ? isExpired
+                  ? 'Your 7-day free trial has expired. Upgrade to keep chat active.'
+                  : `Free trial active • ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining until expiration.`
+                : isExpired
+                ? 'Your monthly subscription has expired.'
+                : `Next billing / renewal date: ${planExpiresAt ? dayjs(planExpiresAt).format('MMMM D, YYYY') : 'Lifetime'}.`}
+            </Typography.Text>
+          </div>
+        </Flex>
+      </Card>
+
+      <Typography.Title level={5} style={{ margin: '0 0 16px' }}>
+        Available Subscription Plans
+      </Typography.Title>
+
+      <Row gutter={[20, 20]}>
+        {/* 1. Free Trial */}
+        <Col xs={24} md={8}>
+          <Card
+            style={{
+              height: '100%',
+              borderRadius: 8,
+              border: plan === 'TRIAL' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ fontWeight: 700, fontSize: 16 }}>7-Day Free Trial</div>
+            <div style={{ fontSize: 28, fontWeight: 800, margin: '8px 0 2px' }}>₹0</div>
+            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>Test on your site with zero risk</div>
+            <div style={{ fontSize: 13, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, flex: 1 }}>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> 1 Active Store</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Unlimited Live Chats</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Automated Triggers</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Sound & Desktop Alerts</div>
+            </div>
+            {plan === 'TRIAL' ? (
+              <Button disabled block>Current Plan</Button>
+            ) : (
+              <Button disabled block>Standard Trial</Button>
+            )}
+          </Card>
+        </Col>
+
+        {/* 2. Starter Growth */}
+        <Col xs={24} md={8}>
+          <Card
+            style={{
+              height: '100%',
+              borderRadius: 8,
+              border: plan === 'STARTER' ? '2px solid #16a34a' : '1px solid #e2e8f0',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ fontWeight: 700, fontSize: 16, color: '#16a34a' }}>Starter Growth</div>
+            <div style={{ fontSize: 28, fontWeight: 800, margin: '8px 0 2px' }}>₹399 <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>/ mo</span></div>
+            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>Turn store visitors into buyers</div>
+            <div style={{ fontSize: 13, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, flex: 1 }}>
+              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> <b>3 Active Stores</b></div>
+              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> Unlimited Live Chats</div>
+              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> Automated Triggers & Canned</div>
+              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> <b>Remove "Chatral" Branding</b></div>
+              <div><CheckOutlined style={{ color: '#16a34a', marginRight: 6 }} /> 24/7 Priority Support</div>
+            </div>
+            {plan === 'STARTER' ? (
+              <Button disabled block>Current Plan</Button>
+            ) : (
+              <Button type="primary" block style={{ background: '#16a34a', borderColor: '#16a34a' }} onClick={() => message.info('Contact administrator or chatral.official@gmail.com to activate Starter Growth')}>
+                Upgrade to Starter
+              </Button>
+            )}
+          </Card>
+        </Col>
+
+        {/* 3. Business & Scale */}
+        <Col xs={24} md={8}>
+          <Card
+            style={{
+              height: '100%',
+              borderRadius: 8,
+              border: plan === 'BUSINESS' ? '2px solid #7c3aed' : '1px solid #e2e8f0',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ fontWeight: 700, fontSize: 16, color: '#7c3aed' }}>Business & Scale</div>
+            <div style={{ fontSize: 28, fontWeight: 800, margin: '8px 0 2px' }}>₹999 <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>/ mo</span></div>
+            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>For scaling agencies & multiple stores</div>
+            <div style={{ fontSize: 13, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, flex: 1 }}>
+              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> <b>Unlimited Active Stores</b></div>
+              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> Unlimited Team Members</div>
+              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> Everything in Starter Growth</div>
+              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> <b>1-on-1 Setup & Onboarding</b></div>
+              <div><CheckOutlined style={{ color: '#7c3aed', marginRight: 6 }} /> WhatsApp & Dedicated Manager</div>
+            </div>
+            {plan === 'BUSINESS' ? (
+              <Button disabled block>Current Plan</Button>
+            ) : (
+              <Button type="primary" block style={{ background: '#7c3aed', borderColor: '#7c3aed' }} onClick={() => message.info('Contact administrator or chatral.official@gmail.com to activate Business & Scale')}>
+                Upgrade to Business
+              </Button>
+            )}
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  );
+}
+
+// --------------------------------------------------------------------------
 // Main Settings Shell
 // --------------------------------------------------------------------------
 
@@ -1209,7 +1351,20 @@ export default function Settings() {
       ),
       children: <Audit {...props} />,
     },
+    can('ADMIN') && {
+      key: 'billing',
+      label: (
+        <span>
+          <CreditCardOutlined /> Subscription & Plans
+        </span>
+      ),
+      children: <SubscriptionPlan {...props} />,
+    },
   ].filter(Boolean);
+
+  const plan = store.plan || 'TRIAL';
+  const planColor = plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
+  const planLabel = plan === 'BUSINESS' ? 'Business Plan' : plan === 'STARTER' ? 'Starter Plan' : '7-Day Trial';
 
   return (
     <div>
@@ -1221,6 +1376,9 @@ export default function Settings() {
             </Typography.Title>
             <Tag color={store.isActive ? 'green' : 'default'} bordered={false} style={{ fontWeight: 500 }}>
               {store.isActive ? 'Active' : 'Paused'}
+            </Tag>
+            <Tag color={planColor} bordered={false} style={{ fontWeight: 600 }}>
+              {planLabel}
             </Tag>
           </Flex>
           <Typography.Text type="secondary" className="saas-page-subtitle">

@@ -85,6 +85,21 @@ function Stores({ filterStoreId, currentStore }) {
     });
   }
 
+  const changePlan = async (store, plan) => {
+    try {
+      const days = plan === 'TRIAL' ? 7 : 30;
+      const planExpiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+      await api(`/stores/${store.id}/plan`, {
+        method: 'PATCH',
+        body: { plan, planStatus: 'ACTIVE', planExpiresAt },
+      });
+      message.success(`${store.name} plan updated to ${plan}`);
+      load();
+    } catch (e) {
+      showError(e, { message });
+    }
+  };
+
   const displayedRows = filterStoreId ? (rows || []).filter((s) => s.id === filterStoreId) : (rows || []);
 
   return (
@@ -136,11 +151,32 @@ function Stores({ filterStoreId, currentStore }) {
               </Tooltip>
             ),
           },
-          { title: 'Members', dataIndex: 'members', width: 100 },
-          { title: 'Conversations (Last 30 Days)', dataIndex: 'conversations', width: 200 },
+          { title: 'Members', dataIndex: 'members', width: 90 },
+          { title: 'Conversations (Last 30 Days)', dataIndex: 'conversations', width: 180 },
+          {
+            title: 'Active Plan',
+            dataIndex: 'plan',
+            width: 170,
+            render: (p, s) => {
+              const plan = p || 'TRIAL';
+              return (
+                <Select
+                  size="small"
+                  value={plan}
+                  style={{ width: 145 }}
+                  onChange={(newPlan) => changePlan(s, newPlan)}
+                  options={[
+                    { value: 'TRIAL', label: '7-Day Trial' },
+                    { value: 'STARTER', label: 'Starter Growth' },
+                    { value: 'BUSINESS', label: 'Business & Scale' },
+                  ]}
+                />
+              );
+            },
+          },
           {
             title: '',
-            width: 100,
+            width: 90,
             render: (_, s) => (
               <Button size="small" danger onClick={() => remove(s)}>
                 Delete

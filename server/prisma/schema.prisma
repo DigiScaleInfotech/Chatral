@@ -134,6 +134,9 @@ model Store {
   shopifyDomain      String? // <handle>.myshopify.com
   shopifyToken       String? // encrypted Admin API access token (ENC_KEY)
   ticketSeq          Int            @default(0) // last ticket number issued (per-store #1, #2, ...)
+  plan               String         @default("TRIAL") // TRIAL | STARTER | BUSINESS
+  planStatus         String         @default("ACTIVE") // ACTIVE | EXPIRED | CANCELLED
+  planExpiresAt      DateTime?
   createdAt          DateTime       @default(now())
 }
 

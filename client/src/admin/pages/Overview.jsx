@@ -18,6 +18,7 @@ function StoreUsage({ store, members, stats, loading, can, toggleWidget }) {
           widgetEnabled: store.widgetEnabled,
           members: members?.length || 0,
           conversations: stats?.conversations || 0,
+          plan: store.plan || 'TRIAL',
         },
       ]
     : [];
@@ -80,8 +81,23 @@ function StoreUsage({ store, members, stats, loading, can, toggleWidget }) {
           {
             title: 'CONVERSATIONS (LAST 30 DAYS)',
             dataIndex: 'conversations',
-            width: 220,
+            width: 200,
             render: (c) => <span style={{ fontWeight: 600 }}>{c}</span>,
+          },
+          {
+            title: 'CURRENT PLAN',
+            dataIndex: 'plan',
+            width: 160,
+            render: (p) => {
+              const plan = p || 'TRIAL';
+              const color = plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
+              const label = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
+              return (
+                <Tag color={color} bordered={false} style={{ fontWeight: 600 }}>
+                  {label}
+                </Tag>
+              );
+            },
           },
         ]}
       />
@@ -253,9 +269,14 @@ export default function Overview() {
     <div>
       <div className="saas-page-header">
         <div>
-          <Typography.Title level={4} className="saas-page-title">
-            Overview
-          </Typography.Title>
+          <Flex align="center" gap={10}>
+            <Typography.Title level={4} className="saas-page-title">
+              Overview
+            </Typography.Title>
+            <Tag color={store?.plan === 'BUSINESS' ? 'purple' : store?.plan === 'STARTER' ? 'green' : 'blue'} bordered={false} style={{ fontWeight: 600 }}>
+              {store?.plan === 'BUSINESS' ? 'Business Plan' : store?.plan === 'STARTER' ? 'Starter Plan' : '7-Day Free Trial'}
+            </Tag>
+          </Flex>
           <Typography.Text type="secondary" className="saas-page-subtitle">
             Workspace overview for store tenancy, widget status, and user credentials.
           </Typography.Text>
