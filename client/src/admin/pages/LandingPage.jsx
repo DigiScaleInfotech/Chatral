@@ -193,18 +193,11 @@ export default function LandingPage() {
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [contactSubmitting, setContactSubmitting] = useState(false);
 
-  // Helper for "Book a demo" CTA across the entire page
+  // Helper for "Book a demo" CTA across the entire page (exact same smooth scroll as navbar Contact Us)
   const handleBookDemo = (topic = 'Schedule a Live Demo') => {
     setContactForm((prev) => ({ ...prev, topic }));
     setMobileMenuOpen(false);
     scrollTo('contact');
-    setTimeout(() => {
-      const nameInput = document.getElementById('contact-name-input');
-      if (nameInput) {
-        nameInput.focus();
-        nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 400);
   };
 
   const handleContactSubmit = async (e) => {
