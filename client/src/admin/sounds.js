@@ -52,7 +52,20 @@ export function onSoundStatus(fn) { listeners.add(fn); return () => listeners.de
 export async function unlockAudio() {
   const c = context();
   if (!c) return 'unavailable';
-  try { if (c.state !== 'running') await c.resume(); } catch { /* still blocked */ }
+  try {
+    if (c.state !== 'running') await c.resume();
+    // Warm up the hardware pipeline with a tiny imperceptible oscillator
+    if (c.state === 'running' && c.createOscillator) {
+      try {
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        if (gain.gain.setValueAtTime) gain.gain.setValueAtTime(0.0001, c.currentTime);
+        osc.connect(gain).connect(c.destination);
+        osc.start(c.currentTime);
+        osc.stop(c.currentTime + 0.001);
+      } catch { /* ignore for minimal test mocks */ }
+    }
+  } catch { /* still blocked */ }
   notify();
   return getSoundStatus();
 }
@@ -60,15 +73,25 @@ export async function unlockAudio() {
 let gestureHooked = false;
 /** Unlock on the first genuine interaction anywhere in the dashboard. */
 export function installAudioUnlock(target = typeof document !== 'undefined' ? document : null) {
-  if (gestureHooked || !target) return;
+  if (gestureHooked) return;
   gestureHooked = true;
+  const events = ['click', 'pointerdown', 'mousedown', 'keydown', 'touchstart'];
   const handler = () => {
     unlockAudio().then((s) => {
-      if (s !== 'blocked') { target.removeEventListener('pointerdown', handler); target.removeEventListener('keydown', handler); }
-    });
+      if (s === 'ready') {
+        events.forEach((ev) => {
+          if (typeof window !== 'undefined') window.removeEventListener(ev, handler, true);
+          if (target?.removeEventListener) target.removeEventListener(ev, handler, true);
+          if (typeof document !== 'undefined') document.removeEventListener(ev, handler, true);
+        });
+      }
+    }).catch(() => {});
   };
-  target.addEventListener('pointerdown', handler);
-  target.addEventListener('keydown', handler);
+  events.forEach((ev) => {
+    if (typeof window !== 'undefined') window.addEventListener(ev, handler, { capture: true, passive: true });
+    if (target?.addEventListener) target.addEventListener(ev, handler, { capture: true, passive: true });
+    if (typeof document !== 'undefined') document.addEventListener(ev, handler, { capture: true, passive: true });
+  });
 }
 
 export function loadSoundPrefs() {

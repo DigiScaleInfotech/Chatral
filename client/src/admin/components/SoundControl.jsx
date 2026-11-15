@@ -106,10 +106,17 @@ export default function SoundControl() {
   );
 
   return (
-    <Popover trigger="click" placement="bottomRight" content={content}>
+    <Popover
+      trigger="click"
+      placement="bottomRight"
+      content={content}
+      onOpenChange={(visible) => {
+        if (visible) unlockAudio();
+      }}
+    >
       <Tooltip title={label}>
         <Badge dot={!muted && status === 'blocked'} color="orange" offset={[-4, 6]}>
-          <Button type="text" icon={icon} aria-label={label} />
+          <Button type="text" icon={icon} aria-label={label} onClick={() => unlockAudio()} />
         </Badge>
       </Tooltip>
     </Popover>

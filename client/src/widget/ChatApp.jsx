@@ -75,13 +75,78 @@ function flashTitle(text) {
   document.addEventListener(visibilitychange, stop);
 }
 
-function beep() {
+let widgetAudioCtx = null;
+function getWidgetAudioContext() {
+  if (widgetAudioCtx) return widgetAudioCtx;
+  const Ctor = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext);
+  if (Ctor) {
+    try {
+      widgetAudioCtx = new Ctor();
+    } catch {
+      widgetAudioCtx = null;
+    }
+  }
+  return widgetAudioCtx;
+}
+
+export function unlockWidgetAudio() {
+  const c = getWidgetAudioContext();
+  if (c && c.state !== 'running') {
+    c.resume().catch(() => {});
+  }
+}
+
+export function playWidgetSound(type = 'incoming') {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator(); const g = ctx.createGain();
-    o.frequency.value = 880; g.gain.setValueAtTime(0.08, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.25);
-    o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.25);
+    const c = getWidgetAudioContext();
+    if (!c) return;
+    const play = () => {
+      const now = c.currentTime;
+      if (type === 'outgoing') {
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+        osc.connect(gain).connect(c.destination);
+        osc.start(now);
+        osc.stop(now + 0.11);
+      } else {
+        const osc1 = c.createOscillator();
+        const gain1 = c.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(880, now);
+        gain1.gain.setValueAtTime(0.08, now);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+        osc1.connect(gain1).connect(c.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.16);
+
+        const osc2 = c.createOscillator();
+        const gain2 = c.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(1320, now + 0.12);
+        gain2.gain.setValueAtTime(0.0001, now);
+        gain2.gain.setValueAtTime(0.08, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+        osc2.connect(gain2).connect(c.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.29);
+      }
+    };
+
+    if (c.state !== 'running') {
+      c.resume().then(play).catch(() => {});
+    } else {
+      play();
+    }
   } catch { /* autoplay blocked */ }
+}
+
+function beep() {
+  playWidgetSound('incoming');
 }
 
 function matchesDisplayRules(rules, href) {
@@ -306,10 +371,14 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       if (m.senderType !== 'VISITOR') {
         setTyping(false);
         sendWs('delivered', { conversationId: m.conversationId, seq: m.seq });
-        if (openRef.current && document.visibilityState === 'visible') sendWs('read', { conversationId: m.conversationId, seq: m.seq });
-        else {
+        if (m.senderType !== 'SYSTEM' && cfgRef.current?.sound && soundRef.current) {
+          playWidgetSound('incoming');
+        }
+        if (openRef.current && document.visibilityState === 'visible') {
+          sendWs('read', { conversationId: m.conversationId, seq: m.seq });
+        } else {
           setUnread((u) => u + 1);
-          if (m.senderType !== 'SYSTEM') { if (cfgRef.current?.sound && soundRef.current) beep(); notifyIncoming(m); }
+          if (m.senderType !== 'SYSTEM') notifyIncoming(m);
         }
       }
     } else if (type === 'typing') {
@@ -379,6 +448,8 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   function flushFailed() { for (const id of outbox.current.keys()) deliver(id); }
 
   function send(text, extra = {}) {
+    unlockWidgetAudio();
+    if (cfgRef.current?.sound && soundRef.current) playWidgetSound('outgoing');
     const clientMsgId = uid();
     outbox.current.set(clientMsgId, { clientMsgId, body: text, ...extra });
     setMessages((list) => merge(list, [{ clientMsgId, senderType: 'VISITOR', body: text, state: 'pending', createdAt: new Date().toISOString(), attachmentId: extra.attachmentId, meta: extra.meta }]));
@@ -547,6 +618,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   }
 
   function toggle() {
+    unlockWidgetAudio();
     const next = !open;
     setOpen(next);
     store.sset(`lc_open_${storeKey}`, next ? '1' : '0');

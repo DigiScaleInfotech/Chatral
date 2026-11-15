@@ -175,6 +175,49 @@ export const meView = (u) => ({
 });
 
 r.get('/me', requireAuth, asyncRoute(async (req, res) => {
+  // If a normal user has no store membership, auto-provision or join their own isolated store as OWNER
+  if (req.user.role === 'USER' && (!req.user.memberships || req.user.memberships.length === 0)) {
+    const storeName = `${req.user.name}'s Store`;
+    let store = await prisma.store.findFirst({ where: { name: storeName } });
+    if (!store) {
+      let chatLinkId = newChatLinkId();
+      for (let i = 0; i < 10; i++) {
+        if (!(await prisma.store.findFirst({ where: { chatLinkId }, select: { id: true } }))) break;
+        chatLinkId = newChatLinkId();
+      }
+      store = await prisma.store.create({
+        data: {
+          name: storeName,
+          allowedOrigins: ['localhost', '127.0.0.1'],
+          timezone: 'Asia/Kolkata',
+          publicKey: newPublicKey(),
+          chatLinkId,
+        },
+      });
+      const cfg = {
+        ...DEFAULT_WIDGET_CONFIG,
+        colors: { ...DEFAULT_WIDGET_CONFIG.colors, primary: '#2563eb', visitorBubble: '#2563eb' },
+        businessHours: { ...DEFAULT_WIDGET_CONFIG.businessHours, timezone: 'Asia/Kolkata' },
+      };
+      await prisma.widgetConfig.create({ data: { storeId: store.id, version: 0, status: 'DRAFT', config: cfg } });
+      await prisma.widgetConfig.create({ data: { storeId: store.id, version: 1, status: 'PUBLISHED', config: cfg, note: 'Initial version', createdById: req.user.id } });
+      await prisma.store.update({ where: { id: store.id }, data: { publishedVersion: 1 } });
+      await prisma.savedReply.createMany({
+        data: [
+          { storeId: store.id, shortcut: 'hello', body: 'Hi there! 👋 How can we help you today?', access: 'PUBLIC', createdById: req.user.id },
+          { storeId: store.id, shortcut: 'pricing', body: 'We offer flexible plans starting with a 7-day free trial. Let us know if you have questions or need custom volume!', access: 'PUBLIC', createdById: req.user.id },
+          { storeId: store.id, shortcut: 'hours', body: 'Our support team is online Monday to Saturday, 9:00 AM to 7:00 PM IST.', access: 'PUBLIC', createdById: req.user.id },
+        ],
+      }).catch(() => {});
+    }
+    await prisma.storeMember.upsert({
+      where: { userId_storeId: { userId: req.user.id, storeId: store.id } },
+      create: { userId: req.user.id, storeId: store.id, role: 'OWNER' },
+      update: {},
+    });
+    req.user = await prisma.user.findUnique({ where: { id: req.user.id }, include: { memberships: true } });
+  }
+
   const stores = await prisma.store.findMany({
     where: req.user.role === 'SUPER_ADMIN' ? {} : { id: { in: req.user.memberships.map((m) => m.storeId) } },
     select: { id: true, name: true, isActive: true },
