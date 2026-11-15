@@ -2756,7 +2756,7 @@ export default function LandingPage() {
       <section
         id="pricing"
         style={{
-          padding: isMobile ? '48px 16px' : '72px 24px',
+          padding: isMobile ? '36px 16px 64px' : '44px 24px 100px',
           background: 'radial-gradient(ellipse 90% 50% at 50% -10%, rgba(219, 234, 254, 0.45) 0%, rgba(240, 247, 255, 0.25) 50%, #ffffff 100%)',
           borderTop: '1px solid #e2e8f0',
         }}
@@ -2772,7 +2772,7 @@ export default function LandingPage() {
               background: '#eaf2ff',
               border: '1px solid rgba(37, 99, 235, 0.2)',
               borderRadius: 999,
-              marginBottom: 14,
+              marginBottom: 10,
             }}
           >
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
@@ -2785,20 +2785,20 @@ export default function LandingPage() {
             level={2}
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 26 : 38,
+              fontSize: isMobile ? 24 : 34,
               fontWeight: 800,
               letterSpacing: '-0.025em',
-              margin: '0 0 12px',
+              margin: '0 0 8px',
             }}
           >
             Simple, transparent pricing
           </Typography.Title>
-          <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 15, maxWidth: 540, margin: '0 auto 36px' }}>
+          <Typography.Paragraph style={{ color: '#5b5f6b', fontSize: 14.5, maxWidth: 540, margin: '0 auto 22px' }}>
             Get started with a full-access 7-day free trial. Upgrade anytime to keep conversations flowing.
           </Typography.Paragraph>
 
           {/* Billing Cycle + Currency Switcher */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 44 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
             <Segmented
               options={[
                 { label: 'Monthly', value: 'monthly' },
@@ -2844,7 +2844,7 @@ export default function LandingPage() {
                   background: '#ffffff',
                   border: '1px solid #e2e8f0',
                   borderRadius: 20,
-                  padding: '32px 26px',
+                  padding: '26px 22px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -2862,15 +2862,15 @@ export default function LandingPage() {
                 }}
               >
                 <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>7-Day Free Trial</div>
-                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
+                <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
                   {currency === 'INR' ? '₹0' : '$0'}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ 7 days free</span>
                 </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
                   Full access to all features free for 7 days. Test on your website with zero risk.
                 </div>
-                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 18px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
+                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Full Access for 7 Days</b></div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> 1 Active Store</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
@@ -2886,7 +2886,7 @@ export default function LandingPage() {
                   style={{
                     width: '100%',
                     justifyContent: 'center',
-                    height: 44,
+                    height: 42,
                     borderRadius: 10,
                     fontSize: 13.5,
                     fontFamily: 'inherit',
@@ -2894,7 +2894,7 @@ export default function LandingPage() {
                 >
                   <RollText text="Start 7-Day Free Trial" secondaryColor="#1d4ed8" />
                 </button>
-                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
                   No credit card required
                 </div>
               </div>
@@ -2907,7 +2907,7 @@ export default function LandingPage() {
                   background: '#ffffff',
                   border: '2px solid #2563eb',
                   borderRadius: 20,
-                  padding: '32px 26px',
+                  padding: '26px 22px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -2934,17 +2934,17 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
-                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
+                <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
                   {currency === 'INR'
                     ? (billingCycle === 'annual' ? '₹399' : '₹499')
                     : (billingCycle === 'annual' ? '$5' : '$7')}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
                   Everything you need to turn visitors into buyers with multi-store and no branding.
                 </div>
-                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 18px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
+                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>3 Active Stores</b></div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
@@ -2960,7 +2960,7 @@ export default function LandingPage() {
                   style={{
                     width: '100%',
                     justifyContent: 'center',
-                    height: 44,
+                    height: 42,
                     borderRadius: 10,
                     fontSize: 13.5,
                     fontFamily: 'inherit',
@@ -2968,7 +2968,7 @@ export default function LandingPage() {
                 >
                   <RollText text="Start 7-Day Free Trial" />
                 </button>
-                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
                   Includes 7-day free trial • Cancel anytime
                 </div>
               </div>
@@ -2981,7 +2981,7 @@ export default function LandingPage() {
                   background: '#ffffff',
                   border: '1px solid #e2e8f0',
                   borderRadius: 20,
-                  padding: '32px 26px',
+                  padding: '26px 22px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -2999,17 +2999,17 @@ export default function LandingPage() {
                 }}
               >
                 <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
-                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
+                <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
                   {currency === 'INR'
                     ? (billingCycle === 'annual' ? '₹999' : '₹1,299')
                     : (billingCycle === 'annual' ? '$15' : '$19')}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
-                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
                   For high-volume stores, scaling agencies & teams needing dedicated onboarding support.
                 </div>
-                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 18px' }} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
+                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Unlimited Active Stores</b></div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Team Members & Roles</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Everything in Starter Growth</div>
@@ -3025,7 +3025,7 @@ export default function LandingPage() {
                   style={{
                     width: '100%',
                     justifyContent: 'center',
-                    height: 44,
+                    height: 42,
                     borderRadius: 10,
                     fontSize: 13.5,
                     fontFamily: 'inherit',
@@ -3033,7 +3033,7 @@ export default function LandingPage() {
                 >
                   <RollText text="Book a Demo" secondaryColor="#1d4ed8" />
                 </button>
-                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
                   Includes 7-day free trial • Cancel anytime
                 </div>
               </div>
