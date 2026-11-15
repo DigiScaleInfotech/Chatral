@@ -10,7 +10,12 @@ if (!email || password.length < 10) {
 }
 const existing = await prisma.user.findUnique({ where: { email } });
 if (existing) {
-  console.log(`User ${email} already exists - nothing changed.`);
+  if (existing.role !== 'SUPER_ADMIN') {
+    await prisma.user.update({ where: { email }, data: { role: 'SUPER_ADMIN', isActive: true } });
+    console.log(`Updated existing user ${email} to SUPER_ADMIN.`);
+  } else {
+    console.log(`User ${email} already exists as SUPER_ADMIN - nothing changed.`);
+  }
 } else {
   await prisma.user.create({ data: { email, name: 'Platform Admin', role: 'SUPER_ADMIN', passwordHash: await bcrypt.hash(password, 12) } });
   console.log(`Created super admin ${email}`);
