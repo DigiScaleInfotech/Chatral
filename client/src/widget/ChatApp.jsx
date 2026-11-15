@@ -96,44 +96,29 @@ export function unlockWidgetAudio() {
   }
 }
 
-export function playWidgetSound(type = 'incoming') {
+export function playWidgetSound() {
   try {
     const c = getWidgetAudioContext();
     if (!c) return;
     const play = () => {
-      const now = c.currentTime;
-      if (type === 'outgoing') {
+      // Standard gentle chime notes (C6 → E6 → G6)
+      const notes = [
+        { f: 1046.5, t: 0, d: 0.15 },
+        { f: 1318.5, t: 0.13, d: 0.15 },
+        { f: 1760, t: 0.26, d: 0.25 },
+      ];
+      const start = c.currentTime + 0.01;
+      for (const n of notes) {
         const osc = c.createOscillator();
         const gain = c.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+        osc.frequency.value = n.f;
+        gain.gain.setValueAtTime(0.0001, start + n.t);
+        gain.gain.exponentialRampToValueAtTime(0.4, start + n.t + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + n.t + n.d);
         osc.connect(gain).connect(c.destination);
-        osc.start(now);
-        osc.stop(now + 0.11);
-      } else {
-        const osc1 = c.createOscillator();
-        const gain1 = c.createGain();
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(880, now);
-        gain1.gain.setValueAtTime(0.08, now);
-        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
-        osc1.connect(gain1).connect(c.destination);
-        osc1.start(now);
-        osc1.stop(now + 0.16);
-
-        const osc2 = c.createOscillator();
-        const gain2 = c.createGain();
-        osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(1320, now + 0.12);
-        gain2.gain.setValueAtTime(0.0001, now);
-        gain2.gain.setValueAtTime(0.08, now + 0.12);
-        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
-        osc2.connect(gain2).connect(c.destination);
-        osc2.start(now + 0.12);
-        osc2.stop(now + 0.29);
+        osc.start(start + n.t);
+        osc.stop(start + n.t + n.d + 0.02);
       }
     };
 
@@ -146,7 +131,7 @@ export function playWidgetSound(type = 'incoming') {
 }
 
 function beep() {
-  playWidgetSound('incoming');
+  playWidgetSound();
 }
 
 function matchesDisplayRules(rules, href) {
@@ -372,7 +357,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         setTyping(false);
         sendWs('delivered', { conversationId: m.conversationId, seq: m.seq });
         if (m.senderType !== 'SYSTEM' && cfgRef.current?.sound && soundRef.current) {
-          playWidgetSound('incoming');
+          playWidgetSound();
         }
         if (openRef.current && document.visibilityState === 'visible') {
           sendWs('read', { conversationId: m.conversationId, seq: m.seq });
@@ -449,7 +434,6 @@ export default function ChatApp({ api, storeKey, popout = false }) {
 
   function send(text, extra = {}) {
     unlockWidgetAudio();
-    if (cfgRef.current?.sound && soundRef.current) playWidgetSound('outgoing');
     const clientMsgId = uid();
     outbox.current.set(clientMsgId, { clientMsgId, body: text, ...extra });
     setMessages((list) => merge(list, [{ clientMsgId, senderType: 'VISITOR', body: text, state: 'pending', createdAt: new Date().toISOString(), attachmentId: extra.attachmentId, meta: extra.meta }]));
