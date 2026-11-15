@@ -20,6 +20,18 @@ if (config.runWorkers) {
   sweepTimer = setInterval(tick, 5 * 60_000);
 }
 
+// Auto self-heal schema migration for Supabase / Production PostgreSQL
+try {
+  await prisma.$executeRawUnsafe(`
+    ALTER TABLE "Store" ADD COLUMN IF NOT EXISTS "plan" TEXT NOT NULL DEFAULT 'TRIAL';
+    ALTER TABLE "Store" ADD COLUMN IF NOT EXISTS "planStatus" TEXT NOT NULL DEFAULT 'ACTIVE';
+    ALTER TABLE "Store" ADD COLUMN IF NOT EXISTS "planExpiresAt" TIMESTAMP(3);
+  `);
+  console.log('[db] Store table schema verified: plan, planStatus, planExpiresAt columns ensured.');
+} catch (e) {
+  console.warn('[db] Auto-migration warning (non-fatal):', e?.message || e);
+}
+
 // Agents who were "online" when the process died have no socket now; reset so availability is truthful.
 await prisma.storeMember.updateMany({ where: { presence: 'ONLINE' }, data: { presence: 'AWAY' } }).catch(() => {});
 

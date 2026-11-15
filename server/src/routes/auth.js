@@ -58,18 +58,31 @@ r.post('/register', loginLimiter, asyncRoute(async (req, res) => {
     const storeName = `${name}'s Store`;
     const trialDays = 7;
     const planExpiresAt = new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000);
-    const s = await tx.store.create({
-      data: {
-        name: storeName,
-        allowedOrigins: ['localhost', '127.0.0.1'],
-        timezone: 'Asia/Kolkata',
-        publicKey: newPublicKey(),
-        chatLinkId,
-        plan: 'TRIAL',
-        planStatus: 'ACTIVE',
-        planExpiresAt,
-      },
-    });
+    let s;
+    try {
+      s = await tx.store.create({
+        data: {
+          name: storeName,
+          allowedOrigins: ['localhost', '127.0.0.1'],
+          timezone: 'Asia/Kolkata',
+          publicKey: newPublicKey(),
+          chatLinkId,
+          plan: 'TRIAL',
+          planStatus: 'ACTIVE',
+          planExpiresAt,
+        },
+      });
+    } catch {
+      s = await tx.store.create({
+        data: {
+          name: storeName,
+          allowedOrigins: ['localhost', '127.0.0.1'],
+          timezone: 'Asia/Kolkata',
+          publicKey: newPublicKey(),
+          chatLinkId,
+        },
+      });
+    }
 
     const cfg = {
       ...DEFAULT_WIDGET_CONFIG,
@@ -192,18 +205,30 @@ r.get('/me', requireAuth, asyncRoute(async (req, res) => {
       }
       const trialDays = 7;
       const planExpiresAt = new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000);
-      store = await prisma.store.create({
-        data: {
-          name: storeName,
-          allowedOrigins: ['localhost', '127.0.0.1'],
-          timezone: 'Asia/Kolkata',
-          publicKey: newPublicKey(),
-          chatLinkId,
-          plan: 'TRIAL',
-          planStatus: 'ACTIVE',
-          planExpiresAt,
-        },
-      });
+      try {
+        store = await prisma.store.create({
+          data: {
+            name: storeName,
+            allowedOrigins: ['localhost', '127.0.0.1'],
+            timezone: 'Asia/Kolkata',
+            publicKey: newPublicKey(),
+            chatLinkId,
+            plan: 'TRIAL',
+            planStatus: 'ACTIVE',
+            planExpiresAt,
+          },
+        });
+      } catch {
+        store = await prisma.store.create({
+          data: {
+            name: storeName,
+            allowedOrigins: ['localhost', '127.0.0.1'],
+            timezone: 'Asia/Kolkata',
+            publicKey: newPublicKey(),
+            chatLinkId,
+          },
+        });
+      }
       const cfg = {
         ...DEFAULT_WIDGET_CONFIG,
         colors: { ...DEFAULT_WIDGET_CONFIG.colors, primary: '#2563eb', visitorBubble: '#2563eb' },
@@ -228,11 +253,26 @@ r.get('/me', requireAuth, asyncRoute(async (req, res) => {
     req.user = await prisma.user.findUnique({ where: { id: req.user.id }, include: { memberships: true } });
   }
 
-  const stores = await prisma.store.findMany({
-    where: req.user.role === 'SUPER_ADMIN' ? {} : { id: { in: req.user.memberships.map((m) => m.storeId) } },
-    select: { id: true, name: true, isActive: true, widgetEnabled: true, plan: true, planStatus: true, planExpiresAt: true },
-    orderBy: { name: 'asc' },
-  });
+  let stores = [];
+  try {
+    stores = await prisma.store.findMany({
+      where: req.user.role === 'SUPER_ADMIN' ? {} : { id: { in: req.user.memberships.map((m) => m.storeId) } },
+      select: { id: true, name: true, isActive: true, widgetEnabled: true, plan: true, planStatus: true, planExpiresAt: true },
+      orderBy: { name: 'asc' },
+    });
+  } catch {
+    const rawStores = await prisma.store.findMany({
+      where: req.user.role === 'SUPER_ADMIN' ? {} : { id: { in: req.user.memberships.map((m) => m.storeId) } },
+      select: { id: true, name: true, isActive: true, widgetEnabled: true },
+      orderBy: { name: 'asc' },
+    });
+    stores = rawStores.map((st) => ({
+      ...st,
+      plan: 'TRIAL',
+      planStatus: 'ACTIVE',
+      planExpiresAt: null,
+    }));
+  }
   res.json({ ...meView(req.user), stores });
 }));
 

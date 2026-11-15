@@ -148,7 +148,11 @@ function Shell() {
 
   useEffect(() => {
     if (!localStorage.getItem('token')) return nav('/login');
-    loadMe().catch(() => nav('/login'));
+    loadMe().catch((err) => {
+      console.warn('Session load error, clearing token:', err);
+      localStorage.removeItem('token');
+      nav('/login');
+    });
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission().catch(() => {});
     }

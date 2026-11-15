@@ -36,7 +36,21 @@ const storePublic = (s, role) => ({
 
 r.get('/stores', asyncRoute(async (req, res) => {
   const where = isSuper(req.user) ? {} : { id: { in: req.user.memberships.map((m) => m.storeId) } };
-  const stores = await prisma.store.findMany({ where, orderBy: { name: 'asc' } });
+  let stores;
+  try {
+    stores = await prisma.store.findMany({ where, orderBy: { name: 'asc' } });
+  } catch {
+    stores = await prisma.store.findMany({
+      where,
+      select: {
+        id: true, name: true, publicKey: true, chatLinkId: true, allowedOrigins: true, timezone: true,
+        isActive: true, widgetEnabled: true, retentionDays: true, publishedVersion: true, createdAt: true,
+        notifyEmails: true, emailOnNewChat: true, emailOnOffline: true, emailConfig: true,
+        previousKeyExpires: true, lastWidgetSeenAt: true, lastWidgetOrigin: true,
+      },
+      orderBy: { name: 'asc' },
+    });
+  }
   res.json(stores.map((s) => ({ ...storePublic(s, storeRole(req.user, s.id)), myRole: storeRole(req.user, s.id) })));
 }));
 
