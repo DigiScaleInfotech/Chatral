@@ -3035,56 +3035,34 @@ export default function LandingPage() {
                 Send us a note and our team will get back to you within a few hours.
               </Typography.Paragraph>
 
-              {/* Modern Enterprise SaaS Contact Channels */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 14 }}>
-                {/* 1. Direct Email Tile */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 16,
-                    padding: '16px 18px',
-                    background: '#ffffff',
-                    border: '1px solid #e0eafc',
-                    borderRadius: 16,
-                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#93c5fd';
-                    e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(37, 99, 235, 0.1)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e0eafc';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.04)';
-                    e.currentTarget.style.transform = 'none';
-                  }}
-                >
+              {/* Direct Info without boxes */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 18 }}>
+                {/* 1. Direct Email */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <div
                     style={{
-                      width: 44,
-                      height: 44,
+                      width: 42,
+                      height: 42,
                       borderRadius: 12,
-                      background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                      background: '#eff6ff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                     }}
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect width="20" height="16" x="2" y="4" rx="2" />
                       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                     </svg>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>
                       Direct Email
                     </div>
                     <a
                       href="mailto:digiscaleinfotech@gmail.com"
-                      style={{ fontSize: 15, fontWeight: 600, color: '#0f172a', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                      style={{ fontSize: 15.5, fontWeight: 600, color: '#0f172a', textDecoration: 'none', transition: 'color 0.15s ease' }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#2563eb')}
                       onMouseLeave={(e) => (e.currentTarget.style.color = '#0f172a')}
                     >
@@ -3093,125 +3071,62 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                {/* 2. Response Time Tile */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 16,
-                    padding: '16px 18px',
-                    background: '#ffffff',
-                    border: '1px solid #e0eafc',
-                    borderRadius: 16,
-                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#93c5fd';
-                    e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(37, 99, 235, 0.1)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e0eafc';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.04)';
-                    e.currentTarget.style.transform = 'none';
-                  }}
-                >
+                {/* 2. Response Time */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <div
                     style={{
-                      width: 44,
-                      height: 44,
+                      width: 42,
+                      height: 42,
                       borderRadius: 12,
-                      background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                      background: '#eff6ff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                     }}
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="10" />
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>
                       Response Time
                     </div>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: '#0f172a' }}>
+                    <div style={{ fontSize: 15.5, fontWeight: 600, color: '#0f172a' }}>
                       Under 2 hours <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>(Mon – Sat)</span>
                     </div>
                   </div>
                 </div>
 
-                {/* 3. Location Tile */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 16,
-                    padding: '16px 18px',
-                    background: '#ffffff',
-                    border: '1px solid #e0eafc',
-                    borderRadius: 16,
-                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#93c5fd';
-                    e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(37, 99, 235, 0.1)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e0eafc';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.04)';
-                    e.currentTarget.style.transform = 'none';
-                  }}
-                >
+                {/* 3. Location */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <div
                     style={{
-                      width: 44,
-                      height: 44,
+                      width: 42,
+                      height: 42,
                       borderRadius: 12,
-                      background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                      background: '#eff6ff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                     }}
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>
                       Headquarters
                     </div>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: '#0f172a' }}>
+                    <div style={{ fontSize: 15.5, fontWeight: 600, color: '#0f172a' }}>
                       Surat, Gujarat, India
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Dedicated Gujarat Support Reassurance Banner */}
-              <div
-                style={{
-                  marginTop: 22,
-                  padding: '13px 18px',
-                  borderRadius: 14,
-                  background: 'rgba(37, 99, 235, 0.04)',
-                  border: '1px solid rgba(37, 99, 235, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                }}
-              >
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
-                <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.5 }}>
-                  <strong style={{ color: '#0f172a' }}>Local Gujarat Support:</strong> Dedicated onboarding assistance for Surat & Ahmedabad teams.
                 </div>
               </div>
             </Col>
