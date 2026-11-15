@@ -196,7 +196,7 @@ function Shell() {
   const store = me.stores.find((s) => s.id === storeId);
 
   const items = [
-    storeId && {
+    !isSuper && storeId && {
       key: '/overview',
       icon: <DashboardOutlined style={{ fontSize: 16 }} />,
       label: 'Overview',
@@ -474,8 +474,17 @@ function Shell() {
               /* Keyed by section so each page change fades in instead of snapping. */
               <div key={selected} className="page-transition">
               <Routes>
-                <Route path="/" element={<Navigate to={storeId ? '/overview' : '/platform'} replace />} />
-                {storeId && <Route path="/overview" element={<Overview key={storeId} />} />}
+                <Route
+                  path="/"
+                  element={
+                    <Navigate
+                      to={isSuper ? (storeId ? '/inbox' : '/platform') : (storeId ? '/overview' : '/inbox')}
+                      replace
+                    />
+                  }
+                />
+                {!isSuper && storeId && <Route path="/overview" element={<Overview key={storeId} />} />}
+                {isSuper && <Route path="/overview" element={<Navigate to="/platform" replace />} />}
                 {storeId && <Route path="/inbox" element={<Inbox key={storeId} />} />}
                 {storeId && <Route path="/tickets" element={<Tickets key={storeId} />} />}
                 {storeId && <Route path="/visitors" element={<Visitors key={storeId} />} />}

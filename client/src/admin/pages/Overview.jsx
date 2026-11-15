@@ -8,7 +8,7 @@ import { ShopOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import { api, showError, ROLE_LABEL } from '../api.js';
 import { useApp } from '../main.jsx';
 
-function StoreUsage({ store, members, stats, loading, toggleWidget }) {
+function StoreUsage({ store, members, stats, loading, can, toggleWidget }) {
   const dataSource = store
     ? [
         {
@@ -59,11 +59,12 @@ function StoreUsage({ store, members, stats, loading, toggleWidget }) {
             dataIndex: 'widgetEnabled',
             width: 140,
             render: (on, s) => (
-              <Tooltip title={on ? 'Shown on the website. Turn off to hide it everywhere (settings are kept).' : 'Hidden on every website'}>
+              <Tooltip title={!can('ADMIN') ? 'Only Admin or Owner can toggle widget visibility' : on ? 'Shown on the website. Turn off to hide it everywhere (settings are kept).' : 'Hidden on every website'}>
                 <Switch
                   checked={on}
                   checkedChildren="On"
                   unCheckedChildren="Off"
+                  disabled={!can('ADMIN')}
                   aria-label={`Widget on site for ${s.name}`}
                   onChange={(v) => toggleWidget(v)}
                 />
@@ -277,6 +278,7 @@ export default function Overview() {
                   members={members}
                   stats={stats}
                   loading={loading}
+                  can={can}
                   toggleWidget={toggleWidget}
                 />
               ),
