@@ -238,8 +238,8 @@ r.delete('/stores/:storeId/members/:userId', requireStore('ADMIN'), asyncRoute(a
   res.json({ ok: true });
 }));
 
-// Master widget switch (main admin): hides the widget on every website at once; all store settings are kept.
-r.put('/platform/stores/:storeId/widget-enabled', requireSuper, asyncRoute(async (req, res) => {
+// Master widget switch: hides/shows the widget on every website at once; all store settings are kept.
+r.put(['/platform/stores/:storeId/widget-enabled', '/stores/:storeId/widget-enabled'], requireStore('ADMIN'), asyncRoute(async (req, res) => {
   const { enabled } = z.object({ enabled: z.boolean() }).parse(req.body);
   const s = await prisma.store.update({ where: { id: req.params.storeId }, data: { widgetEnabled: enabled } }).catch(() => null);
   if (!s) throw httpError(404, 'Store not found');

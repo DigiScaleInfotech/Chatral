@@ -8,7 +8,7 @@ import {
 import {
   MessageOutlined, MailOutlined, ThunderboltOutlined, BgColorsOutlined, BarChartOutlined, SettingOutlined, SnippetsOutlined, EyeOutlined,
   ShopOutlined, UserOutlined, LogoutOutlined, LockOutlined, MenuFoldOutlined, MenuUnfoldOutlined,
-  CheckCircleFilled, SyncOutlined, LineChartOutlined,
+  CheckCircleFilled, SyncOutlined, LineChartOutlined, DashboardOutlined,
 } from '@ant-design/icons';
 import { api, showError, ROLE_LABEL, RANK } from './api.js';
 import { alertFor, soundFor } from './notifications.js';
@@ -26,6 +26,7 @@ installAudioUnlock();
 import { connectSocket, disconnectSocket, onSocket, subscribeStore } from './socket.js';
 import { theme, BRAND } from './theme.js';
 import './global.css';
+import Overview from './pages/Overview.jsx';
 import Login from './pages/Login.jsx';
 import Inbox from './pages/Inbox.jsx';
 import Tickets from './pages/Tickets.jsx';
@@ -196,6 +197,11 @@ function Shell() {
 
   const items = [
     storeId && {
+      key: '/overview',
+      icon: <DashboardOutlined style={{ fontSize: 16 }} />,
+      label: 'Overview',
+    },
+    storeId && {
       key: '/inbox',
       icon: <MessageOutlined style={{ fontSize: 16 }} />,
       label: (
@@ -356,22 +362,8 @@ function Shell() {
               style={{ color: '#64748b', padding: '4px 8px' }}
             />
 
-            {/* Store Switcher (only relevant on store-scoped pages, not on global /platform) */}
-            {loc.pathname === '/platform' ? (
-              <Tag
-                bordered={false}
-                style={{
-                  fontWeight: 600,
-                  fontSize: 12,
-                  padding: '3px 10px',
-                  borderRadius: 4,
-                  background: '#eff6ff',
-                  color: '#1d4ed8',
-                }}
-              >
-                Global Platform Console (All Tenancies)
-              </Tag>
-            ) : me.stores.length > 0 ? (
+            {/* Store Switcher */}
+            {me.stores.length > 0 ? (
               <Select
                 value={storeId}
                 onChange={(v) => {
@@ -391,7 +383,7 @@ function Shell() {
               <Typography.Text type="secondary" style={{ fontSize: 13 }}>No stores assigned</Typography.Text>
             )}
 
-            {loc.pathname !== '/platform' && role && (
+            {role && (
               <Tag
                 bordered={false}
                 className="hide-xs"
@@ -482,7 +474,8 @@ function Shell() {
               /* Keyed by section so each page change fades in instead of snapping. */
               <div key={selected} className="page-transition">
               <Routes>
-                <Route path="/" element={<Navigate to={storeId ? '/inbox' : '/platform'} replace />} />
+                <Route path="/" element={<Navigate to={storeId ? '/overview' : '/platform'} replace />} />
+                {storeId && <Route path="/overview" element={<Overview key={storeId} />} />}
                 {storeId && <Route path="/inbox" element={<Inbox key={storeId} />} />}
                 {storeId && <Route path="/tickets" element={<Tickets key={storeId} />} />}
                 {storeId && <Route path="/visitors" element={<Visitors key={storeId} />} />}

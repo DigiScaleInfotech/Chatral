@@ -11,7 +11,7 @@ import {
 import { api, showError, ROLE_LABEL, TIMEZONE_OPTIONS } from '../api.js';
 import { useApp } from '../main.jsx';
 
-function Stores() {
+function Stores({ filterStoreId, currentStore }) {
   const { reloadMe } = useApp();
   const { message, modal } = App.useApp();
   const [rows, setRows] = useState(null);
@@ -85,13 +85,19 @@ function Stores() {
     });
   }
 
+  const displayedRows = filterStoreId ? (rows || []).filter((s) => s.id === filterStoreId) : (rows || []);
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
-          <div style={{ fontWeight: 600, fontSize: 14 }}>All Store Tenancies</div>
+          <div style={{ fontWeight: 600, fontSize: 14 }}>
+            {filterStoreId && currentStore ? `${currentStore.name} Tenancy` : 'All Store Tenancies'}
+          </div>
           <div style={{ fontSize: 12, color: '#64748b' }}>
-            Multi-store tenant isolation and aggregate 30-day activity tracking.
+            {filterStoreId && currentStore
+              ? 'Tenant isolation, widget status and aggregate 30-day activity tracking for this store.'
+              : 'Multi-store tenant isolation and aggregate 30-day activity tracking across all clients.'}
           </div>
         </div>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => setOpen(true)}>
@@ -102,7 +108,7 @@ function Stores() {
       <Table
         rowKey="id"
         loading={!rows}
-        dataSource={rows || []}
+        dataSource={displayedRows}
         pagination={{ pageSize: 25, hideOnSinglePage: true }}
         scroll={{ x: 900 }}
         columns={[
@@ -178,7 +184,7 @@ function Stores() {
   );
 }
 
-export function Users() {
+export function Users({ filterStoreId, currentStore } = {}) {
   const { me } = useApp();
   const { message } = App.useApp();
   const [rows, setRows] = useState(null);
@@ -231,13 +237,21 @@ export function Users() {
     }
   }
 
+  const displayedUsers = filterStoreId
+    ? (rows || []).filter((u) => u.memberships?.some((m) => m.storeId === filterStoreId) || u.role === 'SUPER_ADMIN')
+    : (rows || []);
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
-          <div style={{ fontWeight: 600, fontSize: 14 }}>Platform User Directory</div>
+          <div style={{ fontWeight: 600, fontSize: 14 }}>
+            {filterStoreId && currentStore ? `${currentStore.name} User Directory` : 'Platform User Directory'}
+          </div>
           <div style={{ fontSize: 12, color: '#64748b' }}>
-            Manage staff accounts and system administrator privileges.
+            {filterStoreId && currentStore
+              ? `Manage staff accounts and agent privileges for ${currentStore.name}.`
+              : 'Manage staff accounts and system administrator privileges.'}
           </div>
         </div>
         <Button
@@ -255,7 +269,7 @@ export function Users() {
       <Table
         rowKey="id"
         loading={!rows}
-        dataSource={rows || []}
+        dataSource={displayedUsers}
         pagination={{ pageSize: 25, hideOnSinglePage: true }}
         scroll={{ x: 800 }}
         columns={[
@@ -414,9 +428,15 @@ export function Users() {
 }
 
 export default function Platform() {
+  const { storeId, me } = useApp();
+  const currentStore = me?.stores?.find((s) => s.id === storeId);
+  const [filterScope, setFilterScope] = useState('selected');
+
+  const activeFilterId = filterScope === 'selected' && storeId ? storeId : null;
+
   return (
     <div>
-      <div className="saas-page-header">
+      <div className="saas-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
           <Typography.Title level={4} className="saas-page-title">
             Platform Administration
@@ -425,6 +445,19 @@ export default function Platform() {
             Super Administrator console for cross-store tenant monitoring and system-wide user credentials.
           </Typography.Text>
         </div>
+
+        <Flex align="center" gap={8}>
+          <span style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>Filter View:</span>
+          <Select
+            value={filterScope}
+            onChange={setFilterScope}
+            style={{ minWidth: 230 }}
+            options={[
+              ...(currentStore ? [{ value: 'selected', label: `Selected: ${currentStore.name}` }] : []),
+              { value: 'all', label: 'All Stores (Global View)' },
+            ]}
+          />
+        </Flex>
       </div>
       <Card>
         <Tabs
@@ -436,7 +469,7 @@ export default function Platform() {
                   <ShopOutlined /> Stores & Usage
                 </span>
               ),
-              children: <Stores />,
+              children: <Stores filterStoreId={activeFilterId} currentStore={currentStore} />,
             },
             {
               key: 'users',
@@ -445,7 +478,7 @@ export default function Platform() {
                   <UserOutlined /> Users Directory
                 </span>
               ),
-              children: <Users />,
+              children: <Users filterStoreId={activeFilterId} currentStore={currentStore} />,
             },
           ]}
         />
