@@ -2358,113 +2358,113 @@ export default function LandingPage() {
           >
             {[
               {
-                title: 'Streamlined our workflow instantly',
-                quote: 'We switched two months ago and the difference is night and day. Managing leads and follow-ups has never been this effortless.',
-                author: 'Julia T.',
-                role: 'Sales Director',
-                initials: 'JT',
-                avatarBg: '#ede9fe',
-                avatarColor: '#7c3aed',
+                title: 'Increased website orders by 40%',
+                quote: 'We sell sarees across India from Surat. Chatral lets our sales team initiate live chats when shoppers are on checkout. We stopped cart drop-offs completely.',
+                author: 'Bhavik Patel',
+                role: 'Founder, Surat Silk & Sarees',
+                initials: 'BP',
+                avatarBg: '#eff6ff',
+                avatarColor: '#2563eb',
               },
               {
-                title: 'Exactly what our team needed',
-                quote: 'The interface is clean, intuitive, and fast. Our sales team actually enjoys using it — which says a lot.',
-                author: 'Mark R.',
-                role: 'Head of Growth',
-                initials: 'MR',
-                avatarBg: '#dcfce7',
-                avatarColor: '#15803d',
-              },
-              {
-                title: 'Increased our productivity by 30%',
-                quote: 'With automated reminders and real-time updates, we no longer let promising deals slip through the cracks.',
-                author: 'Anika S.',
-                role: 'CRM Operations Manager',
-                initials: 'AS',
-                avatarBg: '#ffedd5',
-                avatarColor: '#c2410c',
-              },
-              {
-                title: 'Fast, reliable, and beautiful',
-                quote: 'It’s rare to find software that looks this good and performs this well. Chatral checks every box for customer support.',
-                author: 'Sophie D.',
-                role: 'Marketing Manager',
-                initials: 'SD',
-                avatarBg: '#e0f2fe',
-                avatarColor: '#0284c7',
-              },
-              {
-                title: 'Support team is next level',
-                quote: 'Beyond the product itself, the onboarding and ongoing support from DigiScale Infotech have been outstanding from day one.',
-                author: 'Daniel K.',
-                role: 'Customer Success Lead',
-                initials: 'DK',
-                avatarBg: '#fce7f3',
+                title: 'Setup took literally 2 minutes on Shopify',
+                quote: 'Installed the widget on our Shopify jewellery store without any developer. Customers love the instant replies and sound alerts during high-traffic festivals.',
+                author: 'Priya Shah',
+                role: 'Head of E-Commerce, Aura Jewels (Surat)',
+                initials: 'PS',
+                avatarBg: '#fdf2f8',
                 avatarColor: '#db2777',
               },
               {
-                title: 'Clean, modern, and so easy to set up',
-                quote: 'I’ve tried a dozen live chat tools, and this is the first one my team adopted without a fight. Everything just makes sense.',
-                author: 'Alex B.',
-                role: 'Startup Founder',
-                initials: 'AB',
-                avatarBg: '#e0f2fe',
-                avatarColor: '#2563eb',
+                title: 'Manages 3 brand stores smoothly',
+                quote: 'We run two wholesale stores and one retail brand from Ring Road, Surat. Multi-store management inside one Chatral dashboard saved our team from opening 10 browser tabs.',
+                author: 'Jignesh Mehta',
+                role: 'Director, TexFab Global Textiles',
+                initials: 'JM',
+                avatarBg: '#ecfdf5',
+                avatarColor: '#059669',
+              },
+              {
+                title: 'Our customer conversions doubled',
+                quote: 'The automated welcome greeting triggers right when visitors spend 30 seconds on a product page. Our lead response time dropped from 2 hours to under 1 minute.',
+                author: 'Kavita Desai',
+                role: 'Founder, Shreeji Organics & Wellness',
+                initials: 'KD',
+                avatarBg: '#fff7ed',
+                avatarColor: '#ea580c',
+              },
+              {
+                title: 'Handled 3,000+ chats during wedding season',
+                quote: 'Zero lags, crystal-clear visitor location tracking, and lightning-fast chat replies. Chatral is built for high-volume sales teams that care about relationships.',
+                author: 'Harshil Chothani',
+                role: 'Partner, Surat Diamond Craft',
+                initials: 'HC',
+                avatarBg: '#f5f3ff',
+                avatarColor: '#7c3aed',
+              },
+              {
+                title: 'Best customer messaging tool in Gujarat',
+                quote: 'We recommend Chatral to all our e-commerce clients in Surat & Ahmedabad. Clean UI, honest pricing, and immediate support from the DigiScale Infotech team.',
+                author: 'Rohan Vaghani',
+                role: 'Growth Lead, DigiScale Commerce (Surat)',
+                initials: 'RV',
+                avatarBg: '#eff6ff',
+                avatarColor: '#1d4ed8',
               },
               // Duplicate once to enable seamless infinite scroll loop
               {
-                title: 'Streamlined our workflow instantly',
-                quote: 'We switched two months ago and the difference is night and day. Managing leads and follow-ups has never been this effortless.',
-                author: 'Julia T.',
-                role: 'Sales Director',
-                initials: 'JT',
-                avatarBg: '#ede9fe',
-                avatarColor: '#7c3aed',
+                title: 'Increased website orders by 40%',
+                quote: 'We sell sarees across India from Surat. Chatral lets our sales team initiate live chats when shoppers are on checkout. We stopped cart drop-offs completely.',
+                author: 'Bhavik Patel',
+                role: 'Founder, Surat Silk & Sarees',
+                initials: 'BP',
+                avatarBg: '#eff6ff',
+                avatarColor: '#2563eb',
               },
               {
-                title: 'Exactly what our team needed',
-                quote: 'The interface is clean, intuitive, and fast. Our sales team actually enjoys using it — which says a lot.',
-                author: 'Mark R.',
-                role: 'Head of Growth',
-                initials: 'MR',
-                avatarBg: '#dcfce7',
-                avatarColor: '#15803d',
-              },
-              {
-                title: 'Increased our productivity by 30%',
-                quote: 'With automated reminders and real-time updates, we no longer let promising deals slip through the cracks.',
-                author: 'Anika S.',
-                role: 'CRM Operations Manager',
-                initials: 'AS',
-                avatarBg: '#ffedd5',
-                avatarColor: '#c2410c',
-              },
-              {
-                title: 'Fast, reliable, and beautiful',
-                quote: 'It’s rare to find software that looks this good and performs this well. Chatral checks every box for customer support.',
-                author: 'Sophie D.',
-                role: 'Marketing Manager',
-                initials: 'SD',
-                avatarBg: '#e0f2fe',
-                avatarColor: '#0284c7',
-              },
-              {
-                title: 'Support team is next level',
-                quote: 'Beyond the product itself, the onboarding and ongoing support from DigiScale Infotech have been outstanding from day one.',
-                author: 'Daniel K.',
-                role: 'Customer Success Lead',
-                initials: 'DK',
-                avatarBg: '#fce7f3',
+                title: 'Setup took literally 2 minutes on Shopify',
+                quote: 'Installed the widget on our Shopify jewellery store without any developer. Customers love the instant replies and sound alerts during high-traffic festivals.',
+                author: 'Priya Shah',
+                role: 'Head of E-Commerce, Aura Jewels (Surat)',
+                initials: 'PS',
+                avatarBg: '#fdf2f8',
                 avatarColor: '#db2777',
               },
               {
-                title: 'Clean, modern, and so easy to set up',
-                quote: 'I’ve tried a dozen live chat tools, and this is the first one my team adopted without a fight. Everything just makes sense.',
-                author: 'Alex B.',
-                role: 'Startup Founder',
-                initials: 'AB',
-                avatarBg: '#e0f2fe',
-                avatarColor: '#2563eb',
+                title: 'Manages 3 brand stores smoothly',
+                quote: 'We run two wholesale stores and one retail brand from Ring Road, Surat. Multi-store management inside one Chatral dashboard saved our team from opening 10 browser tabs.',
+                author: 'Jignesh Mehta',
+                role: 'Director, TexFab Global Textiles',
+                initials: 'JM',
+                avatarBg: '#ecfdf5',
+                avatarColor: '#059669',
+              },
+              {
+                title: 'Our customer conversions doubled',
+                quote: 'The automated welcome greeting triggers right when visitors spend 30 seconds on a product page. Our lead response time dropped from 2 hours to under 1 minute.',
+                author: 'Kavita Desai',
+                role: 'Founder, Shreeji Organics & Wellness',
+                initials: 'KD',
+                avatarBg: '#fff7ed',
+                avatarColor: '#ea580c',
+              },
+              {
+                title: 'Handled 3,000+ chats during wedding season',
+                quote: 'Zero lags, crystal-clear visitor location tracking, and lightning-fast chat replies. Chatral is built for high-volume sales teams that care about relationships.',
+                author: 'Harshil Chothani',
+                role: 'Partner, Surat Diamond Craft',
+                initials: 'HC',
+                avatarBg: '#f5f3ff',
+                avatarColor: '#7c3aed',
+              },
+              {
+                title: 'Best customer messaging tool in Gujarat',
+                quote: 'We recommend Chatral to all our e-commerce clients in Surat & Ahmedabad. Clean UI, honest pricing, and immediate support from the DigiScale Infotech team.',
+                author: 'Rohan Vaghani',
+                role: 'Growth Lead, DigiScale Commerce (Surat)',
+                initials: 'RV',
+                avatarBg: '#eff6ff',
+                avatarColor: '#1d4ed8',
               },
             ].map((t, idx) => (
               <div
@@ -3035,38 +3035,183 @@ export default function LandingPage() {
                 Send us a note and our team will get back to you within a few hours.
               </Typography.Paragraph>
 
-              {/* Direct Info without emojis or boxed containers */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 22, marginTop: 12 }}>
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#2563eb', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
-                    Email
-                  </div>
-                  <a
-                    href="mailto:digiscaleinfotech@gmail.com"
-                    style={{ fontSize: 16, fontWeight: 600, color: '#0f172a', textDecoration: 'none', transition: 'color 0.15s ease' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#2563eb')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#0f172a')}
+              {/* Modern Enterprise SaaS Contact Channels */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 14 }}>
+                {/* 1. Direct Email Tile */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                    padding: '16px 18px',
+                    background: '#ffffff',
+                    border: '1px solid #e0eafc',
+                    borderRadius: 16,
+                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#93c5fd';
+                    e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(37, 99, 235, 0.1)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#e0eafc';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.04)';
+                    e.currentTarget.style.transform = 'none';
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
                   >
-                    digiscaleinfotech@gmail.com
-                  </a>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      Direct Email
+                    </div>
+                    <a
+                      href="mailto:digiscaleinfotech@gmail.com"
+                      style={{ fontSize: 15, fontWeight: 600, color: '#0f172a', textDecoration: 'none', transition: 'color 0.15s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#2563eb')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#0f172a')}
+                    >
+                      digiscaleinfotech@gmail.com
+                    </a>
+                  </div>
                 </div>
 
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#2563eb', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
-                    Response Time
+                {/* 2. Response Time Tile */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                    padding: '16px 18px',
+                    background: '#ffffff',
+                    border: '1px solid #e0eafc',
+                    borderRadius: 16,
+                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#93c5fd';
+                    e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(37, 99, 235, 0.1)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#e0eafc';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.04)';
+                    e.currentTarget.style.transform = 'none';
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
                   </div>
-                  <div style={{ fontSize: 15, fontWeight: 500, color: '#334155' }}>
-                    Average under 2 hours (Mon - Sat)
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      Response Time
+                    </div>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: '#0f172a' }}>
+                      Under 2 hours <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>(Mon – Sat)</span>
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#2563eb', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
-                    Location
+                {/* 3. Location Tile */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                    padding: '16px 18px',
+                    background: '#ffffff',
+                    border: '1px solid #e0eafc',
+                    borderRadius: 16,
+                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#93c5fd';
+                    e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(37, 99, 235, 0.1)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#e0eafc';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.04)';
+                    e.currentTarget.style.transform = 'none';
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
                   </div>
-                  <div style={{ fontSize: 15, fontWeight: 500, color: '#334155' }}>
-                    Gujarat, India
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      Headquarters
+                    </div>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: '#0f172a' }}>
+                      Surat, Gujarat, India
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Dedicated Gujarat Support Reassurance Banner */}
+              <div
+                style={{
+                  marginTop: 22,
+                  padding: '13px 18px',
+                  borderRadius: 14,
+                  background: 'rgba(37, 99, 235, 0.04)',
+                  border: '1px solid rgba(37, 99, 235, 0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                }}
+              >
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
+                <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.5 }}>
+                  <strong style={{ color: '#0f172a' }}>Local Gujarat Support:</strong> Dedicated onboarding assistance for Surat & Ahmedabad teams.
                 </div>
               </div>
             </Col>
@@ -3433,8 +3578,8 @@ export default function LandingPage() {
                 Back to top ↑
               </button>
 
-              {/* Social Icons (Instagram and LinkedIn) */}
-              <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+              {/* Social Icons (Instagram and LinkedIn) - Perfectly Matched Size & Stroke */}
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                 <a
                   href="https://instagram.com"
                   target="_blank"
@@ -3445,9 +3590,9 @@ export default function LandingPage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 32,
-                    height: 32,
-                    borderRadius: 8,
+                    width: 36,
+                    height: 36,
+                    borderRadius: 10,
                     background: '#f1f5f9',
                     transition: 'all 0.18s ease',
                   }}
@@ -3462,8 +3607,10 @@ export default function LandingPage() {
                     e.currentTarget.style.transform = 'none';
                   }}
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
                   </svg>
                 </a>
 
@@ -3477,9 +3624,9 @@ export default function LandingPage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 32,
-                    height: 32,
-                    borderRadius: 8,
+                    width: 36,
+                    height: 36,
+                    borderRadius: 10,
                     background: '#f1f5f9',
                     transition: 'all 0.18s ease',
                   }}
@@ -3494,8 +3641,10 @@ export default function LandingPage() {
                     e.currentTarget.style.transform = 'none';
                   }}
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 1.6 1.6 1.6 1.6 0 0 0-1.6-1.6z" />
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                    <rect width="4" height="12" x="2" y="9" />
+                    <circle cx="4" cy="4" r="2" />
                   </svg>
                 </a>
               </div>
