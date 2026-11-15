@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Button, Card, Col, Collapse, Divider, Flex, Grid, Row, Segmented, Tag, Typography,
+  Button, Card, Col, Collapse, Divider, Drawer, Flex, Grid, Row, Segmented, Tag, Typography,
 } from 'antd';
 import {
   ArrowRightOutlined, CheckCircleFilled, MessageOutlined,
@@ -186,23 +186,73 @@ export default function LandingPage() {
   const [heroActiveConvId, setHeroActiveConvId] = useState('chatral');
   const [showWidgetPill, setShowWidgetPill] = useState(true);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Contact Form state & submission handler
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', topic: 'Schedule a Live Demo', message: '' });
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [contactSubmitting, setContactSubmitting] = useState(false);
 
-  const handleContactSubmit = (e) => {
+  // Helper for "Book a demo" CTA across the entire page
+  const handleBookDemo = (topic = 'Schedule a Live Demo') => {
+    setContactForm((prev) => ({ ...prev, topic }));
+    setMobileMenuOpen(false);
+    scrollTo('contact');
+    setTimeout(() => {
+      const nameInput = document.getElementById('contact-name-input');
+      if (nameInput) {
+        nameInput.focus();
+        nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 400);
+  };
+
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
     if (!contactForm.name.trim() || !contactForm.email.trim() || !contactForm.message.trim()) {
       return;
     }
     setContactSubmitting(true);
-    setTimeout(() => {
-      setContactSubmitting(false);
+    try {
+      // 1. Direct reliable delivery to digiscaleinfotech@gmail.com via FormSubmit AJAX
+      const formPromise = fetch('https://formsubmit.co/ajax/digiscaleinfotech@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          company: contactForm.company || 'N/A',
+          topic: contactForm.topic,
+          message: contactForm.message,
+          _subject: `New Chatral Lead: ${contactForm.name} (${contactForm.topic})`,
+          _template: 'table',
+        }),
+      }).catch((err) => console.warn('FormSubmit error:', err));
+
+      // 2. Also send to internal backend endpoint /api/contact if available
+      const apiPromise = fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contactForm),
+      }).catch((err) => console.warn('API contact error:', err));
+
+      // Wait max 1.8s so user never experiences lag
+      await Promise.race([
+        Promise.all([formPromise, apiPromise]),
+        new Promise((resolve) => setTimeout(resolve, 1800)),
+      ]);
+
       setContactSubmitted(true);
       setContactForm({ name: '', email: '', company: '', topic: 'Schedule a Live Demo', message: '' });
-    }, 500);
+    } catch (err) {
+      console.error('Submission error:', err);
+      setContactSubmitted(true);
+    } finally {
+      setContactSubmitting(false);
+    }
   };
 
   const handleLogoClick = (e) => {
@@ -461,15 +511,15 @@ export default function LandingPage() {
             </Flex>
           )}
 
-          {/* Right Button: Brand Blue Button with Interactive Kinetic Roll & Arrow */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          {/* Right Button: Brand Blue Button + Mobile Hamburger Menu */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <button
               onClick={() => nav('/login?mode=signup')}
               className="btn-brand-primary"
               style={{
-                padding: '10px 22px',
-                height: 42,
-                fontSize: 14,
+                padding: isMobile ? '8px 16px' : '10px 22px',
+                height: isMobile ? 38 : 42,
+                fontSize: isMobile ? 13 : 14,
                 fontFamily: 'inherit',
               }}
             >
@@ -479,9 +529,125 @@ export default function LandingPage() {
                 <path d="m12 5 7 7-7 7" />
               </svg>
             </button>
+
+            {/* Mobile Hamburger Toggle */}
+            {isMobile && (
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open Navigation Menu"
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: 10,
+                  border: '1px solid #e2e8f0',
+                  background: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#0f172a',
+                  cursor: 'pointer',
+                  padding: 0,
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </nav>
+
+      {/* Mobile Navigation Drawer */}
+      <Drawer
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        placement="right"
+        width={300}
+        styles={{ body: { padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' } }}
+      >
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, paddingBottom: 14, borderBottom: '1px solid #f1f5f9' }}>
+            <ChatralFullLogo height={30} dark={false} />
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 8,
+                border: '1px solid #e2e8f0',
+                background: '#f8fafc',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#64748b',
+              }}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {[
+              { label: 'Features', id: 'features' },
+              { label: 'How it works', id: 'how-it-works' },
+              { label: 'Testimonials', id: 'testimonials' },
+              { label: 'Pricing', id: 'pricing' },
+              { label: 'FAQ', id: 'faq' },
+              { label: 'Contact us', id: 'contact' },
+            ].map((item) => (
+              <a
+                key={item.id}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  scrollTo(item.id);
+                }}
+                style={{
+                  fontSize: 15.5,
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  textDecoration: 'none',
+                  padding: '10px 4px',
+                  borderBottom: '1px solid #f8fafc',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                }}
+              >
+                <span>{item.label}</span>
+                <span style={{ color: '#94a3b8', fontSize: 13 }}>→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 32 }}>
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              nav('/login?mode=signup');
+            }}
+            className="btn-brand-primary"
+            style={{ width: '100%', height: 44, borderRadius: 10, fontSize: 14, justifyContent: 'center' }}
+          >
+            <RollText text="Start 7-Day Free Trial" />
+          </button>
+          <button
+            onClick={() => handleBookDemo()}
+            className="btn-brand-secondary"
+            style={{ width: '100%', height: 44, borderRadius: 10, fontSize: 14, justifyContent: 'center' }}
+          >
+            <RollText text="Book a demo" secondaryColor="#1d4ed8" />
+          </button>
+        </div>
+      </Drawer>
 
       {/* Interactive Micro-animations, Liquid Waves & Styles */}
       <style>{`
@@ -893,7 +1059,7 @@ export default function LandingPage() {
               </svg>
             </button>
             <button
-              onClick={() => scrollTo('contact')}
+              onClick={() => handleBookDemo('Schedule a Live Demo')}
               className="btn-brand-secondary"
               style={{
                 padding: '13px 26px',
@@ -1300,10 +1466,10 @@ export default function LandingPage() {
                   style={{
                     width: isMobile ? '100%' : 295,
                     flexShrink: 0,
-                    borderRight: '1px solid #f1f3f7',
+                    borderRight: isMobile ? 'none' : '1px solid #f1f3f7',
                     background: '#ffffff',
                     padding: '14px 12px',
-                    display: 'flex',
+                    display: isMobile ? (heroActiveConvId ? 'none' : 'flex') : 'flex',
                     flexDirection: 'column',
                     gap: 10,
                     overflowY: 'auto',
@@ -1528,7 +1694,7 @@ export default function LandingPage() {
                     minWidth: 0,
                     borderRight: isMobile ? 'none' : '1px solid #f1f3f7',
                     background: heroActiveConvId ? '#f8fafc' : '#ffffff',
-                    display: isMobile && !heroActiveConvId ? 'none' : 'flex',
+                    display: isMobile ? (heroActiveConvId ? 'flex' : 'none') : 'flex',
                     flexDirection: 'column',
                     justifyContent: heroActiveConvId ? 'space-between' : 'center',
                     alignItems: heroActiveConvId ? 'stretch' : 'center',
@@ -1570,6 +1736,29 @@ export default function LandingPage() {
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
+                              {isMobile && (
+                                <button
+                                  type="button"
+                                  onClick={() => setHeroActiveConvId(null)}
+                                  style={{
+                                    border: '1px solid #dbeafe',
+                                    background: '#eff6ff',
+                                    color: '#2563eb',
+                                    padding: '3px 8px',
+                                    borderRadius: 6,
+                                    fontSize: 11.5,
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    marginRight: 4,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 3,
+                                    flexShrink: 0,
+                                  }}
+                                >
+                                  ← List
+                                </button>
+                              )}
                               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
                               <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', flexShrink: 0 }}>
                                 {activeConv.name}
@@ -2579,7 +2768,7 @@ export default function LandingPage() {
           borderTop: '1px solid #e2e8f0',
         }}
       >
-        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ maxWidth: 1140, margin: '0 auto', textAlign: 'center' }}>
           
           <div
             style={{
@@ -2656,13 +2845,13 @@ export default function LandingPage() {
 
           <Row gutter={[24, 24]} justify="center" align="stretch">
             {/* 1. 7-Day Free Trial Plan */}
-            <Col xs={24} md={12} lg={10}>
+            <Col xs={24} md={12} lg={8}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e2e8f0',
                   borderRadius: 20,
-                  padding: '34px 28px',
+                  padding: '32px 26px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -2718,14 +2907,14 @@ export default function LandingPage() {
               </div>
             </Col>
 
-            {/* 2. Starter Growth Plan (Starts at $5 / mo) */}
-            <Col xs={24} md={12} lg={10}>
+            {/* 2. Starter Growth Plan (Most Popular) */}
+            <Col xs={24} md={12} lg={8}>
               <div
                 style={{
                   background: '#ffffff',
                   border: '2px solid #2563eb',
                   borderRadius: 20,
-                  padding: '34px 28px',
+                  padding: '32px 26px',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -2768,7 +2957,7 @@ export default function LandingPage() {
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Shopify & E-commerce Integration</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Shopify & WooCommerce Integration</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
                 </div>
@@ -2785,6 +2974,71 @@ export default function LandingPage() {
                   }}
                 >
                   <RollText text="Start 7-Day Free Trial" />
+                </button>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
+                  Includes 7-day free trial • Cancel anytime
+                </div>
+              </div>
+            </Col>
+
+            {/* 3. Business & Scale Plan */}
+            <Col xs={24} md={12} lg={8}>
+              <div
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: 20,
+                  padding: '32px 26px',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  textAlign: 'left',
+                  boxShadow: '0 4px 16px -2px rgba(12, 13, 16, 0.03)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#93c5fd';
+                  e.currentTarget.style.boxShadow = '0 12px 30px -4px rgba(37, 99, 235, 0.08)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.boxShadow = '0 4px 16px -2px rgba(12, 13, 16, 0.03)';
+                }}
+              >
+                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
+                <div style={{ fontSize: 34, fontWeight: 800, color: '#0c0d10', margin: '12px 0 4px', letterSpacing: '-0.03em' }}>
+                  {currency === 'INR'
+                    ? (billingCycle === 'annual' ? '₹999' : '₹1,299')
+                    : (billingCycle === 'annual' ? '$15' : '$19')}{' '}
+                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+                </div>
+                <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+                  For high-volume stores, scaling agencies & teams needing dedicated onboarding support.
+                </div>
+                <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 18px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 26, fontSize: 13, color: '#0c0d10' }}>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Unlimited Active Stores</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Team Members & Roles</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Everything in Starter Growth</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>1-on-1 Setup & Onboarding Support</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Custom CSS & Brand White-labeling</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Advanced Analytics & Reports Export</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Dedicated Account Manager</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> WhatsApp & Priority Phone Support</div>
+                </div>
+                <button
+                  onClick={() => handleBookDemo('Custom Plan & Pricing')}
+                  className="btn-brand-secondary"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    height: 44,
+                    borderRadius: 10,
+                    fontSize: 13.5,
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  <RollText text="Book a Demo" secondaryColor="#1d4ed8" />
                 </button>
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
                   Includes 7-day free trial • Cancel anytime
@@ -3182,6 +3436,7 @@ export default function LandingPage() {
                         Full Name <span style={{ color: '#ef4444' }}>*</span>
                       </label>
                       <input
+                        id="contact-name-input"
                         type="text"
                         required
                         placeholder="John Doe"

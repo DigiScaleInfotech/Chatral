@@ -16,6 +16,7 @@ import ticketRoutes from './routes/tickets.js';
 import triggerRoutes from './routes/triggers.js';
 import reportRoutes from './routes/reports.js';
 import analyticsRoutes from './routes/analytics.js';
+import contactRoutes from './routes/contact.js';
 // Side-effect imports register event listeners + job handlers.
 import './triggers/engine.js';
 import './services/notify.js';
@@ -47,7 +48,7 @@ export function createServer() {
     credentials: true,
   });
   app.use('/api/auth', adminCors, authRoutes);
-  app.use('/api', adminCors, adminRoutes, inboxRoutes, ticketRoutes, triggerRoutes, reportRoutes, analyticsRoutes);
+  app.use('/api', adminCors, adminRoutes, inboxRoutes, ticketRoutes, triggerRoutes, reportRoutes, analyticsRoutes, contactRoutes);
 
   // Static: embeddable widget + admin SPA (client: npm run build).
   // Pop-out chat window: a full-page widget on this server's origin. It refuses to start until the

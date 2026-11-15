@@ -31,7 +31,8 @@ export default function Login() {
   const nav = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const resetParam = searchParams.get('reset') || '';
-  const [mode, setMode] = useState(resetParam ? 'reset' : 'login');
+  const modeParam = searchParams.get('mode') || '';
+  const [mode, setMode] = useState(resetParam ? 'reset' : (modeParam === 'signup' ? 'signup' : 'login'));
   const [resetToken, setResetToken] = useState(resetParam);
   const [error, setError] = useState(null);
   const [notice, setNotice] = useState(null);
@@ -42,8 +43,12 @@ export default function Login() {
     if (resetParam) {
       setResetToken(resetParam);
       setMode('reset');
+    } else if (modeParam === 'signup') {
+      setMode('signup');
+    } else if (modeParam === 'login') {
+      setMode('login');
     }
-  }, [resetParam]);
+  }, [resetParam, modeParam]);
 
   function switchMode(next) {
     setError(null);
