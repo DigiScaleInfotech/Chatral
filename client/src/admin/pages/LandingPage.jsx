@@ -3095,12 +3095,12 @@ export default function LandingPage() {
                       Response Time
                     </div>
                     <div style={{ fontSize: 15.5, fontWeight: 600, color: '#0f172a' }}>
-                      24/7 Priority Support <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>(Always online)</span>
+                      24/7 Priority Support
                     </div>
                   </div>
                 </div>
 
-                {/* 3. Location */}
+                {/* 3. Setup Support */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <div
                     style={{
@@ -3115,16 +3115,16 @@ export default function LandingPage() {
                     }}
                   >
                     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
+                      <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
                     </svg>
                   </div>
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>
-                      Headquarters
+                      Setup Support
                     </div>
                     <div style={{ fontSize: 15.5, fontWeight: 600, color: '#0f172a' }}>
-                      Surat, Gujarat, India
+                      1-on-1 Setup Support
                     </div>
                   </div>
                 </div>
