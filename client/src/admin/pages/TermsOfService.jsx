@@ -207,7 +207,7 @@ export default function TermsOfService() {
             2. Description of Service
           </h2>
           <p style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75, margin: 0 }}>
-            Chatral is a Software-as-a-Service customer messaging and visitor engagement platform providing real-time chat widgets, team management, automated response triggers, Shopify integrations, and visitor tracking tools operated by DigiScale Infotech.
+            Chatral is a Software-as-a-Service customer messaging and visitor engagement platform providing real-time chat widgets, team management, automated response triggers, Shopify integrations, and visitor tracking tools operated by Chatral.
           </p>
         </section>
 
@@ -243,7 +243,7 @@ export default function TermsOfService() {
             5. Intellectual Property
           </h2>
           <p style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75, margin: 0 }}>
-            Chatral and its logos, source code, designs, and documentation are the exclusive intellectual property of DigiScale Infotech. You retain all rights and ownership to the customer data, visitor conversations, and store content processed through your account.
+            Chatral and its logos, source code, designs, and documentation are the exclusive intellectual property of Chatral. You retain all rights and ownership to the customer data, visitor conversations, and store content processed through your account.
           </p>
         </section>
 
@@ -253,7 +253,7 @@ export default function TermsOfService() {
             6. Service Level, Warranties &amp; Liability
           </h2>
           <p style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75, margin: 0 }}>
-            Chatral provides a 99.9% targeted service uptime. While we employ automated failover and secure cloud infrastructure, the service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. Under no circumstances shall Chatral or DigiScale Infotech be liable for indirect, incidental, or consequential damages resulting from downtime, network failures, or lost profits.
+            Chatral provides a 99.9% targeted service uptime. While we employ automated failover and secure cloud infrastructure, the service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. Under no circumstances shall Chatral be liable for indirect, incidental, or consequential damages resulting from downtime, network failures, or lost profits.
           </p>
         </section>
 

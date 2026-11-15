@@ -17,7 +17,7 @@ if (existing) {
     console.log(`User ${email} already exists as SUPER_ADMIN - nothing changed.`);
   }
 } else {
-  await prisma.user.create({ data: { email, name: 'Platform Admin', role: 'SUPER_ADMIN', passwordHash: await bcrypt.hash(password, 12) } });
+  await prisma.user.create({ data: { email, name: 'Chatral Admin', role: 'SUPER_ADMIN', passwordHash: await bcrypt.hash(password, 12) } });
   console.log(`Created super admin ${email}`);
 }
 await prisma.$disconnect();

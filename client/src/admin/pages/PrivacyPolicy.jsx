@@ -197,7 +197,7 @@ export default function PrivacyPolicy() {
             1. Overview &amp; Commitment
           </h2>
           <p style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75, margin: '0 0 12px' }}>
-            Chatral (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;), operated by DigiScale Infotech, provides real-time customer messaging, live chat widgets, and visitor analytics infrastructure for businesses (&quot;Customers&quot;). We are deeply committed to protecting your privacy and complying with global data protection laws, including the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA).
+            Chatral (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) provides real-time customer messaging, live chat widgets, and visitor analytics infrastructure for businesses (&quot;Customers&quot;). We are deeply committed to protecting your privacy and complying with global data protection laws, including the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA).
           </p>
           <p style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75, margin: 0 }}>
             This Privacy Policy explains how we collect, store, process, and safeguard information when you use our website, dashboard, APIs, or embeddable chat widgets.
@@ -275,7 +275,7 @@ export default function PrivacyPolicy() {
           </p>
           <div style={{ color: '#4b5162', fontSize: 15, lineHeight: 1.75 }}>
             <div><strong style={{ color: '#0c0d10' }}>Email:</strong> chatral.official@gmail.com</div>
-            <div><strong style={{ color: '#0c0d10' }}>Organization:</strong> Chatral Platform (DigiScale Infotech)</div>
+            <div><strong style={{ color: '#0c0d10' }}>Organization:</strong> Chatral Platform</div>
           </div>
         </section>
       </main>

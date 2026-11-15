@@ -130,3 +130,4 @@ node -e "import('./src/config.js').then(async ({ prisma }) => {
 | કસ્ટમ ઇમેઇલથી બનાવવો | Env સાથે seed | `cd server && ADMIN_EMAIL="xyz@abc.com" ADMIN_PASSWORD="secret" npm run seed` |
 | બ્રાઉઝર GUI માંથી સુધારો કરવો | Prisma Studio | `cd server && npx prisma studio` |
 | મોજૂદ યુઝરને એડમિન બનાવવો | Node One-liner | `cd server && node -e "..."` (વિકલ્પ ૩ મુજબ) |
+
