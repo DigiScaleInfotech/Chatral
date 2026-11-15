@@ -2756,7 +2756,7 @@ export default function LandingPage() {
       <section
         id="pricing"
         style={{
-          padding: isMobile ? '36px 16px 64px' : '44px 24px 100px',
+          padding: isMobile ? '48px 16px 80px' : '72px 24px 100px',
           background: 'radial-gradient(ellipse 90% 50% at 50% -10%, rgba(219, 234, 254, 0.45) 0%, rgba(240, 247, 255, 0.25) 50%, #ffffff 100%)',
           borderTop: '1px solid #e2e8f0',
         }}
@@ -2772,7 +2772,7 @@ export default function LandingPage() {
               background: '#eaf2ff',
               border: '1px solid rgba(37, 99, 235, 0.2)',
               borderRadius: 999,
-              marginBottom: 10,
+              marginBottom: 16,
             }}
           >
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
