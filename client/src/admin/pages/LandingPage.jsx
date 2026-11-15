@@ -3095,7 +3095,7 @@ export default function LandingPage() {
                       Response Time
                     </div>
                     <div style={{ fontSize: 15.5, fontWeight: 600, color: '#0f172a' }}>
-                      Under 2 hours <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>(Mon – Sat)</span>
+                      24/7 Priority Support <span style={{ fontSize: 13, fontWeight: 400, color: '#64748b' }}>(Always online)</span>
                     </div>
                   </div>
                 </div>
