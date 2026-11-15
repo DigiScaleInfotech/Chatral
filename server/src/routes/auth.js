@@ -5,9 +5,10 @@ import { z } from 'zod';
 import rateLimit from 'express-rate-limit';
 import { config, prisma } from '../config.js';
 import { signToken, requireAuth } from '../lib/auth.js';
-import { asyncRoute, audit, httpError } from '../lib/util.js';
+import { asyncRoute, audit, httpError, newPublicKey, newChatLinkId } from '../lib/util.js';
 import { disconnectUser } from '../realtime.js';
 import { emailConfigured, sendEmailNow } from '../services/notify.js';
+import { DEFAULT_WIDGET_CONFIG } from '../services/stores.js';
 
 const r = Router();
 // Same cost as real hashes, so an unknown email takes as long as a wrong password.
@@ -37,14 +38,66 @@ r.post('/register', loginLimiter, asyncRoute(async (req, res) => {
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) throw httpError(409, 'An account with this email already exists');
 
-  const user = await prisma.user.create({
-    data: {
-      name,
-      email,
-      passwordHash: await bcrypt.hash(password, 12),
-      role: 'USER',
-    },
+  const user = await prisma.$transaction(async (tx) => {
+    const u = await tx.user.create({
+      data: {
+        name,
+        email,
+        passwordHash: await bcrypt.hash(password, 12),
+        role: 'USER',
+      },
+    });
+
+    // Generate unique 8-character chatLinkId for pop-out chat
+    let chatLinkId = newChatLinkId();
+    for (let i = 0; i < 10; i++) {
+      if (!(await tx.store.findFirst({ where: { chatLinkId }, select: { id: true } }))) break;
+      chatLinkId = newChatLinkId();
+    }
+
+    const storeName = `${name}'s Store`;
+    const s = await tx.store.create({
+      data: {
+        name: storeName,
+        allowedOrigins: ['localhost', '127.0.0.1'],
+        timezone: 'Asia/Kolkata',
+        publicKey: newPublicKey(),
+        chatLinkId,
+      },
+    });
+
+    const cfg = {
+      ...DEFAULT_WIDGET_CONFIG,
+      colors: {
+        ...DEFAULT_WIDGET_CONFIG.colors,
+        primary: '#2563eb',
+        visitorBubble: '#2563eb',
+      },
+      businessHours: {
+        ...DEFAULT_WIDGET_CONFIG.businessHours,
+        timezone: 'Asia/Kolkata',
+      },
+    };
+
+    await tx.widgetConfig.create({ data: { storeId: s.id, version: 0, status: 'DRAFT', config: cfg } });
+    await tx.widgetConfig.create({ data: { storeId: s.id, version: 1, status: 'PUBLISHED', config: cfg, note: 'Initial version', createdById: u.id } });
+    await tx.store.update({ where: { id: s.id }, data: { publishedVersion: 1 } });
+
+    // Join user to store as OWNER
+    await tx.storeMember.create({ data: { storeId: s.id, userId: u.id, role: 'OWNER' } });
+
+    // Pre-populate 3 helpful canned replies out-of-the-box
+    await tx.savedReply.createMany({
+      data: [
+        { storeId: s.id, shortcut: 'hello', body: 'Hi there! 👋 How can we help you today?', access: 'PUBLIC', createdById: u.id },
+        { storeId: s.id, shortcut: 'pricing', body: 'We offer flexible plans starting with a 7-day free trial. Let us know if you have questions or need custom volume!', access: 'PUBLIC', createdById: u.id },
+        { storeId: s.id, shortcut: 'hours', body: 'Our support team is online Monday to Saturday, 9:00 AM to 7:00 PM IST.', access: 'PUBLIC', createdById: u.id },
+      ],
+    }).catch(() => {});
+
+    return u;
   });
+
   req.user = user;
   await audit(req, 'auth.register');
   res.status(201).json({ token: signToken(user) });
