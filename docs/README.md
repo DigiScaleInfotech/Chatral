@@ -13,6 +13,7 @@ A multi-store live chat platform: an embeddable website widget, a real-time agen
 | [TICKETS-EMAIL.md](TICKETS-EMAIL.md) | Ticket lifecycle, SMTP queue, retries, threading, limits |
 | [DATABASE.md](DATABASE.md) | Schema, migrations, retention, backups |
 | [SECURITY.md](SECURITY.md) | Auth, roles, isolation, allowlists, uploads, secrets |
+| [SUPER_ADMIN_RECOVERY.md](SUPER_ADMIN_RECOVERY.md) | **Super Admin recovery guide**: recreate or promote super admin accounts via CLI, seed, or Prisma Studio |
 | [TESTING.md](TESTING.md) | Test commands, coverage, manual checks, verified vs unverified |
 | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Common problems and fixes |
 
