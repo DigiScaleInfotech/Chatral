@@ -356,8 +356,22 @@ function Shell() {
               style={{ color: '#64748b', padding: '4px 8px' }}
             />
 
-            {/* Store Switcher */}
-            {me.stores.length > 0 ? (
+            {/* Store Switcher (only relevant on store-scoped pages, not on global /platform) */}
+            {loc.pathname === '/platform' ? (
+              <Tag
+                bordered={false}
+                style={{
+                  fontWeight: 600,
+                  fontSize: 12,
+                  padding: '3px 10px',
+                  borderRadius: 4,
+                  background: '#eff6ff',
+                  color: '#1d4ed8',
+                }}
+              >
+                Global Platform Console (All Tenancies)
+              </Tag>
+            ) : me.stores.length > 0 ? (
               <Select
                 value={storeId}
                 onChange={(v) => {
@@ -377,7 +391,7 @@ function Shell() {
               <Typography.Text type="secondary" style={{ fontSize: 13 }}>No stores assigned</Typography.Text>
             )}
 
-            {role && (
+            {loc.pathname !== '/platform' && role && (
               <Tag
                 bordered={false}
                 className="hide-xs"
