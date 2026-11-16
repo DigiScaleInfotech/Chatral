@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   Modal, Flex, Typography, Tag, Segmented, Input, Button, Card,
-  Divider, Space, App, Spin,
+  Divider, Space, App, Spin, Row, Col,
 } from 'antd';
 import {
   CheckCircleFilled, QrcodeOutlined, CreditCardOutlined,
