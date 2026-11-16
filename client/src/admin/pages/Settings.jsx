@@ -1130,6 +1130,7 @@ function loadRazorpayScript() {
 
 function SubscriptionPlan({ store, reload, can }) {
   const { me, reloadMe } = useApp();
+  const isSuperAdmin = me?.role === 'SUPER_ADMIN';
   const { message } = App.useApp();
   const planPricing = usePlanPricing();
   const [searchParams] = useSearchParams();
@@ -1291,14 +1292,16 @@ function SubscriptionPlan({ store, reload, can }) {
             </div>
             <Flex align="center" gap={10}>
               <Typography.Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-                {planName}
+                {isSuperAdmin ? 'Platform Owner & Super Admin' : planName}
               </Typography.Title>
-              <Tag color={isExpired ? 'error' : 'blue'} bordered={false} style={{ fontWeight: 600 }}>
-                {isExpired ? 'Expired' : 'Active'}
+              <Tag color={isSuperAdmin ? 'purple' : isExpired ? 'error' : 'blue'} bordered={false} style={{ fontWeight: 600 }}>
+                {isSuperAdmin ? 'Lifetime Full Access' : isExpired ? 'Expired' : 'Active'}
               </Tag>
             </Flex>
             <Typography.Text type="secondary" style={{ fontSize: 13, marginTop: 4, display: 'block' }}>
-              {plan === 'TRIAL'
+              {isSuperAdmin
+                ? 'You are the platform Super Admin and Owner. You have permanent, unlimited access to all features, stores, and capabilities across Chatral without any subscription or payment limits.'
+                : plan === 'TRIAL'
                 ? isExpired
                   ? 'Your 7-day free trial has expired. Upgrade to keep chat active.'
                   : `Free trial active • ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining until expiration.`
@@ -1308,7 +1311,7 @@ function SubscriptionPlan({ store, reload, can }) {
             </Typography.Text>
           </div>
           <Flex align="center" gap={10} wrap>
-            {can('ADMIN') && (
+            {!isSuperAdmin && can('ADMIN') && (
               <Button
                 icon={<ReloadOutlined />}
                 loading={syncingPayment}
@@ -1317,7 +1320,7 @@ function SubscriptionPlan({ store, reload, can }) {
                 Sync Payment Status
               </Button>
             )}
-            {can('ADMIN') && plan === 'TRIAL' && (
+            {!isSuperAdmin && can('ADMIN') && plan === 'TRIAL' && (
               <Button
                 type="primary"
                 style={{ background: '#2563eb' }}
@@ -1329,6 +1332,16 @@ function SubscriptionPlan({ store, reload, can }) {
           </Flex>
         </Flex>
       </Card>
+
+      {isSuperAdmin && (
+        <Alert
+          type="info"
+          showIcon
+          message="Super Admin Full Access (No Payment Required)"
+          description="As the platform owner, your account is completely exempt from subscription billing. You have permanent access to all features, multi-store channels, and limits. The plans below are displayed for pricing review and customer reference only."
+          style={{ marginBottom: 22, borderRadius: 8, background: '#f8fafc', border: '1px solid #e2e8f0' }}
+        />
+      )}
 
       <Flex justify="space-between" align="center" wrap gap={16} style={{ marginBottom: 18 }}>
         <Typography.Title level={5} style={{ margin: 0, fontWeight: 700 }}>
@@ -1387,7 +1400,11 @@ function SubscriptionPlan({ store, reload, can }) {
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Standard Web Chat Widget</div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
             </div>
-            {plan === 'TRIAL' ? (
+            {isSuperAdmin ? (
+              <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600, background: '#f8fafc', color: '#64748b' }}>
+                Included with Super Admin
+              </Button>
+            ) : plan === 'TRIAL' ? (
               <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600 }}>
                 Current Active Plan
               </Button>
@@ -1457,7 +1474,11 @@ function SubscriptionPlan({ store, reload, can }) {
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
             </div>
-            {plan === 'STARTER' ? (
+            {isSuperAdmin ? (
+              <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600, background: '#f8fafc', color: '#64748b' }}>
+                Included with Super Admin
+              </Button>
+            ) : plan === 'STARTER' ? (
               <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600 }}>
                 Current Active Plan
               </Button>
@@ -1515,7 +1536,11 @@ function SubscriptionPlan({ store, reload, can }) {
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Dedicated Account Manager</div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> WhatsApp & Priority Phone Support</div>
             </div>
-            {plan === 'BUSINESS' ? (
+            {isSuperAdmin ? (
+              <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600, background: '#f8fafc', color: '#64748b' }}>
+                Included with Super Admin
+              </Button>
+            ) : plan === 'BUSINESS' ? (
               <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600 }}>
                 Current Active Plan
               </Button>
@@ -1653,9 +1678,10 @@ export default function Settings() {
     },
   ].filter(Boolean);
 
+  const isSuperAdmin = me?.role === 'SUPER_ADMIN';
   const plan = store.plan || 'TRIAL';
-  const planColor = plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
-  const planLabel = plan === 'BUSINESS' ? 'Business Plan' : plan === 'STARTER' ? 'Starter Plan' : '7-Day Trial';
+  const planColor = isSuperAdmin ? 'purple' : plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
+  const planLabel = isSuperAdmin ? 'Super Admin' : plan === 'BUSINESS' ? 'Business Plan' : plan === 'STARTER' ? 'Starter Plan' : '7-Day Trial';
 
   return (
     <div>

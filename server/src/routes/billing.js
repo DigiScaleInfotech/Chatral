@@ -109,6 +109,10 @@ const rzp = new Razorpay({
 
 // Create a Razorpay Order
 r.post('/stores/:storeId/billing/create-order', requireStore('ADMIN'), asyncRoute(async (req, res) => {
+  if (req.user.role === 'SUPER_ADMIN') {
+    throw httpError(400, 'Super admin already has unlimited lifetime access to all platform features. No subscription purchase required.');
+  }
+
   const { plan, cycle } = z.object({
     plan: z.enum(['STARTER', 'BUSINESS']),
     cycle: z.enum(['monthly', 'annual']).default('monthly'),
