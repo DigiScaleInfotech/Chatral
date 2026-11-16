@@ -2,11 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build:vercel",
   "outputDirectory": "dist/vercel",
-  "redirects": [
-    { "source": "/", "destination": "/admin/", "permanent": false }
-  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://chatral-backend.onrender.com/api/$1" },
-    { "source": "/admin/(.*)", "destination": "/admin/index.html" }
+    { "source": "/widget/(.*)", "destination": "/widget/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
