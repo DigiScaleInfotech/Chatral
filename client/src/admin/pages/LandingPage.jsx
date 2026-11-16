@@ -518,9 +518,6 @@ export default function LandingPage() {
               <a onClick={() => scrollTo('pricing')} className="nav-menu-link">
                 <RollText text="Pricing" secondaryColor="#2563eb" />
               </a>
-              <a onClick={() => scrollTo('why-chatral')} className="nav-menu-link">
-                <RollText text="Why Chatral" secondaryColor="#2563eb" />
-              </a>
               <a onClick={() => scrollTo('faq')} className="nav-menu-link">
                 <RollText text="FAQ" secondaryColor="#2563eb" />
               </a>
@@ -618,7 +615,6 @@ export default function LandingPage() {
               { label: 'How it works', id: 'how-it-works' },
               { label: 'Testimonials', id: 'testimonials' },
               { label: 'Pricing', id: 'pricing' },
-              { label: 'Why Chatral', id: 'why-chatral' },
               { label: 'FAQ', id: 'faq' },
               { label: 'Contact us', id: 'contact' },
             ].map((item) => (
@@ -3076,153 +3072,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6.5. Comparison Section: Why Choose Chatral (High-Converting Comparison without separate pages) */}
-      <section
-        id="why-chatral"
-        style={{
-          padding: isMobile ? '48px 16px' : '72px 24px',
-          background: '#ffffff',
-          borderTop: '1px solid #e2e8f0',
-        }}
-      >
-        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '4px 14px',
-              background: '#eaf2ff',
-              border: '1px solid rgba(37, 99, 235, 0.2)',
-              borderRadius: 999,
-              marginBottom: 16,
-            }}
-          >
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
-            <span style={{ color: '#2563eb', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Why Chatral
-            </span>
-          </div>
-
-          <Typography.Title
-            level={2}
-            style={{
-              color: '#0c0d10',
-              fontSize: isMobile ? 26 : 38,
-              fontWeight: 800,
-              letterSpacing: '-0.03em',
-              lineHeight: 1.18,
-              margin: '0 0 14px',
-            }}
-          >
-            Built for speed, simplicity, and conversion
-          </Typography.Title>
-          <Typography.Paragraph
-            style={{
-              color: '#5b5f6b',
-              fontSize: isMobile ? 14.5 : 16,
-              maxWidth: 620,
-              margin: '0 auto 36px',
-              lineHeight: 1.6,
-            }}
-          >
-            See how Chatral compares to legacy, bloated live chat tools. No hidden fees, no slow-loading scripts.
-          </Typography.Paragraph>
-
-          {/* Clean Modern Comparison Table */}
-          <div
-            style={{
-              background: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: 20,
-              overflow: 'hidden',
-              boxShadow: '0 4px 20px -2px rgba(12, 13, 16, 0.04)',
-              textAlign: 'left',
-            }}
-          >
-            {/* Table Header */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: isMobile ? '1fr 1fr' : '2fr 1.3fr 1.3fr',
-                background: '#f8fafc',
-                borderBottom: '1px solid #e2e8f0',
-                padding: '16px 20px',
-                fontWeight: 700,
-                fontSize: 13,
-                color: '#475569',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-              }}
-            >
-              <div>Feature</div>
-              <div style={{ color: '#2563eb', fontWeight: 800 }}>Chatral ✨</div>
-              {!isMobile && <div>Legacy Tools (Tawk, Crisp, etc.)</div>}
-            </div>
-
-            {/* Comparison Rows */}
-            {[
-              {
-                feature: 'Widget Bundle Size',
-                chatral: '<195 KB (Lightning fast, 0 SEO lag)',
-                others: '1.5 MB – 3 MB (Slows PageSpeed)',
-              },
-              {
-                feature: 'Multi-Store Tenancy',
-                chatral: 'Included (Manage all stores in 1 inbox)',
-                others: 'Charged separately per store',
-              },
-              {
-                feature: 'Real-Time Visitor Tracking',
-                chatral: 'Included with live URLs & presence',
-                others: 'Often locked behind expensive tiers',
-              },
-              {
-                feature: 'Pricing Model',
-                chatral: 'Affordable flat rate (Unlimited chats)',
-                others: '$25 – $80 / seat / month',
-              },
-              {
-                feature: 'Remove Branding',
-                chatral: 'Included on all paid plans',
-                others: 'Enterprise plan required ($100+/mo)',
-              },
-              {
-                feature: 'Installation Time',
-                chatral: 'Under 2 minutes (1 script tag)',
-                others: 'Complex multi-step setups',
-              },
-            ].map((row, idx, arr) => (
-              <div
-                key={row.feature}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: isMobile ? '1fr 1fr' : '2fr 1.3fr 1.3fr',
-                  padding: '16px 20px',
-                  borderBottom: idx === arr.length - 1 ? 'none' : '1px solid #f1f5f9',
-                  background: idx % 2 === 0 ? '#ffffff' : '#fafbfe',
-                  alignItems: 'center',
-                  fontSize: 13.5,
-                }}
-              >
-                <div style={{ fontWeight: 600, color: '#0f172a' }}>{row.feature}</div>
-                <div style={{ color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 16 }}>✓</span>
-                  <span>{row.chatral}</span>
-                </div>
-                {!isMobile && (
-                  <div style={{ color: '#64748b' }}>
-                    <span style={{ color: '#ef4444', marginRight: 6 }}>✕</span>
-                    {row.others}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. FAQ Section (Centered, Clean & Spacious with Hero Blue Ambient Glow) */}
+      {/* 6. FAQ Section (Centered, Clean & Spacious with Hero Blue Ambient Glow) */}
       <section
         id="faq"
         style={{
