@@ -1,14 +1,19 @@
 {
   "name": "Chatral",
   "short_name": "Chatral",
-  "start_url": "/admin/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#2563eb",
   "icons": [
     {
-      "src": "/admin/apple-touch-icon.png",
+      "src": "/apple-touch-icon.png?v=3",
       "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png?v=3",
+      "sizes": "32x32",
       "type": "image/png"
     }
   ]
