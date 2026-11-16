@@ -35,7 +35,7 @@ try {
   console.warn('[db] Auto-migration warning (non-fatal):', e?.message || e);
 }
 
-// One-time Fresh Panel Reset: Purge old test users and establish chatral.official@gmail.com as SUPER_ADMIN
+// One-time Fresh Panel Reset: Purge old test stores/users and ensure ONLY Chatral Store and chatral.official@gmail.com exist
 try {
   await prisma.$executeRawUnsafe(`
     CREATE TABLE IF NOT EXISTS "_SystemMigration" (
@@ -43,40 +43,49 @@ try {
       "appliedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
   `);
-  const ran = await prisma.$queryRawUnsafe(`
-    SELECT "key" FROM "_SystemMigration" WHERE "key" = 'fresh_users_reset_chatral_official';
+  const ranPurge = await prisma.$queryRawUnsafe(`
+    SELECT "key" FROM "_SystemMigration" WHERE "key" = 'fresh_purge_test_stores_v3';
   `);
-  if (!ran || ran.length === 0) {
-    console.log('[db] Initiating one-time fresh panel reset for chatral.official@gmail.com...');
-    // Clear old push devices, store memberships, and users
-    await prisma.pushDevice.deleteMany({}).catch(() => {});
-    await prisma.storeMember.deleteMany({}).catch(() => {});
-    await prisma.user.deleteMany({}).catch(() => {});
-
-    // Reset unassigned conversations & tickets
-    await prisma.conversation.updateMany({ data: { assigneeId: null } }).catch(() => {});
-    await prisma.ticket.updateMany({ data: { assigneeId: null } }).catch(() => {});
-
-    // Create fresh SUPER_ADMIN
-    const adminEmail = 'chatral.official@gmail.com';
-    const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'Admin@123456', 12);
-    const superAdmin = await prisma.user.create({
-      data: {
-        email: adminEmail,
-        name: 'Chatral Super Admin',
-        role: 'SUPER_ADMIN',
-        isActive: true,
-        passwordHash,
+  if (!ranPurge || ranPurge.length === 0) {
+    console.log('[db] Initiating full purge of old test stores and users...');
+    
+    // 1. Delete all old test stores (AutoTest's Store, Meet Rajani's Store, etc.)
+    await prisma.store.deleteMany({
+      where: {
+        name: { not: 'Chatral Store' },
       },
-    });
+    }).catch((e) => console.warn('Store purge warning:', e?.message));
 
-    // Ensure all existing stores have chatral.official@gmail.com as OWNER
-    const stores = await prisma.store.findMany();
-    if (stores.length === 0) {
-      const defaultStore = await prisma.store.create({
+    // 2. Ensure only chatral.official@gmail.com exists
+    await prisma.user.deleteMany({
+      where: {
+        email: { not: 'chatral.official@gmail.com' },
+      },
+    }).catch((e) => console.warn('User purge warning:', e?.message));
+
+    // 3. Ensure SUPER_ADMIN exists
+    const adminEmail = 'chatral.official@gmail.com';
+    let superAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
+    if (!superAdmin) {
+      const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'Admin@123456', 12);
+      superAdmin = await prisma.user.create({
+        data: {
+          email: adminEmail,
+          name: 'Chatral Super Admin',
+          role: 'SUPER_ADMIN',
+          isActive: true,
+          passwordHash,
+        },
+      });
+    }
+
+    // 4. Ensure pristine Chatral Store exists
+    let chatralStore = await prisma.store.findFirst({ where: { name: 'Chatral Store' } });
+    if (!chatralStore) {
+      chatralStore = await prisma.store.create({
         data: {
           name: 'Chatral Store',
-          allowedOrigins: ['localhost', '127.0.0.1'],
+          allowedOrigins: ['localhost', '127.0.0.1', 'chatral.com', '*.chatral.com'],
           timezone: 'Asia/Kolkata',
           publicKey: newPublicKey(),
           chatLinkId: newChatLinkId(),
@@ -87,30 +96,28 @@ try {
       });
       const cfg = { ...DEFAULT_WIDGET_CONFIG, businessHours: { ...DEFAULT_WIDGET_CONFIG.businessHours, timezone: 'Asia/Kolkata' } };
       await prisma.widgetConfig.create({
-        data: { storeId: defaultStore.id, version: 1, status: 'PUBLISHED', config: cfg, note: 'Initial setup' },
+        data: { storeId: chatralStore.id, version: 1, status: 'PUBLISHED', config: cfg, note: 'Initial setup' },
       }).catch(() => {});
-      await prisma.storeMember.create({
-        data: { storeId: defaultStore.id, userId: superAdmin.id, role: 'OWNER' },
-      }).catch(() => {});
-    } else {
-      for (const store of stores) {
-        await prisma.storeMember.create({
-          data: {
-            storeId: store.id,
-            userId: superAdmin.id,
-            role: 'OWNER',
-          },
-        }).catch(() => {});
-      }
     }
 
+    // 5. Connect chatral.official@gmail.com as OWNER of Chatral Store
+    await prisma.storeMember.upsert({
+      where: { userId_storeId: { userId: superAdmin.id, storeId: chatralStore.id } },
+      update: { role: 'OWNER' },
+      create: { userId: superAdmin.id, storeId: chatralStore.id, role: 'OWNER' },
+    }).catch(() => {});
+
+    // 6. Reset any dangling assignments
+    await prisma.conversation.updateMany({ data: { assigneeId: null } }).catch(() => {});
+    await prisma.ticket.updateMany({ data: { assigneeId: null } }).catch(() => {});
+
     await prisma.$executeRawUnsafe(`
-      INSERT INTO "_SystemMigration" ("key") VALUES ('fresh_users_reset_chatral_official');
+      INSERT INTO "_SystemMigration" ("key") VALUES ('fresh_purge_test_stores_v3');
     `);
-    console.log('[db] Fresh panel reset complete! chatral.official@gmail.com is now active SUPER_ADMIN.');
+    console.log('[db] Full purge complete! Only Chatral Store and chatral.official@gmail.com remain.');
   }
 } catch (e) {
-  console.warn('[db] Fresh panel reset warning (non-fatal):', e?.message || e);
+  console.warn('[db] Fresh purge warning (non-fatal):', e?.message || e);
 }
 
 // Agents who were "online" when the process died have no socket now; reset so availability is truthful.
