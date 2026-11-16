@@ -17,5 +17,5 @@ Disallow: /users
 Disallow: /platform
 Disallow: /api/
 
-Sitemap: https://chatral.com/sitemap.xml
+Sitemap: https://www.chatral.com/sitemap.xml
 
