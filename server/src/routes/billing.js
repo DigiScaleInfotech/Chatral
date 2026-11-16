@@ -136,7 +136,7 @@ r.post('/stores/:storeId/billing/subscribe', requireStore('ADMIN'), asyncRoute(a
     plan: z.enum(['STARTER', 'BUSINESS']),
     cycle: z.enum(['monthly', 'annual']).default('monthly'),
     currency: z.enum(['INR', 'USD']).default('INR'),
-    method: z.enum(['UPI', 'CARD', 'NETBANKING']).default('UPI'),
+    method: z.enum(['UPI', 'CARD', 'NETBANKING', 'WALLET']).default('UPI'),
     transactionId: z.string().optional(),
   }).parse(req.body);
 

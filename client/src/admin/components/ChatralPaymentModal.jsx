@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import {
   Modal, Flex, Typography, Tag, Segmented, Input, Button, Card,
-  Divider, Space, App, Spin, Row, Col,
+  Divider, Space, App, Spin, Row, Col, Checkbox, Select,
 } from 'antd';
 import {
   CheckCircleFilled, QrcodeOutlined, CreditCardOutlined,
   CopyOutlined, LockOutlined, ArrowRightOutlined,
-  CheckOutlined, SafetyCertificateOutlined,
+  CheckOutlined, SafetyCertificateOutlined, BankOutlined,
+  WalletOutlined, CloseOutlined,
 } from '@ant-design/icons';
 import { api, showError } from '../api.js';
 
@@ -49,6 +50,37 @@ export const PRICING_DATA = {
   },
 };
 
+const POPULAR_BANKS = [
+  { id: 'HDFC', name: 'HDFC Bank', code: 'HDFC', color: '#004c8f' },
+  { id: 'SBI', name: 'State Bank of India', code: 'SBI', color: '#280071' },
+  { id: 'ICICI', name: 'ICICI Bank', code: 'ICICI', color: '#b02a30' },
+  { id: 'AXIS', name: 'Axis Bank', code: 'AXIS', color: '#97144d' },
+  { id: 'KOTAK', name: 'Kotak Bank', code: 'KOTAK', color: '#ed1c24' },
+  { id: 'PNB', name: 'Punjab National Bank', code: 'PNB', color: '#a20a3a' },
+];
+
+const ALL_OTHER_BANKS = [
+  { value: 'BOB', label: 'Bank of Baroda' },
+  { value: 'BOI', label: 'Bank of India' },
+  { value: 'CANARA', label: 'Canara Bank' },
+  { value: 'UNION', label: 'Union Bank of India' },
+  { value: 'INDUS', label: 'IndusInd Bank' },
+  { value: 'YES', label: 'Yes Bank' },
+  { value: 'FED', label: 'Federal Bank' },
+  { value: 'IDBI', label: 'IDBI Bank' },
+  { value: 'IDFC', label: 'IDFC FIRST Bank' },
+  { value: 'RBL', label: 'RBL Bank' },
+  { value: 'INDIAN', label: 'Indian Bank' },
+  { value: 'CENTRAL', label: 'Central Bank of India' },
+];
+
+const WALLET_OPTIONS = [
+  { id: 'PAYTM', name: 'Paytm Wallet', icon: '🔵', desc: 'Pay with linked Paytm balance or UPI' },
+  { id: 'PHONEPE', name: 'PhonePe Wallet', icon: '🟣', desc: 'Instant 1-click checkout via PhonePe' },
+  { id: 'AMAZON', name: 'Amazon Pay', icon: '🟡', desc: 'Pay using your Amazon Pay balance' },
+  { id: 'MOBIKWIK', name: 'MobiKwik', icon: '🔷', desc: 'Pay using MobiKwik wallet or ZIP' },
+];
+
 export default function ChatralPaymentModal({
   open,
   onClose,
@@ -60,21 +92,33 @@ export default function ChatralPaymentModal({
   onSuccess,
 }) {
   const { message } = App.useApp();
-  const [selectedPlan, setSelectedPlan] = useState(initialPlan);
-  const [cycle, setCycle] = useState(initialCycle);
-  const [currency, setCurrency] = useState(initialCurrency);
-  const [paymentMethod, setPaymentMethod] = useState('UPI'); // 'UPI' | 'CARD'
+  const [selectedPlan, setSelectedPlan] = useState(initialPlan || 'STARTER');
+  const [cycle, setCycle] = useState(initialCycle || 'monthly');
+  const [currency, setCurrency] = useState(initialCurrency || 'INR');
+  const [paymentMethod, setPaymentMethod] = useState('CARD'); // 'CARD' | 'UPI' | 'NETBANKING' | 'WALLET'
   
-  // Form fields
-  const [upiId, setUpiId] = useState('');
+  // Card Fields
   const [cardNumber, setCardNumber] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvv, setCardCvv] = useState('');
   const [cardName, setCardName] = useState('');
+  const [saveCard, setSaveCard] = useState(true);
+
+  // UPI Fields
+  const [upiId, setUpiId] = useState('');
+  const [copiedUpi, setCopiedUpi] = useState(false);
+
+  // Netbanking Fields
+  const [selectedBank, setSelectedBank] = useState('HDFC');
+
+  // Wallet Fields
+  const [selectedWallet, setSelectedWallet] = useState('PAYTM');
+
+  // User contact
+  const [userContact, setUserContact] = useState('+91 90992 26483');
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [copiedUpi, setCopiedUpi] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -83,6 +127,14 @@ export default function ChatralPaymentModal({
       setCurrency(initialCurrency || 'INR');
       setSuccess(false);
       setLoading(false);
+
+      // Try reading user info
+      const token = localStorage.getItem('token');
+      if (token) {
+        api('/auth/me').then((m) => {
+          if (m?.email) setUserContact(m.email);
+        }).catch(() => {});
+      }
     }
   }, [open, initialPlan, initialCycle, initialCurrency]);
 
@@ -96,8 +148,9 @@ export default function ChatralPaymentModal({
   const periodDisplay = cycle === 'annual' ? '/ year (Save 25%)' : '/ month';
 
   const officialUpiId = 'chatral.official@okaxis';
-  const upiQrString = encodeURIComponent(`upi://pay?pa=${officialUpiId}&pn=Chatral%20Technologies&am=${cycle === 'annual' ? planInfo.annualPriceINR : planInfo.monthlyPriceINR}&cu=INR&tn=${encodeURIComponent(planInfo.name + ' Plan')}`);
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${upiQrString}&color=0f172a&bgcolor=ffffff&qzone=1`;
+  const upiAmount = cycle === 'annual' ? planInfo.annualPriceINR : planInfo.monthlyPriceINR;
+  const upiQrString = encodeURIComponent(`upi://pay?pa=${officialUpiId}&pn=Chatral%20Technologies&am=${upiAmount}&cu=INR&tn=${encodeURIComponent(planInfo.name + ' Plan')}`);
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${upiQrString}&color=0f172a&bgcolor=ffffff&qzone=1`;
 
   const copyUpi = () => {
     navigator.clipboard?.writeText(officialUpiId);
@@ -119,9 +172,6 @@ export default function ChatralPaymentModal({
   };
 
   const handleProcessPayment = async () => {
-    if (paymentMethod === 'UPI' && !upiId && !copiedUpi) {
-      // Allow proceeding if they verified QR scan or entered UPI ID
-    }
     if (paymentMethod === 'CARD') {
       if (cardNumber.replace(/\s/g, '').length < 15) {
         message.error('Please enter a valid card number');
@@ -137,6 +187,20 @@ export default function ChatralPaymentModal({
       }
     }
 
+    if (paymentMethod === 'UPI' && !upiId && !copiedUpi) {
+      // Allow proceeding
+    }
+
+    if (paymentMethod === 'NETBANKING' && !selectedBank) {
+      message.error('Please select a bank');
+      return;
+    }
+
+    if (paymentMethod === 'WALLET' && !selectedWallet) {
+      message.error('Please select a wallet');
+      return;
+    }
+
     setLoading(true);
     try {
       let targetStoreId = storeId;
@@ -147,12 +211,12 @@ export default function ChatralPaymentModal({
         }
       }
       if (!targetStoreId) {
-        message.error('No active store found. Please set up your store first.');
+        message.error('No active store found. Please create or select a store first.');
         return;
       }
 
-      // Simulate real-time secure gateway handoff, then activate
-      await new Promise((resolve) => setTimeout(resolve, 1400));
+      // Smooth gateway transition
+      await new Promise((resolve) => setTimeout(resolve, 1200));
       
       const res = await api(`/stores/${targetStoreId}/billing/subscribe`, {
         method: 'POST',
@@ -186,33 +250,36 @@ export default function ChatralPaymentModal({
       onCancel={handleClose}
       footer={null}
       centered
-      width={680}
+      width={760}
       destroyOnClose
+      closeIcon={null}
       styles={{
         content: {
-          padding: '28px 32px',
-          borderRadius: 20,
-          boxShadow: '0 24px 60px -12px rgba(15, 23, 42, 0.22)',
+          padding: 0,
+          borderRadius: 16,
+          overflow: 'hidden',
+          boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.3)',
+          border: 'none',
         },
       }}
     >
       {success ? (
-        <div style={{ textAlign: 'center', padding: '36px 16px' }}>
+        <div style={{ textAlign: 'center', padding: '48px 24px', background: '#ffffff' }}>
           <CheckCircleFilled style={{ fontSize: 64, color: '#22c55e', marginBottom: 20 }} />
-          <Typography.Title level={3} style={{ margin: '0 0 8px', fontWeight: 800 }}>
+          <Typography.Title level={3} style={{ margin: '0 0 8px', fontWeight: 800, color: '#0f172a' }}>
             Subscription Activated! 🎉
           </Typography.Title>
           <Typography.Text type="secondary" style={{ fontSize: 15, display: 'block', maxWidth: 440, margin: '0 auto 28px' }}>
-            Your store <b>{storeName || 'Chatral Store'}</b> is now active on the <b>{planInfo.name}</b> ({cycle === 'annual' ? 'Annual' : 'Monthly'}).
+            Your store <b>{storeName || 'Chatral Store'}</b> is now active on <b>{planInfo.name}</b> ({cycle === 'annual' ? 'Annual' : 'Monthly'}).
           </Typography.Text>
 
-          <Card style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, maxWidth: 400, margin: '0 auto 28px', textAlign: 'left' }}>
+          <Card style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, maxWidth: 380, margin: '0 auto 28px', textAlign: 'left' }}>
             <Flex justify="space-between" style={{ marginBottom: 8 }}>
               <span style={{ color: '#64748b' }}>Plan</span>
               <span style={{ fontWeight: 700, color: '#0f172a' }}>{planInfo.name}</span>
             </Flex>
             <Flex justify="space-between" style={{ marginBottom: 8 }}>
-              <span style={{ color: '#64748b' }}>Billing Amount</span>
+              <span style={{ color: '#64748b' }}>Amount Paid</span>
               <span style={{ fontWeight: 700, color: '#2563eb' }}>{priceDisplay} {periodDisplay}</span>
             </Flex>
             <Flex justify="space-between">
@@ -225,259 +292,496 @@ export default function ChatralPaymentModal({
             type="primary"
             size="large"
             onClick={handleClose}
-            style={{ height: 46, padding: '0 36px', borderRadius: 10, background: '#2563eb', fontWeight: 600 }}
+            style={{ height: 44, padding: '0 36px', borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
           >
-            Go to Store Settings
+            Done
           </Button>
         </div>
       ) : (
-        <div>
-          {/* Header */}
-          <Flex justify="space-between" align="center" style={{ marginBottom: 20 }}>
-            <div>
-              <Flex align="center" gap={8}>
-                <span style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>Chatral Checkout</span>
-                <Tag color="blue" bordered={false} style={{ fontWeight: 700, borderRadius: 6 }}>
-                  {planInfo.name}
-                </Tag>
-              </Flex>
-              <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-                Instant plan activation with zero branding and priority support.
-              </Typography.Text>
-            </div>
-            
-            <Flex gap={8} align="center">
-              <Segmented
-                size="small"
-                value={currency}
-                onChange={setCurrency}
-                options={[
-                  { label: '₹ INR', value: 'INR' },
-                  { label: '$ USD', value: 'USD' },
-                ]}
-              />
-              <Segmented
-                size="small"
-                value={cycle}
-                onChange={setCycle}
-                options={[
-                  { label: 'Monthly', value: 'monthly' },
-                  { label: 'Annual (-25%)', value: 'annual' },
-                ]}
-              />
-            </Flex>
-          </Flex>
-
-          {/* Pricing Banner */}
+        <div style={{ display: 'flex', minHeight: 480, background: '#ffffff' }}>
+          {/* 1. Left Razorpay-style Blue Sidebar */}
           <div
             style={{
-              background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
-              color: '#ffffff',
-              borderRadius: 14,
-              padding: '18px 22px',
-              marginBottom: 22,
+              width: 260,
+              background: 'linear-gradient(175deg, #1d4ed8 0%, #1e40af 60%, #1e3a8a 100%)',
+              padding: '24px 20px',
               display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'space-between',
-              alignItems: 'center',
+              color: '#ffffff',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
             <div>
-              <div style={{ fontSize: 12, opacity: 0.85, textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>
-                Total Due Today
+              {/* Chatral Official Logo */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    background: '#ffffff',
+                    color: '#1d4ed8',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 900,
+                    fontSize: 18,
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                  }}
+                >
+                  C
+                </div>
+                <span style={{ fontSize: 19, fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>
+                  Chatral
+                </span>
               </div>
-              <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em' }}>
-                {priceDisplay} <span style={{ fontSize: 13, fontWeight: 400, opacity: 0.9 }}>{periodDisplay}</span>
+
+              {/* Price Summary */}
+              <div style={{ marginTop: 28 }}>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Price Summary
+                </div>
+                <div style={{ fontSize: 34, fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em', margin: '4px 0 2px' }}>
+                  {priceDisplay}
+                </div>
+                <div style={{ fontSize: 12, color: '#93c5fd' }}>
+                  {planInfo.name} • {cycle === 'annual' ? 'Annual (25% off)' : 'Monthly'}
+                </div>
+              </div>
+
+              {/* User Chip */}
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.12)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: 8,
+                  padding: '9px 12px',
+                  marginTop: 22,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                  fontSize: 12,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden' }}>
+                  <span style={{ fontSize: 13 }}>👤</span>
+                  <span style={{ color: '#ffffff', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    Using as {userContact}
+                  </span>
+                </div>
+                <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>›</span>
               </div>
             </div>
-            <div style={{ textAlign: 'right', fontSize: 12, opacity: 0.9 }}>
-              <div>Auto-activates instantly</div>
-              <div>Cancel anytime from settings</div>
+
+            {/* Bottom 3D Graphic & Encryption Note (Clean replacement for Secured by Razorpay) */}
+            <div style={{ marginTop: 20 }}>
+              <div style={{ textAlign: 'center', marginBottom: 12 }}>
+                <svg width="150" height="90" viewBox="0 0 150 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M75 10L135 45L75 80L15 45L75 10Z" fill="#3b82f6" fillOpacity="0.4" />
+                  <path d="M15 45L75 80V85L15 50V45Z" fill="#1e40af" />
+                  <path d="M135 45L75 80V85L135 50V45Z" fill="#1d4ed8" />
+                  <rect x="42" y="24" width="66" height="42" rx="6" fill="#ffffff" fillOpacity="0.95" />
+                  <rect x="42" y="32" width="66" height="8" fill="#1e3a8a" />
+                  <circle cx="56" cy="52" r="5" fill="#f59e0b" />
+                  <circle cx="64" cy="52" r="5" fill="#ef4444" fillOpacity="0.8" />
+                  <rect x="76" y="50" width="24" height="4" rx="2" fill="#94a3b8" />
+                </svg>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  fontSize: 11,
+                  justifyContent: 'center',
+                }}
+              >
+                <LockOutlined style={{ fontSize: 12, color: '#60a5fa' }} />
+                <span>256-Bit Bank Grade Security</span>
+              </div>
             </div>
           </div>
 
-          {/* Payment Method Tabs */}
-          <div style={{ marginBottom: 16 }}>
-            <Segmented
-              block
-              value={paymentMethod}
-              onChange={setPaymentMethod}
-              options={[
-                {
-                  label: (
-                    <Flex align="center" justify="center" gap={8} style={{ padding: '6px 0' }}>
-                      <QrcodeOutlined style={{ fontSize: 16 }} />
-                      <span style={{ fontWeight: 600 }}>UPI / QR Code (India)</span>
-                    </Flex>
-                  ),
-                  value: 'UPI',
-                },
-                {
-                  label: (
-                    <Flex align="center" justify="center" gap={8} style={{ padding: '6px 0' }}>
-                      <CreditCardOutlined style={{ fontSize: 16 }} />
-                      <span style={{ fontWeight: 600 }}>Credit / Debit Card (Global)</span>
-                    </Flex>
-                  ),
-                  value: 'CARD',
-                },
-              ]}
-            />
-          </div>
-
-          {/* Tab 1: UPI */}
-          {paymentMethod === 'UPI' && (
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '20px', marginBottom: 20 }}>
-              <Row gutter={[20, 20]} align="middle">
-                <Col xs={24} sm={10} style={{ textAlign: 'center' }}>
-                  <div style={{ background: '#ffffff', padding: 12, borderRadius: 12, border: '1px solid #cbd5e1', display: 'inline-block', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}>
-                    <img
-                      src={qrUrl}
-                      alt="Scan UPI QR Code"
-                      style={{ width: 140, height: 140, display: 'block' }}
-                    />
-                  </div>
-                  <div style={{ fontSize: 11, color: '#64748b', marginTop: 8, fontWeight: 600 }}>
-                    Scan with GPay, PhonePe, Paytm, CRED
-                  </div>
-                </Col>
-
-                <Col xs={24} sm={14}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>
-                    Direct UPI Transfer
-                  </div>
-                  <div style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>
-                    Copy our verified official merchant UPI ID:
-                  </div>
-
-                  <div
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid #cbd5e1',
-                      borderRadius: 8,
-                      padding: '8px 12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: 14,
-                    }}
-                  >
-                    <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#1e293b', fontSize: 13 }}>
-                      {officialUpiId}
-                    </span>
-                    <Button
-                      size="small"
-                      type="text"
-                      icon={<CopyOutlined />}
-                      onClick={copyUpi}
-                      style={{ color: '#2563eb', fontWeight: 600 }}
-                    >
-                      {copiedUpi ? 'Copied!' : 'Copy'}
-                    </Button>
-                  </div>
-
-                  <div style={{ fontSize: 12, fontWeight: 600, color: '#0f172a', marginBottom: 6 }}>
-                    Or enter your UPI ID for quick verification:
-                  </div>
-                  <Input
-                    placeholder="e.g. yourname@okhdfcbank"
-                    value={upiId}
-                    onChange={(e) => setUpiId(e.target.value)}
-                    style={{ borderRadius: 8, height: 38 }}
-                  />
-                </Col>
-              </Row>
-            </div>
-          )}
-
-          {/* Tab 2: Credit / Debit Card */}
-          {paymentMethod === 'CARD' && (
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '20px', marginBottom: 20 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>Enter Card Details</span>
-                <span style={{ fontSize: 12, color: '#64748b' }}>Visa • Mastercard • RuPay • Amex</span>
-              </div>
-
-              <Space direction="vertical" size={12} style={{ width: '100%' }}>
-                <div>
-                  <div style={{ fontSize: 11.5, fontWeight: 600, color: '#475569', marginBottom: 4 }}>
-                    Card Number
-                  </div>
-                  <Input
-                    prefix={<CreditCardOutlined style={{ color: '#94a3b8' }} />}
-                    placeholder="4532 •••• •••• ••••"
-                    value={cardNumber}
-                    onChange={handleCardNumberChange}
-                    maxLength={19}
-                    style={{ borderRadius: 8, height: 40 }}
-                  />
-                </div>
-
-                <Row gutter={12}>
-                  <Col span={12}>
-                    <div style={{ fontSize: 11.5, fontWeight: 600, color: '#475569', marginBottom: 4 }}>
-                      Expiry (MM/YY)
-                    </div>
-                    <Input
-                      placeholder="MM/YY"
-                      value={cardExpiry}
-                      onChange={handleExpiryChange}
-                      maxLength={5}
-                      style={{ borderRadius: 8, height: 40 }}
-                    />
-                  </Col>
-                  <Col span={12}>
-                    <div style={{ fontSize: 11.5, fontWeight: 600, color: '#475569', marginBottom: 4 }}>
-                      CVV / CVC
-                    </div>
-                    <Input.Password
-                      placeholder="•••"
-                      value={cardCvv}
-                      onChange={(e) => setCardCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                      maxLength={4}
-                      style={{ borderRadius: 8, height: 40 }}
-                    />
-                  </Col>
-                </Row>
-
-                <div>
-                  <div style={{ fontSize: 11.5, fontWeight: 600, color: '#475569', marginBottom: 4 }}>
-                    Cardholder Name
-                  </div>
-                  <Input
-                    placeholder="Full name as printed on card"
-                    value={cardName}
-                    onChange={(e) => setCardName(e.target.value)}
-                    style={{ borderRadius: 8, height: 40 }}
-                  />
-                </div>
-              </Space>
-            </div>
-          )}
-
-          {/* Security & Action */}
-          <Flex justify="space-between" align="center" style={{ marginTop: 16 }}>
-            <Flex align="center" gap={6} style={{ color: '#64748b', fontSize: 12 }}>
-              <SafetyCertificateOutlined style={{ color: '#22c55e', fontSize: 15 }} />
-              <span>256-bit bank-grade encryption</span>
-            </Flex>
-
-            <Button
-              type="primary"
-              size="large"
-              loading={loading}
-              onClick={handleProcessPayment}
+          {/* 2. Right Main Panel */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#ffffff' }}>
+            {/* Top Bar */}
+            <div
               style={{
-                height: 46,
-                padding: '0 32px',
-                borderRadius: 10,
-                background: '#2563eb',
-                fontWeight: 700,
-                fontSize: 14,
+                padding: '14px 20px',
+                borderBottom: '1px solid #f1f5f9',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
-              Complete Payment ({priceDisplay})
-            </Button>
-          </Flex>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>
+                Payment Options
+              </span>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <Segmented
+                  size="small"
+                  value={currency}
+                  onChange={setCurrency}
+                  options={[
+                    { label: '₹ INR', value: 'INR' },
+                    { label: '$ USD', value: 'USD' },
+                  ]}
+                />
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: 16,
+                    color: '#64748b',
+                    cursor: 'pointer',
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                  }}
+                  title="Close"
+                >
+                  <CloseOutlined />
+                </button>
+              </div>
+            </div>
+
+            {/* Split Options Body */}
+            <div style={{ flex: 1, display: 'flex' }}>
+              {/* Left Sub-Nav (Exact Razorpay Tab Menu) */}
+              <div
+                style={{
+                  width: 175,
+                  background: '#fafbfc',
+                  borderRight: '1px solid #f1f5f9',
+                  padding: '8px 0',
+                }}
+              >
+                {/* 1. Cards */}
+                <div
+                  onClick={() => setPaymentMethod('CARD')}
+                  style={{
+                    padding: '12px 14px',
+                    cursor: 'pointer',
+                    background: paymentMethod === 'CARD' ? '#ffffff' : 'transparent',
+                    borderLeft: paymentMethod === 'CARD' ? '3px solid #2563eb' : '3px solid transparent',
+                    boxShadow: paymentMethod === 'CARD' ? '0 1px 3px rgba(0,0,0,0.03)' : 'none',
+                  }}
+                >
+                  <div style={{ fontSize: 13, fontWeight: paymentMethod === 'CARD' ? 700 : 500, color: paymentMethod === 'CARD' ? '#1d4ed8' : '#334155' }}>
+                    Cards
+                  </div>
+                  <div style={{ fontSize: 10.5, color: '#94a3b8', marginTop: 2 }}>
+                    Visa, Master, RuPay
+                  </div>
+                </div>
+
+                {/* 2. UPI / QR */}
+                <div
+                  onClick={() => setPaymentMethod('UPI')}
+                  style={{
+                    padding: '12px 14px',
+                    cursor: 'pointer',
+                    background: paymentMethod === 'UPI' ? '#ffffff' : 'transparent',
+                    borderLeft: paymentMethod === 'UPI' ? '3px solid #2563eb' : '3px solid transparent',
+                    boxShadow: paymentMethod === 'UPI' ? '0 1px 3px rgba(0,0,0,0.03)' : 'none',
+                  }}
+                >
+                  <div style={{ fontSize: 13, fontWeight: paymentMethod === 'UPI' ? 700 : 500, color: paymentMethod === 'UPI' ? '#1d4ed8' : '#334155' }}>
+                    UPI / QR Code
+                  </div>
+                  <div style={{ fontSize: 10.5, color: '#94a3b8', marginTop: 2 }}>
+                    GPay, PhonePe, Paytm
+                  </div>
+                </div>
+
+                {/* 3. Netbanking */}
+                <div
+                  onClick={() => setPaymentMethod('NETBANKING')}
+                  style={{
+                    padding: '12px 14px',
+                    cursor: 'pointer',
+                    background: paymentMethod === 'NETBANKING' ? '#ffffff' : 'transparent',
+                    borderLeft: paymentMethod === 'NETBANKING' ? '3px solid #2563eb' : '3px solid transparent',
+                    boxShadow: paymentMethod === 'NETBANKING' ? '0 1px 3px rgba(0,0,0,0.03)' : 'none',
+                  }}
+                >
+                  <div style={{ fontSize: 13, fontWeight: paymentMethod === 'NETBANKING' ? 700 : 500, color: paymentMethod === 'NETBANKING' ? '#1d4ed8' : '#334155' }}>
+                    Netbanking
+                  </div>
+                  <div style={{ fontSize: 10.5, color: '#94a3b8', marginTop: 2 }}>
+                    All Indian Banks
+                  </div>
+                </div>
+
+                {/* 4. Wallet */}
+                <div
+                  onClick={() => setPaymentMethod('WALLET')}
+                  style={{
+                    padding: '12px 14px',
+                    cursor: 'pointer',
+                    background: paymentMethod === 'WALLET' ? '#ffffff' : 'transparent',
+                    borderLeft: paymentMethod === 'WALLET' ? '3px solid #2563eb' : '3px solid transparent',
+                    boxShadow: paymentMethod === 'WALLET' ? '0 1px 3px rgba(0,0,0,0.03)' : 'none',
+                  }}
+                >
+                  <div style={{ fontSize: 13, fontWeight: paymentMethod === 'WALLET' ? 700 : 500, color: paymentMethod === 'WALLET' ? '#1d4ed8' : '#334155' }}>
+                    Wallet
+                  </div>
+                  <div style={{ fontSize: 10.5, color: '#94a3b8', marginTop: 2 }}>
+                    Paytm, Amazon, PhonePe
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Content Panel */}
+              <div
+                style={{
+                  flex: 1,
+                  padding: '20px 22px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {/* METHOD 1: CARDS */}
+                {paymentMethod === 'CARD' && (
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 14 }}>
+                      Add a new card
+                    </div>
+
+                    <Space direction="vertical" size={12} style={{ width: '100%' }}>
+                      <div>
+                        <Input
+                          placeholder="Card Number"
+                          value={cardNumber}
+                          onChange={handleCardNumberChange}
+                          maxLength={19}
+                          style={{ height: 42, borderRadius: 8, fontSize: 13.5 }}
+                          prefix={<CreditCardOutlined style={{ color: '#94a3b8', marginRight: 4 }} />}
+                        />
+                      </div>
+
+                      <Row gutter={10}>
+                        <Col span={12}>
+                          <Input
+                            placeholder="MM / YY"
+                            value={cardExpiry}
+                            onChange={handleExpiryChange}
+                            maxLength={5}
+                            style={{ height: 42, borderRadius: 8, fontSize: 13.5 }}
+                          />
+                        </Col>
+                        <Col span={12}>
+                          <Input.Password
+                            placeholder="CVV"
+                            value={cardCvv}
+                            onChange={(e) => setCardCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                            maxLength={4}
+                            style={{ height: 42, borderRadius: 8, fontSize: 13.5 }}
+                          />
+                        </Col>
+                      </Row>
+
+                      <div>
+                        <Input
+                          placeholder="Cardholder's Name"
+                          value={cardName}
+                          onChange={(e) => setCardName(e.target.value)}
+                          style={{ height: 42, borderRadius: 8, fontSize: 13.5 }}
+                        />
+                      </div>
+
+                      <div style={{ marginTop: 4 }}>
+                        <Checkbox checked={saveCard} onChange={(e) => setSaveCard(e.target.checked)}>
+                          <span style={{ fontSize: 12, color: '#64748b' }}>
+                            Save this card as per RBI guidelines
+                          </span>
+                        </Checkbox>
+                      </div>
+                    </Space>
+                  </div>
+                )}
+
+                {/* METHOD 2: UPI / QR */}
+                {paymentMethod === 'UPI' && (
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 12 }}>
+                      Scan QR or Enter UPI ID
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 16, alignItems: 'center', background: '#f8fafc', padding: 12, borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                      <div style={{ background: '#ffffff', padding: 6, borderRadius: 8, border: '1px solid #cbd5e1' }}>
+                        <img src={qrUrl} alt="UPI QR" style={{ width: 110, height: 110, display: 'block' }} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>Scan with any UPI app</div>
+                        <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>GPay, PhonePe, Paytm, BHIM</div>
+                        <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ fontSize: 11, fontFamily: 'monospace', color: '#1e293b', fontWeight: 600 }}>{officialUpiId}</span>
+                          <Button size="small" type="text" icon={<CopyOutlined />} onClick={copyUpi} style={{ color: '#2563eb', padding: '0 4px', fontSize: 11 }}>
+                            {copiedUpi ? 'Copied' : 'Copy'}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ marginTop: 14 }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 4 }}>
+                        Or enter UPI ID / VPA
+                      </div>
+                      <Input
+                        placeholder="yourname@okaxis"
+                        value={upiId}
+                        onChange={(e) => setUpiId(e.target.value)}
+                        style={{ height: 38, borderRadius: 8 }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* METHOD 3: NETBANKING (Razorpay Popular Banks Grid) */}
+                {paymentMethod === 'NETBANKING' && (
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 10 }}>
+                      Popular Indian Banks
+                    </div>
+
+                    <Row gutter={[8, 8]}>
+                      {POPULAR_BANKS.map((b) => {
+                        const active = selectedBank === b.id;
+                        return (
+                          <Col span={8} key={b.id}>
+                            <div
+                              onClick={() => setSelectedBank(b.id)}
+                              style={{
+                                border: active ? '2px solid #2563eb' : '1px solid #e2e8f0',
+                                background: active ? '#eff6ff' : '#ffffff',
+                                borderRadius: 8,
+                                padding: '10px 8px',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease',
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: 28,
+                                  height: 28,
+                                  borderRadius: '50%',
+                                  background: b.color,
+                                  color: '#ffffff',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontSize: 10,
+                                  fontWeight: 800,
+                                  margin: '0 auto 6px',
+                                }}
+                              >
+                                {b.code.slice(0, 2)}
+                              </div>
+                              <div style={{ fontSize: 11, fontWeight: 600, color: active ? '#1d4ed8' : '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {b.name}
+                              </div>
+                            </div>
+                          </Col>
+                        );
+                      })}
+                    </Row>
+
+                    <div style={{ marginTop: 12 }}>
+                      <div style={{ fontSize: 11.5, fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
+                        Or select from all other banks:
+                      </div>
+                      <Select
+                        placeholder="Select Bank"
+                        value={POPULAR_BANKS.some((b) => b.id === selectedBank) ? undefined : selectedBank}
+                        onChange={(v) => setSelectedBank(v)}
+                        options={ALL_OTHER_BANKS}
+                        style={{ width: '100%', height: 36 }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* METHOD 4: WALLET */}
+                {paymentMethod === 'WALLET' && (
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 12 }}>
+                      Select a Wallet
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {WALLET_OPTIONS.map((w) => {
+                        const active = selectedWallet === w.id;
+                        return (
+                          <div
+                            key={w.id}
+                            onClick={() => setSelectedWallet(w.id)}
+                            style={{
+                              border: active ? '2px solid #2563eb' : '1px solid #e2e8f0',
+                              background: active ? '#eff6ff' : '#ffffff',
+                              borderRadius: 8,
+                              padding: '10px 14px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <span style={{ fontSize: 18 }}>{w.icon}</span>
+                              <div>
+                                <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>{w.name}</div>
+                                <div style={{ fontSize: 11, color: '#64748b' }}>{w.desc}</div>
+                              </div>
+                            </div>
+                            <div
+                              style={{
+                                width: 16,
+                                height: 16,
+                                borderRadius: '50%',
+                                border: active ? '5px solid #2563eb' : '2px solid #cbd5e1',
+                                background: '#ffffff',
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Bottom Continue / Pay Button */}
+                <div style={{ marginTop: 16 }}>
+                  <Button
+                    type="primary"
+                    block
+                    size="large"
+                    loading={loading}
+                    onClick={handleProcessPayment}
+                    style={{
+                      height: 44,
+                      background: '#0f172a', // Clean Razorpay-style dark submit button
+                      borderRadius: 8,
+                      fontWeight: 700,
+                      fontSize: 14,
+                    }}
+                  >
+                    Continue & Pay {priceDisplay}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </Modal>
