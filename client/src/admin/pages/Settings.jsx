@@ -1135,6 +1135,7 @@ function SubscriptionPlan({ store, reload, can }) {
   const [searchParams] = useSearchParams();
   const planParam = searchParams.get('plan');
   const [upgradingPlan, setUpgradingPlan] = useState(null);
+  const [syncingPayment, setSyncingPayment] = useState(false);
   const [cycle, setCycle] = useState('monthly'); // 'monthly' | 'annual'
   const [currency, setCurrency] = useState('INR'); // 'INR' | 'USD'
 
@@ -1147,6 +1148,26 @@ function SubscriptionPlan({ store, reload, can }) {
   const daysLeft = planExpiresAt
     ? Math.max(0, Math.ceil((new Date(planExpiresAt).getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
     : 7;
+
+  async function handleSyncPayment() {
+    setSyncingPayment(true);
+    try {
+      const res = await api(`/stores/${store.id}/billing/sync-payment`, {
+        method: 'POST',
+      });
+      if (res.ok) {
+        message.success(res.message);
+        reload?.();
+        reloadMe?.();
+      } else {
+        message.info(res.message);
+      }
+    } catch (err) {
+      showError(err, { message });
+    } finally {
+      setSyncingPayment(false);
+    }
+  }
 
   const planName = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
 
@@ -1286,15 +1307,26 @@ function SubscriptionPlan({ store, reload, can }) {
                 : `Next billing / renewal date: ${planExpiresAt ? dayjs(planExpiresAt).format('MMMM D, YYYY') : 'Active Subscription'}.`}
             </Typography.Text>
           </div>
-          {can('ADMIN') && plan === 'TRIAL' && (
-            <Button
-              type="primary"
-              style={{ background: '#2563eb' }}
-              onClick={() => handleUpgrade('STARTER')}
-            >
-              Upgrade Plan
-            </Button>
-          )}
+          <Flex align="center" gap={10} wrap>
+            {can('ADMIN') && (
+              <Button
+                icon={<ReloadOutlined />}
+                loading={syncingPayment}
+                onClick={handleSyncPayment}
+              >
+                Sync Payment Status
+              </Button>
+            )}
+            {can('ADMIN') && plan === 'TRIAL' && (
+              <Button
+                type="primary"
+                style={{ background: '#2563eb' }}
+                onClick={() => handleUpgrade('STARTER')}
+              >
+                Upgrade Plan
+              </Button>
+            )}
+          </Flex>
         </Flex>
       </Card>
 

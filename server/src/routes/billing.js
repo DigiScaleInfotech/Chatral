@@ -30,6 +30,76 @@ r.get('/billing/plans', (req, res) => {
   res.json({ ok: true, plans: PLAN_PRICING });
 });
 
+// Public Webhook endpoint for Razorpay server-to-server notifications
+r.post('/billing/webhook', asyncRoute(async (req, res) => {
+  const secret = process.env.RAZORPAY_WEBHOOK_SECRET || config.razorpay.keySecret;
+  const signature = req.headers['x-razorpay-signature'];
+
+  // Signature validation if secret and signature are available
+  if (secret && signature) {
+    try {
+      const payload = req.rawBody ? req.rawBody.toString() : JSON.stringify(req.body);
+      const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+      if (expected !== signature) {
+        console.warn('[razorpay-webhook] Signature verification mismatch');
+        return res.status(400).json({ error: 'Invalid webhook signature' });
+      }
+    } catch (e) {
+      console.error('[razorpay-webhook] Signature verification error:', e);
+      return res.status(400).json({ error: 'Signature check failed' });
+    }
+  }
+
+  const event = req.body?.event;
+  console.log(`[razorpay-webhook] Received event: ${event}`);
+
+  if (event === 'order.paid' || event === 'payment.captured') {
+    const payload = req.body.payload || {};
+    const order = payload.order?.entity || {};
+    const payment = payload.payment?.entity || {};
+
+    const notes = order.notes || payment.notes || {};
+    const storeId = notes.storeId;
+    const plan = notes.plan || 'STARTER';
+    const cycle = notes.cycle || 'monthly';
+
+    if (storeId) {
+      const durationDays = cycle === 'annual' ? 365 : 30;
+      const planExpiresAt = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000);
+
+      await prisma.store.update({
+        where: { id: storeId },
+        data: {
+          plan,
+          planStatus: 'ACTIVE',
+          planExpiresAt,
+        },
+      });
+
+      console.log(`[razorpay-webhook] Activated plan ${plan} for store ${storeId}`);
+
+      try {
+        await prisma.auditLog.create({
+          data: {
+            storeId,
+            userId: notes.userId || null,
+            action: 'store.plan_upgraded_webhook',
+            meta: {
+              event,
+              plan,
+              cycle,
+              paymentId: payment.id,
+              orderId: order.id,
+            },
+          },
+        });
+      } catch {}
+    }
+  }
+
+  res.json({ status: 'ok' });
+}));
+
 r.use(requireAuth);
 
 const rzp = new Razorpay({
@@ -134,6 +204,60 @@ r.post('/stores/:storeId/billing/verify-payment', requireStore('ADMIN'), asyncRo
     planStatus: updatedStore.planStatus,
     planExpiresAt: updatedStore.planExpiresAt,
   });
+}));
+
+// Sync / Re-check payment status directly with Razorpay API for this store
+r.post('/stores/:storeId/billing/sync-payment', requireStore('ADMIN'), asyncRoute(async (req, res) => {
+  const store = await prisma.store.findUnique({ where: { id: req.params.storeId } });
+  if (!store) throw httpError(404, 'Store not found');
+
+  try {
+    // Fetch last 15 orders from Razorpay
+    const orders = await rzp.orders.all({ count: 15 });
+    // Find any order belonging to this store that has status 'paid'
+    const matchingOrder = orders.items?.find(
+      (o) => (o.notes?.storeId === store.id || o.notes?.storeName === store.name) && o.status === 'paid'
+    );
+
+    if (!matchingOrder) {
+      return res.json({
+        ok: false,
+        message: 'No recent paid order found for this store on Razorpay. If money was debited, please wait a moment and try again.',
+      });
+    }
+
+    const plan = matchingOrder.notes?.plan || 'STARTER';
+    const cycle = matchingOrder.notes?.cycle || 'monthly';
+    const durationDays = cycle === 'annual' ? 365 : 30;
+    const planExpiresAt = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000);
+
+    const updatedStore = await prisma.store.update({
+      where: { id: store.id },
+      data: {
+        plan,
+        planStatus: 'ACTIVE',
+        planExpiresAt,
+      },
+    });
+
+    await audit(req, 'store.plan_synced', {
+      storeId: store.id,
+      plan,
+      cycle,
+      orderId: matchingOrder.id,
+    });
+
+    return res.json({
+      ok: true,
+      message: `🎉 Successfully verified payment! ${PLAN_PRICING[plan]?.name || plan} plan is now active.`,
+      plan: updatedStore.plan,
+      planStatus: updatedStore.planStatus,
+      planExpiresAt: updatedStore.planExpiresAt,
+    });
+  } catch (err) {
+    console.error('[sync-payment] Error:', err);
+    throw httpError(500, `Failed to sync with Razorpay: ${err.message}`);
+  }
 }));
 
 // Direct native Chatral checkout processor (100% white-labeled custom UI)

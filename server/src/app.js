@@ -31,7 +31,12 @@ export function createServer() {
   app.set('trust proxy', 1);
   app.disable('x-powered-by');
   app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-  app.use(express.json({ limit: '100kb' }));
+  app.use(express.json({
+    limit: '100kb',
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  }));
 
   // Widget API is called from merchant sites; the per-store origin allowlist is enforced inside the routes.
   app.use('/api/widget', cors({ origin: true, allowedHeaders: ['Content-Type', 'X-Visitor-Token', 'X-Filename'], maxAge: 600 }), widgetRoutes);
