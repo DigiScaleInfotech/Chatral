@@ -17,6 +17,7 @@ import triggerRoutes from './routes/triggers.js';
 import reportRoutes from './routes/reports.js';
 import analyticsRoutes from './routes/analytics.js';
 import contactRoutes from './routes/contact.js';
+import billingRoutes from './routes/billing.js';
 // Side-effect imports register event listeners + job handlers.
 import './triggers/engine.js';
 import './services/notify.js';
@@ -48,7 +49,7 @@ export function createServer() {
     credentials: true,
   });
   app.use('/api/auth', adminCors, authRoutes);
-  app.use('/api', adminCors, adminRoutes, inboxRoutes, ticketRoutes, triggerRoutes, reportRoutes, analyticsRoutes, contactRoutes);
+  app.use('/api', adminCors, adminRoutes, inboxRoutes, ticketRoutes, triggerRoutes, reportRoutes, analyticsRoutes, contactRoutes, billingRoutes);
 
   // Static: embeddable widget + admin SPA (client: npm run build).
   // Pop-out chat window: a full-page widget on this server's origin. It refuses to start until the
@@ -70,9 +71,17 @@ export function createServer() {
   const adminCsp = helmet.contentSecurityPolicy({
     useDefaults: false,
     directives: {
-      defaultSrc: ["'self'"], scriptSrc: ["'self'"], styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'], imgSrc: ["'self'", 'https:', 'data:', 'blob:'],
-      connectSrc: ["'self'", 'ws:', 'wss:'], objectSrc: ["'none'"], baseUri: ["'self'"], frameAncestors: ["'none'"], formAction: ["'self'"],
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", 'https://checkout.razorpay.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+      imgSrc: ["'self'", 'https:', 'data:', 'blob:', 'https://cdn.razorpay.com'],
+      connectSrc: ["'self'", 'ws:', 'wss:', 'https://api.razorpay.com', 'https://lumberjack.razorpay.com'],
+      frameSrc: ["'self'", 'https://api.razorpay.com', 'https://checkout.razorpay.com'],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      frameAncestors: ["'none'"],
+      formAction: ["'self'"],
     },
   });
   app.use('/admin', adminCsp);

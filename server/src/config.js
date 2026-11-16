@@ -27,6 +27,10 @@ export const config = {
     pass: process.env.SMTP_PASS,
     from: process.env.SMTP_FROM,
   },
+  razorpay: {
+    keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_U0l0wCqIG5EIHv',
+    keySecret: process.env.RAZORPAY_KEY_SECRET || 'tpz6Nk8ePJq4BXO6UumxdOR7',
+  },
 };
 
 export const prisma = new PrismaClient();

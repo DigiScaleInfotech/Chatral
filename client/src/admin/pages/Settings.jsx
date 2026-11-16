@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   App, Alert, Badge, Button, Card, Col, Flex, Form, Input, InputNumber,
-  List, Modal, Popconfirm, Row, Select, Space, Spin, Switch, Table, Tabs,
+  List, Modal, Popconfirm, Row, Segmented, Select, Space, Spin, Switch, Table, Tabs,
   Tag, Tooltip, Typography,
 } from 'antd';
 import {
@@ -1114,8 +1114,24 @@ function Audit({ store }) {
 // 9. Subscription & Billing Plans
 // --------------------------------------------------------------------------
 
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 function SubscriptionPlan({ store, reload, can }) {
+  const { me, reloadMe } = useApp();
   const { message } = App.useApp();
+  const [upgradingPlan, setUpgradingPlan] = useState(null);
+  const [cycle, setCycle] = useState('monthly'); // 'monthly' | 'annual'
+
   const plan = store.plan || 'TRIAL';
   const planExpiresAt = store.planExpiresAt;
   const isExpired = planExpiresAt ? new Date(planExpiresAt) < new Date() : false;
@@ -1127,6 +1143,83 @@ function SubscriptionPlan({ store, reload, can }) {
     : 7;
 
   const planName = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
+
+  async function handleUpgrade(targetPlan) {
+    if (!can('ADMIN')) {
+      message.error('Only Store Admins and Owners can manage subscriptions');
+      return;
+    }
+    setUpgradingPlan(targetPlan);
+    try {
+      const ok = await loadRazorpayScript();
+      if (!ok) {
+        message.error('Failed to load Razorpay payment gateway. Please check your internet connection.');
+        return;
+      }
+
+      // Step 1: Create Order on backend
+      const order = await api(`/stores/${store.id}/billing/create-order`, {
+        method: 'POST',
+        body: { plan: targetPlan, cycle },
+      });
+
+      // Step 2: Open Razorpay checkout with custom Chatral theme
+      const options = {
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Chatral',
+        description: `${order.planName} (${cycle === 'annual' ? 'Annual - 25% Off' : 'Monthly'})`,
+        image: 'https://chatral.vercel.app/favicon.ico',
+        order_id: order.orderId,
+        prefill: {
+          name: me?.name || '',
+          email: me?.email || '',
+        },
+        handler: async function (response) {
+          try {
+            message.loading({ content: 'Verifying payment and activating subscription…', key: 'sub_verify', duration: 0 });
+            const verifyRes = await api(`/stores/${store.id}/billing/verify-payment`, {
+              method: 'POST',
+              body: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                plan: targetPlan,
+                cycle,
+              },
+            });
+
+            message.success({
+              content: `🎉 Payment successful! ${verifyRes.plan} is now active for this store.`,
+              key: 'sub_verify',
+              duration: 5,
+            });
+            reload?.();
+            reloadMe?.();
+          } catch (verifyErr) {
+            message.error({ content: `Verification failed: ${verifyErr.message}`, key: 'sub_verify' });
+          }
+        },
+        theme: {
+          color: '#2563eb', // Chatral brand blue
+          backdrop_color: 'rgba(15, 23, 42, 0.75)',
+        },
+        modal: {
+          ondismiss: function () {
+            message.info('Payment window closed');
+          },
+        },
+      };
+
+      const rzpInstance = new window.Razorpay(options);
+      rzpInstance.open();
+    } catch (err) {
+      showError(err, { message });
+    } finally {
+      setUpgradingPlan(null);
+    }
+  }
 
   return (
     <div style={{ width: '100%' }}>
@@ -1151,7 +1244,7 @@ function SubscriptionPlan({ store, reload, can }) {
                   ? 'Your 7-day free trial has expired. Upgrade to keep chat active.'
                   : `Free trial active • ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining until expiration.`
                 : isExpired
-                ? 'Your monthly subscription has expired.'
+                ? 'Your subscription has expired.'
                 : `Next billing / renewal date: ${planExpiresAt ? dayjs(planExpiresAt).format('MMMM D, YYYY') : 'Active Subscription'}.`}
             </Typography.Text>
           </div>
@@ -1159,7 +1252,8 @@ function SubscriptionPlan({ store, reload, can }) {
             <Button
               type="primary"
               style={{ background: '#2563eb' }}
-              onClick={() => message.info('Contact support at chatral.official@gmail.com to upgrade your plan')}
+              onClick={() => handleUpgrade('STARTER')}
+              loading={upgradingPlan === 'STARTER'}
             >
               Upgrade Plan
             </Button>
@@ -1167,9 +1261,19 @@ function SubscriptionPlan({ store, reload, can }) {
         </Flex>
       </Card>
 
-      <Typography.Title level={5} style={{ margin: '0 0 18px', fontWeight: 700 }}>
-        Available Subscription Plans
-      </Typography.Title>
+      <Flex justify="space-between" align="center" wrap gap={16} style={{ marginBottom: 18 }}>
+        <Typography.Title level={5} style={{ margin: 0, fontWeight: 700 }}>
+          Available Subscription Plans
+        </Typography.Title>
+        <Segmented
+          value={cycle}
+          onChange={setCycle}
+          options={[
+            { label: 'Monthly', value: 'monthly' },
+            { label: 'Annual (Save 25%)', value: 'annual' },
+          ]}
+        />
+      </Flex>
 
       <Row gutter={[24, 24]} style={{ width: '100%', margin: 0 }}>
         {/* 1. 7-Day Free Trial */}
@@ -1224,7 +1328,7 @@ function SubscriptionPlan({ store, reload, can }) {
           <div
             style={{
               background: '#ffffff',
-              border: '2px solid #2563eb',
+              border: plan === 'STARTER' ? '2px solid #2563eb' : '2px solid #2563eb',
               borderRadius: 16,
               padding: '28px 24px',
               height: '100%',
@@ -1253,10 +1357,12 @@ function SubscriptionPlan({ store, reload, can }) {
             </div>
             <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              ₹399 <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              ₹{cycle === 'annual' ? 299 : 399} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
-              Everything you need to turn visitors into buyers with multi-store and no branding.
+              {cycle === 'annual'
+                ? 'Billed annually at ₹3,591/yr (Save 25%). Everything you need with multi-store.'
+                : 'Everything you need to turn visitors into buyers with multi-store and no branding.'}
             </div>
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
@@ -1277,8 +1383,9 @@ function SubscriptionPlan({ store, reload, can }) {
               <Button
                 type="primary"
                 block
+                loading={upgradingPlan === 'STARTER'}
                 style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
-                onClick={() => message.info('Contact support at chatral.official@gmail.com to upgrade to Starter Growth')}
+                onClick={() => handleUpgrade('STARTER')}
               >
                 Upgrade to Starter Growth
               </Button>
@@ -1305,10 +1412,12 @@ function SubscriptionPlan({ store, reload, can }) {
           >
             <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              ₹999 <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              ₹{cycle === 'annual' ? 749 : 999} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
-              For high-volume stores, scaling agencies & teams needing dedicated onboarding support.
+              {cycle === 'annual'
+                ? 'Billed annually at ₹8,991/yr (Save 25%). For high-volume stores & scaling teams.'
+                : 'For high-volume stores, scaling agencies & teams needing dedicated onboarding support.'}
             </div>
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
@@ -1329,8 +1438,9 @@ function SubscriptionPlan({ store, reload, can }) {
               <Button
                 type="primary"
                 block
+                loading={upgradingPlan === 'BUSINESS'}
                 style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
-                onClick={() => message.info('Contact support at chatral.official@gmail.com to upgrade to Business & Scale')}
+                onClick={() => handleUpgrade('BUSINESS')}
               >
                 Upgrade to Business & Scale
               </Button>
