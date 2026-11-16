@@ -20,7 +20,7 @@ export const PLAN_PRICING = {
     monthlyPriceINR: 499,
     annualPriceINR: 4488, // ₹374 / mo (Save 25%)
     monthlyPriceUSD: 6,
-    annualPriceUSD: 54, // $4.50 / mo (Save 25%)
+    annualPriceUSD: 60, // $5 / mo (Round figure)
   },
   BUSINESS: {
     name: 'Business & Scale',
