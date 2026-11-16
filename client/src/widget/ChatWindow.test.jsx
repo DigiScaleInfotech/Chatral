@@ -27,9 +27,9 @@ describe('ChatWindow', () => {
     expect(messageLinks[0].getAttribute('rel')).toContain('noopener');
   });
 
-  it('renders the Powered by Chatral footer badge linking to chatral.com', () => {
+  it('renders the Live Chat by Chatral footer badge linking to chatral.com', () => {
     render(<ChatWindow {...base} />);
-    const poweredLink = screen.getByRole('link', { name: /powered by chatral/i });
+    const poweredLink = screen.getByRole('link', { name: /live chat by chatral/i });
     expect(poweredLink).toBeTruthy();
     expect(poweredLink.getAttribute('href')).toBe('https://www.chatral.com');
   });

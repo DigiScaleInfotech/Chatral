@@ -343,9 +343,9 @@ export default function ChatWindow({
               target="_blank"
               rel="noopener noreferrer"
               className="lc-powered-link"
-              title="Powered by Chatral - Live chat for modern websites"
+              title="Live Chat by Chatral"
             >
-              ⚡ Powered by <strong>Chatral</strong>
+              Live Chat by <strong>Chatral</strong>
             </a>
           </footer>
         </section>
