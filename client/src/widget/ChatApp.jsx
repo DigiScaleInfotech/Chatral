@@ -218,15 +218,33 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   soundRef.current = soundOn;
   const [popoutError, setPopoutError] = useState(false);
   const [ended, setEnded] = useState(false); // visitor ended the chat: hide the message box until they start a new one
-  const [messages, setMessages] = useState([]);
-  const [conv, setConv] = useState(null);
+  const [sessionLoaded, setSessionLoaded] = useState(false);
+  const [messages, setMessages] = useState(() => {
+    try {
+      const cached = store.get(`lc_msgs_${storeKey}`);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+    return [];
+  });
+  const [conv, setConv] = useState(() => {
+    try {
+      const saved = store.get(`lc_conv_${storeKey}`);
+      if (saved) return { id: saved, status: 'OPEN' };
+    } catch {}
+    return null;
+  });
   const [visitor, setVisitor] = useState(null);
   const [avail, setAvail] = useState({ online: true });
   const [typing, setTyping] = useState(false);
   const [unread, setUnread] = useState(0);
   const [preview, setPreview] = useState(null); // last unseen agent/bot message, shown above the launcher
   const [agentReadSeq, setAgentReadSeq] = useState(0);
-  const [mode, setMode] = useState('chat');
+  const [mode, setMode] = useState(() => {
+    try {
+      if (store.get(`lc_conv_${storeKey}`)) return 'chat';
+    } catch {}
+    return 'chat';
+  });
   const [banner, setBanner] = useState(null);
   const [mobile, setMobile] = useState(isMobile());
   const token = useRef(null);
@@ -286,6 +304,8 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       setAvail(s.availability);
       if (s.conversation) {
         setConv({ id: s.conversation.id, status: s.conversation.status });
+        try { store.set(`lc_conv_${storeKey}`, s.conversation.id); } catch {}
+        try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(s.conversation.messages.slice(-50))); } catch {}
         lastSeq.current = s.conversation.lastSeq;
         setAgentReadSeq(s.conversation.agentReadSeq);
         setMessages(s.conversation.messages.map(withFormState));
@@ -295,9 +315,13 @@ export default function ChatApp({ api, storeKey, popout = false }) {
           call('/resume', { method: 'POST', body: { conversationId: s.conversation.id } }).catch(() => {});
         }
       } else {
-        setConv(null); setMessages([]);
+        setConv(null);
+        setMessages([]);
+        try { store.set(`lc_conv_${storeKey}`, ''); } catch {}
+        try { store.set(`lc_msgs_${storeKey}`, ''); } catch {}
         if (s.proactive) showProactive(s.proactive, false);
       }
+      setSessionLoaded(true);
       connect();
     } catch (err) {
       console.warn('[livechat] Widget boot attempt failed:', err?.message || err);
@@ -466,6 +490,8 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       outbox.current.delete(clientMsgId);
       if (!convRef.current || convRef.current.id !== r.conversationId) {
         setConv({ id: r.conversationId, status: r.status });
+        convRef.current = { id: r.conversationId, status: r.status };
+        try { store.set(`lc_conv_${storeKey}`, r.conversationId); } catch {}
         resumed.current = true;
         if (proactiveRef.current) { const pid = proactiveRef.current.executionId; proactiveRef.current = null; setMessages((l) => l.filter((m) => m.proactiveOf !== pid)); syncAfterCreate(r.conversationId); }
       }
@@ -628,16 +654,22 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     return () => clearInterval(t);
   }, [cfg, conv, call]);
 
+  useEffect(() => {
+    if (messages.length > 0 && conv) {
+      try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(messages.slice(-50))); } catch {}
+    }
+  }, [messages, conv, storeKey]);
+
   // Mode decision.
   useEffect(() => {
-    if (!cfg) return;
+    if (!cfg || !sessionLoaded) return;
     if (conv) return setMode('chat');
     if (mode === 'offline_sent') return;
     if (!avail.online) return setMode(cfg.offlineBehavior === 'form' ? 'offline' : 'hidden');
     const known = (f) => (f.key === 'name' || f.key === 'email' ? visitor?.[f.key] : visitor?.attributes?.[f.key]?.value);
     const need = cfg.preChatForm.enabled && cfg.preChatForm.fields.some((f) => f.required && !known(f));
     setMode(need ? 'prechat' : 'chat');
-  }, [cfg, conv, avail.online, visitor]);
+  }, [cfg, sessionLoaded, conv, avail.online, visitor]);
 
   function popOut() {
     const origin = new URL(api).origin;
@@ -723,6 +755,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         if (r.conversation) {
           setConv({ id: r.conversation.id, status: r.conversation.status });
           convRef.current = { id: r.conversation.id, status: r.conversation.status };
+          try { store.set(`lc_conv_${storeKey}`, r.conversation.id); } catch {}
           lastSeq.current = Math.max(lastSeq.current, r.conversation.lastSeq || 0);
           await syncAfterCreate(r.conversation.id);
         }
