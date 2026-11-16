@@ -1174,7 +1174,7 @@ function SubscriptionPlan({ store, reload, can }) {
         currency: order.currency,
         name: 'Chatral',
         description: `${order.planName} (${cycle === 'annual' ? 'Annual - 25% Off' : 'Monthly'})`,
-        image: 'https://chatral.vercel.app/favicon.ico',
+        image: 'https://chatral.com/apple-touch-icon.png',
         order_id: order.orderId,
         prefill: {
           name: me?.name || '',
