@@ -6,14 +6,6 @@ import { prisma, config } from '../config.js';
 import { requireAuth, requireStore } from '../lib/auth.js';
 import { asyncRoute, httpError, audit } from '../lib/util.js';
 
-const r = Router();
-r.use(requireAuth);
-
-const rzp = new Razorpay({
-  key_id: config.razorpay.keyId,
-  key_secret: config.razorpay.keySecret,
-});
-
 export const PLAN_PRICING = {
   STARTER: {
     name: 'Starter Growth',
@@ -30,6 +22,20 @@ export const PLAN_PRICING = {
     annualPriceUSD: 108, // $9 / mo (Save 25%)
   },
 };
+
+const r = Router();
+
+// Public endpoint: Allow Landing Page and clients to read current plan pricing without authentication
+r.get('/billing/plans', (req, res) => {
+  res.json({ ok: true, plans: PLAN_PRICING });
+});
+
+r.use(requireAuth);
+
+const rzp = new Razorpay({
+  key_id: config.razorpay.keyId,
+  key_secret: config.razorpay.keySecret,
+});
 
 // Create a Razorpay Order
 r.post('/stores/:storeId/billing/create-order', requireStore('ADMIN'), asyncRoute(async (req, res) => {

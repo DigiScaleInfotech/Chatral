@@ -14,6 +14,7 @@ import {
 import dayjs from 'dayjs';
 import { api, showError, ROLE_LABEL, TIMEZONE_OPTIONS } from '../api.js';
 import { useApp } from '../main.jsx';
+import { usePlanPricing } from '../constants/plans.js';
 
 const copy = (text, message) =>
   navigator.clipboard.writeText(text).then(() => message.success('Copied to clipboard'));
@@ -1130,6 +1131,7 @@ function loadRazorpayScript() {
 function SubscriptionPlan({ store, reload, can }) {
   const { me, reloadMe } = useApp();
   const { message } = App.useApp();
+  const planPricing = usePlanPricing();
   const [searchParams] = useSearchParams();
   const planParam = searchParams.get('plan');
   const [upgradingPlan, setUpgradingPlan] = useState(null);
@@ -1402,11 +1404,14 @@ function SubscriptionPlan({ store, reload, can }) {
             </div>
             <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              {currency === 'USD' ? (cycle === 'annual' ? '$5' : '$6') : (cycle === 'annual' ? '₹374' : '₹10')} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              {currency === 'USD'
+                ? (cycle === 'annual' ? `$${Math.round(planPricing.STARTER.annualPriceUSD / 12)}` : `$${planPricing.STARTER.monthlyPriceUSD}`)
+                : (cycle === 'annual' ? `₹${Math.round(planPricing.STARTER.annualPriceINR / 12)}` : `₹${planPricing.STARTER.monthlyPriceINR}`)}{' '}
+              <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
               {cycle === 'annual'
-                ? (currency === 'USD' ? 'Billed annually at $60/yr. Multi-store with zero branding.' : 'Billed annually at ₹4,488/yr (Save 25%). Multi-store with zero branding.')
+                ? (currency === 'USD' ? `Billed annually at $${planPricing.STARTER.annualPriceUSD}/yr. Multi-store with zero branding.` : `Billed annually at ₹${planPricing.STARTER.annualPriceINR.toLocaleString('en-IN')}/yr (Save 25%). Multi-store with zero branding.`)
                 : 'Everything you need to turn visitors into buyers with multi-store and no branding.'}
             </div>
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
@@ -1457,11 +1462,14 @@ function SubscriptionPlan({ store, reload, can }) {
           >
             <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              {currency === 'USD' ? (cycle === 'annual' ? '$9' : '$12') : (cycle === 'annual' ? '₹749' : '₹999')} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              {currency === 'USD'
+                ? (cycle === 'annual' ? `$${Math.round(planPricing.BUSINESS.annualPriceUSD / 12)}` : `$${planPricing.BUSINESS.monthlyPriceUSD}`)
+                : (cycle === 'annual' ? `₹${Math.round(planPricing.BUSINESS.annualPriceINR / 12)}` : `₹${planPricing.BUSINESS.monthlyPriceINR}`)}{' '}
+              <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
               {cycle === 'annual'
-                ? (currency === 'USD' ? 'Billed annually at $108/yr (Save 25%). For high-volume stores & scaling teams.' : 'Billed annually at ₹8,988/yr (Save 25%). For high-volume stores & scaling teams.')
+                ? (currency === 'USD' ? `Billed annually at $${planPricing.BUSINESS.annualPriceUSD}/yr (Save 25%). For high-volume stores & scaling teams.` : `Billed annually at ₹${planPricing.BUSINESS.annualPriceINR.toLocaleString('en-IN')}/yr (Save 25%). For high-volume stores & scaling teams.`)
                 : 'For high-volume stores, scaling agencies & teams needing dedicated onboarding support.'}
             </div>
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />

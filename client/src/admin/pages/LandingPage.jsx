@@ -14,6 +14,7 @@ import {
 } from '@ant-design/icons';
 import { ChatralFullLogo } from '../components/BrandLogo.jsx';
 import { api } from '../api.js';
+import { usePlanPricing } from '../constants/plans.js';
 
 const { useBreakpoint } = Grid;
 
@@ -379,6 +380,7 @@ export default function LandingPage() {
     return false;
   };
   const [currency, setCurrency] = useState(() => (detectIsIndia() ? 'INR' : 'USD'));
+  const planPricing = usePlanPricing();
 
   // Ensure Chatral live chat widget is loaded and visible ONLY on Landing Page
   useEffect(() => {
@@ -2943,13 +2945,13 @@ export default function LandingPage() {
                 <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
                 <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
                   {currency === 'INR'
-                    ? (billingCycle === 'annual' ? '₹374' : '₹499')
-                    : (billingCycle === 'annual' ? '$5' : '$6')}{' '}
+                    ? (billingCycle === 'annual' ? `₹${Math.round(planPricing.STARTER.annualPriceINR / 12)}` : `₹${planPricing.STARTER.monthlyPriceINR}`)
+                    : (billingCycle === 'annual' ? `$${Math.round(planPricing.STARTER.annualPriceUSD / 12)}` : `$${planPricing.STARTER.monthlyPriceUSD}`)}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
                   {billingCycle === 'annual'
-                    ? (currency === 'INR' ? 'Billed annually at ₹4,488/yr (Save 25%). Multi-store with zero branding.' : 'Billed annually at $60/yr. Multi-store with zero branding.')
+                    ? (currency === 'INR' ? `Billed annually at ₹${planPricing.STARTER.annualPriceINR.toLocaleString('en-IN')}/yr (Save 25%). Multi-store with zero branding.` : `Billed annually at $${planPricing.STARTER.annualPriceUSD}/yr. Multi-store with zero branding.`)
                     : 'Everything you need to turn visitors into buyers with multi-store and no branding.'}
                 </div>
                 <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
@@ -3010,13 +3012,13 @@ export default function LandingPage() {
                 <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
                 <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
                   {currency === 'INR'
-                    ? (billingCycle === 'annual' ? '₹749' : '₹999')
-                    : (billingCycle === 'annual' ? '$9' : '$12')}{' '}
+                    ? (billingCycle === 'annual' ? `₹${Math.round(planPricing.BUSINESS.annualPriceINR / 12)}` : `₹${planPricing.BUSINESS.monthlyPriceINR}`)
+                    : (billingCycle === 'annual' ? `$${Math.round(planPricing.BUSINESS.annualPriceUSD / 12)}` : `$${planPricing.BUSINESS.monthlyPriceUSD}`)}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
                   {billingCycle === 'annual'
-                    ? (currency === 'INR' ? 'Billed annually at ₹8,988/yr (Save 25%). For high-volume stores & scaling teams.' : 'Billed annually at $108/yr (Save 25%). For high-volume stores & scaling teams.')
+                    ? (currency === 'INR' ? `Billed annually at ₹${planPricing.BUSINESS.annualPriceINR.toLocaleString('en-IN')}/yr (Save 25%). For high-volume stores & scaling teams.` : `Billed annually at $${planPricing.BUSINESS.annualPriceUSD}/yr (Save 25%). For high-volume stores & scaling teams.`)
                     : 'For high-volume stores, scaling agencies & teams needing dedicated onboarding support.'}
                 </div>
                 <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
