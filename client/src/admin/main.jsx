@@ -522,8 +522,10 @@ function WidgetVisibilityManager() {
     const isLanding = location.pathname === '/landing' || (location.pathname === '/' && !localStorage.getItem('token'));
     const hosts = document.querySelectorAll('[id^="livechat-"]');
     hosts.forEach((h) => {
-      h.style.display = isLanding ? 'block' : 'none';
-      h.style.visibility = isLanding ? 'visible' : 'hidden';
+      const isDisabled = h.getAttribute('data-disabled') === 'true';
+      const show = isLanding && !isDisabled;
+      h.style.display = show ? 'block' : 'none';
+      h.style.visibility = show ? 'visible' : 'hidden';
     });
   }, [location.pathname]);
   return null;

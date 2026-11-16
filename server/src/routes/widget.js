@@ -21,8 +21,8 @@ const limiter = (limit, windowMs = 60_000) => noLimit ? (req, res, next) => next
 
 const loadStore = asyncRoute(async (req, res, next) => {
   const store = await loadStoreByKey(req.params.key);
-  if (!store) return res.status(404).json({ error: 'Chat is not available' });
-  if (!(await checkOrigin(store, req.headers.origin))) return res.status(403).json({ error: 'This website is not allowed to use this chat widget' });
+  if (!store) return res.status(404).json({ error: 'Chat is not available', code: 'CHAT_DISABLED' });
+  if (!(await checkOrigin(store, req.headers.origin))) return res.status(403).json({ error: 'This website is not allowed to use this chat widget', code: 'ORIGIN_FORBIDDEN' });
   req.store = store;
   next();
 });

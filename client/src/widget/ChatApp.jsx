@@ -208,7 +208,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       const cached = store.get(`lc_cfg_${storeKey}`);
       if (cached) return JSON.parse(cached);
     } catch {}
-    return DEFAULT_WIDGET_CONFIG;
+    return null;
   });
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(popout || store.sget(`lc_open_${storeKey}`) === '1');
@@ -268,8 +268,19 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       const s = await call('/session', { method: 'POST', body: { token: token.current, ...page() } });
       if (s.visitorToken) { token.current = s.visitorToken; store.set(`lc_v_${s.tag}`, s.visitorToken); }
       if (s.rotatedKey) console.warn('[livechat] This embed uses an old store key. Update the snippet from your dashboard.');
+      setHidden(false);
       setCfg(s.config);
       try { store.set(`lc_cfg_${storeKey}`, JSON.stringify(s.config)); } catch {}
+      try {
+        const host = document.getElementById(`livechat-${storeKey}`);
+        if (host) {
+          host.removeAttribute('data-disabled');
+          host.style.removeProperty('display');
+          host.style.removeProperty('visibility');
+          host.style.display = 'block';
+          host.style.visibility = 'visible';
+        }
+      } catch {}
       window.__livechatLoadFont?.(s.config.font.family);
       setVisitor(s.visitor);
       setAvail(s.availability);
@@ -290,6 +301,21 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       connect();
     } catch (err) {
       console.warn('[livechat] Widget boot attempt failed:', err?.message || err);
+      // If store is disabled or origin forbidden, cleanly hide widget and wipe cached config
+      if (err?.status === 404 || err?.status === 403 || err?.code === 'CHAT_DISABLED' || err?.code === 'ORIGIN_FORBIDDEN') {
+        setHidden(true);
+        setCfg(null);
+        try { store.set(`lc_cfg_${storeKey}`, ''); } catch {}
+        try {
+          const host = document.getElementById(`livechat-${storeKey}`);
+          if (host) {
+            host.setAttribute('data-disabled', 'true');
+            host.style.setProperty('display', 'none', 'important');
+            host.style.setProperty('visibility', 'hidden', 'important');
+          }
+        } catch {}
+        return;
+      }
       // Auto-retry up to 4 times (every 3.5s) if backend is waking up or temporary network hiccup
       if (retryCount < 4) {
         setTimeout(() => boot(retryCount + 1), 3500);
@@ -380,6 +406,33 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     } else if (type === 'config_updated' && d.config) {
       setCfg((c) => ({ ...d.config, transcripts: c?.transcripts })); // a re-publish doesn't change email availability
       window.__livechatLoadFont?.(d.config.font?.family);
+    } else if (type === 'widget_status') {
+      const isEnabled = !!d.enabled;
+      setHidden(!isEnabled);
+      if (!isEnabled) {
+        setOpen(false);
+        try { store.set(`lc_cfg_${storeKey}`, ''); } catch {}
+        try {
+          const host = document.getElementById(`livechat-${storeKey}`);
+          if (host) {
+            host.setAttribute('data-disabled', 'true');
+            host.style.setProperty('display', 'none', 'important');
+            host.style.setProperty('visibility', 'hidden', 'important');
+          }
+        } catch {}
+      } else {
+        try {
+          const host = document.getElementById(`livechat-${storeKey}`);
+          if (host) {
+            host.removeAttribute('data-disabled');
+            host.style.removeProperty('display');
+            host.style.removeProperty('visibility');
+            host.style.display = 'block';
+            host.style.visibility = 'visible';
+          }
+        } catch {}
+        boot();
+      }
     } else if (type === 'conversation_deleted') {
       if (convRef.current?.id === d.id) { setConv(null); setMessages([]); lastSeq.current = 0; }
     } else if (type === 'media_expired') {

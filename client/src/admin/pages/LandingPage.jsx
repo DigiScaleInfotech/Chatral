@@ -375,8 +375,13 @@ export default function LandingPage() {
     const showWidget = () => {
       const hosts = document.querySelectorAll('[id^="livechat-"]');
       hosts.forEach((h) => {
-        h.style.display = 'block';
-        h.style.visibility = 'visible';
+        if (h.getAttribute('data-disabled') === 'true') {
+          h.style.display = 'none';
+          h.style.visibility = 'hidden';
+        } else {
+          h.style.display = 'block';
+          h.style.visibility = 'visible';
+        }
       });
     };
 

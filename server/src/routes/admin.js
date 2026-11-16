@@ -119,6 +119,10 @@ r.patch('/stores/:storeId', requireStore('ADMIN'), asyncRoute(async (req, res) =
   if (input.retentionDays !== undefined && input.retentionDays !== before.retentionDays) {
     await prisma.$executeRaw`UPDATE "Conversation" SET "expiresAt" = "lastActivityAt" + make_interval(days => ${input.retentionDays}::int) WHERE "storeId" = ${store.id}`;
   }
+  if (input.isActive !== undefined || input.widgetEnabled !== undefined) {
+    toStoreVisitors(store.id, 'widget_status', { enabled: store.isActive && store.widgetEnabled });
+    toAgents(store.id, 'store_updated', { storeId: store.id, isActive: store.isActive, widgetEnabled: store.widgetEnabled });
+  }
   await audit(req, 'store.updated', { storeId: store.id, meta: { fields: Object.keys(input) } });
   res.json(storePublic(store, req.storeRole));
 }));
@@ -280,6 +284,8 @@ r.put(['/platform/stores/:storeId/widget-enabled', '/stores/:storeId/widget-enab
   const s = await prisma.store.update({ where: { id: req.params.storeId }, data: { widgetEnabled: enabled } }).catch(() => null);
   if (!s) throw httpError(404, 'Store not found');
   await audit(req, enabled ? 'widget.enabled' : 'widget.disabled', { storeId: s.id });
+  toStoreVisitors(s.id, 'widget_status', { enabled: s.widgetEnabled && s.isActive });
+  toAgents(s.id, 'store_updated', { storeId: s.id, widgetEnabled: s.widgetEnabled });
   res.json({ ok: true, widgetEnabled: s.widgetEnabled });
 }));
 
