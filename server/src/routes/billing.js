@@ -9,10 +9,10 @@ import { asyncRoute, httpError, audit } from '../lib/util.js';
 export const PLAN_PRICING = {
   STARTER: {
     name: 'Starter Growth',
-    monthlyPriceINR: 10, // Live Testing mode: ₹10
-    annualPriceINR: 4488, // ₹374 / mo (Save 25%)
+    monthlyPriceINR: 599,
+    annualPriceINR: 6100,
     monthlyPriceUSD: 6,
-    annualPriceUSD: 60, // $5 / mo (Round figure)
+    annualPriceUSD: 61,
   },
   BUSINESS: {
     name: 'Business & Scale',

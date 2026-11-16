@@ -2832,7 +2832,7 @@ export default function LandingPage() {
             <Segmented
               options={[
                 { label: 'Monthly', value: 'monthly' },
-                { label: 'Annual (Save 25%)', value: 'annual' },
+                { label: 'Annual (Save up to 25%)', value: 'annual' },
               ]}
               value={billingCycle}
               onChange={setBillingCycle}
@@ -2972,7 +2972,7 @@ export default function LandingPage() {
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
                   {billingCycle === 'annual'
-                    ? (currency === 'INR' ? `Billed annually at ₹${planPricing.STARTER.annualPriceINR.toLocaleString('en-IN')}/yr (Save 25%). Multi-store with zero branding.` : `Billed annually at $${planPricing.STARTER.annualPriceUSD}/yr. Multi-store with zero branding.`)
+                    ? (currency === 'INR' ? `Billed annually at ₹${planPricing.STARTER.annualPriceINR.toLocaleString('en-IN')}/yr (Save 15%). Multi-store with zero branding.` : `Billed annually at $${planPricing.STARTER.annualPriceUSD}/yr (Save 15%). Multi-store with zero branding.`)
                     : 'Everything you need to turn visitors into buyers with multi-store and no branding.'}
                 </div>
                 <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />

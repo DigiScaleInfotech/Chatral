@@ -7,10 +7,10 @@ import { useState, useEffect } from 'react';
 export const DEFAULT_PLAN_PRICING = {
   STARTER: {
     name: 'Starter Growth',
-    monthlyPriceINR: 10, // Live Testing mode: ₹10 (change here or on backend to update everywhere)
-    annualPriceINR: 4488, // ₹374 / mo
+    monthlyPriceINR: 599,
+    annualPriceINR: 6100,
     monthlyPriceUSD: 6,
-    annualPriceUSD: 60, // $5 / mo
+    annualPriceUSD: 61,
   },
   BUSINESS: {
     name: 'Business & Scale',
