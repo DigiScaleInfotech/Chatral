@@ -5,6 +5,8 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://chatral-backend.onrender.com/api/$1" },
     { "source": "/widget/(.*)", "destination": "/widget/$1" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

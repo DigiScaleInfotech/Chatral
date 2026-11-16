@@ -382,6 +382,10 @@ export default function LandingPage() {
   const [currency, setCurrency] = useState(() => (detectIsIndia() ? 'INR' : 'USD'));
   const planPricing = usePlanPricing();
 
+  useEffect(() => {
+    document.title = 'Chatral - Connect. Support. Resolve. | Modern Live Chat for Websites & E-Commerce';
+  }, []);
+
   // Ensure Chatral live chat widget is loaded and visible ONLY on Landing Page
   useEffect(() => {
     let existing = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
@@ -1013,36 +1017,39 @@ export default function LandingPage() {
             </span>
           </div>
 
-          {/* Relatik Big Title in 2 Clean Lines */}
+          {/* SEO Optimized Hero Title with Official Tagline */}
           <Typography.Title
             level={1}
             className="hero-fade-item-1"
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 36 : 58,
+              fontSize: isMobile ? 34 : 56,
               fontWeight: 800,
-              lineHeight: 1.12,
+              lineHeight: 1.14,
               letterSpacing: '-0.035em',
               margin: '0 auto 20px',
-              maxWidth: 780,
+              maxWidth: 820,
             }}
           >
-            Customer management<br />made simple
+            Connect. Support. Resolve.<br />
+            <span style={{ background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Live Chat for Modern Websites
+            </span>
           </Typography.Title>
 
-          {/* Relatik Subtitle in 2 Clean Lines */}
+          {/* SEO Optimized Subtitle */}
           <Typography.Paragraph
             className="hero-fade-item-2"
             style={{
               color: '#5b5f6b',
-              fontSize: isMobile ? 15 : 17,
+              fontSize: isMobile ? 15 : 17.5,
               lineHeight: 1.6,
-              maxWidth: 600,
+              maxWidth: 640,
               margin: '0 auto 34px',
               fontWeight: 400,
             }}
           >
-            All your customer data, tasks, and conversations — organized in one calm, fast workspace your whole team will actually use.
+            Connect with your visitors in real-time, support buyers right when it matters, and resolve queries in seconds. The fast, lightweight customer support platform built to convert visitors into customers.
           </Typography.Paragraph>
 
           {/* Relatik Hero CTA Buttons with Dynamic Hover Animations */}
@@ -1952,7 +1959,7 @@ export default function LandingPage() {
                 margin: '0 0 14px',
               }}
             >
-              Everything you need to close more deals
+              Everything you need to connect, support, and convert
             </Typography.Title>
             <Typography.Paragraph
               style={{

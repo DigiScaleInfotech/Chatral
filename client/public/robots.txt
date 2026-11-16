@@ -1,0 +1,20 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /widget/chat.js
+
+# Disallow internal operator dashboards, sensitive APIs, and authentication redirects
+Disallow: /overview
+Disallow: /inbox
+Disallow: /tickets
+Disallow: /visitors
+Disallow: /settings
+Disallow: /reports
+Disallow: /triggers
+Disallow: /design
+Disallow: /users
+Disallow: /platform
+Disallow: /api/
+
+Sitemap: https://chatral.com/sitemap.xml

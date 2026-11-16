@@ -12,7 +12,7 @@ export function ChatralShortLogo({ size = 28, dark = true, style = {} }) {
   return (
     <img
       src={assetUrl('logo-short.png')}
-      alt="Chatral"
+      alt="Chatral - Connect. Support. Resolve."
       style={{
         width: size,
         height: size,
@@ -30,7 +30,7 @@ export function ChatralFullLogo({ height = 28, dark = true, style = {} }) {
   return (
     <img
       src={assetUrl('logo.png')}
-      alt="Chatral"
+      alt="Chatral - Connect. Support. Resolve. Live Chat"
       style={{
         height,
         width: 'auto',
