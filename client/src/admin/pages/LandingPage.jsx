@@ -2235,7 +2235,7 @@ export default function LandingPage() {
               </div>
             </Col>
 
-            {/* Bento Card 5: Team collaboration (Bottom Right) */}
+            {/* Bento Card 6: Role-based access (Bottom Right) */}
             <Col xs={24} md={8}>
               <div
                 style={{
@@ -2260,7 +2260,7 @@ export default function LandingPage() {
                     marginBottom: 14,
                   }}
                 >
-                  <TeamOutlined style={{ fontSize: 18, color: '#ec4899' }} />
+                  <SafetyCertificateOutlined style={{ fontSize: 18, color: '#ec4899' }} />
                 </div>
                 <Typography.Title
                   level={3}
@@ -2272,7 +2272,7 @@ export default function LandingPage() {
                     margin: '0 0 8px',
                   }}
                 >
-                  Team collaboration
+                  Role-based access
                 </Typography.Title>
                 <Typography.Paragraph
                   style={{
@@ -2282,7 +2282,7 @@ export default function LandingPage() {
                     margin: 0,
                   }}
                 >
-                  Assign chats, leave internal whisper notes, use canned /shortcuts, and stay perfectly aligned with your support team.
+                  Assign granular roles (Owner, Admin, Agent) with custom permissions, ensuring team members only access what they need.
                 </Typography.Paragraph>
               </div>
             </Col>
