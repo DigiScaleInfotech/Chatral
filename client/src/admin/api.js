@@ -10,7 +10,7 @@ export async function api(path, { method = 'GET', body, raw, headers = {} } = {}
   try { data = await res.json(); } catch { data = {}; }
   if (res.status === 401 && !path.startsWith('/auth/login')) {
     localStorage.removeItem('token');
-    window.location.href = '/admin/login';
+    window.location.href = '/login';
   }
   if (!res.ok) {
     const err = new Error(data.error || FALLBACK[res.status] || 'Something went wrong. Please try again.');

@@ -531,10 +531,16 @@ function WidgetVisibilityManager() {
   return null;
 }
 
+function AdminRedirect() {
+  const location = useLocation();
+  const sub = location.pathname.replace(/^\/admin/, '') || '/';
+  return <Navigate to={`${sub}${location.search}${location.hash}`} replace />;
+}
+
 createRoot(document.getElementById('root')).render(
   <ConfigProvider theme={theme}>
     <AntApp>
-      <BrowserRouter basename="/admin">
+      <BrowserRouter>
         <WidgetVisibilityManager />
         <Routes>
           <Route path="/landing" element={<LandingPage />} />
@@ -543,6 +549,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Navigate to="/login?mode=signup" replace />} />
           <Route path="/register" element={<Navigate to="/login?mode=signup" replace />} />
+          <Route path="/admin" element={<Navigate to="/" replace />} />
+          <Route path="/admin/*" element={<AdminRedirect />} />
           <Route path="/" element={<RootRoute />} />
           <Route path="/*" element={<Shell />} />
         </Routes>

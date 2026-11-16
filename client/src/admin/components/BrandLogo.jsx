@@ -4,7 +4,7 @@
  * - ChatralFullLogo: Full "Chatral" wordmark from logo.png.
  */
 function assetUrl(file) {
-  const base = import.meta.env.BASE_URL || '/admin/';
+  const base = import.meta.env.BASE_URL || '/';
   return `${base.endsWith('/') ? base : `${base}/`}${file}`;
 }
 

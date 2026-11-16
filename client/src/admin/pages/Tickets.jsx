@@ -212,7 +212,7 @@ export default function Tickets() {
               <div style={{ fontSize: 12, color: '#64748b' }}>
                 Created {dayjs(ticket.createdAt).format('MMM D, YYYY HH:mm')}
                 {ticket.closedAt && <div>Closed {dayjs(ticket.closedAt).format('MMM D, YYYY HH:mm')}</div>}
-                {ticket.conversationId && <div><a href={`/admin/inbox?c=${ticket.conversationId}`}>Open source conversation</a></div>}
+                {ticket.conversationId && <div><a href={`/inbox?c=${ticket.conversationId}`}>Open source conversation</a></div>}
               </div>
             </Space>
           </div>
