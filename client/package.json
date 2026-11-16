@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && vite build -c vite.widget.config.js && mkdir -p public/widget && cp dist/widget/chat.js public/widget/chat.js",
-    "build:vercel": "npm run build && rm -rf dist/vercel && mkdir -p dist/vercel && cp -r dist/admin/* dist/vercel/ && mkdir -p dist/vercel/admin && cp -r dist/admin/* dist/vercel/admin/ && mkdir -p dist/vercel/widget && cp -r dist/widget/* dist/vercel/widget/",
+    "build:vercel": "npm run build && rm -rf dist/vercel && mkdir -p dist/vercel && cp -r dist/admin/* dist/vercel/ && mkdir -p dist/vercel/widget && cp -r dist/widget/* dist/vercel/widget/",
     "test": "vitest run"
   },
   "dependencies": {

@@ -84,13 +84,15 @@ export function createServer() {
       formAction: ["'self'"],
     },
   });
-  app.use('/admin', adminCsp);
-  app.use('/admin', express.static(path.join(clientDist, 'admin')));
-  app.get('/admin/*', (req, res) => res.sendFile(path.join(clientDist, 'admin/index.html')));
+  app.use(adminCsp);
+  app.use(express.static(path.join(clientDist, 'admin')));
   app.get('/favicon.ico', (req, res) => res.sendFile(path.join(clientDist, 'admin/favicon.ico')));
   app.get('/apple-touch-icon.png', (req, res) => res.sendFile(path.join(clientDist, 'admin/apple-touch-icon.png')));
-  app.get('/', (req, res) => res.redirect('/admin/'));
   app.get('/health', (req, res) => res.json({ ok: true }));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/widget')) return next();
+    res.sendFile(path.join(clientDist, 'admin/index.html'));
+  });
 
   app.use((err, req, res, next) => {
     if (err instanceof ZodError) return res.status(400).json(zodToResponse(err));

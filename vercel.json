@@ -3,6 +3,18 @@
   "installCommand": "if [ -d \"client\" ]; then cd client && npm install; else npm install; fi",
   "buildCommand": "if [ -d \"client\" ]; then cd client && npm run build:vercel; else npm run build:vercel; fi",
   "outputDirectory": "client/dist/vercel",
+  "redirects": [
+    {
+      "source": "/admin",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/admin/:match*",
+      "destination": "/:match*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
