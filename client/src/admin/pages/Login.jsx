@@ -68,9 +68,9 @@ export default function Login() {
       const { token } = await api('/auth/login', { method: 'POST', body: { email, password } });
       localStorage.setItem('token', token);
       if (planParam) {
-        nav(`/settings?tab=billing&plan=${planParam}`);
+        nav(`/settings?tab=billing&plan=${planParam}`, { replace: true });
       } else {
-        nav('/');
+        nav('/overview', { replace: true });
       }
     } catch (e) {
       setError(e.message);
@@ -86,9 +86,9 @@ export default function Login() {
       const { token } = await api('/auth/register', { method: 'POST', body: { name, email, password } });
       localStorage.setItem('token', token);
       if (planParam) {
-        nav(`/settings?tab=billing&plan=${planParam}`);
+        nav(`/settings?tab=billing&plan=${planParam}`, { replace: true });
       } else {
-        nav('/');
+        nav('/overview', { replace: true });
       }
     } catch (e) {
       setError(e.message);

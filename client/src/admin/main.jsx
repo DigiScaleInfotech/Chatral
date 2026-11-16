@@ -200,7 +200,7 @@ function Shell() {
   const store = me.stores.find((s) => s.id === storeId);
 
   const items = [
-    !isSuper && storeId && {
+    storeId && {
       key: '/overview',
       icon: <DashboardOutlined style={{ fontSize: 16 }} />,
       label: 'Overview',
@@ -482,13 +482,13 @@ function Shell() {
                   path="/"
                   element={
                     <Navigate
-                      to={isSuper ? (storeId ? '/inbox' : '/platform') : (storeId ? '/overview' : '/inbox')}
+                      to={storeId ? '/overview' : (isSuper ? '/platform' : '/overview')}
                       replace
                     />
                   }
                 />
-                {!isSuper && storeId && <Route path="/overview" element={<Overview key={storeId} />} />}
-                {isSuper && <Route path="/overview" element={<Navigate to="/platform" replace />} />}
+                {storeId && <Route path="/overview" element={<Overview key={storeId} />} />}
+                {!storeId && isSuper && <Route path="/overview" element={<Navigate to="/platform" replace />} />}
                 {storeId && <Route path="/inbox" element={<Inbox key={storeId} />} />}
                 {storeId && <Route path="/tickets" element={<Tickets key={storeId} />} />}
                 {storeId && <Route path="/visitors" element={<Visitors key={storeId} />} />}
@@ -512,7 +512,7 @@ function Shell() {
 
 function RootRoute() {
   const token = localStorage.getItem('token');
-  if (token) return <Shell />;
+  if (token) return <Navigate to="/overview" replace />;
   return <LandingPage />;
 }
 
