@@ -18,3 +18,4 @@ Disallow: /platform
 Disallow: /api/
 
 Sitemap: https://chatral.com/sitemap.xml
+
