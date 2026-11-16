@@ -384,21 +384,6 @@ export default function LandingPage() {
 
   // Ensure Chatral live chat widget is loaded and visible ONLY on Landing Page
   useEffect(() => {
-    const showWidget = () => {
-      const hosts = document.querySelectorAll('[id^="livechat-"]');
-      hosts.forEach((h) => {
-        if (h.getAttribute('data-disabled') === 'true') {
-          h.style.display = 'none';
-          h.style.visibility = 'hidden';
-        } else {
-          h.style.display = 'block';
-          h.style.visibility = 'visible';
-        }
-      });
-    };
-
-    showWidget();
-
     let existing = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
     if (!existing) {
       const s = document.createElement('script');
@@ -409,18 +394,36 @@ export default function LandingPage() {
       document.body.appendChild(s);
     }
 
-    const timer = setInterval(showWidget, 500);
-    const stopTimer = setTimeout(() => clearInterval(timer), 6000);
+    const showWidget = () => {
+      const hosts = document.querySelectorAll('[id^="livechat-"]');
+      hosts.forEach((h) => {
+        if (h.getAttribute('data-disabled') === 'true') {
+          h.style.setProperty('display', 'none', 'important');
+          h.style.setProperty('visibility', 'hidden', 'important');
+        } else {
+          h.style.setProperty('display', 'block', 'important');
+          h.style.setProperty('visibility', 'visible', 'important');
+        }
+      });
+    };
+
+    showWidget();
+    const timer = setInterval(showWidget, 400);
+    const stopTimer = setTimeout(() => clearInterval(timer), 8000);
 
     return () => {
       clearInterval(timer);
       clearTimeout(stopTimer);
-      // Hide widget completely when leaving the Landing Page (Login, Sign up, Dashboard, etc.)
+      // Remove widget completely when leaving the Landing Page (Login, Sign up, Dashboard, etc.)
       const hosts = document.querySelectorAll('[id^="livechat-"]');
       hosts.forEach((h) => {
-        h.style.display = 'none';
-        h.style.visibility = 'hidden';
+        h.remove();
       });
+      const s = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
+      if (s) s.remove();
+      if (window.__livechat) {
+        delete window.__livechat['pk_yU4JQtndJuFviYy6d94ZzZE-'];
+      }
     };
   }, []);
 

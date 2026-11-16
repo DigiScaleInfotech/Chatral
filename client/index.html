@@ -14,10 +14,17 @@
     <meta name="theme-color" content="#2563eb" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      /* Prevent any customer livechat widget from displaying in operator dashboard */
+      body:has(.ant-layout) [id^="livechat-"] {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/admin/main.jsx"></script>
-    <script src="https://chatral-backend.onrender.com/widget/chat.js" data-store="pk_yU4JQtndJuFviYy6d94ZzZE-" async></script>
   </body>
 </html>

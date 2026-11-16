@@ -127,13 +127,18 @@ function Shell() {
   }, []);
 
   useEffect(() => {
-    // Hide customer visitor widget inside operator dashboard to prevent UI overlap
-    const host = document.querySelector('[id^="livechat-"]');
-    if (host) host.style.display = 'none';
-    return () => {
-      const h = document.querySelector('[id^="livechat-"]');
-      if (h) h.style.display = 'block';
+    // Customer live chat widget must NEVER appear inside operator dashboard
+    const purgeWidget = () => {
+      document.querySelectorAll('[id^="livechat-"]').forEach((el) => el.remove());
+      const s = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
+      if (s) s.remove();
+      if (window.__livechat) {
+        delete window.__livechat['pk_yU4JQtndJuFviYy6d94ZzZE-'];
+      }
     };
+    purgeWidget();
+    const timer = setInterval(purgeWidget, 1000);
+    return () => clearInterval(timer);
   }, []);
 
   const loadMe = () =>
@@ -520,13 +525,14 @@ function WidgetVisibilityManager() {
   const location = useLocation();
   useEffect(() => {
     const isLanding = location.pathname === '/landing' || (location.pathname === '/' && !localStorage.getItem('token'));
-    const hosts = document.querySelectorAll('[id^="livechat-"]');
-    hosts.forEach((h) => {
-      const isDisabled = h.getAttribute('data-disabled') === 'true';
-      const show = isLanding && !isDisabled;
-      h.style.display = show ? 'block' : 'none';
-      h.style.visibility = show ? 'visible' : 'hidden';
-    });
+    if (!isLanding) {
+      document.querySelectorAll('[id^="livechat-"]').forEach((h) => h.remove());
+      const s = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
+      if (s) s.remove();
+      if (window.__livechat) {
+        delete window.__livechat['pk_yU4JQtndJuFviYy6d94ZzZE-'];
+      }
+    }
   }, [location.pathname]);
   return null;
 }
