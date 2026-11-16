@@ -14,7 +14,6 @@ import {
 } from '@ant-design/icons';
 import { ChatralFullLogo } from '../components/BrandLogo.jsx';
 import { api } from '../api.js';
-import ChatralPaymentModal from '../components/ChatralPaymentModal.jsx';
 
 const { useBreakpoint } = Grid;
 
@@ -195,33 +194,12 @@ export default function LandingPage() {
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [contactSubmitting, setContactSubmitting] = useState(false);
 
-  // Direct checkout modal state from Landing Page
-  const [checkoutModal, setCheckoutModal] = useState({ open: false, plan: 'STARTER' });
-  const [currentUserStore, setCurrentUserStore] = useState(null);
-
-  const handlePurchasePlan = async (targetPlan) => {
+  const handlePurchasePlan = (targetPlan) => {
     const token = localStorage.getItem('token');
     if (!token) {
-      nav(`/login?mode=signup&plan=${targetPlan}`);
-      return;
-    }
-
-    try {
-      let store = currentUserStore;
-      if (!store) {
-        const stores = await api('/stores');
-        if (stores && stores.length > 0) {
-          store = stores[0];
-          setCurrentUserStore(store);
-        }
-      }
-      if (store) {
-        setCheckoutModal({ open: true, plan: targetPlan });
-      } else {
-        nav('/dashboard');
-      }
-    } catch (err) {
-      nav(`/login?mode=signup&plan=${targetPlan}`);
+      nav(`/login?mode=signup&plan=${targetPlan.toLowerCase()}`);
+    } else {
+      nav(`/settings?tab=billing&plan=${targetPlan.toLowerCase()}`);
     }
   };
 
@@ -3929,19 +3907,6 @@ export default function LandingPage() {
         document.body
       )}
 
-      {/* 100% Native Chatral Checkout Modal on Landing Page (No Razorpay popup) */}
-      <ChatralPaymentModal
-        open={checkoutModal.open}
-        onClose={() => setCheckoutModal({ open: false, plan: 'STARTER' })}
-        storeId={currentUserStore?.id}
-        storeName={currentUserStore?.name}
-        initialPlan={checkoutModal.plan}
-        initialCycle={billingCycle}
-        initialCurrency={currency}
-        onSuccess={() => {
-          nav('/settings?tab=billing');
-        }}
-      />
 
       {/* Global subtle float, pulse & smooth entrance keyframes */}
       <style>{`

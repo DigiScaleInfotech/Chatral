@@ -14,7 +14,6 @@ import {
 import dayjs from 'dayjs';
 import { api, showError, ROLE_LABEL, TIMEZONE_OPTIONS } from '../api.js';
 import { useApp } from '../main.jsx';
-import ChatralPaymentModal from '../components/ChatralPaymentModal.jsx';
 
 const copy = (text, message) =>
   navigator.clipboard.writeText(text).then(() => message.success('Copied to clipboard'));
@@ -1133,12 +1132,9 @@ function SubscriptionPlan({ store, reload, can }) {
   const { message } = App.useApp();
   const [searchParams] = useSearchParams();
   const planParam = searchParams.get('plan');
+  const [upgradingPlan, setUpgradingPlan] = useState(null);
   const [cycle, setCycle] = useState('monthly'); // 'monthly' | 'annual'
   const [currency, setCurrency] = useState('INR'); // 'INR' | 'USD'
-  const [checkoutModal, setCheckoutModal] = useState({
-    open: Boolean(planParam && ['STARTER', 'BUSINESS'].includes(planParam.toUpperCase())),
-    plan: planParam && ['STARTER', 'BUSINESS'].includes(planParam.toUpperCase()) ? planParam.toUpperCase() : 'STARTER',
-  });
 
   const plan = store.plan || 'TRIAL';
   const planExpiresAt = store.planExpiresAt;
@@ -1152,13 +1148,88 @@ function SubscriptionPlan({ store, reload, can }) {
 
   const planName = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
 
-  function handleUpgrade(targetPlan) {
+  async function handleUpgrade(targetPlan) {
     if (!can('ADMIN')) {
       message.error('Only Store Admins and Owners can manage subscriptions');
       return;
     }
-    setCheckoutModal({ open: true, plan: targetPlan });
+    setUpgradingPlan(targetPlan);
+    try {
+      const ok = await loadRazorpayScript();
+      if (!ok) {
+        message.error('Failed to load Razorpay payment gateway. Please check your internet connection.');
+        return;
+      }
+
+      // Step 1: Create Order on backend
+      const order = await api(`/stores/${store.id}/billing/create-order`, {
+        method: 'POST',
+        body: { plan: targetPlan, cycle },
+      });
+
+      // Step 2: Open official Razorpay checkout
+      const options = {
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Chatral',
+        description: `${order.planName} (${cycle === 'annual' ? 'Annual - 25% Off' : 'Monthly'})`,
+        image: 'https://chatral.vercel.app/favicon.ico',
+        order_id: order.orderId,
+        prefill: {
+          name: me?.name || '',
+          email: me?.email || '',
+        },
+        theme: {
+          color: '#2563eb', // Chatral brand blue
+        },
+        handler: async function (response) {
+          try {
+            message.loading({ content: 'Verifying payment and activating subscription…', key: 'sub_verify', duration: 0 });
+            const verifyRes = await api(`/stores/${store.id}/billing/verify-payment`, {
+              method: 'POST',
+              body: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                plan: targetPlan,
+                cycle,
+              },
+            });
+
+            message.success({
+              content: `🎉 Payment successful! ${verifyRes.plan} is now active for this store.`,
+              key: 'sub_verify',
+              duration: 5,
+            });
+            reload?.();
+            reloadMe?.();
+          } catch (verifyErr) {
+            message.error({ content: `Verification failed: ${verifyErr.message}`, key: 'sub_verify' });
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            message.info('Payment window closed');
+          },
+        },
+      };
+
+      const rzpInstance = new window.Razorpay(options);
+      rzpInstance.open();
+    } catch (err) {
+      showError(err, { message });
+    } finally {
+      setUpgradingPlan(null);
+    }
   }
+
+  // Auto trigger if navigated with ?tab=billing&plan=starter or ?tab=billing&plan=business
+  useEffect(() => {
+    if (planParam && ['STARTER', 'BUSINESS'].includes(planParam.toUpperCase())) {
+      handleUpgrade(planParam.toUpperCase());
+    }
+  }, [planParam]);
 
   return (
     <div style={{ width: '100%' }}>
@@ -1331,6 +1402,7 @@ function SubscriptionPlan({ store, reload, can }) {
               <Button
                 type="primary"
                 block
+                loading={upgradingPlan === 'STARTER'}
                 style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
                 onClick={() => handleUpgrade('STARTER')}
               >
@@ -1385,6 +1457,7 @@ function SubscriptionPlan({ store, reload, can }) {
               <Button
                 type="primary"
                 block
+                loading={upgradingPlan === 'BUSINESS'}
                 style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
                 onClick={() => handleUpgrade('BUSINESS')}
               >
@@ -1397,21 +1470,6 @@ function SubscriptionPlan({ store, reload, can }) {
           </div>
         </Col>
       </Row>
-
-      {/* 100% Native Chatral Checkout Modal (No 3rd party Razorpay popup) */}
-      <ChatralPaymentModal
-        open={checkoutModal.open}
-        onClose={() => setCheckoutModal({ open: false, plan: 'STARTER' })}
-        storeId={store.id}
-        storeName={store.name}
-        initialPlan={checkoutModal.plan}
-        initialCycle={cycle}
-        initialCurrency={currency}
-        onSuccess={() => {
-          reload?.();
-          reloadMe?.();
-        }}
-      />
     </div>
   );
 }
