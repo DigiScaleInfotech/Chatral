@@ -1183,6 +1183,32 @@ function SubscriptionPlan({ store, reload, can }) {
         theme: {
           color: '#2563eb', // Chatral brand blue
         },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: 'Pay using UPI (GPay, PhonePe, Paytm, QR)',
+                instruments: [
+                  {
+                    method: 'upi',
+                  },
+                ],
+              },
+              other: {
+                name: 'Cards, Netbanking & Wallets',
+                instruments: [
+                  { method: 'card' },
+                  { method: 'netbanking' },
+                  { method: 'wallet' },
+                ],
+              },
+            },
+            sequence: ['block.upi', 'block.other'],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         handler: async function (response) {
           try {
             message.loading({ content: 'Verifying payment and activating subscription…', key: 'sub_verify', duration: 0 });
