@@ -2,8 +2,8 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from './config.js';
 
-const email = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
-const password = process.env.ADMIN_PASSWORD || '';
+const email = (process.env.ADMIN_EMAIL || 'chatral.official@gmail.com').trim().toLowerCase();
+const password = process.env.ADMIN_PASSWORD || 'Admin@123456';
 if (!email || password.length < 10) {
   console.log('Skipping seed: ADMIN_EMAIL or ADMIN_PASSWORD (10+ chars) not set.');
   process.exit(0);
