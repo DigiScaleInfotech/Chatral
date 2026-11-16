@@ -17,7 +17,7 @@ const rzp = new Razorpay({
 export const PLAN_PRICING = {
   STARTER: {
     name: 'Starter Growth',
-    monthlyPriceINR: 499,
+    monthlyPriceINR: 10, // Live Testing mode: ₹10
     annualPriceINR: 4488, // ₹374 / mo (Save 25%)
     monthlyPriceUSD: 6,
     annualPriceUSD: 60, // $5 / mo (Round figure)

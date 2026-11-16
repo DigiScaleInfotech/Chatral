@@ -1402,7 +1402,7 @@ function SubscriptionPlan({ store, reload, can }) {
             </div>
             <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              {currency === 'USD' ? (cycle === 'annual' ? '$5' : '$6') : (cycle === 'annual' ? '₹374' : '₹499')} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              {currency === 'USD' ? (cycle === 'annual' ? '$5' : '$6') : (cycle === 'annual' ? '₹374' : '₹10')} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
               {cycle === 'annual'
