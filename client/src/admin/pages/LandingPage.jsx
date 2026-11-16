@@ -400,18 +400,10 @@ export default function LandingPage() {
     let existing = document.querySelector('script[data-store="pk_yU4JQtndJuFviYy6d94ZzZE-"]');
     if (!existing) {
       const s = document.createElement('script');
-      // Instant local bundle load, with fallback to backend
-      s.src = '/widget/chat.js';
-      s.dataset.api = 'https://chatral-backend.onrender.com';
+      s.src = 'https://chatral-backend.onrender.com/widget/chat.js';
       s.dataset.store = 'pk_yU4JQtndJuFviYy6d94ZzZE-';
+      s.dataset.api = 'https://chatral-backend.onrender.com';
       s.async = true;
-      s.onerror = () => {
-        const fb = document.createElement('script');
-        fb.src = 'https://chatral-backend.onrender.com/widget/chat.js';
-        fb.dataset.store = 'pk_yU4JQtndJuFviYy6d94ZzZE-';
-        fb.async = true;
-        document.body.appendChild(fb);
-      };
       document.body.appendChild(s);
     }
 

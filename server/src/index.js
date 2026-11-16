@@ -44,15 +44,18 @@ try {
     );
   `);
   const ranPurge = await prisma.$queryRawUnsafe(`
-    SELECT "key" FROM "_SystemMigration" WHERE "key" = 'fresh_purge_test_stores_v3';
+    SELECT "key" FROM "_SystemMigration" WHERE "key" = 'fresh_purge_test_stores_v4';
   `);
   if (!ranPurge || ranPurge.length === 0) {
     console.log('[db] Initiating full purge of old test stores and users...');
     
-    // 1. Delete all old test stores (AutoTest's Store, Meet Rajani's Store, etc.)
+    // 1. Delete all other stores, keeping only the user's active Chatral Store key or Chatral Store
     await prisma.store.deleteMany({
       where: {
-        name: { not: 'Chatral Store' },
+        AND: [
+          { name: { not: 'Chatral Store' } },
+          { publicKey: { not: 'pk_yU4JQtndJuFviYy6d94ZzZE-' } },
+        ],
       },
     }).catch((e) => console.warn('Store purge warning:', e?.message));
 
@@ -79,26 +82,50 @@ try {
       });
     }
 
-    // 4. Ensure pristine Chatral Store exists
-    let chatralStore = await prisma.store.findFirst({ where: { name: 'Chatral Store' } });
-    if (!chatralStore) {
+    // 4. Update or create the official Chatral Store with key pk_yU4JQtndJuFviYy6d94ZzZE-
+    let chatralStore = await prisma.store.findFirst({
+      where: {
+        OR: [
+          { publicKey: 'pk_yU4JQtndJuFviYy6d94ZzZE-' },
+          { name: 'Chatral Store' },
+        ],
+      },
+    });
+
+    if (chatralStore) {
+      chatralStore = await prisma.store.update({
+        where: { id: chatralStore.id },
+        data: {
+          name: 'Chatral Store',
+          publicKey: 'pk_yU4JQtndJuFviYy6d94ZzZE-',
+          allowedOrigins: ['localhost', '127.0.0.1', 'chatral.com', '*.chatral.com'],
+          widgetEnabled: true,
+          isActive: true,
+        },
+      });
+    } else {
       chatralStore = await prisma.store.create({
         data: {
           name: 'Chatral Store',
           allowedOrigins: ['localhost', '127.0.0.1', 'chatral.com', '*.chatral.com'],
           timezone: 'Asia/Kolkata',
-          publicKey: newPublicKey(),
+          publicKey: 'pk_yU4JQtndJuFviYy6d94ZzZE-',
           chatLinkId: newChatLinkId(),
           plan: 'STARTER',
           planStatus: 'ACTIVE',
           planExpiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+          widgetEnabled: true,
+          isActive: true,
         },
       });
-      const cfg = { ...DEFAULT_WIDGET_CONFIG, businessHours: { ...DEFAULT_WIDGET_CONFIG.businessHours, timezone: 'Asia/Kolkata' } };
-      await prisma.widgetConfig.create({
-        data: { storeId: chatralStore.id, version: 1, status: 'PUBLISHED', config: cfg, note: 'Initial setup' },
-      }).catch(() => {});
     }
+
+    const cfg = { ...DEFAULT_WIDGET_CONFIG, businessHours: { ...DEFAULT_WIDGET_CONFIG.businessHours, timezone: 'Asia/Kolkata' } };
+    await prisma.widgetConfig.upsert({
+      where: { storeId_version: { storeId: chatralStore.id, version: 1 } },
+      update: { status: 'PUBLISHED', config: cfg },
+      create: { storeId: chatralStore.id, version: 1, status: 'PUBLISHED', config: cfg, note: 'Initial setup' },
+    }).catch(() => {});
 
     // 5. Connect chatral.official@gmail.com as OWNER of Chatral Store
     await prisma.storeMember.upsert({
@@ -112,9 +139,9 @@ try {
     await prisma.ticket.updateMany({ data: { assigneeId: null } }).catch(() => {});
 
     await prisma.$executeRawUnsafe(`
-      INSERT INTO "_SystemMigration" ("key") VALUES ('fresh_purge_test_stores_v3');
+      INSERT INTO "_SystemMigration" ("key") VALUES ('fresh_purge_test_stores_v4');
     `);
-    console.log('[db] Full purge complete! Only Chatral Store and chatral.official@gmail.com remain.');
+    console.log('[db] Full purge complete! Only Chatral Store (pk_yU4JQtndJuFviYy6d94ZzZE-) and chatral.official@gmail.com remain.');
   }
 } catch (e) {
   console.warn('[db] Fresh purge warning (non-fatal):', e?.message || e);
