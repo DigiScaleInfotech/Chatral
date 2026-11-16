@@ -1196,7 +1196,7 @@ function SubscriptionPlan({ store, reload, can }) {
         amount: order.amount,
         currency: order.currency,
         name: 'Chatral',
-        description: `${order.planName} (${cycle === 'annual' ? 'Annual - 25% Off' : 'Monthly'})`,
+        description: `${order.planName} (${cycle === 'annual' ? (order.planName?.toLowerCase().includes('starter') ? 'Annual - 15% Off' : 'Annual - 25% Off') : 'Monthly'})`,
         image: 'https://chatral.com/apple-touch-icon.png',
         order_id: order.orderId,
         prefill: {
@@ -1340,7 +1340,7 @@ function SubscriptionPlan({ store, reload, can }) {
             onChange={setCycle}
             options={[
               { label: 'Monthly', value: 'monthly' },
-              { label: 'Annual (Save up to 25%)', value: 'annual' },
+              { label: 'Annual (Save 15%)', value: 'annual' },
             ]}
           />
           <Segmented

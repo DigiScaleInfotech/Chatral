@@ -2832,7 +2832,7 @@ export default function LandingPage() {
             <Segmented
               options={[
                 { label: 'Monthly', value: 'monthly' },
-                { label: 'Annual (Save up to 25%)', value: 'annual' },
+                { label: 'Annual (Save 15%)', value: 'annual' },
               ]}
               value={billingCycle}
               onChange={setBillingCycle}
