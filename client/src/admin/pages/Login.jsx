@@ -32,6 +32,7 @@ export default function Login() {
   const [searchParams, setSearchParams] = useSearchParams();
   const resetParam = searchParams.get('reset') || '';
   const modeParam = searchParams.get('mode') || '';
+  const planParam = searchParams.get('plan') || '';
   const [mode, setMode] = useState(resetParam ? 'reset' : (modeParam === 'signup' ? 'signup' : 'login'));
   const [resetToken, setResetToken] = useState(resetParam);
   const [error, setError] = useState(null);
@@ -66,7 +67,11 @@ export default function Login() {
     try {
       const { token } = await api('/auth/login', { method: 'POST', body: { email, password } });
       localStorage.setItem('token', token);
-      nav('/');
+      if (planParam) {
+        nav(`/settings?tab=billing&plan=${planParam}`);
+      } else {
+        nav('/');
+      }
     } catch (e) {
       setError(e.message);
     } finally {
@@ -80,7 +85,11 @@ export default function Login() {
     try {
       const { token } = await api('/auth/register', { method: 'POST', body: { name, email, password } });
       localStorage.setItem('token', token);
-      nav('/');
+      if (planParam) {
+        nav(`/settings?tab=billing&plan=${planParam}`);
+      } else {
+        nav('/');
+      }
     } catch (e) {
       setError(e.message);
     } finally {

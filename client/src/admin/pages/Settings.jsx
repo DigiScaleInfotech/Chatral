@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   App, Alert, Badge, Button, Card, Col, Flex, Form, Input, InputNumber,
   List, Modal, Popconfirm, Row, Segmented, Select, Space, Spin, Switch, Table, Tabs,
@@ -13,6 +14,7 @@ import {
 import dayjs from 'dayjs';
 import { api, showError, ROLE_LABEL, TIMEZONE_OPTIONS } from '../api.js';
 import { useApp } from '../main.jsx';
+import ChatralPaymentModal from '../components/ChatralPaymentModal.jsx';
 
 const copy = (text, message) =>
   navigator.clipboard.writeText(text).then(() => message.success('Copied to clipboard'));
@@ -1129,8 +1131,14 @@ function loadRazorpayScript() {
 function SubscriptionPlan({ store, reload, can }) {
   const { me, reloadMe } = useApp();
   const { message } = App.useApp();
-  const [upgradingPlan, setUpgradingPlan] = useState(null);
+  const [searchParams] = useSearchParams();
+  const planParam = searchParams.get('plan');
   const [cycle, setCycle] = useState('monthly'); // 'monthly' | 'annual'
+  const [currency, setCurrency] = useState('INR'); // 'INR' | 'USD'
+  const [checkoutModal, setCheckoutModal] = useState({
+    open: Boolean(planParam && ['STARTER', 'BUSINESS'].includes(planParam.toUpperCase())),
+    plan: planParam && ['STARTER', 'BUSINESS'].includes(planParam.toUpperCase()) ? planParam.toUpperCase() : 'STARTER',
+  });
 
   const plan = store.plan || 'TRIAL';
   const planExpiresAt = store.planExpiresAt;
@@ -1144,81 +1152,12 @@ function SubscriptionPlan({ store, reload, can }) {
 
   const planName = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
 
-  async function handleUpgrade(targetPlan) {
+  function handleUpgrade(targetPlan) {
     if (!can('ADMIN')) {
       message.error('Only Store Admins and Owners can manage subscriptions');
       return;
     }
-    setUpgradingPlan(targetPlan);
-    try {
-      const ok = await loadRazorpayScript();
-      if (!ok) {
-        message.error('Failed to load Razorpay payment gateway. Please check your internet connection.');
-        return;
-      }
-
-      // Step 1: Create Order on backend
-      const order = await api(`/stores/${store.id}/billing/create-order`, {
-        method: 'POST',
-        body: { plan: targetPlan, cycle },
-      });
-
-      // Step 2: Open Razorpay checkout with custom Chatral theme
-      const options = {
-        key: order.keyId,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'Chatral',
-        description: `${order.planName} (${cycle === 'annual' ? 'Annual - 25% Off' : 'Monthly'})`,
-        image: 'https://chatral.vercel.app/favicon.ico',
-        order_id: order.orderId,
-        prefill: {
-          name: me?.name || '',
-          email: me?.email || '',
-        },
-        handler: async function (response) {
-          try {
-            message.loading({ content: 'Verifying payment and activating subscription…', key: 'sub_verify', duration: 0 });
-            const verifyRes = await api(`/stores/${store.id}/billing/verify-payment`, {
-              method: 'POST',
-              body: {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                plan: targetPlan,
-                cycle,
-              },
-            });
-
-            message.success({
-              content: `🎉 Payment successful! ${verifyRes.plan} is now active for this store.`,
-              key: 'sub_verify',
-              duration: 5,
-            });
-            reload?.();
-            reloadMe?.();
-          } catch (verifyErr) {
-            message.error({ content: `Verification failed: ${verifyErr.message}`, key: 'sub_verify' });
-          }
-        },
-        theme: {
-          color: '#2563eb', // Chatral brand blue
-          backdrop_color: 'rgba(15, 23, 42, 0.75)',
-        },
-        modal: {
-          ondismiss: function () {
-            message.info('Payment window closed');
-          },
-        },
-      };
-
-      const rzpInstance = new window.Razorpay(options);
-      rzpInstance.open();
-    } catch (err) {
-      showError(err, { message });
-    } finally {
-      setUpgradingPlan(null);
-    }
+    setCheckoutModal({ open: true, plan: targetPlan });
   }
 
   return (
@@ -1253,7 +1192,6 @@ function SubscriptionPlan({ store, reload, can }) {
               type="primary"
               style={{ background: '#2563eb' }}
               onClick={() => handleUpgrade('STARTER')}
-              loading={upgradingPlan === 'STARTER'}
             >
               Upgrade Plan
             </Button>
@@ -1265,14 +1203,24 @@ function SubscriptionPlan({ store, reload, can }) {
         <Typography.Title level={5} style={{ margin: 0, fontWeight: 700 }}>
           Available Subscription Plans
         </Typography.Title>
-        <Segmented
-          value={cycle}
-          onChange={setCycle}
-          options={[
-            { label: 'Monthly', value: 'monthly' },
-            { label: 'Annual (Save 25%)', value: 'annual' },
-          ]}
-        />
+        <Flex gap={12} align="center" wrap>
+          <Segmented
+            value={cycle}
+            onChange={setCycle}
+            options={[
+              { label: 'Monthly', value: 'monthly' },
+              { label: 'Annual (Save 25%)', value: 'annual' },
+            ]}
+          />
+          <Segmented
+            value={currency}
+            onChange={setCurrency}
+            options={[
+              { label: '₹ INR', value: 'INR' },
+              { label: '$ USD', value: 'USD' },
+            ]}
+          />
+        </Flex>
       </Flex>
 
       <Row gutter={[24, 24]} style={{ width: '100%', margin: 0 }}>
@@ -1292,7 +1240,7 @@ function SubscriptionPlan({ store, reload, can }) {
           >
             <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>7-Day Free Trial</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              ₹0 <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ 7 days free</span>
+              {currency === 'USD' ? '$0' : '₹0'} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ 7 days free</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
               Full access to all features free for 7 days. Test on your website with zero risk.
@@ -1357,11 +1305,11 @@ function SubscriptionPlan({ store, reload, can }) {
             </div>
             <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              ₹{cycle === 'annual' ? 299 : 399} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              {currency === 'USD' ? (cycle === 'annual' ? '$4.50' : '$6') : (cycle === 'annual' ? '₹374' : '₹499')} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
               {cycle === 'annual'
-                ? 'Billed annually at ₹3,591/yr (Save 25%). Everything you need with multi-store.'
+                ? (currency === 'USD' ? 'Billed annually at $54/yr (Save 25%). Multi-store with zero branding.' : 'Billed annually at ₹4,488/yr (Save 25%). Multi-store with zero branding.')
                 : 'Everything you need to turn visitors into buyers with multi-store and no branding.'}
             </div>
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
@@ -1383,15 +1331,14 @@ function SubscriptionPlan({ store, reload, can }) {
               <Button
                 type="primary"
                 block
-                loading={upgradingPlan === 'STARTER'}
                 style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
                 onClick={() => handleUpgrade('STARTER')}
               >
-                Upgrade to Starter Growth
+                Purchase Starter Growth
               </Button>
             )}
             <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
-              Includes 7-day free trial • Cancel anytime
+              Instant activation • Cancel anytime
             </div>
           </div>
         </Col>
@@ -1412,11 +1359,11 @@ function SubscriptionPlan({ store, reload, can }) {
           >
             <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              ₹{cycle === 'annual' ? 749 : 999} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              {currency === 'USD' ? (cycle === 'annual' ? '$9' : '$12') : (cycle === 'annual' ? '₹749' : '₹999')} <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
               {cycle === 'annual'
-                ? 'Billed annually at ₹8,991/yr (Save 25%). For high-volume stores & scaling teams.'
+                ? (currency === 'USD' ? 'Billed annually at $108/yr (Save 25%). For high-volume stores & scaling teams.' : 'Billed annually at ₹8,988/yr (Save 25%). For high-volume stores & scaling teams.')
                 : 'For high-volume stores, scaling agencies & teams needing dedicated onboarding support.'}
             </div>
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
@@ -1438,19 +1385,33 @@ function SubscriptionPlan({ store, reload, can }) {
               <Button
                 type="primary"
                 block
-                loading={upgradingPlan === 'BUSINESS'}
                 style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
                 onClick={() => handleUpgrade('BUSINESS')}
               >
-                Upgrade to Business & Scale
+                Purchase Business & Scale
               </Button>
             )}
             <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
-              Includes 7-day free trial • Cancel anytime
+              Instant activation • Dedicated support
             </div>
           </div>
         </Col>
       </Row>
+
+      {/* 100% Native Chatral Checkout Modal (No 3rd party Razorpay popup) */}
+      <ChatralPaymentModal
+        open={checkoutModal.open}
+        onClose={() => setCheckoutModal({ open: false, plan: 'STARTER' })}
+        storeId={store.id}
+        storeName={store.name}
+        initialPlan={checkoutModal.plan}
+        initialCycle={cycle}
+        initialCurrency={currency}
+        onSuccess={() => {
+          reload?.();
+          reloadMe?.();
+        }}
+      />
     </div>
   );
 }
@@ -1462,7 +1423,10 @@ function SubscriptionPlan({ store, reload, can }) {
 export default function Settings() {
   const { storeId, can, me, reloadMe } = useApp();
   const { message } = App.useApp();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [store, setStore] = useState(null);
+
+  const activeTab = searchParams.get('tab') || 'general';
 
   const load = () =>
     api(`/stores/${storeId}`)
@@ -1589,7 +1553,19 @@ export default function Settings() {
           </Typography.Text>
         </div>
       </div>
-      <Tabs items={items} destroyInactiveTabPane style={{ background: '#ffffff', padding: '16px 20px', borderRadius: 8, border: '1px solid #e2e8f0' }} />
+      <Tabs
+        activeKey={activeTab}
+        onChange={(k) =>
+          setSearchParams((prev) => {
+            const next = new URLSearchParams(prev);
+            next.set('tab', k);
+            return next;
+          })
+        }
+        items={items}
+        destroyInactiveTabPane
+        style={{ background: '#ffffff', padding: '16px 20px', borderRadius: 8, border: '1px solid #e2e8f0' }}
+      />
     </div>
   );
 }

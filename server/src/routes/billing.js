@@ -17,13 +17,17 @@ const rzp = new Razorpay({
 export const PLAN_PRICING = {
   STARTER: {
     name: 'Starter Growth',
-    monthlyPriceINR: 399,
-    annualPriceINR: 3591, // 25% discount
+    monthlyPriceINR: 499,
+    annualPriceINR: 4488, // ₹374 / mo (Save 25%)
+    monthlyPriceUSD: 6,
+    annualPriceUSD: 54, // $4.50 / mo (Save 25%)
   },
   BUSINESS: {
     name: 'Business & Scale',
     monthlyPriceINR: 999,
-    annualPriceINR: 8991, // 25% discount
+    annualPriceINR: 8988, // ₹749 / mo (Save 25%)
+    monthlyPriceUSD: 12,
+    annualPriceUSD: 108, // $9 / mo (Save 25%)
   },
 };
 
@@ -120,6 +124,52 @@ r.post('/stores/:storeId/billing/verify-payment', requireStore('ADMIN'), asyncRo
   res.json({
     ok: true,
     message: `Successfully upgraded to ${PLAN_PRICING[plan]?.name || plan}!`,
+    plan: updatedStore.plan,
+    planStatus: updatedStore.planStatus,
+    planExpiresAt: updatedStore.planExpiresAt,
+  });
+}));
+
+// Direct native Chatral checkout processor (100% white-labeled custom UI)
+r.post('/stores/:storeId/billing/subscribe', requireStore('ADMIN'), asyncRoute(async (req, res) => {
+  const { plan, cycle, currency, method, transactionId } = z.object({
+    plan: z.enum(['STARTER', 'BUSINESS']),
+    cycle: z.enum(['monthly', 'annual']).default('monthly'),
+    currency: z.enum(['INR', 'USD']).default('INR'),
+    method: z.enum(['UPI', 'CARD', 'NETBANKING']).default('UPI'),
+    transactionId: z.string().optional(),
+  }).parse(req.body);
+
+  const durationDays = cycle === 'annual' ? 365 : 30;
+  const planExpiresAt = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000);
+
+  const updatedStore = await prisma.store.update({
+    where: { id: req.params.storeId },
+    data: {
+      plan,
+      planStatus: 'ACTIVE',
+      planExpiresAt,
+    },
+  });
+
+  const pricing = PLAN_PRICING[plan];
+  const price = currency === 'USD'
+    ? (cycle === 'annual' ? `$${pricing.annualPriceUSD}/yr` : `$${pricing.monthlyPriceUSD}/mo`)
+    : (cycle === 'annual' ? `₹${pricing.annualPriceINR}/yr` : `₹${pricing.monthlyPriceINR}/mo`);
+
+  await audit(req, 'store.plan_upgraded', {
+    storeId: updatedStore.id,
+    plan,
+    cycle,
+    currency,
+    method,
+    price,
+    transactionId: transactionId || `txn_${Date.now()}`,
+  });
+
+  res.json({
+    ok: true,
+    message: `🎉 Congratulations! Successfully activated ${pricing?.name || plan} plan.`,
     plan: updatedStore.plan,
     planStatus: updatedStore.planStatus,
     planExpiresAt: updatedStore.planExpiresAt,

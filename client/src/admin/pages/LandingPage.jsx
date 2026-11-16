@@ -13,6 +13,8 @@ import {
   BarChartOutlined, BellOutlined, CheckOutlined,
 } from '@ant-design/icons';
 import { ChatralFullLogo } from '../components/BrandLogo.jsx';
+import { api } from '../api.js';
+import ChatralPaymentModal from '../components/ChatralPaymentModal.jsx';
 
 const { useBreakpoint } = Grid;
 
@@ -192,6 +194,36 @@ export default function LandingPage() {
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', topic: 'Schedule a Live Demo', message: '' });
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [contactSubmitting, setContactSubmitting] = useState(false);
+
+  // Direct checkout modal state from Landing Page
+  const [checkoutModal, setCheckoutModal] = useState({ open: false, plan: 'STARTER' });
+  const [currentUserStore, setCurrentUserStore] = useState(null);
+
+  const handlePurchasePlan = async (targetPlan) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      nav(`/login?mode=signup&plan=${targetPlan}`);
+      return;
+    }
+
+    try {
+      let store = currentUserStore;
+      if (!store) {
+        const stores = await api('/stores');
+        if (stores && stores.length > 0) {
+          store = stores[0];
+          setCurrentUserStore(store);
+        }
+      }
+      if (store) {
+        setCheckoutModal({ open: true, plan: targetPlan });
+      } else {
+        nav('/dashboard');
+      }
+    } catch (err) {
+      nav(`/login?mode=signup&plan=${targetPlan}`);
+    }
+  };
 
   // Helper for "Book a demo" CTA across the entire page (exact same smooth scroll as navbar Contact Us)
   const handleBookDemo = (topic = 'Schedule a Live Demo') => {
@@ -2941,12 +2973,14 @@ export default function LandingPage() {
                 <div style={{ fontWeight: 700, color: '#2563eb', fontSize: 16 }}>Starter Growth</div>
                 <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
                   {currency === 'INR'
-                    ? (billingCycle === 'annual' ? '₹399' : '₹499')
-                    : (billingCycle === 'annual' ? '$5' : '$7')}{' '}
+                    ? (billingCycle === 'annual' ? '₹374' : '₹499')
+                    : (billingCycle === 'annual' ? '$4.50' : '$6')}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
-                  Everything you need to turn visitors into buyers with multi-store and no branding.
+                  {billingCycle === 'annual'
+                    ? (currency === 'INR' ? 'Billed annually at ₹4,488/yr (Save 25%). Multi-store with zero branding.' : 'Billed annually at $54/yr (Save 25%). Multi-store with zero branding.')
+                    : 'Everything you need to turn visitors into buyers with multi-store and no branding.'}
                 </div>
                 <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20, fontSize: 13, color: '#0c0d10' }}>
@@ -2960,7 +2994,7 @@ export default function LandingPage() {
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
                 </div>
                 <button
-                  onClick={() => nav('/login?mode=signup')}
+                  onClick={() => handlePurchasePlan('STARTER')}
                   className="btn-brand-primary"
                   style={{
                     width: '100%',
@@ -2971,10 +3005,10 @@ export default function LandingPage() {
                     fontFamily: 'inherit',
                   }}
                 >
-                  <RollText text="Start 7-Day Free Trial" />
+                  <RollText text="Buy Starter Growth" />
                 </button>
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
-                  Includes 7-day free trial • Cancel anytime
+                  Instant access • Cancel anytime
                 </div>
               </div>
             </Col>
@@ -3006,12 +3040,14 @@ export default function LandingPage() {
                 <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
                 <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
                   {currency === 'INR'
-                    ? (billingCycle === 'annual' ? '₹999' : '₹1,299')
-                    : (billingCycle === 'annual' ? '$15' : '$19')}{' '}
+                    ? (billingCycle === 'annual' ? '₹749' : '₹999')
+                    : (billingCycle === 'annual' ? '$9' : '$12')}{' '}
                   <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
-                  For high-volume stores, scaling agencies & teams needing dedicated onboarding support.
+                  {billingCycle === 'annual'
+                    ? (currency === 'INR' ? 'Billed annually at ₹8,988/yr (Save 25%). For high-volume stores & scaling teams.' : 'Billed annually at $108/yr (Save 25%). For high-volume stores & scaling teams.')
+                    : 'For high-volume stores, scaling agencies & teams needing dedicated onboarding support.'}
                 </div>
                 <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20, fontSize: 13, color: '#0c0d10' }}>
@@ -3025,7 +3061,7 @@ export default function LandingPage() {
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> WhatsApp & Priority Phone Support</div>
                 </div>
                 <button
-                  onClick={() => handleBookDemo('Custom Plan & Pricing')}
+                  onClick={() => handlePurchasePlan('BUSINESS')}
                   className="btn-brand-secondary"
                   style={{
                     width: '100%',
@@ -3036,10 +3072,10 @@ export default function LandingPage() {
                     fontFamily: 'inherit',
                   }}
                 >
-                  <RollText text="Book a Demo" secondaryColor="#1d4ed8" />
+                  <RollText text="Buy Business & Scale" secondaryColor="#1d4ed8" />
                 </button>
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
-                  Includes 7-day free trial • Cancel anytime
+                  Includes 1-on-1 setup • Priority support
                 </div>
               </div>
             </Col>
@@ -3892,6 +3928,20 @@ export default function LandingPage() {
         </div>,
         document.body
       )}
+
+      {/* 100% Native Chatral Checkout Modal on Landing Page (No Razorpay popup) */}
+      <ChatralPaymentModal
+        open={checkoutModal.open}
+        onClose={() => setCheckoutModal({ open: false, plan: 'STARTER' })}
+        storeId={currentUserStore?.id}
+        storeName={currentUserStore?.name}
+        initialPlan={checkoutModal.plan}
+        initialCycle={billingCycle}
+        initialCurrency={currency}
+        onSuccess={() => {
+          nav('/settings?tab=billing');
+        }}
+      />
 
       {/* Global subtle float, pulse & smooth entrance keyframes */}
       <style>{`
