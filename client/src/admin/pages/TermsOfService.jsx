@@ -141,7 +141,7 @@ export default function TermsOfService() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 8,
-                background: '#0c0d10',
+                background: '#2563eb',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: 12,
@@ -151,16 +151,18 @@ export default function TermsOfService() {
                 fontWeight: 600,
                 cursor: 'pointer',
                 textDecoration: 'none',
-                boxShadow: '0px 1px 2px 0px rgba(12, 13, 16, 0.12), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.12)',
-                transition: 'all 0.15s ease',
+                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.28)',
+                transition: 'background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease',
                 fontFamily: 'inherit',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#1e2025';
+                e.currentTarget.style.background = '#1d4ed8';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(37, 99, 235, 0.35)';
                 e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#0c0d10';
+                e.currentTarget.style.background = '#2563eb';
+                e.currentTarget.style.boxShadow = '0 4px 14px rgba(37, 99, 235, 0.28)';
                 e.currentTarget.style.transform = 'none';
               }}
             >
