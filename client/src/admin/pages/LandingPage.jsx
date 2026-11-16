@@ -3827,8 +3827,8 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* Floating Callout Pill pointing to the Chatral Live Chat Widget */}
-      {showWidgetPill && !isWidgetOpen && typeof document !== 'undefined' && createPortal(
+      {/* Floating Callout Pill pointing to the Chatral Live Chat Widget (Desktop Only) */}
+      {!isMobile && showWidgetPill && !isWidgetOpen && typeof document !== 'undefined' && createPortal(
         <div
           onClick={handleOpenLiveWidget}
           role="button"
@@ -3836,13 +3836,13 @@ export default function LandingPage() {
           onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleOpenLiveWidget()}
           style={{
             position: 'fixed',
-            bottom: isMobile ? 86 : 24,
-            right: isMobile ? 16 : 88,
+            bottom: 24,
+            right: 88,
             zIndex: 2147482990,
             background: '#ffffff',
             border: '1.5px solid #2563eb',
             borderRadius: 999,
-            padding: isMobile ? '6px 12px' : '8px 14px',
+            padding: '8px 14px',
             display: 'flex',
             alignItems: 'center',
             gap: 8,
