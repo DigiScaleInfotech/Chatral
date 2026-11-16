@@ -148,7 +148,11 @@ button, input, textarea, select { font-family: inherit; }
 .lc-bubble.media .lc-file { background: var(--lc-ab); color: var(--lc-at); padding: 9px 12px; border-radius: 12px; }
 .lc-bubble a:has(> .lc-img) { display: block; max-width: 100%; }
 .lc-banner { background: #fef3c7; color: #92400e; font-size: .8em; padding: 6px 12px; text-align: center; flex: none; margin: 8px 10px 0; border-radius: 10px; }
-.lc-powered { text-align: center; font-size: 11px; color: #94a3b8; padding: 4px 0 6px; background: #fff; }
+.lc-powered { text-align: center; font-size: 11px; color: #64748b; padding: 6px 12px 7px; background: #f8fafc; border-top: 1px solid #f1f5f9; flex: none; user-select: none; }
+.lc-powered-link { color: #64748b; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 500; cursor: pointer; transition: color .15s ease; }
+.lc-powered-link:hover { color: var(--lc-primary, #2563eb); }
+.lc-powered-link strong { color: #0f172a; font-weight: 700; }
+.lc-powered-link:hover strong { color: var(--lc-primary, #2563eb); }
 .lc-preview { width: max-content; max-width: min(300px, calc(100vw - 2 * var(--lc-x))); margin-bottom: 10px; padding: 10px 6px 10px 12px; display: flex; gap: 4px; align-items: flex-start; background: #fff; color: #0f172a; border-radius: 14px; box-shadow: 0 8px 24px rgba(15,23,42,.18); animation: lc-in .18s ease-out; }
 .lc-root.right .lc-preview { margin-left: auto; }
 .lc-preview-body { all: unset; cursor: pointer; display: flex; flex-direction: column; gap: 2px; min-width: 0; font-size: .92em; }

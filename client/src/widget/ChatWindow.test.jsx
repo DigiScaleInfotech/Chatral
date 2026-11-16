@@ -21,10 +21,17 @@ describe('ChatWindow', () => {
       { id: '1', seq: 1, senderType: 'VISITOR', body: 'see https://shop.test/a and javascript:alert(1)', createdAt: new Date().toISOString() },
     ];
     render(<ChatWindow {...base} messages={messages} />);
-    const links = screen.getAllByRole('link');
-    expect(links).toHaveLength(1);
-    expect(links[0].getAttribute('href')).toBe('https://shop.test/a');
-    expect(links[0].getAttribute('rel')).toContain('noopener');
+    const messageLinks = screen.getAllByRole('link').filter((l) => !l.classList.contains('lc-powered-link'));
+    expect(messageLinks).toHaveLength(1);
+    expect(messageLinks[0].getAttribute('href')).toBe('https://shop.test/a');
+    expect(messageLinks[0].getAttribute('rel')).toContain('noopener');
+  });
+
+  it('renders the Powered by Chatral footer badge linking to chatral.com', () => {
+    render(<ChatWindow {...base} />);
+    const poweredLink = screen.getByRole('link', { name: /powered by chatral/i });
+    expect(poweredLink).toBeTruthy();
+    expect(poweredLink.getAttribute('href')).toBe('https://www.chatral.com');
   });
 
   it('shows Seen on the last visitor message the agent has read, and lets failed sends retry', () => {

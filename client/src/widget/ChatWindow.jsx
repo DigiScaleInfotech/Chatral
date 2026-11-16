@@ -337,6 +337,17 @@ export default function ChatWindow({
               <button type="submit" className="lc-icon lc-send" disabled={!text.trim()} aria-label="Send">{Icon.send}</button>
             </form>
           )}
+          <footer className="lc-powered">
+            <a
+              href="https://www.chatral.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lc-powered-link"
+              title="Powered by Chatral - Live chat for modern websites"
+            >
+              ⚡ Powered by <strong>Chatral</strong>
+            </a>
+          </footer>
         </section>
       )}
       {!open && !layout.inline && preview && (
