@@ -1,12 +1,350 @@
 // Store Overview: Minimal 2-tab workspace management matching Platform layout, scoped to the current store.
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  App, Button, Card, Flex, Form, Input, InputNumber, Modal, Space, Switch, Table, Tabs, Tag,
+  App, Button, Card, Flex, Form, Input, InputNumber, Modal, Progress, Space, Switch, Table, Tabs, Tag,
   Tooltip, Typography,
 } from 'antd';
-import { ShopOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  ShopOutlined, UserOutlined, PlusOutlined, RocketOutlined, CheckCircleFilled, CheckOutlined,
+  CopyOutlined, BgColorsOutlined, MessageOutlined, DownOutlined, UpOutlined, CloseOutlined,
+  TrophyOutlined, SettingOutlined,
+} from '@ant-design/icons';
 import { api, showError, ROLE_LABEL } from '../api.js';
 import { useApp } from '../main.jsx';
+
+function OnboardingChecklist({ store, stats, can }) {
+  const nav = useNavigate();
+  const { message } = App.useApp();
+  const [copied, setCopied] = useState(false);
+  const [minimized, setMinimized] = useState(() => {
+    return localStorage.getItem(`chatral_onboarding_min_${store?.id}`) === 'true';
+  });
+  const [dismissed, setDismissed] = useState(() => {
+    return localStorage.getItem(`chatral_onboarding_dismiss_${store?.id}`) === 'true';
+  });
+
+  const [manualDone, setManualDone] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`chatral_onboarding_done_${store?.id}`) || '{}');
+    } catch {
+      return {};
+    }
+  });
+
+  const toggleManual = (key) => {
+    const next = { ...manualDone, [key]: !manualDone[key] };
+    setManualDone(next);
+    localStorage.setItem(`chatral_onboarding_done_${store?.id}`, JSON.stringify(next));
+  };
+
+  const handleDismiss = () => {
+    setDismissed(true);
+    localStorage.setItem(`chatral_onboarding_dismiss_${store?.id}`, 'true');
+    message.info('Setup guide dismissed. You can reopen it anytime from the top banner.');
+  };
+
+  const handleReopen = () => {
+    setDismissed(false);
+    localStorage.removeItem(`chatral_onboarding_dismiss_${store?.id}`);
+  };
+
+  const toggleMinimize = () => {
+    const next = !minimized;
+    setMinimized(next);
+    localStorage.setItem(`chatral_onboarding_min_${store?.id}`, String(next));
+  };
+
+  const hasConvs = (stats?.conversations || 0) > 0;
+  const isInstalled = !!manualDone['install'] || store?.widgetEnabled === true;
+  const isCustomized = !!manualDone['design'];
+  const isTested = !!manualDone['test'] || hasConvs;
+
+  const steps = [
+    {
+      key: 'account',
+      title: 'Store workspace created',
+      desc: `${store?.name || 'Store'} is registered, configured, and running on Chatral.`,
+      done: true,
+      action: null,
+    },
+    {
+      key: 'install',
+      title: 'Install live chat widget on your website',
+      desc: 'Paste this 1-line script tag into your Shopify, WordPress/WooCommerce, or HTML website.',
+      done: isInstalled,
+      action: (
+        <Space wrap size={8}>
+          <Button
+            size="small"
+            type={isInstalled ? 'default' : 'primary'}
+            icon={copied ? <CheckOutlined style={{ color: '#10b981' }} /> : <CopyOutlined />}
+            onClick={() => {
+              const snippet = `<script src="${window.location.origin}/widget/chat.js" data-store-id="${store?.id}" async></script>`;
+              navigator.clipboard?.writeText(snippet);
+              setCopied(true);
+              message.success('Widget script tag copied to clipboard!');
+              setTimeout(() => setCopied(false), 2000);
+              if (!manualDone['install']) toggleManual('install');
+            }}
+          >
+            {copied ? 'Copied' : 'Copy Script Tag'}
+          </Button>
+          <Button
+            size="small"
+            icon={<SettingOutlined />}
+            onClick={() => nav('/settings?tab=installation')}
+          >
+            Installation Guide
+          </Button>
+          <Button
+            size="small"
+            type="text"
+            style={{ fontSize: 12, color: isInstalled ? '#10b981' : '#64748b' }}
+            onClick={() => toggleManual('install')}
+          >
+            {isInstalled ? 'Marked Done ✓' : 'Mark as Done'}
+          </Button>
+        </Space>
+      ),
+    },
+    {
+      key: 'design',
+      title: 'Customize widget styling & branding',
+      desc: 'Personalize widget theme colors, agent name, greeting title, and pre-chat form.',
+      done: isCustomized,
+      action: (
+        <Space wrap size={8}>
+          <Button
+            size="small"
+            type={isCustomized ? 'default' : 'primary'}
+            icon={<BgColorsOutlined />}
+            onClick={() => {
+              if (!manualDone['design']) toggleManual('design');
+              nav('/widget');
+            }}
+          >
+            Customize Widget
+          </Button>
+          <Button
+            size="small"
+            type="text"
+            style={{ fontSize: 12, color: isCustomized ? '#10b981' : '#64748b' }}
+            onClick={() => toggleManual('design')}
+          >
+            {isCustomized ? 'Marked Done ✓' : 'Mark as Done'}
+          </Button>
+        </Space>
+      ),
+    },
+    {
+      key: 'test',
+      title: 'Send your first live test message',
+      desc: 'Test your visitor chat window, verify sound alerts, and check real-time agent replies.',
+      done: isTested,
+      action: (
+        <Space wrap size={8}>
+          <Button
+            size="small"
+            type={isTested ? 'default' : 'primary'}
+            icon={<MessageOutlined />}
+            onClick={() => {
+              if (!manualDone['test']) toggleManual('test');
+              nav('/widget');
+            }}
+          >
+            Test Live Preview
+          </Button>
+          <Button
+            size="small"
+            type="text"
+            style={{ fontSize: 12, color: isTested ? '#10b981' : '#64748b' }}
+            onClick={() => toggleManual('test')}
+          >
+            {isTested ? 'Marked Done ✓' : 'Mark as Done'}
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
+  const completedCount = steps.filter((s) => s.done).length;
+  const percent = Math.round((completedCount / steps.length) * 100);
+  const allCompleted = completedCount === steps.length;
+
+  if (dismissed) {
+    return (
+      <div
+        style={{
+          marginBottom: 16,
+          padding: '6px 14px',
+          background: 'rgba(255, 255, 255, 0.02)',
+          borderRadius: 8,
+          border: '1px solid #e2e8f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          fontSize: 12,
+        }}
+      >
+        <span style={{ color: '#64748b' }}>
+          🚀 <b>Quick Setup Guide</b> is hidden ({completedCount}/{steps.length} completed).
+        </span>
+        <Button size="small" type="link" onClick={handleReopen} style={{ padding: 0 }}>
+          Show Setup Guide
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Card
+      style={{
+        marginBottom: 20,
+        borderRadius: 10,
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+      }}
+      bodyStyle={{ padding: '16px 20px 18px' }}
+    >
+      {/* Header */}
+      <Flex justify="space-between" align="center" wrap gap={12} style={{ marginBottom: minimized ? 0 : 12 }}>
+        <Flex align="center" gap={10}>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 8,
+              background: allCompleted ? '#ecfdf5' : '#eff6ff',
+              border: `1px solid ${allCompleted ? '#a7f3d0' : '#bfdbfe'}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {allCompleted ? (
+              <TrophyOutlined style={{ fontSize: 16, color: '#10b981' }} />
+            ) : (
+              <RocketOutlined style={{ fontSize: 16, color: '#2563eb' }} />
+            )}
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 15, color: '#0f172a' }}>
+              {allCompleted ? '🎉 Congratulations! Live chat is fully configured' : '🚀 Getting Started with Chatral'}
+            </div>
+            <div style={{ fontSize: 12, color: '#64748b' }}>
+              {allCompleted
+                ? 'Your website live chat widget is ready to engage visitors and capture leads.'
+                : 'Complete these quick steps to start chatting with your website visitors.'}
+            </div>
+          </div>
+        </Flex>
+
+        <Flex align="center" gap={8}>
+          <Tag
+            color={allCompleted ? 'success' : percent >= 50 ? 'processing' : 'default'}
+            bordered={false}
+            style={{ fontWeight: 600, fontSize: 12, padding: '2px 8px' }}
+          >
+            {completedCount} of {steps.length} Completed ({percent}%)
+          </Tag>
+          <Tooltip title={minimized ? 'Expand checklist' : 'Minimize checklist'}>
+            <Button
+              type="text"
+              size="small"
+              icon={minimized ? <DownOutlined /> : <UpOutlined />}
+              onClick={toggleMinimize}
+              aria-label="Toggle checklist"
+            />
+          </Tooltip>
+          <Tooltip title="Dismiss setup guide">
+            <Button
+              type="text"
+              size="small"
+              icon={<CloseOutlined style={{ fontSize: 12 }} />}
+              onClick={handleDismiss}
+              aria-label="Dismiss setup guide"
+            />
+          </Tooltip>
+        </Flex>
+      </Flex>
+
+      {/* Progress Bar */}
+      <Progress
+        percent={percent}
+        showInfo={false}
+        size="small"
+        strokeColor={{ '0%': '#2563eb', '100%': '#10b981' }}
+        style={{ marginBottom: minimized ? 0 : 16 }}
+      />
+
+      {/* Checklist items */}
+      {!minimized && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {steps.map((s, idx) => (
+            <div
+              key={s.key}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 12,
+                padding: '10px 12px',
+                borderRadius: 8,
+                background: s.done ? '#f8fafc' : '#ffffff',
+                border: `1px solid ${s.done ? '#e2e8f0' : '#cbd5e1'}`,
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <div style={{ paddingTop: 2 }}>
+                {s.done ? (
+                  <CheckCircleFilled style={{ color: '#10b981', fontSize: 20 }} />
+                ) : (
+                  <div
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      border: '2px solid #94a3b8',
+                      color: '#64748b',
+                      fontSize: 11,
+                      fontWeight: 700,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {idx + 1}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+                  <div>
+                    <span
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 13.5,
+                        color: s.done ? '#475569' : '#0f172a',
+                        textDecoration: s.done && s.key === 'account' ? 'none' : s.done ? 'line-through' : 'none',
+                      }}
+                    >
+                      {s.title}
+                    </span>
+                    <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>
+                      {s.desc}
+                    </div>
+                  </div>
+                  {s.action && <div>{s.action}</div>}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
 
 function StoreUsage({ store, members, stats, loading, can, toggleWidget, me }) {
   const isPlatformStore = me?.role === 'SUPER_ADMIN' && (store?.name === 'Chatral Store' || store?.id === 'cmwejj2wi0002ri646fs0jj8l');
@@ -284,6 +622,10 @@ export default function Overview() {
           </Typography.Text>
         </div>
       </div>
+
+      {!isPlatformStore && (
+        <OnboardingChecklist store={store} stats={stats} can={can} />
+      )}
 
       <Card>
         <Tabs
