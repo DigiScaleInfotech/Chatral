@@ -13,7 +13,7 @@ import {
 import { api, showError, ROLE_LABEL } from '../api.js';
 import { useApp } from '../main.jsx';
 
-function OnboardingChecklist({ store, stats, can }) {
+function OnboardingChecklist({ store, stats, diag, can }) {
   const nav = useNavigate();
   const { message } = App.useApp();
   const [copied, setCopied] = useState(false);
@@ -23,20 +23,6 @@ function OnboardingChecklist({ store, stats, can }) {
   const [dismissed, setDismissed] = useState(() => {
     return localStorage.getItem(`chatral_onboarding_dismiss_${store?.id}`) === 'true';
   });
-
-  const [manualDone, setManualDone] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(`chatral_onboarding_done_${store?.id}`) || '{}');
-    } catch {
-      return {};
-    }
-  });
-
-  const toggleManual = (key) => {
-    const next = { ...manualDone, [key]: !manualDone[key] };
-    setManualDone(next);
-    localStorage.setItem(`chatral_onboarding_done_${store?.id}`, JSON.stringify(next));
-  };
 
   const handleDismiss = () => {
     setDismissed(true);
@@ -55,10 +41,22 @@ function OnboardingChecklist({ store, stats, can }) {
     localStorage.setItem(`chatral_onboarding_min_${store?.id}`, String(next));
   };
 
+  // 100% Automated System Detection
+  const installedCheck = diag?.checks?.find((c) => c.key === 'installed')?.ok;
+  const publishedCheck = diag?.checks?.find((c) => c.key === 'published')?.ok;
+
   const hasConvs = (stats?.conversations || 0) > 0;
-  const isInstalled = !!manualDone['install'] || store?.widgetEnabled === true;
-  const isCustomized = !!manualDone['design'];
-  const isTested = !!manualDone['test'] || hasConvs;
+  const isInstalled = Boolean(installedCheck || store?.lastWidgetSeenAt || hasConvs);
+  const isCustomized = Boolean(publishedCheck || store?.publishedVersion != null);
+  const isTested = hasConvs;
+
+  const handleCopySnippet = () => {
+    const snippet = `<script src="${window.location.origin}/widget/chat.js" data-store-id="${store?.id}" async></script>`;
+    navigator.clipboard?.writeText(snippet);
+    setCopied(true);
+    message.success('Widget script tag copied to clipboard!');
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const steps = [
     {
@@ -66,27 +64,41 @@ function OnboardingChecklist({ store, stats, can }) {
       title: 'Store workspace created',
       desc: `${store?.name || 'Store'} is registered, configured, and running on Chatral.`,
       done: true,
-      action: null,
+      action: (
+        <Tag color="success" bordered={false} style={{ fontWeight: 600 }}>
+          Active
+        </Tag>
+      ),
     },
     {
       key: 'install',
       title: 'Install live chat widget on your website',
-      desc: 'Paste this 1-line script tag into your Shopify, WordPress/WooCommerce, or HTML website.',
+      desc: isInstalled
+        ? store?.lastWidgetOrigin
+          ? `Widget automatically detected on ${store.lastWidgetOrigin}.`
+          : 'Widget automatically detected and loaded on website.'
+        : 'Paste this 1-line script tag into your Shopify, WordPress/WooCommerce, or HTML website.',
       done: isInstalled,
-      action: (
+      action: isInstalled ? (
+        <Space wrap size={8}>
+          <Tag color="success" bordered={false} style={{ fontWeight: 600 }}>
+            Detected on website ✓
+          </Tag>
+          <Button
+            size="small"
+            icon={<SettingOutlined />}
+            onClick={() => nav('/settings?tab=installation')}
+          >
+            Installation Settings
+          </Button>
+        </Space>
+      ) : (
         <Space wrap size={8}>
           <Button
             size="small"
-            type={isInstalled ? 'default' : 'primary'}
+            type="primary"
             icon={copied ? <CheckOutlined style={{ color: '#10b981' }} /> : <CopyOutlined />}
-            onClick={() => {
-              const snippet = `<script src="${window.location.origin}/widget/chat.js" data-store-id="${store?.id}" async></script>`;
-              navigator.clipboard?.writeText(snippet);
-              setCopied(true);
-              message.success('Widget script tag copied to clipboard!');
-              setTimeout(() => setCopied(false), 2000);
-              if (!manualDone['install']) toggleManual('install');
-            }}
+            onClick={handleCopySnippet}
           >
             {copied ? 'Copied' : 'Copy Script Tag'}
           </Button>
@@ -97,73 +109,60 @@ function OnboardingChecklist({ store, stats, can }) {
           >
             Installation Guide
           </Button>
-          <Button
-            size="small"
-            type="text"
-            style={{ fontSize: 12, color: isInstalled ? '#10b981' : '#64748b' }}
-            onClick={() => toggleManual('install')}
-          >
-            {isInstalled ? 'Marked Done ✓' : 'Mark as Done'}
-          </Button>
         </Space>
       ),
     },
     {
       key: 'design',
       title: 'Customize widget styling & branding',
-      desc: 'Personalize widget theme colors, agent name, greeting title, and pre-chat form.',
+      desc: isCustomized
+        ? 'Custom colors, greetings, and branding published.'
+        : 'Personalize widget theme colors, agent name, greeting title, and pre-chat form.',
       done: isCustomized,
-      action: (
+      action: isCustomized ? (
         <Space wrap size={8}>
+          <Tag color="success" bordered={false} style={{ fontWeight: 600 }}>
+            Customized ✓
+          </Tag>
           <Button
             size="small"
-            type={isCustomized ? 'default' : 'primary'}
             icon={<BgColorsOutlined />}
-            onClick={() => {
-              if (!manualDone['design']) toggleManual('design');
-              nav('/widget');
-            }}
+            onClick={() => nav('/widget')}
           >
-            Customize Widget
-          </Button>
-          <Button
-            size="small"
-            type="text"
-            style={{ fontSize: 12, color: isCustomized ? '#10b981' : '#64748b' }}
-            onClick={() => toggleManual('design')}
-          >
-            {isCustomized ? 'Marked Done ✓' : 'Mark as Done'}
+            Edit Design
           </Button>
         </Space>
+      ) : (
+        <Button
+          size="small"
+          type="primary"
+          icon={<BgColorsOutlined />}
+          onClick={() => nav('/widget')}
+        >
+          Customize Widget
+        </Button>
       ),
     },
     {
       key: 'test',
       title: 'Send your first live test message',
-      desc: 'Test your visitor chat window, verify sound alerts, and check real-time agent replies.',
+      desc: isTested
+        ? `First conversation received (${stats.conversations} chat${stats.conversations === 1 ? '' : 's'} logged).`
+        : 'Test your visitor chat window, verify sound alerts, and check real-time agent replies.',
       done: isTested,
-      action: (
-        <Space wrap size={8}>
-          <Button
-            size="small"
-            type={isTested ? 'default' : 'primary'}
-            icon={<MessageOutlined />}
-            onClick={() => {
-              if (!manualDone['test']) toggleManual('test');
-              nav('/widget');
-            }}
-          >
-            Test Live Preview
-          </Button>
-          <Button
-            size="small"
-            type="text"
-            style={{ fontSize: 12, color: isTested ? '#10b981' : '#64748b' }}
-            onClick={() => toggleManual('test')}
-          >
-            {isTested ? 'Marked Done ✓' : 'Mark as Done'}
-          </Button>
-        </Space>
+      action: isTested ? (
+        <Tag color="success" bordered={false} style={{ fontWeight: 600 }}>
+          Received chats ✓
+        </Tag>
+      ) : (
+        <Button
+          size="small"
+          type="primary"
+          icon={<MessageOutlined />}
+          onClick={() => nav('/widget')}
+        >
+          Test Live Preview
+        </Button>
       ),
     },
   ];
@@ -345,6 +344,10 @@ function OnboardingChecklist({ store, stats, can }) {
     </Card>
   );
 }
+
+
+
+
 
 function StoreUsage({ store, members, stats, loading, can, toggleWidget, me }) {
   const isPlatformStore = me?.role === 'SUPER_ADMIN' && (store?.name === 'Chatral Store' || store?.id === 'cmwejj2wi0002ri646fs0jj8l');
@@ -537,6 +540,7 @@ export default function Overview() {
 
   const [members, setMembers] = useState(null);
   const [stats, setStats] = useState(null);
+  const [diag, setDiag] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [addMemberOpen, setAddMemberOpen] = useState(false);
@@ -547,11 +551,13 @@ export default function Overview() {
     if (!store?.id) return;
     setLoading(true);
     try {
-      const [membersData, reportsData] = await Promise.all([
+      const [membersData, reportsData, diagData] = await Promise.all([
         api(`/stores/${store.id}/members`).catch(() => []),
         api(`/stores/${store.id}/reports`).catch(() => null),
+        can('ADMIN') ? api(`/stores/${store.id}/diagnostics`).catch(() => null) : null,
       ]);
       setMembers(membersData || []);
+      setDiag(diagData || null);
 
       if (reportsData) {
         const totalConvs = (reportsData.byStatus || []).reduce((acc, x) => acc + (x._count || 0), 0);
@@ -624,7 +630,7 @@ export default function Overview() {
       </div>
 
       {!isPlatformStore && (
-        <OnboardingChecklist store={store} stats={stats} can={can} />
+        <OnboardingChecklist store={store} stats={stats} diag={diag} can={can} />
       )}
 
       <Card>
