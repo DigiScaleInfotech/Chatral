@@ -8,7 +8,8 @@ import { ShopOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import { api, showError, ROLE_LABEL } from '../api.js';
 import { useApp } from '../main.jsx';
 
-function StoreUsage({ store, members, stats, loading, can, toggleWidget }) {
+function StoreUsage({ store, members, stats, loading, can, toggleWidget, me }) {
+  const isPlatformStore = me?.role === 'SUPER_ADMIN' && (store?.name === 'Chatral Store' || store?.id === 'cmwejj2wi0002ri646fs0jj8l');
   const dataSource = store
     ? [
         {
@@ -18,7 +19,7 @@ function StoreUsage({ store, members, stats, loading, can, toggleWidget }) {
           widgetEnabled: store.widgetEnabled,
           members: members?.length || 0,
           conversations: stats?.conversations || 0,
-          plan: store.plan || 'TRIAL',
+          plan: isPlatformStore ? 'BUSINESS' : (store.plan || 'TRIAL'),
         },
       ]
     : [];
@@ -88,10 +89,10 @@ function StoreUsage({ store, members, stats, loading, can, toggleWidget }) {
             title: 'CURRENT PLAN',
             dataIndex: 'plan',
             width: 160,
-            render: (p) => {
+            render: (p, s) => {
               const plan = p || 'TRIAL';
-              const color = plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
-              const label = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
+              const color = isPlatformStore ? 'purple' : plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
+              const label = isPlatformStore ? 'Super Admin' : plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
               return (
                 <Tag color={color} bordered={false} style={{ fontWeight: 600 }}>
                   {label}
@@ -192,7 +193,8 @@ function UsersDirectory({ store, members, loading, can, onAddMember }) {
 }
 
 export default function Overview() {
-  const { store, role, can, reloadMe } = useApp();
+  const { store, role, can, reloadMe, me } = useApp();
+  const isPlatformStore = me?.role === 'SUPER_ADMIN' && (store?.name === 'Chatral Store' || store?.id === 'cmwejj2wi0002ri646fs0jj8l');
   const { message } = App.useApp();
 
   const [members, setMembers] = useState(null);
@@ -273,8 +275,8 @@ export default function Overview() {
             <Typography.Title level={4} className="saas-page-title">
               Overview
             </Typography.Title>
-            <Tag color={store?.plan === 'BUSINESS' ? 'purple' : store?.plan === 'STARTER' ? 'green' : 'blue'} bordered={false} style={{ fontWeight: 600 }}>
-              {store?.plan === 'BUSINESS' ? 'Business Plan' : store?.plan === 'STARTER' ? 'Starter Plan' : '7-Day Free Trial'}
+            <Tag color={isPlatformStore ? 'purple' : store?.plan === 'BUSINESS' ? 'purple' : store?.plan === 'STARTER' ? 'green' : 'blue'} bordered={false} style={{ fontWeight: 600 }}>
+              {isPlatformStore ? 'Super Admin' : store?.plan === 'BUSINESS' ? 'Business Plan' : store?.plan === 'STARTER' ? 'Starter Plan' : '7-Day Free Trial'}
             </Tag>
           </Flex>
           <Typography.Text type="secondary" className="saas-page-subtitle">
@@ -301,6 +303,7 @@ export default function Overview() {
                   loading={loading}
                   can={can}
                   toggleWidget={toggleWidget}
+                  me={me}
                 />
               ),
             },

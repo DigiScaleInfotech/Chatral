@@ -340,8 +340,9 @@ function Shell() {
 
           {/* Bottom Store & Subscription Widget */}
           {store && (() => {
-            const plan = store.plan || 'TRIAL';
-            const planExpiresAt = store.planExpiresAt;
+            const isPlatformStore = isSuper && (store.name === 'Chatral Store' || store.id === 'cmwejj2wi0002ri646fs0jj8l');
+            const plan = isPlatformStore ? 'BUSINESS' : (store.plan || 'TRIAL');
+            const planExpiresAt = isPlatformStore ? null : store.planExpiresAt;
             const now = new Date();
             const isExpired = planExpiresAt ? new Date(planExpiresAt) < now : false;
             const daysLeft = planExpiresAt
@@ -350,7 +351,7 @@ function Shell() {
 
             if (collapsed && !isMobile) {
               return (
-                <div style={{ flexShrink: 0, padding: '12px 8px', borderTop: '1px solid #1e293b' }}>
+                <div style={{ flexShrink: 0, padding: '8px 6px', borderTop: '1px solid #1e293b' }}>
                   <Tooltip
                     placement="right"
                     title={
@@ -360,7 +361,7 @@ function Shell() {
                           style={{
                             fontSize: 11,
                             marginTop: 2,
-                            color: isSuper
+                            color: isPlatformStore
                               ? '#c084fc'
                               : plan === 'BUSINESS' || plan === 'STARTER'
                               ? '#34d399'
@@ -369,7 +370,7 @@ function Shell() {
                               : '#fbbf24',
                           }}
                         >
-                          {isSuper
+                          {isPlatformStore
                             ? 'Super Admin (Lifetime)'
                             : plan === 'BUSINESS'
                             ? 'Business & Scale'
@@ -379,7 +380,7 @@ function Shell() {
                             ? 'Trial Expired'
                             : `7-Day Trial (${daysLeft}d left)`}
                         </div>
-                        {!isSuper && plan !== 'BUSINESS' && plan !== 'STARTER' && (
+                        {!isPlatformStore && plan !== 'BUSINESS' && plan !== 'STARTER' && (
                           <div style={{ fontSize: 10, color: '#60a5fa', marginTop: 4, fontWeight: 600 }}>
                             Click to Upgrade Plan
                           </div>
@@ -388,27 +389,27 @@ function Shell() {
                     }
                   >
                     <div
-                      onClick={() => !isSuper && nav('/settings?tab=billing')}
+                      onClick={() => !isPlatformStore && nav('/settings?tab=billing')}
                       style={{
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        padding: '8px 0',
-                        borderRadius: 8,
+                        padding: '6px 0',
+                        borderRadius: 6,
                         background: 'rgba(255, 255, 255, 0.04)',
-                        cursor: isSuper ? 'default' : 'pointer',
+                        cursor: isPlatformStore ? 'default' : 'pointer',
                         border: '1px solid rgba(255, 255, 255, 0.06)',
                       }}
                     >
-                      <ShopOutlined style={{ fontSize: 18, color: '#94a3b8' }} />
+                      <ShopOutlined style={{ fontSize: 16, color: '#94a3b8' }} />
                       <span
                         style={{
-                          width: 6,
-                          height: 6,
+                          width: 5,
+                          height: 5,
                           borderRadius: '50%',
-                          marginTop: 4,
-                          background: isSuper
+                          marginTop: 3,
+                          background: isPlatformStore
                             ? '#c084fc'
                             : plan === 'BUSINESS' || plan === 'STARTER'
                             ? '#10b981'
@@ -427,35 +428,48 @@ function Shell() {
               <div
                 style={{
                   flexShrink: 0,
-                  padding: '12px 14px 16px',
+                  padding: '8px 10px 10px',
                   borderTop: '1px solid #1e293b',
                   background: 'rgba(15, 23, 42, 0.55)',
                 }}
               >
                 <div
                   style={{
-                    padding: '10px 12px',
-                    borderRadius: 8,
+                    padding: '7px 9px',
+                    borderRadius: 6,
                     background: 'rgba(255, 255, 255, 0.03)',
                     border: '1px solid #1e293b',
                   }}
                 >
-                  {/* Top line: Label + Plan Badge */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
-                    <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>
-                      Active Store
+                  {/* Line 1: Store Name + Plan Pill */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6 }}>
+                    <div
+                      style={{
+                        color: '#f8fafc',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        flex: 1,
+                      }}
+                      title={store.name}
+                    >
+                      {store.name}
                     </div>
-                    {isSuper ? (
+
+                    {isPlatformStore ? (
                       <span
                         style={{
-                          fontSize: 9.5,
+                          fontSize: 9,
                           fontWeight: 700,
                           color: '#c084fc',
                           background: 'rgba(168, 85, 247, 0.18)',
                           border: '1px solid rgba(168, 85, 247, 0.35)',
-                          padding: '1px 6px',
-                          borderRadius: 4,
+                          padding: '1px 5px',
+                          borderRadius: 3,
                           letterSpacing: '0.02em',
+                          flexShrink: 0,
                         }}
                       >
                         SUPER ADMIN
@@ -463,14 +477,15 @@ function Shell() {
                     ) : plan === 'BUSINESS' || plan === 'STARTER' ? (
                       <span
                         style={{
-                          fontSize: 9.5,
+                          fontSize: 9,
                           fontWeight: 700,
                           color: '#34d399',
                           background: 'rgba(16, 185, 129, 0.15)',
                           border: '1px solid rgba(16, 185, 129, 0.3)',
-                          padding: '1px 6px',
-                          borderRadius: 4,
+                          padding: '1px 5px',
+                          borderRadius: 3,
                           letterSpacing: '0.02em',
+                          flexShrink: 0,
                         }}
                       >
                         {plan}
@@ -478,14 +493,15 @@ function Shell() {
                     ) : (
                       <span
                         style={{
-                          fontSize: 9.5,
+                          fontSize: 9,
                           fontWeight: 700,
                           color: isExpired ? '#f87171' : '#fbbf24',
                           background: isExpired ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)',
                           border: `1px solid ${isExpired ? 'rgba(239, 68, 68, 0.35)' : 'rgba(245, 158, 11, 0.35)'}`,
-                          padding: '1px 6px',
-                          borderRadius: 4,
+                          padding: '1px 5px',
+                          borderRadius: 3,
                           letterSpacing: '0.02em',
+                          flexShrink: 0,
                         }}
                       >
                         {isExpired ? 'EXPIRED' : 'TRIAL'}
@@ -493,43 +509,27 @@ function Shell() {
                     )}
                   </div>
 
-                  {/* Store Name */}
+                  {/* Line 2: Status / Countdown & Compact Action */}
                   <div
                     style={{
-                      color: '#f8fafc',
-                      fontSize: 12.5,
-                      fontWeight: 600,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                    title={store.name}
-                  >
-                    {store.name}
-                  </div>
-
-                  {/* Plan Details & Countdown */}
-                  <div
-                    style={{
-                      marginTop: 6,
-                      paddingTop: 6,
-                      borderTop: '1px dashed rgba(255, 255, 255, 0.08)',
+                      marginTop: 5,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      fontSize: 11,
+                      gap: 6,
+                      fontSize: 10.5,
                     }}
                   >
-                    {isSuper ? (
-                      <div style={{ color: '#94a3b8', fontSize: 10.5, display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <CrownFilled style={{ color: '#c084fc', fontSize: 11 }} />
+                    {isPlatformStore ? (
+                      <div style={{ color: '#94a3b8', fontSize: 10, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <CrownFilled style={{ color: '#c084fc', fontSize: 10.5 }} />
                         <span>Lifetime Access</span>
                       </div>
                     ) : plan === 'BUSINESS' || plan === 'STARTER' ? (
                       <>
-                        <div style={{ color: '#94a3b8', fontSize: 10.5, display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <CheckCircleFilled style={{ color: '#10b981', fontSize: 11 }} />
-                          <span>{plan === 'BUSINESS' ? 'Business & Scale' : 'Starter Growth'}</span>
+                        <div style={{ color: '#94a3b8', fontSize: 10, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <CheckCircleFilled style={{ color: '#10b981', fontSize: 10.5 }} />
+                          <span>{plan === 'BUSINESS' ? 'Business Plan' : 'Starter Plan'}</span>
                         </div>
                         <span
                           onClick={() => nav('/settings?tab=billing')}
@@ -537,7 +537,7 @@ function Shell() {
                             fontSize: 10,
                             color: '#38bdf8',
                             cursor: 'pointer',
-                            fontWeight: 500,
+                            fontWeight: 600,
                           }}
                         >
                           Manage
@@ -547,62 +547,45 @@ function Shell() {
                       <>
                         <div
                           style={{
-                            color: isExpired ? '#f87171' : '#cbd5e1',
-                            fontSize: 10.5,
+                            color: isExpired ? '#f87171' : '#f59e0b',
+                            fontSize: 10,
+                            fontWeight: 500,
                             display: 'flex',
                             alignItems: 'center',
                             gap: 4,
                           }}
                         >
-                          <ClockCircleOutlined style={{ color: isExpired ? '#ef4444' : '#f59e0b', fontSize: 11 }} />
-                          <span>{isExpired ? 'Trial Ended' : `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left`}</span>
+                          <ClockCircleOutlined style={{ fontSize: 10 }} />
+                          <span>{isExpired ? 'Ended' : `${daysLeft}d left`}</span>
                         </div>
-                        <span
+
+                        <button
+                          type="button"
+                          onClick={() => nav('/settings?tab=billing')}
                           style={{
-                            fontSize: 10,
-                            color: '#94a3b8',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 3.5,
+                            padding: '2.5px 7px',
+                            borderRadius: 4,
+                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                            color: '#ffffff',
+                            fontSize: 9.5,
+                            fontWeight: 600,
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            cursor: 'pointer',
+                            boxShadow: '0 1px 4px rgba(37, 99, 235, 0.35)',
+                            transition: 'all 0.15s ease',
                           }}
+                          onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(1.15)')}
+                          onMouseLeave={(e) => (e.currentTarget.style.filter = 'none')}
                         >
-                          7-Day Trial
-                        </span>
+                          <ThunderboltOutlined style={{ fontSize: 9, color: '#fde047' }} />
+                          <span>Upgrade</span>
+                        </button>
                       </>
                     )}
                   </div>
-
-                  {/* High-converting Upgrade Button (For Trial or Expired stores) */}
-                  {!isSuper && plan !== 'BUSINESS' && plan !== 'STARTER' && (
-                    <button
-                      type="button"
-                      onClick={() => nav('/settings?tab=billing')}
-                      style={{
-                        marginTop: 8,
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 5,
-                        padding: '6px 10px',
-                        borderRadius: 6,
-                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                        color: '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 600,
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 6px rgba(37, 99, 235, 0.35)',
-                        transition: 'all 0.15s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.filter = 'brightness(1.1)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.filter = 'none';
-                      }}
-                    >
-                      <ThunderboltOutlined style={{ fontSize: 11, color: '#fde047' }} />
-                      <span>Upgrade Plan</span>
-                    </button>
-                  )}
                 </div>
               </div>
             );
