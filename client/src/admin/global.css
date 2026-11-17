@@ -98,6 +98,12 @@ body {
   box-shadow: none !important;
 }
 
+.saas-sider .ant-layout-sider-children {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
 .saas-header {
   position: sticky;
   top: 0;
