@@ -51,7 +51,7 @@ const CATEGORY_COLORS = {
 export default function HelpCenter() {
   const { storeId, can } = useApp();
   const { message } = App.useApp();
-  const [faqs, setFaqs] = useState(null);
+  const [faqs, setFaqs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
@@ -192,7 +192,7 @@ export default function HelpCenter() {
               type="primary"
               icon={<CloudUploadOutlined />}
               loading={saving}
-              onClick={() => saveList(faqs)}
+              onClick={() => saveList(faqs || [])}
               style={{
                 background: '#10b981',
                 borderColor: '#10b981',
@@ -386,13 +386,13 @@ export default function HelpCenter() {
             {can('ADMIN') && (
               <Flex justify="space-between" align="center" style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #f1f5f9' }}>
                 <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  {faqs.length} total FAQs • {faqs.filter((f) => f.showOnHome).length} displayed on Home greeting
+                  {(faqs || []).length} total FAQs • {(faqs || []).filter((f) => f?.showOnHome).length} displayed on Home greeting
                 </Typography.Text>
                 <Button
                   type="primary"
                   icon={<CloudUploadOutlined />}
                   loading={saving}
-                  onClick={() => saveList(faqs)}
+                  onClick={() => saveList(faqs || [])}
                   style={{
                     background: '#10b981',
                     borderColor: '#10b981',
