@@ -9,6 +9,7 @@ import {
   MessageOutlined, MailOutlined, ThunderboltOutlined, BgColorsOutlined, BarChartOutlined, SettingOutlined, SnippetsOutlined, EyeOutlined,
   ShopOutlined, UserOutlined, LogoutOutlined, LockOutlined, MenuFoldOutlined, MenuUnfoldOutlined,
   CheckCircleFilled, SyncOutlined, LineChartOutlined, DashboardOutlined, CrownFilled, ClockCircleOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import { api, showError, ROLE_LABEL, RANK } from './api.js';
 import { alertFor, soundFor } from './notifications.js';
@@ -32,6 +33,7 @@ import Inbox from './pages/Inbox.jsx';
 import Tickets from './pages/Tickets.jsx';
 import Visitors from './pages/Visitors.jsx';
 import Triggers from './pages/Triggers.jsx';
+import HelpCenter from './pages/HelpCenter.jsx';
 import WidgetEditor from './pages/WidgetEditor.jsx';
 import SavedReplies from './pages/SavedReplies.jsx';
 import Reports from './pages/Reports.jsx';
@@ -237,6 +239,11 @@ function Shell() {
       key: '/saved-replies',
       icon: <SnippetsOutlined style={{ fontSize: 16 }} />,
       label: 'Saved replies',
+    },
+    storeId && {
+      key: '/help-center',
+      icon: <QuestionCircleOutlined style={{ fontSize: 16 }} />,
+      label: 'Help Center (FAQs)',
     },
     storeId && can('ADMIN') && {
       key: '/triggers',
@@ -748,6 +755,7 @@ function Shell() {
                 {storeId && <Route path="/tickets" element={<Tickets key={storeId} />} />}
                 {storeId && <Route path="/visitors" element={<Visitors key={storeId} />} />}
                 {storeId && <Route path="/saved-replies" element={<SavedReplies key={storeId} />} />}
+                {storeId && <Route path="/help-center" element={<HelpCenter key={storeId} />} />}
                 {storeId && <Route path="/triggers/*" element={<Triggers key={storeId} />} />}
                 {storeId && <Route path="/widget" element={<WidgetEditor key={storeId} />} />}
                 {storeId && <Route path="/reports" element={<Reports key={storeId} />} />}

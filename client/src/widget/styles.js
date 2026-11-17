@@ -161,5 +161,53 @@ button, input, textarea, select { font-family: inherit; }
 .lc-icon.lc-preview-close { width: 26px; height: 26px; color: #64748b; flex: none; }
 .lc-icon.lc-preview-close:hover { background: #f1f5f9; }
 .lc-icon.lc-preview-close svg { width: 14px; height: 14px; }
+
+/* Help Center & Tabs */
+.lc-tabs { display: flex; border-top: 1px solid #e2e8f0; background: #ffffff; padding: 4px 8px 5px; justify-content: space-around; flex: none; }
+.lc-tab { all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 500; color: #64748b; padding: 4px 16px; border-radius: 8px; position: relative; transition: all .15s ease; }
+.lc-tab:hover { color: #0f172a; background: #f8fafc; }
+.lc-tab.active { color: var(--lc-primary); font-weight: 600; }
+.lc-tab svg { width: 19px; height: 19px; }
+.lc-tab-badge { position: absolute; top: 0px; right: 10px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #ef4444; color: #fff; font: 700 10px/16px system-ui; text-align: center; }
+
+.lc-home-hero { background: var(--lc-primary); color: var(--lc-header-text); padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 12px; flex: none; position: relative; }
+.lc-home-hero-top { display: flex; justify-content: space-between; align-items: center; }
+.lc-home-hero-top img.logo { height: 32px; max-width: 100px; object-fit: contain; }
+.lc-home-greeting { font-size: 1.35em; font-weight: 700; line-height: 1.25; }
+.lc-home-sub { font-size: 0.92em; opacity: 0.9; margin-top: 2px; }
+
+.lc-home-scroll { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; background: var(--lc-bg); overscroll-behavior: contain; }
+.lc-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; cursor: pointer; transition: all .15s ease; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 1px 3px rgba(15,23,42,.03); text-align: left; }
+.lc-card:hover { border-color: var(--lc-primary); box-shadow: 0 4px 14px rgba(15,23,42,.08); transform: translateY(-1px); }
+.lc-card-main { min-width: 0; flex: 1; }
+.lc-card-title { font-weight: 600; font-size: 0.92em; color: #0f172a; margin-bottom: 2px; }
+.lc-card-desc { font-size: 0.82em; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lc-card-arrow { color: #94a3b8; flex: none; display: grid; place-items: center; }
+
+.lc-card-recent { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; cursor: pointer; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 3px rgba(15,23,42,.03); text-align: left; transition: all .15s ease; }
+.lc-card-recent:hover { border-color: var(--lc-primary); box-shadow: 0 4px 14px rgba(15,23,42,.08); }
+.lc-card-recent-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.78em; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.lc-card-recent-msg { display: flex; align-items: center; gap: 10px; }
+.lc-card-recent-msg .lc-avatar { width: 32px; height: 32px; font-size: 13px; }
+.lc-card-recent-text { font-size: 0.88em; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+
+.lc-faq-search-box { display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px 12px; color: #64748b; cursor: pointer; transition: border-color .15s ease; }
+.lc-faq-search-box:focus-within { border-color: var(--lc-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lc-primary) 15%, transparent); }
+.lc-faq-search-input { border: 0; outline: 0; background: transparent; font: inherit; font-size: 0.9em; color: #0f172a; flex: 1; }
+
+.lc-faq-categories { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 4px; scrollbar-width: none; }
+.lc-faq-cat-pill { all: unset; cursor: pointer; border: 1px solid #e2e8f0; background: #ffffff; border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 500; color: #475569; white-space: nowrap; flex: none; transition: all .15s ease; }
+.lc-faq-cat-pill:hover { background: #f8fafc; border-color: #cbd5e1; }
+.lc-faq-cat-pill.active { background: var(--lc-primary); color: var(--lc-header-text); border-color: var(--lc-primary); font-weight: 600; }
+
+.lc-faq-article-view { flex: 1; overflow-y: auto; padding: 18px 16px; background: #ffffff; display: flex; flex-direction: column; gap: 12px; overscroll-behavior: contain; }
+.lc-faq-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: #eff6ff; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; align-self: flex-start; }
+.lc-faq-article-q { font-size: 1.22em; font-weight: 700; color: #0f172a; line-height: 1.3; }
+.lc-faq-article-a { font-size: 0.92em; line-height: 1.6; color: #334155; white-space: pre-wrap; word-break: break-word; }
+
+.lc-faq-cta { margin-top: 16px; padding: 14px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center; display: flex; flex-direction: column; gap: 8px; }
+.lc-faq-cta-title { font-weight: 600; font-size: 0.92em; color: #0f172a; }
+.lc-faq-cta-sub { font-size: 0.82em; color: #64748b; }
+
 @media (prefers-reduced-motion: reduce) { .lc-panel, .lc-typing i, .lc-launcher { animation: none; transition: none; } }
 `;

@@ -38,6 +38,36 @@ export const DEFAULT_WIDGET_CONFIG = {
   },
   offlineBehavior: 'form', // form | hide
   sound: true,
+  faqs: [
+    {
+      id: 'faq_track_order',
+      question: 'How do I track my order?',
+      answer: 'Once your order has been dispatched, you will receive an email and SMS with the tracking link and courier details. You can also contact our support team here with your Order ID for real-time updates.',
+      category: 'Orders',
+      showOnHome: true,
+    },
+    {
+      id: 'faq_shipping_time',
+      question: 'What are your delivery times & charges?',
+      answer: 'Standard delivery takes 3 to 5 business days across major cities. We offer Free Shipping on orders above ₹999. Express delivery options are also available at checkout.',
+      category: 'Shipping',
+      showOnHome: true,
+    },
+    {
+      id: 'faq_return_policy',
+      question: 'What is your return & refund policy?',
+      answer: 'We offer a 7-day easy return policy for unused items in original packaging. Once we receive and inspect the returned item, your refund is credited within 3-5 business days.',
+      category: 'Returns',
+      showOnHome: true,
+    },
+    {
+      id: 'faq_cod_payment',
+      question: 'Do you accept Cash on Delivery (COD)?',
+      answer: 'Yes! Cash on Delivery is available on most pincodes. We also accept UPI (GPay, PhonePe, Paytm), Debit/Credit Cards, and Net Banking.',
+      category: 'Payment',
+      showOnHome: true,
+    },
+  ],
   behavior: {
     fileUpload: true, // visitors may attach files (also enforced by the API)
     agentTyping: true, // show "agent is typing" to visitors
@@ -110,6 +140,14 @@ const url = z.string().trim().max(500).refine((v) => v === '' || /^https:\/\//.t
 const hhmm = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'must be HH:MM');
 const dayRanges = z.array(z.object({ start: hhmm, end: hhmm }).refine((r) => r.start < r.end, 'start must be before end')).max(6);
 
+export const faqItemSchema = z.object({
+  id: z.string().max(60),
+  question: z.string().trim().min(1).max(300),
+  answer: z.string().trim().min(1).max(5000),
+  category: z.string().trim().max(60).default('General'),
+  showOnHome: z.boolean().default(true),
+});
+
 export const widgetConfigSchema = z.object({
   colors: z.object({ primary: color, headerText: color, visitorBubble: color, visitorText: color, agentBubble: color, agentText: color, background: color }),
   logoUrl: url,
@@ -142,6 +180,7 @@ export const widgetConfigSchema = z.object({
   }),
   offlineBehavior: z.enum(['form', 'hide']),
   sound: z.boolean(),
+  faqs: z.array(faqItemSchema).max(50).default([]),
   // Optional with defaults so configs saved before these toggles existed stay valid.
   behavior: z.object({
     fileUpload: z.boolean().default(true),
@@ -187,6 +226,7 @@ export async function checkOrigin(store, origin) {
 export function withFieldTypes(cfg) {
   // Configs saved before the please-wait message existed get the default text (an explicit '' stays off).
   if (cfg?.messages && cfg.messages.afterPrechat === undefined) cfg = { ...cfg, messages: { ...cfg.messages, afterPrechat: DEFAULT_WIDGET_CONFIG.messages.afterPrechat } };
+  if (cfg && !Array.isArray(cfg.faqs)) cfg = { ...cfg, faqs: DEFAULT_WIDGET_CONFIG.faqs };
   const fields = cfg?.preChatForm?.fields;
   if (!Array.isArray(fields) || fields.every((f) => f.type)) return cfg;
   return { ...cfg, preChatForm: { ...cfg.preChatForm, fields: fields.map((f) => ({ ...f, type: f.type || (BUILTIN_KEY[f.key] ? f.key : 'text') })) } };

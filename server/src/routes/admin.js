@@ -8,7 +8,7 @@ import { prisma, clock, config, DAY_MS } from '../config.js';
 import { requireAuth, requireStore, requireSuper, isSuper, RANK, storeRole } from '../lib/auth.js';
 import { asyncRoute, audit, httpError, newPublicKey, newChatLinkId, hostOf, randomToken } from '../lib/util.js';
 import { encryptJson } from '../lib/crypto.js';
-import { DEFAULT_WIDGET_CONFIG, widgetConfigSchema, getPublishedConfig, withFieldTypes } from '../services/stores.js';
+import { DEFAULT_WIDGET_CONFIG, widgetConfigSchema, getPublishedConfig, withFieldTypes, faqItemSchema } from '../services/stores.js';
 import { emailConfigured, assertPublicUrl, WEBHOOK_EVENTS, queueWebhook, sendEmailNow, emailStatus } from '../services/notify.js';
 import { normalizeShopDomain, sealToken, shopifyConnected, testShopify } from '../services/shopify.js';
 import { enqueue } from '../services/jobs.js';
@@ -438,6 +438,41 @@ r.delete('/stores/:storeId/widget/versions', requireStore('ADMIN'), asyncRoute(a
   await audit(req, 'widget.versions_cleared', { storeId, meta: { removed } });
   const versions = await prisma.widgetConfig.findMany({ where: { storeId, status: 'PUBLISHED' }, orderBy: { version: 'desc' }, select: { version: true, note: true, createdAt: true, createdById: true } });
   res.json({ removed, versions });
+}));
+
+// ---------- Help Center / FAQs ----------
+
+r.get('/stores/:storeId/faqs', requireStore('AGENT'), asyncRoute(async (req, res) => {
+  const store = await prisma.store.findUnique({ where: { id: req.params.storeId } });
+  if (!store) throw httpError(404, 'Store not found');
+  const cfg = await getPublishedConfig(store);
+  res.json(cfg.faqs || DEFAULT_WIDGET_CONFIG.faqs);
+}));
+
+r.put('/stores/:storeId/faqs', requireStore('ADMIN'), asyncRoute(async (req, res) => {
+  const faqs = z.array(faqItemSchema).max(50).parse(req.body);
+  const storeId = req.params.storeId;
+  const store = await prisma.store.findUnique({ where: { id: storeId } });
+  if (!store) throw httpError(404, 'Store not found');
+  const current = await getPublishedConfig(store);
+  const updatedConfig = { ...current, faqs };
+
+  await prisma.widgetConfig.upsert({
+    where: { storeId_version: { storeId, version: 0 } },
+    create: { storeId, version: 0, status: 'DRAFT', config: updatedConfig, createdById: req.user.id },
+    update: { config: updatedConfig, createdById: req.user.id },
+  });
+
+  const last = await prisma.widgetConfig.findFirst({ where: { storeId }, orderBy: { version: 'desc' } });
+  const v = (last?.version || 0) + 1;
+  await prisma.widgetConfig.create({
+    data: { storeId, version: v, status: 'PUBLISHED', config: updatedConfig, note: 'Updated FAQs', createdById: req.user.id },
+  });
+  await prisma.store.update({ where: { id: storeId }, data: { publishedVersion: v } });
+
+  toStoreVisitors(storeId, 'config_updated', { config: updatedConfig });
+  toAgents(storeId, 'widget_published', { version: v, config: updatedConfig });
+  res.json(faqs);
 }));
 
 // ---------- Saved replies ----------

@@ -10,6 +10,12 @@ const Icon = {
   clip: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5 5 0 01-7.1-7.1l8.6-8.6a3.5 3.5 0 015 5L10.3 18a2 2 0 01-2.8-2.8l7.9-7.9" /></svg>,
   menu: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>,
   file: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z" /><path d="M14 3v6h6" /></svg>,
+  home: <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1V9.5z"/></svg>,
+  help: <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+  messages: <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>,
+  search: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+  chevronRight: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>,
+  back: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>,
 };
 
 /** Plain text with safe http(s) links only. React escapes everything else. */
@@ -213,10 +219,37 @@ export default function ChatWindow({
   const typingRef = useRef(0);
   const m = cfg.messages;
 
+  // Help Center & FAQ states
+  const faqs = Array.isArray(cfg?.faqs) ? cfg.faqs : [];
+  const hasFaqs = faqs.length > 0;
+  const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
+  const [selectedFaq, setSelectedFaq] = useState(null);
+  const [helpSearch, setHelpSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  // If mode switches to prechat or offline, force activeTab to messages so the form is visible
+  const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
+
+  // Categories list
+  const categories = ['All', ...new Set(faqs.map((f) => f.category || 'General').filter(Boolean))];
+
+  // Filtered FAQs for Help Center
+  const filteredFaqs = faqs.filter((f) => {
+    const matchCat = selectedCategory === 'All' || (f.category || 'General') === selectedCategory;
+    const q = helpSearch.trim().toLowerCase();
+    const matchSearch = !q || f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  // Home top FAQs
+  const homeFaqs = faqs.filter((f) => f.showOnHome !== false);
+  const displayHomeFaqs = homeFaqs.length > 0 ? homeFaqs.slice(0, 4) : faqs.slice(0, 4);
+  const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
+
   useEffect(() => {
     const el = bodyRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages.length, typing, open, mode]);
+  }, [messages.length, typing, open, mode, effectiveTab]);
 
   function submit(e) {
     e?.preventDefault();
@@ -266,77 +299,342 @@ export default function ChatWindow({
     <div className={cls} style={cssVars(cfg)}>
       {rendered && (
         <section className={`lc-panel ${closing ? 'closing' : ''}`} role="dialog" aria-label={m.title}>
-          <header className="lc-head">
-            {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
-            <div className="lc-grow">
-              <div className="lc-title">{mode === 'offline' || mode === 'offline_sent' ? m.offlineTitle : m.title}</div>
-              {m.subtitle && <div className="lc-sub">{m.subtitle}</div>}
-            </div>
-            {menuItems.length > 0 && mode === 'chat' && (
-              <button className="lc-icon" onClick={() => setMenuOpen((v) => !v)} aria-label="Chat menu" aria-haspopup="menu" aria-expanded={menuOpen}>{Icon.menu}</button>
-            )}
-            {/* No minimise button: the launcher closes the chat. Phones keep a close button (full-screen chat covers the launcher). */}
-            {!layout.inline && !layout.popout && layout.mobile && cfg.layout.mobileFullscreen && <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>}
-            {menuOpen && <Menu items={menuItems} onClose={() => setMenuOpen(false)} />}
-          </header>
-          {banner && <div className="lc-banner">{banner}</div>}
-          {notice && !banner && <div className="lc-banner info" role="status" onClick={() => setNotice('')}>{notice}</div>}
-          <div className="lc-body" ref={bodyRef} aria-live="polite">
-            {mode === 'prechat' && (
-              <Form fields={cfg.preChatForm.fields} submitLabel="Start chat" onSubmit={onPrechat} extra={m.greeting ? <div className="lc-note">{m.greeting}</div> : null} />
-            )}
-            {mode === 'offline' && (
-              <Form fields={[{ key: 'name', label: 'Name', required: true }, { key: 'email', label: 'Email', required: true }, { key: 'message', label: 'Message', required: true, multiline: true }]}
-                submitLabel="Send message" onSubmit={onOffline} extra={<><div className="lc-note">{m.offlineText}</div><div className="lc-retention" role="note">{retentionNotice(cfg)}</div></>} />
-            )}
-            {mode === 'offline_sent' && <div className="lc-center">✓<br />{m.offlineThanks}</div>}
-            {mode === 'chat' && panel === 'name' && (
-              <Form fields={[{ key: 'name', type: 'name', label: 'Your name', required: true }]} initial={{ name: visitorName }} submitLabel="Save name"
-                extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
-                onSubmit={async (v) => { await onChangeName(v.name.trim()); done('Your name was updated.'); }} />
-            )}
-            {mode === 'chat' && panel === 'transcript' && (
-              <Form fields={[{ key: 'email', type: 'email', label: 'Send the transcript to', required: true }]} submitLabel="Send transcript"
-                extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
-                onSubmit={async (v) => { await onEmailTranscript(v.email.trim()); done('Transcript sent. Check your inbox.'); }} />
-            )}
-            {mode === 'chat' && panel === 'end' && (
-              <div className="lc-form">
-                <div className="lc-note">End this chat? You can start a new chat at any time.</div>
-                <button type="button" className="lc-btn" onClick={async () => { try { await onEndChat(); done('Chat ended. Thanks for reaching out!'); } catch (e) { setNotice(e.message || 'Could not end the chat.'); setPanel(null); } }}>End chat</button>
-                <button type="button" className="lc-link" onClick={() => setPanel(null)}>Cancel</button>
+          {effectiveTab === 'home' && (
+            <>
+              <div className="lc-home-hero">
+                <div className="lc-home-hero-top">
+                  {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
+                  <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
+                </div>
+                <div>
+                  <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
+                  <div className="lc-home-sub">{m.title || 'How can we help?'}</div>
+                </div>
               </div>
-            )}
-            {mode === 'chat' && !panel && (
-              <>
-                <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
-                {/* The greeting is an intro, not a chat message: shown only until the conversation has any message, never alongside automated welcomes. */}
-                {m.greeting && messages.length === 0 && <Message m={{ senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />}
-                {messages.map((msg, i) => (
-                  <Message key={msg.clientMsgId || msg.id} m={msg} cfg={cfg} Attachment={Attachment}
-                    showName={msg.senderType !== 'VISITOR' && (i === 0 || messages[i - 1].senderType === 'VISITOR' || messages[i - 1].senderName !== msg.senderName)}
-                    onRetry={onRetry} onSuggest={(s) => onSend?.(s)} isLastBot={i === lastBotIdx} onContact={onContact} seen={msg.seq && msg.seq === lastSeenVisitorSeq} />
-                ))}
-                {typing && <div className="lc-row them"><Avatar src={cfg.avatarUrl} name={cfg.agentName} /><div className="lc-bubble lc-typing" aria-label="Agent is typing"><i /><i /><i /></div></div>}
-              </>
-            )}
-          </div>
-          {mode === 'chat' && !panel && ended && <EndedCard onStartNew={onStartNew} onEmailTranscript={onEmailTranscript} onDownloadTranscript={onDownloadTranscript} />}
-          {mode === 'chat' && !panel && !ended && (
-            <form className="lc-foot" onSubmit={submit}>
-              {canUpload && onUpload && (
+
+              <div className="lc-home-scroll">
+                {lastMsg && (
+                  <div className="lc-card-recent" onClick={() => setActiveTab('messages')}>
+                    <div className="lc-card-recent-head">
+                      <span>Recent message</span>
+                      <span>{time(lastMsg.createdAt || Date.now())}</span>
+                    </div>
+                    <div className="lc-card-recent-msg">
+                      <Avatar src={lastMsg.senderType === 'VISITOR' ? '' : (lastMsg.senderAvatar || cfg.avatarUrl)} name={lastMsg.senderType === 'VISITOR' ? (visitorName || 'You') : (lastMsg.senderName || cfg.agentName)} />
+                      <div className="lc-card-recent-text">
+                        <strong>{lastMsg.senderType === 'VISITOR' ? 'You: ' : `${lastMsg.senderName || cfg.agentName}: `}</strong>
+                        {lastMsg.body || 'Attachment'}
+                      </div>
+                      <div className="lc-card-arrow">{Icon.chevronRight}</div>
+                    </div>
+                  </div>
+                )}
+
+                <div
+                  className="lc-faq-search-box"
+                  onClick={() => setActiveTab('help')}
+                >
+                  {Icon.search}
+                  <span style={{ fontSize: '0.9em', color: '#64748b' }}>Search for help...</span>
+                </div>
+
+                {!lastMsg && (
+                  <div className="lc-card" onClick={() => setActiveTab('messages')}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 34, height: 34, borderRadius: 8, background: 'color-mix(in srgb, var(--lc-primary) 12%, transparent)', color: 'var(--lc-primary)', display: 'grid', placeItems: 'center' }}>
+                        {Icon.messages}
+                      </div>
+                      <div>
+                        <div className="lc-card-title">Send us a message</div>
+                        <div className="lc-card-desc">We usually reply within a few minutes</div>
+                      </div>
+                    </div>
+                    <div className="lc-card-arrow">{Icon.chevronRight}</div>
+                  </div>
+                )}
+
+                {displayHomeFaqs.length > 0 && (
+                  <div style={{ marginTop: 4 }}>
+                    <div style={{ fontSize: '0.78em', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8, paddingLeft: 2 }}>
+                      Frequently Asked Questions
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {displayHomeFaqs.map((faq) => (
+                        <div
+                          key={faq.id}
+                          className="lc-card"
+                          onClick={() => {
+                            setSelectedFaq(faq);
+                            setActiveTab('help');
+                          }}
+                        >
+                          <div className="lc-card-main">
+                            <div className="lc-card-title">{faq.question}</div>
+                            <div className="lc-card-desc">{faq.answer}</div>
+                          </div>
+                          <div className="lc-card-arrow">{Icon.chevronRight}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {faqs.length > displayHomeFaqs.length && (
+                  <button
+                    type="button"
+                    className="lc-link"
+                    style={{ textAlign: 'center', margin: '4px 0 8px', fontWeight: 600 }}
+                    onClick={() => setActiveTab('help')}
+                  >
+                    Browse all {faqs.length} articles →
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+
+          {effectiveTab === 'help' && (
+            <>
+              {selectedFaq ? (
                 <>
-                  <button type="button" className="lc-icon" onClick={() => fileRef.current?.click()} aria-label="Attach a file">{Icon.clip}</button>
-                  <input ref={fileRef} type="file" hidden accept="image/png,image/jpeg,image/gif,image/webp,application/pdf,text/plain"
-                    onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) onUpload(f); }} />
+                  <header className="lc-head">
+                    <button className="lc-icon" onClick={() => setSelectedFaq(null)} aria-label="Back to Help">{Icon.back}</button>
+                    <div className="lc-grow">
+                      <div className="lc-title">Help Center</div>
+                    </div>
+                    <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
+                  </header>
+                  <div className="lc-faq-article-view">
+                    {selectedFaq.category && <span className="lc-faq-tag">{selectedFaq.category}</span>}
+                    <h3 className="lc-faq-article-q">{selectedFaq.question}</h3>
+                    <div className="lc-faq-article-a">
+                      <Linkified text={selectedFaq.answer} />
+                    </div>
+                    <div className="lc-faq-cta">
+                      <div className="lc-faq-cta-title">Still have questions?</div>
+                      <div className="lc-faq-cta-sub">Our support team is ready to assist you.</div>
+                      <button
+                        type="button"
+                        className="lc-btn"
+                        onClick={() => {
+                          setSelectedFaq(null);
+                          setActiveTab('messages');
+                        }}
+                      >
+                        Chat with an Agent
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <header className="lc-head">
+                    <div className="lc-grow">
+                      <div className="lc-title">Help Center</div>
+                      <div className="lc-sub">{faqs.length} {faqs.length === 1 ? 'article' : 'articles'} & guides</div>
+                    </div>
+                    <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
+                  </header>
+                  <div className="lc-body" style={{ gap: 10 }}>
+                    <div className="lc-faq-search-box">
+                      {Icon.search}
+                      <input
+                        type="search"
+                        className="lc-faq-search-input"
+                        placeholder="Search for help..."
+                        value={helpSearch}
+                        onChange={(e) => setHelpSearch(e.target.value)}
+                        aria-label="Search for help"
+                      />
+                      {helpSearch && (
+                        <button
+                          type="button"
+                          className="lc-icon"
+                          style={{ width: 20, height: 20 }}
+                          onClick={() => setHelpSearch('')}
+                          aria-label="Clear search"
+                        >
+                          {Icon.close}
+                        </button>
+                      )}
+                    </div>
+
+                    {categories.length > 2 && (
+                      <div className="lc-faq-categories">
+                        {categories.map((cat) => (
+                          <button
+                            key={cat}
+                            type="button"
+                            className={`lc-faq-cat-pill ${selectedCategory === cat ? 'active' : ''}`}
+                            onClick={() => setSelectedCategory(cat)}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {filteredFaqs.map((faq) => (
+                        <div
+                          key={faq.id}
+                          className="lc-card"
+                          onClick={() => setSelectedFaq(faq)}
+                        >
+                          <div className="lc-card-main">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                              {faq.category && <span style={{ fontSize: '0.7em', padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#475569', fontWeight: 600 }}>{faq.category}</span>}
+                              <span className="lc-card-title" style={{ margin: 0 }}>{faq.question}</span>
+                            </div>
+                            <div className="lc-card-desc">{faq.answer}</div>
+                          </div>
+                          <div className="lc-card-arrow">{Icon.chevronRight}</div>
+                        </div>
+                      ))}
+
+                      {filteredFaqs.length === 0 && (
+                        <div style={{ textAlign: 'center', padding: '36px 16px', color: '#64748b' }}>
+                          <div style={{ fontSize: 24, marginBottom: 8 }}>🔍</div>
+                          <div style={{ fontWeight: 600, color: '#0f172a', marginBottom: 4 }}>No articles found</div>
+                          <div style={{ fontSize: '0.85em', marginBottom: 16 }}>We couldn't find anything matching "{helpSearch}". Talk to us directly!</div>
+                          <button
+                            type="button"
+                            className="lc-btn"
+                            onClick={() => setActiveTab('messages')}
+                          >
+                            Start a Live Chat
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </>
               )}
-              <textarea rows={1} value={text} placeholder={m.placeholder} aria-label="Message" maxLength={5000}
-                onChange={(e) => changed(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }} />
-              <button type="submit" className="lc-icon lc-send" disabled={!text.trim()} aria-label="Send">{Icon.send}</button>
-            </form>
+            </>
           )}
+
+          {effectiveTab === 'messages' && (
+            <>
+              <header className="lc-head">
+                {hasFaqs && (
+                  <button className="lc-icon" onClick={() => setActiveTab('home')} aria-label="Back to home">
+                    {Icon.back}
+                  </button>
+                )}
+                {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
+                <div className="lc-grow">
+                  <div className="lc-title">{mode === 'offline' || mode === 'offline_sent' ? m.offlineTitle : m.title}</div>
+                  {m.subtitle && <div className="lc-sub">{m.subtitle}</div>}
+                </div>
+                {menuItems.length > 0 && mode === 'chat' && (
+                  <button className="lc-icon" onClick={() => setMenuOpen((v) => !v)} aria-label="Chat menu" aria-haspopup="menu" aria-expanded={menuOpen}>{Icon.menu}</button>
+                )}
+                {/* Phones keep a close button */}
+                {!layout.inline && !layout.popout && (hasFaqs || (layout.mobile && cfg.layout.mobileFullscreen)) && (
+                  <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
+                )}
+                {menuOpen && <Menu items={menuItems} onClose={() => setMenuOpen(false)} />}
+              </header>
+              {banner && <div className="lc-banner">{banner}</div>}
+              {notice && !banner && <div className="lc-banner info" role="status" onClick={() => setNotice('')}>{notice}</div>}
+              <div className="lc-body" ref={bodyRef} aria-live="polite">
+                {mode === 'prechat' && (
+                  <Form fields={cfg.preChatForm.fields} submitLabel="Start chat" onSubmit={onPrechat} extra={m.greeting ? <div className="lc-note">{m.greeting}</div> : null} />
+                )}
+                {mode === 'offline' && (
+                  <Form fields={[{ key: 'name', label: 'Name', required: true }, { key: 'email', label: 'Email', required: true }, { key: 'message', label: 'Message', required: true, multiline: true }]}
+                    submitLabel="Send message" onSubmit={onOffline} extra={<><div className="lc-note">{m.offlineText}</div><div className="lc-retention" role="note">{retentionNotice(cfg)}</div></>} />
+                )}
+                {mode === 'offline_sent' && <div className="lc-center">✓<br />{m.offlineThanks}</div>}
+                {mode === 'chat' && panel === 'name' && (
+                  <Form fields={[{ key: 'name', type: 'name', label: 'Your name', required: true }]} initial={{ name: visitorName }} submitLabel="Save name"
+                    extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
+                    onSubmit={async (v) => { await onChangeName(v.name.trim()); done('Your name was updated.'); }} />
+                )}
+                {mode === 'chat' && panel === 'transcript' && (
+                  <Form fields={[{ key: 'email', type: 'email', label: 'Send the transcript to', required: true }]} submitLabel="Send transcript"
+                    extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
+                    onSubmit={async (v) => { await onEmailTranscript(v.email.trim()); done('Transcript sent. Check your inbox.'); }} />
+                )}
+                {mode === 'chat' && panel === 'end' && (
+                  <div className="lc-form">
+                    <div className="lc-note">End this chat? You can start a new chat at any time.</div>
+                    <button type="button" className="lc-btn" onClick={async () => { try { await onEndChat(); done('Chat ended. Thanks for reaching out!'); } catch (e) { setNotice(e.message || 'Could not end the chat.'); setPanel(null); } }}>End chat</button>
+                    <button type="button" className="lc-link" onClick={() => setPanel(null)}>Cancel</button>
+                  </div>
+                )}
+                {mode === 'chat' && !panel && (
+                  <>
+                    <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
+                    {/* The greeting is an intro, not a chat message */}
+                    {m.greeting && messages.length === 0 && <Message m={{ senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />}
+                    {messages.map((msg, i) => (
+                      <Message key={msg.clientMsgId || msg.id} m={msg} cfg={cfg} Attachment={Attachment}
+                        showName={msg.senderType !== 'VISITOR' && (i === 0 || messages[i - 1].senderType === 'VISITOR' || messages[i - 1].senderName !== msg.senderName)}
+                        onRetry={onRetry} onSuggest={(s) => onSend?.(s)} isLastBot={i === lastBotIdx} onContact={onContact} seen={msg.seq && msg.seq === lastSeenVisitorSeq} />
+                    ))}
+                    {typing && <div className="lc-row them"><Avatar src={cfg.avatarUrl} name={cfg.agentName} /><div className="lc-bubble lc-typing" aria-label="Agent is typing"><i /><i /><i /></div></div>}
+                  </>
+                )}
+              </div>
+              {mode === 'chat' && !panel && ended && <EndedCard onStartNew={onStartNew} onEmailTranscript={onEmailTranscript} onDownloadTranscript={onDownloadTranscript} />}
+              {mode === 'chat' && !panel && !ended && (
+                <form className="lc-foot" onSubmit={submit}>
+                  {canUpload && onUpload && (
+                    <>
+                      <button type="button" className="lc-icon" onClick={() => fileRef.current?.click()} aria-label="Attach a file">{Icon.clip}</button>
+                      <input ref={fileRef} type="file" hidden accept="image/png,image/jpeg,image/gif,image/webp,application/pdf,text/plain"
+                        onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) onUpload(f); }} />
+                    </>
+                  )}
+                  <textarea rows={1} value={text} placeholder={m.placeholder} aria-label="Message" maxLength={5000}
+                    onChange={(e) => changed(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }} />
+                  <button type="submit" className="lc-icon lc-send" disabled={!text.trim()} aria-label="Send">{Icon.send}</button>
+                </form>
+              )}
+            </>
+          )}
+
+          {hasFaqs && mode === 'chat' && (
+            <nav className="lc-tabs" aria-label="Chat navigation">
+              <button
+                type="button"
+                className={`lc-tab ${effectiveTab === 'home' ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedFaq(null);
+                  setActiveTab('home');
+                }}
+                aria-label="Home"
+              >
+                {Icon.home}
+                <span>Home</span>
+              </button>
+              <button
+                type="button"
+                className={`lc-tab ${effectiveTab === 'messages' ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedFaq(null);
+                  setActiveTab('messages');
+                }}
+                aria-label="Messages"
+              >
+                {Icon.messages}
+                <span>Messages</span>
+                {unread > 0 && <span className="lc-tab-badge">{unread > 9 ? '9+' : unread}</span>}
+              </button>
+              <button
+                type="button"
+                className={`lc-tab ${effectiveTab === 'help' ? 'active' : ''}`}
+                onClick={() => setActiveTab('help')}
+                aria-label="Help"
+              >
+                {Icon.help}
+                <span>Help</span>
+              </button>
+            </nav>
+          )}
+
           <footer className="lc-powered">
             <a
               href="https://www.chatral.com"
