@@ -6,7 +6,7 @@ import {
 import {
   PlusOutlined, EditOutlined, DeleteOutlined, QuestionCircleOutlined,
   SearchOutlined, EyeOutlined, ArrowUpOutlined, ArrowDownOutlined,
-  BookOutlined, ThunderboltOutlined,
+  BookOutlined, ThunderboltOutlined, CloudUploadOutlined, SaveOutlined,
 } from '@ant-design/icons';
 import { api, showError } from '../api.js';
 import { useApp } from '../main.jsx';
@@ -187,14 +187,30 @@ export default function HelpCenter() {
           </Typography.Text>
         </div>
         {can('ADMIN') && (
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleOpenAdd}
-            style={{ background: '#2563eb' }}
-          >
-            Add FAQ / Article
-          </Button>
+          <Space>
+            <Button
+              type="primary"
+              icon={<CloudUploadOutlined />}
+              loading={saving}
+              onClick={() => saveList(faqs)}
+              style={{
+                background: '#10b981',
+                borderColor: '#10b981',
+                fontWeight: 600,
+                boxShadow: '0 2px 6px rgba(16, 185, 129, 0.25)',
+              }}
+            >
+              Save & Publish to Live Widget
+            </Button>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={handleOpenAdd}
+              style={{ background: '#2563eb' }}
+            >
+              Add FAQ / Article
+            </Button>
+          </Space>
         )}
       </div>
 
@@ -366,6 +382,27 @@ export default function HelpCenter() {
                 },
               ]}
             />
+
+            {can('ADMIN') && (
+              <Flex justify="space-between" align="center" style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #f1f5f9' }}>
+                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  {faqs.length} total FAQs • {faqs.filter((f) => f.showOnHome).length} displayed on Home greeting
+                </Typography.Text>
+                <Button
+                  type="primary"
+                  icon={<CloudUploadOutlined />}
+                  loading={saving}
+                  onClick={() => saveList(faqs)}
+                  style={{
+                    background: '#10b981',
+                    borderColor: '#10b981',
+                    fontWeight: 600,
+                  }}
+                >
+                  Save & Publish to Live Widget
+                </Button>
+              </Flex>
+            )}
           </Card>
         </Col>
 
