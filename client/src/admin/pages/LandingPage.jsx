@@ -143,10 +143,11 @@ function CustomSelect({ value, onChange, options }) {
 
 // Slick kinetic character rolling text for navbar menu links & buttons (staggered roll-up, no box)
 function RollText({ text, secondaryColor }) {
+  const chars = Array.from(text || '');
   return (
     <span className="roll-text" aria-label={text}>
       <span className="roll-stack roll-stack-primary" aria-hidden="true">
-        {text.split('').map((char, i) => (
+        {chars.map((char, i) => (
           <span
             key={i}
             className="roll-char"
@@ -161,7 +162,7 @@ function RollText({ text, secondaryColor }) {
         aria-hidden="true"
         style={secondaryColor ? { color: secondaryColor } : undefined}
       >
-        {text.split('').map((char, i) => (
+        {chars.map((char, i) => (
           <span
             key={i}
             className="roll-char"
@@ -3026,13 +3027,10 @@ export default function LandingPage() {
                   e.currentTarget.style.boxShadow = '0 4px 16px -2px rgba(12, 13, 16, 0.03)';
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Enterprise</div>
-                  <span style={{ fontSize: 11.5, background: '#fef3c7', color: '#b45309', padding: '3px 8px', borderRadius: 6, fontWeight: 700 }}>Custom Plan 👑</span>
-                </div>
+                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Enterprise</div>
                 <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-                  Custom
-                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400, marginLeft: 8 }}>pricing</span>
+                  Custom{' '}
+                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ tailored plan</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
                   Tailored for high-volume stores, custom features & scaling teams.
@@ -3050,7 +3048,7 @@ export default function LandingPage() {
                 </div>
                 <button
                   onClick={() => window.open('https://wa.me/?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
-                  className="btn-brand-secondary"
+                  className="btn-brand-primary"
                   style={{
                     width: '100%',
                     justifyContent: 'center',
@@ -3058,13 +3056,9 @@ export default function LandingPage() {
                     borderRadius: 10,
                     fontSize: 13.5,
                     fontFamily: 'inherit',
-                    background: '#16a34a',
-                    borderColor: '#16a34a',
-                    color: '#ffffff',
-                    fontWeight: 600,
                   }}
                 >
-                  <RollText text="Chat on WhatsApp 💬" secondaryColor="#ffffff" />
+                  <RollText text="Chat on WhatsApp" />
                 </button>
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
                   Tailored onboarding • Dedicated support

@@ -1525,12 +1525,9 @@ function SubscriptionPlan({ store, reload, can }) {
               boxShadow: '0 4px 16px -2px rgba(12, 13, 16, 0.03)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Enterprise</div>
-              <span style={{ fontSize: 11.5, background: '#fef3c7', color: '#b45309', padding: '3px 8px', borderRadius: 6, fontWeight: 700 }}>Custom Plan 👑</span>
-            </div>
+            <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Enterprise</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              Custom <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400, marginLeft: 8 }}>pricing</span>
+              Custom <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ tailored plan</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
               Tailored for high-volume stores, custom features & scaling teams.
@@ -1557,14 +1554,14 @@ function SubscriptionPlan({ store, reload, can }) {
                 style={{
                   height: 42,
                   borderRadius: 8,
-                  background: '#16a34a',
-                  borderColor: '#16a34a',
+                  background: '#2563eb',
+                  borderColor: '#2563eb',
                   fontWeight: 600,
                   fontSize: 14,
                 }}
                 onClick={() => window.open('https://wa.me/?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
               >
-                Chat on WhatsApp 💬
+                Chat on WhatsApp
               </Button>
             )}
             <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
