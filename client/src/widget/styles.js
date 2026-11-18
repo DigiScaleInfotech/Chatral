@@ -71,16 +71,17 @@ button, input, textarea, select { font-family: inherit; }
   }
 }
 .lc-root.inline .lc-panel { max-height: none; margin: 0; }
-.lc-head { background: var(--lc-primary); color: var(--lc-header-text); padding: 14px 14px 14px 16px; display: flex; align-items: center; gap: 12px; flex: none; position: relative; }
-.lc-head img.logo { height: 32px; max-width: 96px; object-fit: contain; }
-.lc-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex: none; background: rgba(255,255,255,.25); display: grid; place-items: center; font-weight: 700; }
-.lc-title { font-weight: 700; font-size: 1.05em; }
-.lc-sub { opacity: .85; font-size: .86em; display: flex; align-items: center; gap: 6px; }
-.lc-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; }
+.lc-head { background: #ffffff; color: #0f172a; padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex: none; position: relative; border-bottom: 1px solid #eef2f6; }
+.lc-head img.logo { height: 28px; max-width: 90px; object-fit: contain; }
+.lc-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: none; background: #f1f5f9; color: var(--lc-primary); display: grid; place-items: center; font-weight: 700; font-size: 14px; border: 1px solid #e2e8f0; overflow: hidden; }
+.lc-title { font-weight: 700; font-size: 14px; color: #0f172a; line-height: 1.25; }
+.lc-sub { color: #64748b; font-size: 12px; line-height: 1.25; display: flex; align-items: center; gap: 5px; margin-top: 1px; }
+.lc-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block; }
 .lc-dot.off { background: #94a3b8; }
 .lc-grow { flex: 1; min-width: 0; }
-.lc-icon { background: transparent; border: 0; color: inherit; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; padding: 0; }
-.lc-icon:hover { background: rgba(255,255,255,.18); }
+.lc-icon { background: transparent; border: 0; color: #64748b; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; padding: 0; flex: none; transition: all .15s ease; }
+.lc-icon:hover { background: #f1f5f9; color: #0f172a; }
+.lc-icon svg { width: 16px; height: 16px; }
 .lc-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; overscroll-behavior: contain; }
 .lc-row { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
 .lc-row.me { justify-content: flex-end; }
@@ -130,7 +131,7 @@ button, input, textarea, select { font-family: inherit; }
 .lc-btn:disabled { opacity: .6; cursor: default; }
 .lc-err { color: #dc2626; font-size: .82em; }
 .lc-note { color: #475569; font-size: .92em; }
-.lc-menu { position: absolute; top: 52px; right: 10px; z-index: 5; min-width: 200px; background: #fff; color: #0f172a; border-radius: 10px; box-shadow: 0 10px 30px rgba(15,23,42,.18); padding: 6px; display: flex; flex-direction: column; }
+.lc-menu { position: absolute; top: 46px; right: 10px; z-index: 5; min-width: 200px; background: #fff; color: #0f172a; border-radius: 10px; box-shadow: 0 10px 30px rgba(15,23,42,.18); padding: 6px; display: flex; flex-direction: column; }
 .lc-menu-item { all: unset; cursor: pointer; padding: 9px 12px; border-radius: 6px; font-size: 13.5px; }
 .lc-menu-item:hover, .lc-menu-item:focus-visible { background: #f1f5f9; }
 .lc-menu-item.danger { color: #dc2626; }
@@ -174,7 +175,7 @@ button, input, textarea, select { font-family: inherit; }
 .lc-tab-badge { position: absolute; top: -1px; right: 22%; min-width: 15px; height: 15px; padding: 0 4px; border-radius: 8px; background: #ef4444; color: #fff; font: 700 9.5px/15px system-ui; text-align: center; }
 
 /* Home Hero with richer mesh gradient & floating brand pill */
-.lc-home-hero { background: radial-gradient(130% 120% at 0% 0%, color-mix(in srgb, var(--lc-primary) 36%, #ffffff) 0%, color-mix(in srgb, var(--lc-primary) 14%, #ffffff) 55%, #f8fafc 100%); padding: 16px 18px 12px; display: flex; flex-direction: column; flex: none; position: relative; }
+.lc-home-hero { background: radial-gradient(135% 125% at 0% 0%, color-mix(in srgb, var(--lc-primary) 54%, #ffffff) 0%, color-mix(in srgb, var(--lc-primary) 26%, #ffffff) 52%, color-mix(in srgb, var(--lc-primary) 10%, #ffffff) 100%); padding: 16px 18px 12px; display: flex; flex-direction: column; flex: none; position: relative; }
 .lc-home-hero-top { display: flex; justify-content: space-between; align-items: center; min-height: 34px; }
 .lc-brand-pill { width: 34px; height: 34px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 8px rgba(15,23,42,.08); display: flex; align-items: center; justify-content: center; overflow: hidden; flex: none; }
 .lc-brand-pill img { width: 22px; height: 22px; object-fit: contain; }
