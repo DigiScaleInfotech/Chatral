@@ -211,7 +211,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     return null;
   });
   const [hidden, setHidden] = useState(false);
-  const [open, setOpen] = useState(popout || store.sget(`lc_open_${storeKey}`) === '1');
+  const [open, setOpen] = useState(!!popout);
   // Visitor's own sound preference (header menu); the store's cfg.sound still has to allow sound.
   const [soundOn, setSoundOn] = useState(store.get(`lc_sound_${storeKey}`) !== 'off');
   const soundRef = useRef(soundOn);
@@ -736,7 +736,17 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       onDownloadTranscript={conv ? () => downloadTranscript(`${api}/api/widget/${storeKey}/conversations/${convRef.current.id}/transcript`, token.current) : null}
       soundOn={soundOn}
       onToggleSound={cfg.sound ? () => setSoundOn((v) => { store.set(`lc_sound_${storeKey}`, v ? 'off' : 'on'); return !v; }) : null}
-      onEndChat={conv && conv.status !== 'RESOLVED' ? async () => { await call(`/conversations/${convRef.current.id}/end`, { method: 'POST' }); setConv((c) => (c ? { ...c, status: 'RESOLVED' } : c)); setEnded(true); } : null}
+      onEndChat={conv ? async () => {
+        if (convRef.current?.id && convRef.current?.status !== 'RESOLVED') {
+          try {
+            await call(`/conversations/${convRef.current.id}/end`, { method: 'POST' });
+          } catch (e) {
+            console.warn('[livechat] Could not end chat:', e);
+          }
+        }
+        setConv((c) => (c ? { ...c, status: 'RESOLVED' } : c));
+        setEnded(true);
+      } : null}
       ended={ended} onStartNew={() => setEnded(false)}
       canUpload={!!conv && cfg.behavior?.fileUpload !== false}
       preview={(mobile ? cfg.behavior?.messagePreviewMobile : cfg.behavior?.messagePreviewDesktop) === false ? null : preview}
