@@ -1182,7 +1182,7 @@ function SubscriptionPlan({ store, reload, can }) {
     }
   }
 
-  const planName = plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
+  const planName = plan === 'BUSINESS' ? 'Enterprise (Custom Plan)' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
 
   async function handleUpgrade(targetPlan) {
     if (!can('ADMIN')) {
@@ -1406,11 +1406,11 @@ function SubscriptionPlan({ store, reload, can }) {
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Full Access for 7 Days</b></div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> 1 Active Store</div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Live Visitor Tracking</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Works on Any Website</div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Standard Web Chat Widget</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Customizable Chat Widget</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
             </div>
             {isPlatformStore ? (
               <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600, background: '#f8fafc', color: '#64748b' }}>
@@ -1478,12 +1478,12 @@ function SubscriptionPlan({ store, reload, can }) {
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>3 Active Stores</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>3 Team Agents</b></div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Live Visitor Tracking</div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Shopify & WooCommerce Integration</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Pre-Chat Visitor Form</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> File & Media Sharing</div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
             </div>
             {isPlatformStore ? (
@@ -1511,7 +1511,7 @@ function SubscriptionPlan({ store, reload, can }) {
           </div>
         </Col>
 
-        {/* 3. Business & Scale */}
+        {/* 3. Enterprise Plan (Custom Plan) */}
         <Col xs={24} lg={8} style={{ paddingLeft: 12, paddingRight: 12 }}>
           <div
             style={{
@@ -1525,50 +1525,50 @@ function SubscriptionPlan({ store, reload, can }) {
               boxShadow: '0 4px 16px -2px rgba(12, 13, 16, 0.03)',
             }}
           >
-            <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Enterprise</div>
+              <span style={{ fontSize: 11.5, background: '#fef3c7', color: '#b45309', padding: '3px 8px', borderRadius: 6, fontWeight: 700 }}>Custom Plan 👑</span>
+            </div>
             <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-              {currency === 'USD'
-                ? (cycle === 'annual' ? `$${Math.round(planPricing.BUSINESS.annualPriceUSD / 12)}` : `$${planPricing.BUSINESS.monthlyPriceUSD}`)
-                : (cycle === 'annual' ? `₹${Math.round(planPricing.BUSINESS.annualPriceINR / 12)}` : `₹${planPricing.BUSINESS.monthlyPriceINR}`)}{' '}
-              <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+              Custom <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400, marginLeft: 8 }}>pricing</span>
             </div>
             <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
-              {cycle === 'annual'
-                ? (currency === 'USD' ? `Billed annually at $${planPricing.BUSINESS.annualPriceUSD}/yr (Save 25%). For high-volume stores & scaling teams.` : `Billed annually at ₹${planPricing.BUSINESS.annualPriceINR.toLocaleString('en-IN')}/yr (Save 25%). For high-volume stores & scaling teams.`)
-                : 'For high-volume stores, scaling agencies & teams needing dedicated onboarding support.'}
+              Tailored for high-volume stores, custom features & scaling teams.
             </div>
             <div style={{ height: 1, background: '#f1f5f9', margin: '0 0 16px' }} />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 24, fontSize: 13, color: '#0c0d10' }}>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Unlimited Active Stores</b></div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Team Members & Roles</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Everything in Starter Growth</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>1-on-1 Setup & Onboarding Support</b></div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Custom CSS & Brand White-labeling</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Advanced Analytics & Reports Export</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Custom Stores & Agent Seats</b></div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Custom Features on Demand</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>1-on-1 Setup & Team Training</b></div>
               <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Dedicated Account Manager</div>
-              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> WhatsApp & Priority Phone Support</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Enterprise-Grade Security</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Early Access to New Features</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> No Contract Lock-in</div>
+              <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
             </div>
             {isPlatformStore ? (
               <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600, background: '#f8fafc', color: '#64748b' }}>
                 Included with Super Admin
               </Button>
-            ) : plan === 'BUSINESS' ? (
-              <Button disabled block style={{ height: 42, borderRadius: 8, fontWeight: 600 }}>
-                Current Active Plan
-              </Button>
             ) : (
               <Button
                 type="primary"
                 block
-                loading={upgradingPlan === 'BUSINESS'}
-                style={{ height: 42, borderRadius: 8, background: '#2563eb', fontWeight: 600 }}
-                onClick={() => handleUpgrade('BUSINESS')}
+                style={{
+                  height: 42,
+                  borderRadius: 8,
+                  background: '#16a34a',
+                  borderColor: '#16a34a',
+                  fontWeight: 600,
+                  fontSize: 14,
+                }}
+                onClick={() => window.open('https://wa.me/?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
               >
-                Purchase Business & Scale
+                Chat on WhatsApp 💬
               </Button>
             )}
             <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 10 }}>
-              Instant activation • Dedicated support
+              Tailored onboarding • Dedicated support
             </div>
           </div>
         </Col>

@@ -13,7 +13,7 @@ export const DEFAULT_PLAN_PRICING = {
     annualPriceUSD: 61,
   },
   BUSINESS: {
-    name: 'Business & Scale',
+    name: 'Enterprise (Custom Plan)',
     monthlyPriceINR: 999,
     annualPriceINR: 8988, // ₹749 / mo
     monthlyPriceUSD: 12,

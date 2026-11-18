@@ -380,7 +380,7 @@ function Shell() {
                           {isPlatformStore
                             ? 'Super Admin (Lifetime)'
                             : plan === 'BUSINESS'
-                            ? 'Business & Scale'
+                            ? 'Enterprise Plan'
                             : plan === 'STARTER'
                             ? 'Starter Growth'
                             : isExpired
@@ -537,7 +537,7 @@ function Shell() {
                       <>
                         <div style={{ color: '#94a3b8', fontSize: 10.5, display: 'flex', alignItems: 'center', gap: 4 }}>
                           <CheckCircleFilled style={{ color: '#10b981', fontSize: 11 }} />
-                          <span>{plan === 'BUSINESS' ? 'Business & Scale' : 'Starter Growth'}</span>
+                          <span>{plan === 'BUSINESS' ? 'Enterprise' : 'Starter Growth'}</span>
                         </div>
                         <span
                           onClick={() => nav('/settings?tab=billing')}

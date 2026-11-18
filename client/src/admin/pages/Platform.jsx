@@ -168,7 +168,7 @@ function Stores({ filterStoreId, currentStore }) {
                   options={[
                     { value: 'TRIAL', label: '7-Day Trial' },
                     { value: 'STARTER', label: 'Starter Growth' },
-                    { value: 'BUSINESS', label: 'Business & Scale' },
+                    { value: 'BUSINESS', label: 'Enterprise (Custom Plan)' },
                   ]}
                 />
               );

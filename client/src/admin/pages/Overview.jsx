@@ -433,7 +433,7 @@ function StoreUsage({ store, members, stats, loading, can, toggleWidget, me }) {
             render: (p, s) => {
               const plan = p || 'TRIAL';
               const color = isPlatformStore ? 'purple' : plan === 'BUSINESS' ? 'purple' : plan === 'STARTER' ? 'green' : 'blue';
-              const label = isPlatformStore ? 'Super Admin' : plan === 'BUSINESS' ? 'Business & Scale' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
+              const label = isPlatformStore ? 'Super Admin' : plan === 'BUSINESS' ? 'Enterprise' : plan === 'STARTER' ? 'Starter Growth' : '7-Day Free Trial';
               return (
                 <Tag color={color} bordered={false} style={{ fontWeight: 600 }}>
                   {label}

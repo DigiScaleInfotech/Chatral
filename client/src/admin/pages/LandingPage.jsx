@@ -2900,11 +2900,11 @@ export default function LandingPage() {
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Full Access for 7 Days</b></div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> 1 Active Store</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Live Visitor Tracking</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Works on Any Website</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Standard Web Chat Widget</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> "Powered by Chatral" Badge</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Customizable Chat Widget</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
                 </div>
                 <button
                   onClick={() => handleStartFree('pricing_free_trial')}
@@ -2974,12 +2974,12 @@ export default function LandingPage() {
                 <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20, fontSize: 13, color: '#0c0d10' }}>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>3 Active Stores</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>3 Team Agents</b></div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Live Chats</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Automated Sales Triggers</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Canned Replies & Shortcuts</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Live Visitor Tracking</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Sound & Desktop Alerts</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Shopify & WooCommerce Integration</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Remove "Powered by Chatral" Badge</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Pre-Chat Visitor Form</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> File & Media Sharing</div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
                 </div>
                 <button
@@ -3002,7 +3002,7 @@ export default function LandingPage() {
               </div>
             </Col>
 
-            {/* 3. Business & Scale Plan */}
+            {/* 3. Enterprise Plan (Custom Plan) */}
             <Col xs={24} md={12} lg={8}>
               <div
                 style={{
@@ -3026,31 +3026,30 @@ export default function LandingPage() {
                   e.currentTarget.style.boxShadow = '0 4px 16px -2px rgba(12, 13, 16, 0.03)';
                 }}
               >
-                <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Business & Scale</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontWeight: 700, color: '#0c0d10', fontSize: 16 }}>Enterprise</div>
+                  <span style={{ fontSize: 11.5, background: '#fef3c7', color: '#b45309', padding: '3px 8px', borderRadius: 6, fontWeight: 700 }}>Custom Plan 👑</span>
+                </div>
                 <div style={{ fontSize: 32, fontWeight: 800, color: '#0c0d10', margin: '8px 0 2px', letterSpacing: '-0.03em' }}>
-                  {currency === 'INR'
-                    ? (billingCycle === 'annual' ? `₹${Math.round(planPricing.BUSINESS.annualPriceINR / 12)}` : `₹${planPricing.BUSINESS.monthlyPriceINR}`)
-                    : (billingCycle === 'annual' ? `$${Math.round(planPricing.BUSINESS.annualPriceUSD / 12)}` : `$${planPricing.BUSINESS.monthlyPriceUSD}`)}{' '}
-                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400 }}>/ month</span>
+                  Custom
+                  <span style={{ fontSize: 13, color: '#6b707c', fontWeight: 400, marginLeft: 8 }}>pricing</span>
                 </div>
                 <div style={{ color: '#5b5f6b', fontSize: 13, marginBottom: 14, lineHeight: 1.45 }}>
-                  {billingCycle === 'annual'
-                    ? (currency === 'INR' ? `Billed annually at ₹${planPricing.BUSINESS.annualPriceINR.toLocaleString('en-IN')}/yr (Save 25%). For high-volume stores & scaling teams.` : `Billed annually at $${planPricing.BUSINESS.annualPriceUSD}/yr (Save 25%). For high-volume stores & scaling teams.`)
-                    : 'For high-volume stores, scaling agencies & teams needing dedicated onboarding support.'}
+                  Tailored for high-volume stores, custom features & scaling teams.
                 </div>
                 <Divider style={{ borderColor: '#f1f5f9', margin: '0 0 14px' }} />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20, fontSize: 13, color: '#0c0d10' }}>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Unlimited Active Stores</b></div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Unlimited Team Members & Roles</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Everything in Starter Growth</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>1-on-1 Setup & Onboarding Support</b></div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Custom CSS & Brand White-labeling</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Advanced Analytics & Reports Export</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>Custom Stores & Agent Seats</b></div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Custom Features on Demand</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> <b>1-on-1 Setup & Team Training</b></div>
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Dedicated Account Manager</div>
-                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> WhatsApp & Priority Phone Support</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Enterprise-Grade Security</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Early Access to New Features</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> No Contract Lock-in</div>
+                  <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
                 </div>
                 <button
-                  onClick={() => handlePurchasePlan('BUSINESS')}
+                  onClick={() => window.open('https://wa.me/?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
                   className="btn-brand-secondary"
                   style={{
                     width: '100%',
@@ -3059,12 +3058,16 @@ export default function LandingPage() {
                     borderRadius: 10,
                     fontSize: 13.5,
                     fontFamily: 'inherit',
+                    background: '#16a34a',
+                    borderColor: '#16a34a',
+                    color: '#ffffff',
+                    fontWeight: 600,
                   }}
                 >
-                  <RollText text="Buy Business & Scale" secondaryColor="#1d4ed8" />
+                  <RollText text="Chat on WhatsApp 💬" secondaryColor="#ffffff" />
                 </button>
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
-                  Includes 1-on-1 setup • Priority support
+                  Tailored onboarding • Dedicated support
                 </div>
               </div>
             </Col>
