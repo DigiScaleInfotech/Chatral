@@ -233,6 +233,40 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     } catch { }
     return null;
   });
+  const [chats, setChats] = useState(() => {
+    try {
+      const raw = store.get(`lc_chats_${storeKey}`);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed.slice(0, 4);
+      }
+    } catch { }
+    try {
+      const prevMsgsRaw = store.get(`lc_msgs_${storeKey}`);
+      const prevConvId = store.get(`lc_conv_${storeKey}`);
+      if (prevMsgsRaw) {
+        const prevMsgs = JSON.parse(prevMsgsRaw);
+        if (Array.isArray(prevMsgs) && prevMsgs.length > 0) {
+          const lastM = prevMsgs[prevMsgs.length - 1];
+          return [{
+            id: prevConvId || `chat-${Date.now()}`,
+            status: 'OPEN',
+            createdAt: prevMsgs[0]?.createdAt || new Date().toISOString(),
+            updatedAt: lastM?.createdAt || new Date().toISOString(),
+            messages: prevMsgs,
+            lastMsg: lastM ? {
+              body: lastM.body,
+              senderType: lastM.senderType,
+              senderName: lastM.senderName,
+              createdAt: lastM.createdAt,
+              attachmentId: lastM.attachmentId,
+            } : null,
+          }];
+        }
+      }
+    } catch { }
+    return [];
+  });
   const [visitor, setVisitor] = useState(null);
   const [avail, setAvail] = useState({ online: true });
   const [typing, setTyping] = useState(false);
@@ -262,7 +296,70 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   openRef.current = open;
   cfgRef.current = cfg;
 
+  const call = useCallback(async (path, { method = 'GET', body, raw, headers = {} } = {}) => {
+    const res = await fetch(`${api}/api/widget/${storeKey}${path}`, {
+      method,
+      headers: { ...(raw ? {} : { 'Content-Type': 'application/json' }), ...(token.current ? { 'X-Visitor-Token': token.current } : {}), ...headers },
+      body: raw || (body ? JSON.stringify(body) : undefined),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw Object.assign(new Error(data.error || 'Something went wrong'), { status: res.status, code: data.code });
+    return data;
+  }, [api, storeKey]);
+
+  const updateChatsWithCurrent = useCallback((currentMsgs, currentConvId, currentStatus = 'OPEN') => {
+    if (!currentMsgs || currentMsgs.length === 0) return;
+    setChats((prevChats) => {
+      const now = new Date().toISOString();
+      const lastM = currentMsgs[currentMsgs.length - 1];
+      const targetId = currentConvId || (prevChats[0]?.id && prevChats[0]?.status !== 'RESOLVED' ? prevChats[0].id : `chat-${Date.now()}`);
+
+      const existingIdx = prevChats.findIndex((c) => (currentConvId && c.id === currentConvId) || c.id === targetId);
+      let nextChats = [];
+      if (existingIdx >= 0) {
+        const updated = {
+          ...prevChats[existingIdx],
+          id: targetId,
+          status: currentStatus,
+          updatedAt: lastM?.createdAt || now,
+          messages: currentMsgs.slice(-50),
+          lastMsg: lastM ? {
+            body: lastM.body,
+            senderType: lastM.senderType,
+            senderName: lastM.senderName,
+            createdAt: lastM.createdAt,
+            attachmentId: lastM.attachmentId,
+          } : null,
+        };
+        nextChats = [updated, ...prevChats.filter((_, i) => i !== existingIdx)];
+      } else {
+        const newEntry = {
+          id: targetId,
+          status: currentStatus,
+          createdAt: currentMsgs[0]?.createdAt || now,
+          updatedAt: lastM?.createdAt || now,
+          messages: currentMsgs.slice(-50),
+          lastMsg: lastM ? {
+            body: lastM.body,
+            senderType: lastM.senderType,
+            senderName: lastM.senderName,
+            createdAt: lastM.createdAt,
+            attachmentId: lastM.attachmentId,
+          } : null,
+        };
+        nextChats = [newEntry, ...prevChats];
+      }
+      // Keep max 4 chats! When 5th arrives, the oldest (1st) is deleted from the widget!
+      const capped = nextChats.slice(0, 4);
+      try { store.set(`lc_chats_${storeKey}`, JSON.stringify(capped)); } catch { }
+      return capped;
+    });
+  }, [storeKey]);
+
   const startNewChat = useCallback(() => {
+    if (messages.length > 0) {
+      updateChatsWithCurrent(messages, convRef.current?.id, ended ? 'RESOLVED' : 'OPEN');
+    }
     setEnded(false);
     setConv(null);
     convRef.current = null;
@@ -275,18 +372,31 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       store.set(`lc_conv_${storeKey}`, '');
       store.set(`lc_msgs_${storeKey}`, '');
     } catch { }
-  }, [storeKey]);
+  }, [storeKey, messages, ended, updateChatsWithCurrent]);
 
-  const call = useCallback(async (path, { method = 'GET', body, raw, headers = {} } = {}) => {
-    const res = await fetch(`${api}/api/widget/${storeKey}${path}`, {
-      method,
-      headers: { ...(raw ? {} : { 'Content-Type': 'application/json' }), ...(token.current ? { 'X-Visitor-Token': token.current } : {}), ...headers },
-      body: raw || (body ? JSON.stringify(body) : undefined),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw Object.assign(new Error(data.error || 'Something went wrong'), { status: res.status, code: data.code });
-    return data;
-  }, [api, storeKey]);
+  const selectChat = useCallback((chat) => {
+    if (!chat) return;
+    setConv({ id: chat.id, status: chat.status || 'OPEN' });
+    convRef.current = { id: chat.id, status: chat.status || 'OPEN' };
+    const isEnded = chat.status === 'RESOLVED';
+    setEnded(isEnded);
+    const msgs = Array.isArray(chat.messages) ? chat.messages : [];
+    setMessages(msgs);
+    lastSeq.current = msgs.reduce((max, m) => Math.max(max, m.seq || 0), 0);
+    try {
+      store.set(`lc_conv_${storeKey}`, chat.id);
+      store.set(`lc_msgs_${storeKey}`, JSON.stringify(msgs.slice(-50)));
+    } catch { }
+    if (!isEnded) {
+      call('/resume', { method: 'POST', body: { conversationId: chat.id } }).catch(() => { });
+    }
+  }, [call, storeKey]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      updateChatsWithCurrent(messages, conv?.id, ended ? 'RESOLVED' : (conv?.status || 'OPEN'));
+    }
+  }, [messages, conv?.id, conv?.status, ended, updateChatsWithCurrent]);
 
   const page = () => ({ url: location.href, title: document.title, referrer: document.referrer, device: isMobile() ? 'mobile' : 'desktop' });
 
@@ -777,6 +887,9 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       onEndChat={conv ? async () => {
         setConv((c) => (c ? { ...c, status: 'RESOLVED' } : c));
         setEnded(true);
+        if (convRef.current?.id) {
+          updateChatsWithCurrent(messages, convRef.current.id, 'RESOLVED');
+        }
         if (convRef.current?.id && convRef.current?.status !== 'RESOLVED') {
           try {
             await call(`/conversations/${convRef.current.id}/end`, { method: 'POST' });
@@ -786,6 +899,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         }
       } : null}
       ended={ended} onStartNew={startNewChat}
+      chats={chats} onSelectChat={selectChat}
       canUpload={!!conv && cfg.behavior?.fileUpload !== false}
       preview={(mobile ? cfg.behavior?.messagePreviewMobile : cfg.behavior?.messagePreviewDesktop) === false ? null : preview}
       onDismissPreview={() => setPreview(null)}

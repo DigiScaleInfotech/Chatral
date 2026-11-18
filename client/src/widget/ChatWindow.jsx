@@ -237,6 +237,7 @@ export default function ChatWindow({
   preview = null, onDismissPreview,
   // header menu (all optional; an option is only shown when its handler is given)
   visitorName = '', onChangeName, onEmailTranscript, onDownloadTranscript, soundOn = true, onToggleSound, onEndChat, ended = false, onStartNew,
+  chats = [], onSelectChat,
 }) {
   const [text, setText] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -263,6 +264,19 @@ export default function ChatWindow({
   const featuredFaqs = homeFaqs;
 
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
+
+  // Max 4 conversations in widget (most recent first)
+  const conversationList = chats && chats.length > 0
+    ? chats.slice(0, 4)
+    : (messages.length > 0
+        ? [{
+            id: 'current',
+            messages,
+            status: ended ? 'RESOLVED' : 'OPEN',
+            updatedAt: lastMsg?.createdAt || new Date().toISOString(),
+            lastMsg,
+          }]
+        : []);
 
   useEffect(() => {
     if (!open) {
@@ -434,28 +448,49 @@ export default function ChatWindow({
                     )}
                   </header>
                   <div className="lc-messages-list-canvas">
-                    {messages.length > 0 ? (
-                      <div
-                        className="lc-conv-card"
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => setInConversation(true)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') setInConversation(true); }}
-                      >
-                        <div className="lc-conv-avatar">
-                          {cfg.logoUrl ? <img src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName || 'Support'} />}
-                        </div>
-                        <div className="lc-conv-content">
-                          <div className="lc-conv-top">
-                            <span className="lc-conv-name">{lastMsg?.senderName || cfg.agentName || 'Support'}</span>
-                            <span className="lc-conv-time">{timeAgo(lastMsg?.createdAt)}</span>
+                    {conversationList.length > 0 ? (
+                      conversationList.map((chat, idx) => {
+                        const chatMsgs = chat.messages || [];
+                        const chatLastMsg = chat.lastMsg || (chatMsgs.length > 0 ? chatMsgs[chatMsgs.length - 1] : null);
+                        const chatTime = timeAgo(chat.updatedAt || chatLastMsg?.createdAt || chat.createdAt);
+                        const partnerName = cfg.agentName || 'Support';
+                        const snippet = chatLastMsg?.senderType === 'VISITOR'
+                          ? `You: ${chatLastMsg.body || (chatLastMsg.attachmentId ? 'Attachment' : '')}`
+                          : (chatLastMsg?.body || (chatLastMsg?.attachmentId ? 'Attachment' : (chat.status === 'RESOLVED' ? 'Chat ended' : 'How can we help?')));
+
+                        return (
+                          <div
+                            key={chat.id || idx}
+                            className="lc-conv-card"
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => {
+                              onSelectChat?.(chat);
+                              setInConversation(true);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                onSelectChat?.(chat);
+                                setInConversation(true);
+                              }
+                            }}
+                          >
+                            <div className="lc-conv-avatar">
+                              {cfg.logoUrl ? <img src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={partnerName} />}
+                            </div>
+                            <div className="lc-conv-content">
+                              <div className="lc-conv-top">
+                                <span className="lc-conv-name">{partnerName}</span>
+                                <span className="lc-conv-time">{chatTime}</span>
+                              </div>
+                              <div className="lc-conv-snippet">
+                                {snippet}
+                              </div>
+                            </div>
+                            <div className="lc-conv-chevron">{Icon.chevronRight}</div>
                           </div>
-                          <div className="lc-conv-snippet">
-                            {lastMsg?.senderType === 'VISITOR' ? 'You: ' : ''}{lastMsg?.body || (lastMsg?.attachmentId ? 'Attachment' : 'How can we help?')}
-                          </div>
-                        </div>
-                        <div className="lc-conv-chevron">{Icon.chevronRight}</div>
-                      </div>
+                        );
+                      })
                     ) : (
                       <div className="lc-conv-empty">
                         <div className="lc-conv-empty-icon">{Icon.messages}</div>
@@ -468,7 +503,7 @@ export default function ChatWindow({
                         type="button"
                         className="lc-btn-send-message"
                         onClick={() => {
-                          if (ended) onStartNew?.();
+                          onStartNew?.();
                           setInConversation(true);
                         }}
                       >
@@ -554,7 +589,9 @@ export default function ChatWindow({
                         <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
                         {/* The greeting stays visible until real bot messages exist in the conversation */}
                         {m.greeting && !messages.some((x) => x.senderType === 'BOT') && (
-                          <Message m={{ id: 'greeting', senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />
+                          <div className="lc-greeting-anim">
+                            <Message m={{ id: 'greeting', senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />
+                          </div>
                         )}
                         {messages.map((msg, i) => (
                           <Message key={msg.clientMsgId || msg.id} m={msg} cfg={cfg} Attachment={Attachment}

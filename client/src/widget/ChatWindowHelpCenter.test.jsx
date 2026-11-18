@@ -112,6 +112,51 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(screen.getByLabelText('Message')).toBeTruthy();
   });
 
+  it('renders up to 4 past chats on Messages screen and caps at 4 when more exist', () => {
+    const mockChats = [
+      { id: 'c1', messages: [{ id: 'm1', body: 'Chat 1 Message', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+      { id: 'c2', messages: [{ id: 'm2', body: 'Chat 2 Message', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+      { id: 'c3', messages: [{ id: 'm3', body: 'Chat 3 Message', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+      { id: 'c4', messages: [{ id: 'm4', body: 'Chat 4 Message', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+      { id: 'c5', messages: [{ id: 'm5', body: 'Chat 5 Oldest', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+    ];
+    let selected = null;
+    render(
+      <ChatWindow
+        {...base}
+        messages={[]}
+        chats={mockChats}
+        onSelectChat={(c) => { selected = c; }}
+      />
+    );
+    // Switch to Messages tab
+    fireEvent.click(screen.getByRole('button', { name: 'Messages' }));
+
+    // Should show newest 4 chats (c1 to c4)
+    expect(screen.getByText(/Chat 1 Message/)).toBeTruthy();
+    expect(screen.getByText(/Chat 2 Message/)).toBeTruthy();
+    expect(screen.getByText(/Chat 3 Message/)).toBeTruthy();
+    expect(screen.getByText(/Chat 4 Message/)).toBeTruthy();
+    // 5th oldest chat should NOT be shown
+    expect(screen.queryByText(/Chat 5 Oldest/)).toBeNull();
+
+    // Selecting a chat invokes onSelectChat
+    fireEvent.click(screen.getByText(/Chat 2 Message/));
+    expect(selected?.id).toBe('c2');
+  });
+
+  it('renders greeting message with smooth entrance animation container in new chat', () => {
+    const cfgGreeting = {
+      ...CONFIG_WITH_FAQS,
+      messages: { ...CONFIG_WITH_FAQS.messages, greeting: 'Hi there 👋 How can we help?' },
+    };
+    const { container } = render(<ChatWindow {...base} cfg={cfgGreeting} messages={[]} />);
+    // Click Send us a message to enter new chat
+    fireEvent.click(screen.getByText('Send us a message'));
+    expect(screen.getByText(/Hi there 👋 How can we help?/)).toBeTruthy();
+    expect(container.querySelector('.lc-greeting-anim')).toBeTruthy();
+  });
+
   it('renders messages-only mode without Home tab or bottom nav when faqs is empty', () => {
     const cfgNoFaqs = { ...CONFIG_WITH_FAQS, faqs: [] };
     render(<ChatWindow {...base} cfg={cfgNoFaqs} messages={[]} />);

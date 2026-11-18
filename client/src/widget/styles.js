@@ -264,5 +264,11 @@ button, input, textarea, select { font-family: inherit; }
 .lc-btn-send-message:active { transform: scale(0.97); }
 .lc-btn-send-message svg { width: 14px; height: 14px; }
 
-@media (prefers-reduced-motion: reduce) { .lc-panel, .lc-typing i, .lc-launcher { animation: none; transition: none; } }
+/* Smooth greeting message entrance */
+.lc-greeting-anim { animation: lcGreetingIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; will-change: transform, opacity; }
+.lc-greeting-anim .lc-bubble { animation: lcBubbleScale 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes lcGreetingIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes lcBubbleScale { 0% { opacity: 0; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) { .lc-panel, .lc-typing i, .lc-launcher, .lc-greeting-anim, .lc-greeting-anim .lc-bubble { animation: none; transition: none; } }
 `;
