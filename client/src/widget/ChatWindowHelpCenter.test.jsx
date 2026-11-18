@@ -41,37 +41,37 @@ afterEach(cleanup);
 const base = { cfg: CONFIG_WITH_FAQS, open: true, onToggle: () => {} };
 
 describe('ChatWindow Help Center & FAQ navigation', () => {
-  it('renders Intercom-style Home screen with greeting, FAQ cards, and bottom tabs', () => {
+  it('renders streamlined Home screen with greeting, 2 bottom tabs (Home and Messages), and FAQ cards', () => {
     render(<ChatWindow {...base} messages={[]} visitorName="Hiren" />);
     expect(screen.getByText(/Hi Hiren 👋/)).toBeTruthy();
+    expect(screen.getByText('Send us a message')).toBeTruthy();
     expect(screen.getByText('Frequently Asked Questions')).toBeTruthy();
     expect(screen.getByText('How do I track my order status?')).toBeTruthy();
     expect(screen.getByText('What is your return & exchange policy?')).toBeTruthy();
     expect(screen.getByRole('navigation', { name: 'Chat navigation' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Home' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Messages' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Help' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Help' })).toBeNull();
   });
 
-  it('clicking an FAQ card opens the Help Center article view with full answer and CTA', () => {
+  it('clicking an FAQ card opens the article view with full answer and back button', () => {
     render(<ChatWindow {...base} messages={[]} />);
     fireEvent.click(screen.getByText('How do I track my order status?'));
     expect(screen.getByText('You can track your order using the tracking link sent via SMS/Email.')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Back to Help' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Chat with an Agent' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Back to Home' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Send us a message' })).toBeTruthy();
   });
 
-  it('clicking "Chat with an Agent" transitions smoothly to Messages tab with composer', () => {
+  it('clicking "Send us a message" transitions smoothly to Messages tab with composer', () => {
     render(<ChatWindow {...base} messages={[]} />);
     fireEvent.click(screen.getByText('How do I track my order status?'));
-    fireEvent.click(screen.getByRole('button', { name: 'Chat with an Agent' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Send us a message' }));
     expect(screen.getByLabelText('Message')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Send' })).toBeTruthy();
   });
 
-  it('switches to Help tab and filters articles with real-time search', () => {
+  it('filters articles right on Home using real-time search box', () => {
     render(<ChatWindow {...base} messages={[]} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Help' }));
     const search = screen.getByLabelText('Search for help');
     expect(search).toBeTruthy();
     fireEvent.change(search, { target: { value: 'COD' } });
@@ -84,7 +84,6 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
       { id: 'm1', seq: 1, senderType: 'AGENT', senderName: 'Alex', body: 'Your package has been dispatched!', createdAt: new Date().toISOString() },
     ];
     render(<ChatWindow {...base} messages={messages} />);
-    // When messages exist, visitor starts on Messages or can switch to Home
     fireEvent.click(screen.getByRole('button', { name: 'Home' }));
     expect(screen.getByText('Recent message')).toBeTruthy();
     expect(screen.getByText(/Your package has been dispatched!/)).toBeTruthy();

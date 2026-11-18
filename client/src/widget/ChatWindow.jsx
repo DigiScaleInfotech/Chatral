@@ -225,25 +225,17 @@ export default function ChatWindow({
   const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
   const [selectedFaq, setSelectedFaq] = useState(null);
   const [helpSearch, setHelpSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
 
   // If mode switches to prechat or offline, force activeTab to messages so the form is visible
   const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
 
-  // Categories list
-  const categories = ['All', ...new Set(faqs.map((f) => f.category || 'General').filter(Boolean))];
-
-  // Filtered FAQs for Help Center
+  // Filtered FAQs for search on Home
+  const q = helpSearch.trim().toLowerCase();
   const filteredFaqs = faqs.filter((f) => {
-    const matchCat = selectedCategory === 'All' || (f.category || 'General') === selectedCategory;
-    const q = helpSearch.trim().toLowerCase();
-    const matchSearch = !q || f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q);
-    return matchCat && matchSearch;
+    if (!q) return true;
+    return f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q) || (f.category && f.category.toLowerCase().includes(q));
   });
 
-  // Home top FAQs
-  const homeFaqs = faqs.filter((f) => f.showOnHome !== false);
-  const displayHomeFaqs = homeFaqs.length > 0 ? homeFaqs.slice(0, 4) : faqs.slice(0, 4);
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
 
   useEffect(() => {
@@ -301,106 +293,12 @@ export default function ChatWindow({
         <section className={`lc-panel ${closing ? 'closing' : ''}`} role="dialog" aria-label={m.title}>
           {effectiveTab === 'home' && (
             <>
-              <div className="lc-home-hero">
-                <div className="lc-home-hero-top">
-                  {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
-                  <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
-                </div>
-                <div>
-                  <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
-                  <div className="lc-home-sub">{m.title || 'How can we help?'}</div>
-                </div>
-              </div>
-
-              <div className="lc-home-scroll">
-                {lastMsg && (
-                  <div className="lc-card-recent" onClick={() => setActiveTab('messages')}>
-                    <div className="lc-card-recent-head">
-                      <span>Recent message</span>
-                      <span>{time(lastMsg.createdAt || Date.now())}</span>
-                    </div>
-                    <div className="lc-card-recent-msg">
-                      <Avatar src={lastMsg.senderType === 'VISITOR' ? '' : (lastMsg.senderAvatar || cfg.avatarUrl)} name={lastMsg.senderType === 'VISITOR' ? (visitorName || 'You') : (lastMsg.senderName || cfg.agentName)} />
-                      <div className="lc-card-recent-text">
-                        <strong>{lastMsg.senderType === 'VISITOR' ? 'You: ' : `${lastMsg.senderName || cfg.agentName}: `}</strong>
-                        {lastMsg.body || 'Attachment'}
-                      </div>
-                      <div className="lc-card-arrow">{Icon.chevronRight}</div>
-                    </div>
-                  </div>
-                )}
-
-                <div
-                  className="lc-faq-search-box"
-                  onClick={() => setActiveTab('help')}
-                >
-                  {Icon.search}
-                  <span style={{ fontSize: '0.9em', color: '#64748b' }}>Search for help...</span>
-                </div>
-
-                {!lastMsg && (
-                  <div className="lc-card" onClick={() => setActiveTab('messages')}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 34, height: 34, borderRadius: 8, background: 'color-mix(in srgb, var(--lc-primary) 12%, transparent)', color: 'var(--lc-primary)', display: 'grid', placeItems: 'center' }}>
-                        {Icon.messages}
-                      </div>
-                      <div>
-                        <div className="lc-card-title">Send us a message</div>
-                        <div className="lc-card-desc">We usually reply within a few minutes</div>
-                      </div>
-                    </div>
-                    <div className="lc-card-arrow">{Icon.chevronRight}</div>
-                  </div>
-                )}
-
-                {displayHomeFaqs.length > 0 && (
-                  <div style={{ marginTop: 4 }}>
-                    <div style={{ fontSize: '0.78em', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8, paddingLeft: 2 }}>
-                      Frequently Asked Questions
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {displayHomeFaqs.map((faq) => (
-                        <div
-                          key={faq.id}
-                          className="lc-card"
-                          onClick={() => {
-                            setSelectedFaq(faq);
-                            setActiveTab('help');
-                          }}
-                        >
-                          <div className="lc-card-main">
-                            <div className="lc-card-title">{faq.question}</div>
-                            <div className="lc-card-desc">{faq.answer}</div>
-                          </div>
-                          <div className="lc-card-arrow">{Icon.chevronRight}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {faqs.length > displayHomeFaqs.length && (
-                  <button
-                    type="button"
-                    className="lc-link"
-                    style={{ textAlign: 'center', margin: '4px 0 8px', fontWeight: 600 }}
-                    onClick={() => setActiveTab('help')}
-                  >
-                    Browse all {faqs.length} articles →
-                  </button>
-                )}
-              </div>
-            </>
-          )}
-
-          {effectiveTab === 'help' && (
-            <>
               {selectedFaq ? (
                 <>
                   <header className="lc-head">
-                    <button className="lc-icon" onClick={() => setSelectedFaq(null)} aria-label="Back to Help">{Icon.back}</button>
+                    <button className="lc-icon" onClick={() => setSelectedFaq(null)} aria-label="Back to Home">{Icon.back}</button>
                     <div className="lc-grow">
-                      <div className="lc-title">Help Center</div>
+                      <div className="lc-title">Help</div>
                     </div>
                     <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
                   </header>
@@ -412,7 +310,7 @@ export default function ChatWindow({
                     </div>
                     <div className="lc-faq-cta">
                       <div className="lc-faq-cta-title">Still have questions?</div>
-                      <div className="lc-faq-cta-sub">Our support team is ready to assist you.</div>
+                      <div className="lc-faq-cta-sub">Our support team is ready to assist you right now.</div>
                       <button
                         type="button"
                         className="lc-btn"
@@ -421,21 +319,57 @@ export default function ChatWindow({
                           setActiveTab('messages');
                         }}
                       >
-                        Chat with an Agent
+                        Send us a message
                       </button>
                     </div>
                   </div>
                 </>
               ) : (
                 <>
-                  <header className="lc-head">
-                    <div className="lc-grow">
-                      <div className="lc-title">Help Center</div>
-                      <div className="lc-sub">{faqs.length} {faqs.length === 1 ? 'article' : 'articles'} & guides</div>
+                  <div className="lc-home-hero">
+                    <div className="lc-home-hero-top">
+                      {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
+                      <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
                     </div>
-                    <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
-                  </header>
-                  <div className="lc-body" style={{ gap: 10 }}>
+                    <div>
+                      <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
+                      <div className="lc-home-sub">{m.title || 'How can we help?'}</div>
+                    </div>
+                  </div>
+
+                  <div className="lc-home-scroll">
+                    {lastMsg && (
+                      <div className="lc-card-recent" onClick={() => setActiveTab('messages')}>
+                        <div className="lc-card-recent-head">
+                          <span>Recent message</span>
+                          <span>{time(lastMsg.createdAt || Date.now())}</span>
+                        </div>
+                        <div className="lc-card-recent-msg">
+                          <Avatar src={lastMsg.senderType === 'VISITOR' ? '' : (lastMsg.senderAvatar || cfg.avatarUrl)} name={lastMsg.senderType === 'VISITOR' ? (visitorName || 'You') : (lastMsg.senderName || cfg.agentName)} />
+                          <div className="lc-card-recent-text">
+                            <strong>{lastMsg.senderType === 'VISITOR' ? 'You: ' : `${lastMsg.senderName || cfg.agentName}: `}</strong>
+                            {lastMsg.body || 'Attachment'}
+                          </div>
+                          <div className="lc-card-arrow">{Icon.chevronRight}</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Send us a message card */}
+                    <div className="lc-card" onClick={() => setActiveTab('messages')}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+                        <div style={{ width: 38, height: 38, borderRadius: 10, background: 'color-mix(in srgb, var(--lc-primary) 12%, transparent)', color: 'var(--lc-primary)', display: 'grid', placeItems: 'center', flex: 'none' }}>
+                          {Icon.messages}
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div className="lc-card-title">Send us a message</div>
+                          <div className="lc-card-desc">{m.subtitle || 'We typically reply in a few minutes'}</div>
+                        </div>
+                      </div>
+                      <div className="lc-card-arrow" style={{ color: 'var(--lc-primary)' }}>{Icon.chevronRight}</div>
+                    </div>
+
+                    {/* Search for help box */}
                     <div className="lc-faq-search-box">
                       {Icon.search}
                       <input
@@ -450,7 +384,7 @@ export default function ChatWindow({
                         <button
                           type="button"
                           className="lc-icon"
-                          style={{ width: 20, height: 20 }}
+                          style={{ width: 22, height: 22 }}
                           onClick={() => setHelpSearch('')}
                           aria-label="Clear search"
                         >
@@ -459,53 +393,43 @@ export default function ChatWindow({
                       )}
                     </div>
 
-                    {categories.length > 2 && (
-                      <div className="lc-faq-categories">
-                        {categories.map((cat) => (
-                          <button
-                            key={cat}
-                            type="button"
-                            className={`lc-faq-cat-pill ${selectedCategory === cat ? 'active' : ''}`}
-                            onClick={() => setSelectedCategory(cat)}
-                          >
-                            {cat}
-                          </button>
-                        ))}
+                    {/* FAQ list */}
+                    <div style={{ marginTop: 2 }}>
+                      <div style={{ fontSize: '0.78em', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8, paddingLeft: 2 }}>
+                        {q ? `Search Results (${filteredFaqs.length})` : 'Frequently Asked Questions'}
                       </div>
-                    )}
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {filteredFaqs.map((faq) => (
-                        <div
-                          key={faq.id}
-                          className="lc-card"
-                          onClick={() => setSelectedFaq(faq)}
-                        >
-                          <div className="lc-card-main">
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-                              {faq.category && <span style={{ fontSize: '0.7em', padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#475569', fontWeight: 600 }}>{faq.category}</span>}
-                              <span className="lc-card-title" style={{ margin: 0 }}>{faq.question}</span>
-                            </div>
-                            <div className="lc-card-desc">{faq.answer}</div>
-                          </div>
-                          <div className="lc-card-arrow">{Icon.chevronRight}</div>
-                        </div>
-                      ))}
-
-                      {filteredFaqs.length === 0 && (
-                        <div style={{ textAlign: 'center', padding: '36px 16px', color: '#64748b' }}>
-                          <div style={{ fontSize: 24, marginBottom: 8 }}>🔍</div>
-                          <div style={{ fontWeight: 600, color: '#0f172a', marginBottom: 4 }}>No articles found</div>
-                          <div style={{ fontSize: '0.85em', marginBottom: 16 }}>We couldn't find anything matching "{helpSearch}". Talk to us directly!</div>
-                          <button
-                            type="button"
-                            className="lc-btn"
-                            onClick={() => setActiveTab('messages')}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {filteredFaqs.map((faq) => (
+                          <div
+                            key={faq.id}
+                            className="lc-card"
+                            onClick={() => setSelectedFaq(faq)}
                           >
-                            Start a Live Chat
-                          </button>
-                        </div>
-                      )}
+                            <div className="lc-card-main">
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                                {faq.category && <span style={{ fontSize: '0.7em', padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#475569', fontWeight: 600 }}>{faq.category}</span>}
+                                <span className="lc-card-title" style={{ margin: 0 }}>{faq.question}</span>
+                              </div>
+                              <div className="lc-card-desc">{faq.answer}</div>
+                            </div>
+                            <div className="lc-card-arrow">{Icon.chevronRight}</div>
+                          </div>
+                        ))}
+
+                        {filteredFaqs.length === 0 && (
+                          <div style={{ textAlign: 'center', padding: '24px 14px', background: '#fff', borderRadius: 12, border: '1px dashed #cbd5e1', color: '#64748b' }}>
+                            <div style={{ fontWeight: 600, color: '#0f172a', marginBottom: 4 }}>No articles found</div>
+                            <div style={{ fontSize: '0.85em', marginBottom: 12 }}>We couldn't find an answer for "{helpSearch}". Talk to us directly!</div>
+                            <button
+                              type="button"
+                              className="lc-btn"
+                              onClick={() => setActiveTab('messages')}
+                            >
+                              Send us a message
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </>
@@ -600,7 +524,7 @@ export default function ChatWindow({
             <nav className="lc-tabs" aria-label="Chat navigation">
               <button
                 type="button"
-                className={`lc-tab ${effectiveTab === 'home' ? 'active' : ''}`}
+                className={`lc-tab ${effectiveTab === 'home' && !selectedFaq ? 'active' : ''}`}
                 onClick={() => {
                   setSelectedFaq(null);
                   setActiveTab('home');
@@ -622,15 +546,6 @@ export default function ChatWindow({
                 {Icon.messages}
                 <span>Messages</span>
                 {unread > 0 && <span className="lc-tab-badge">{unread > 9 ? '9+' : unread}</span>}
-              </button>
-              <button
-                type="button"
-                className={`lc-tab ${effectiveTab === 'help' ? 'active' : ''}`}
-                onClick={() => setActiveTab('help')}
-                aria-label="Help"
-              >
-                {Icon.help}
-                <span>Help</span>
               </button>
             </nav>
           )}
