@@ -380,22 +380,26 @@ export default function ChatWindow({
             <>
               <header className="lc-head">
                 {hasFaqs && (
-                  <button className="lc-icon" onClick={() => setActiveTab('home')} aria-label="Back to home">
+                  <button className="lc-icon lc-back" onClick={() => setActiveTab('home')} aria-label="Back to home">
                     {Icon.back}
                   </button>
                 )}
-                {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
-                <div className="lc-grow">
-                  <div className="lc-title">{mode === 'offline' || mode === 'offline_sent' ? m.offlineTitle : m.title}</div>
-                  {m.subtitle && <div className="lc-sub">{m.subtitle}</div>}
+                <div className="lc-head-brand">
+                  {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
+                  <div className="lc-grow">
+                    <div className="lc-title">{mode === 'offline' || mode === 'offline_sent' ? m.offlineTitle : m.title}</div>
+                    {m.subtitle && <div className="lc-sub">{m.subtitle}</div>}
+                  </div>
                 </div>
-                {menuItems.length > 0 && mode === 'chat' && (
-                  <button className="lc-icon" onClick={() => setMenuOpen((v) => !v)} aria-label="Chat menu" aria-haspopup="menu" aria-expanded={menuOpen}>{Icon.menu}</button>
-                )}
-                {/* Phones keep a close button */}
-                {!layout.inline && !layout.popout && (hasFaqs || (layout.mobile && cfg.layout.mobileFullscreen)) && (
-                  <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
-                )}
+                <div className="lc-head-actions">
+                  {menuItems.length > 0 && mode === 'chat' && (
+                    <button className="lc-icon" onClick={() => setMenuOpen((v) => !v)} aria-label="Chat menu" aria-haspopup="menu" aria-expanded={menuOpen}>{Icon.menu}</button>
+                  )}
+                  {/* Phones keep a close button */}
+                  {!layout.inline && !layout.popout && (hasFaqs || (layout.mobile && cfg.layout.mobileFullscreen)) && (
+                    <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
+                  )}
+                </div>
                 {menuOpen && <Menu items={menuItems} onClose={() => setMenuOpen(false)} />}
               </header>
               {banner && <div className="lc-banner">{banner}</div>}
