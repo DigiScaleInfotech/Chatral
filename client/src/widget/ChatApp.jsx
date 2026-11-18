@@ -27,7 +27,7 @@ export function chatLinkMatches(hash, chatLinkId) {
  */
 export function preventStuckZoom(root) {
   const iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  if (!iOS || typeof document === 'undefined') return () => {};
+  if (!iOS || typeof document === 'undefined') return () => { };
   let meta = document.querySelector('meta[name="viewport"]');
   const created = !meta;
   if (!meta) { meta = document.createElement('meta'); meta.name = 'viewport'; document.head.appendChild(meta); }
@@ -92,7 +92,7 @@ function getWidgetAudioContext() {
 export function unlockWidgetAudio() {
   const c = getWidgetAudioContext();
   if (c && c.state !== 'running') {
-    c.resume().catch(() => {});
+    c.resume().catch(() => { });
   }
 }
 
@@ -123,7 +123,7 @@ export function playWidgetSound() {
     };
 
     if (c.state !== 'running') {
-      c.resume().then(play).catch(() => {});
+      c.resume().then(play).catch(() => { });
     } else {
       play();
     }
@@ -207,7 +207,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     try {
       const cached = store.get(`lc_cfg_${storeKey}`);
       if (cached) return JSON.parse(cached);
-    } catch {}
+    } catch { }
     return null;
   });
   const [hidden, setHidden] = useState(false);
@@ -223,14 +223,14 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     try {
       const cached = store.get(`lc_msgs_${storeKey}`);
       if (cached) return JSON.parse(cached);
-    } catch {}
+    } catch { }
     return [];
   });
   const [conv, setConv] = useState(() => {
     try {
       const saved = store.get(`lc_conv_${storeKey}`);
       if (saved) return { id: saved, status: 'OPEN' };
-    } catch {}
+    } catch { }
     return null;
   });
   const [visitor, setVisitor] = useState(null);
@@ -242,7 +242,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   const [mode, setMode] = useState(() => {
     try {
       if (store.get(`lc_conv_${storeKey}`)) return 'chat';
-    } catch {}
+    } catch { }
     return 'chat';
   });
   const [banner, setBanner] = useState(null);
@@ -274,7 +274,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     try {
       store.set(`lc_conv_${storeKey}`, '');
       store.set(`lc_msgs_${storeKey}`, '');
-    } catch {}
+    } catch { }
   }, [storeKey]);
 
   const call = useCallback(async (path, { method = 'GET', body, raw, headers = {} } = {}) => {
@@ -304,7 +304,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       if (s.rotatedKey) console.warn('[livechat] This embed uses an old store key. Update the snippet from your dashboard.');
       setHidden(false);
       setCfg(s.config);
-      try { store.set(`lc_cfg_${storeKey}`, JSON.stringify(s.config)); } catch {}
+      try { store.set(`lc_cfg_${storeKey}`, JSON.stringify(s.config)); } catch { }
       try {
         const host = document.getElementById(`livechat-${storeKey}`);
         if (host) {
@@ -314,7 +314,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
           host.style.display = 'block';
           host.style.visibility = 'visible';
         }
-      } catch {}
+      } catch { }
       window.__livechatLoadFont?.(s.config.font.family);
       setVisitor(s.visitor);
       setAvail(s.availability);
@@ -324,26 +324,26 @@ export default function ChatApp({ api, storeKey, popout = false }) {
           convRef.current = null;
           setMessages([]);
           setEnded(false);
-          try { store.set(`lc_conv_${storeKey}`, ''); } catch {}
-          try { store.set(`lc_msgs_${storeKey}`, ''); } catch {}
+          try { store.set(`lc_conv_${storeKey}`, ''); } catch { }
+          try { store.set(`lc_msgs_${storeKey}`, ''); } catch { }
         } else {
           setConv({ id: s.conversation.id, status: s.conversation.status });
-          try { store.set(`lc_conv_${storeKey}`, s.conversation.id); } catch {}
-          try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(s.conversation.messages.slice(-50))); } catch {}
+          try { store.set(`lc_conv_${storeKey}`, s.conversation.id); } catch { }
+          try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(s.conversation.messages.slice(-50))); } catch { }
           lastSeq.current = s.conversation.lastSeq;
           setAgentReadSeq(s.conversation.agentReadSeq);
           setMessages(s.conversation.messages.map(withFormState));
           setUnread(s.conversation.unreadForVisitor);
           if (openRef.current && !resumed.current) {
             resumed.current = true;
-            call('/resume', { method: 'POST', body: { conversationId: s.conversation.id } }).catch(() => {});
+            call('/resume', { method: 'POST', body: { conversationId: s.conversation.id } }).catch(() => { });
           }
         }
       } else {
         setConv(null);
         setMessages([]);
-        try { store.set(`lc_conv_${storeKey}`, ''); } catch {}
-        try { store.set(`lc_msgs_${storeKey}`, ''); } catch {}
+        try { store.set(`lc_conv_${storeKey}`, ''); } catch { }
+        try { store.set(`lc_msgs_${storeKey}`, ''); } catch { }
         if (s.proactive) showProactive(s.proactive, false);
       }
       setSessionLoaded(true);
@@ -354,7 +354,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       if (err?.status === 404 || err?.status === 403 || err?.code === 'CHAT_DISABLED' || err?.code === 'ORIGIN_FORBIDDEN') {
         setHidden(true);
         setCfg(null);
-        try { store.set(`lc_cfg_${storeKey}`, ''); } catch {}
+        try { store.set(`lc_cfg_${storeKey}`, ''); } catch { }
         try {
           const host = document.getElementById(`livechat-${storeKey}`);
           if (host) {
@@ -362,7 +362,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
             host.style.setProperty('display', 'none', 'important');
             host.style.setProperty('visibility', 'hidden', 'important');
           }
-        } catch {}
+        } catch { }
         return;
       }
       // Auto-retry up to 4 times (every 3.5s) if backend is waking up or temporary network hiccup
@@ -461,7 +461,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       setHidden(!isEnabled);
       if (!isEnabled) {
         setOpen(false);
-        try { store.set(`lc_cfg_${storeKey}`, ''); } catch {}
+        try { store.set(`lc_cfg_${storeKey}`, ''); } catch { }
         try {
           const host = document.getElementById(`livechat-${storeKey}`);
           if (host) {
@@ -469,7 +469,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
             host.style.setProperty('display', 'none', 'important');
             host.style.setProperty('visibility', 'hidden', 'important');
           }
-        } catch {}
+        } catch { }
       } else {
         try {
           const host = document.getElementById(`livechat-${storeKey}`);
@@ -480,7 +480,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
             host.style.display = 'block';
             host.style.visibility = 'visible';
           }
-        } catch {}
+        } catch { }
         boot();
       }
     } else if (type === 'conversation_deleted') {
@@ -527,8 +527,9 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       if (!convRef.current || convRef.current.id !== r.conversationId) {
         setConv({ id: r.conversationId, status: r.status });
         convRef.current = { id: r.conversationId, status: r.status };
-        try { store.set(`lc_conv_${storeKey}`, r.conversationId); } catch {}
+        try { store.set(`lc_conv_${storeKey}`, r.conversationId); } catch { }
         resumed.current = true;
+        if (proactiveRef.current) { const pid = proactiveRef.current.executionId; proactiveRef.current = null; setMessages((l) => l.filter((m) => m.proactiveOf !== pid)); syncAfterCreate(r.conversationId); }
         if (proactiveRef.current) { const pid = proactiveRef.current.executionId; proactiveRef.current = null; setMessages((l) => l.filter((m) => m.proactiveOf !== pid)); }
         await syncAfterCreate(r.conversationId);
       }
@@ -601,7 +602,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     const nav = () => setTimeout(() => {
       if (location.href === last || !token.current) return;
       last = location.href;
-      call('/pageview', { method: 'POST', body: page() }).catch(() => {});
+      call('/pageview', { method: 'POST', body: page() }).catch(() => { });
       setHidden(!matchesDisplayRules(cfgRef.current?.displayRules, location.href));
     }, 50);
     const wrap = (k) => { const orig = history[k]; history[k] = function (...a) { const r = orig.apply(this, a); nav(); return r; }; return () => { history[k] = orig; }; };
@@ -687,13 +688,13 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   // Availability polling while it matters (offline form / no chat yet).
   useEffect(() => {
     if (!cfg || conv) return undefined;
-    const t = setInterval(() => call('/availability').then(setAvail).catch(() => {}), 60_000);
+    const t = setInterval(() => call('/availability').then(setAvail).catch(() => { }), 60_000);
     return () => clearInterval(t);
   }, [cfg, conv, call]);
 
   useEffect(() => {
     if (messages.length > 0 && conv) {
-      try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(messages.slice(-50))); } catch {}
+      try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(messages.slice(-50))); } catch { }
     }
   }, [messages, conv, storeKey]);
 
@@ -803,7 +804,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         if (r.conversation && !isNew) {
           setConv({ id: r.conversation.id, status: r.conversation.status });
           convRef.current = { id: r.conversation.id, status: r.conversation.status };
-          try { store.set(`lc_conv_${storeKey}`, r.conversation.id); } catch {}
+          try { store.set(`lc_conv_${storeKey}`, r.conversation.id); } catch { }
           lastSeq.current = Math.max(lastSeq.current, r.conversation.lastSeq || 0);
           await syncAfterCreate(r.conversation.id);
         }
