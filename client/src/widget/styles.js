@@ -71,17 +71,16 @@ button, input, textarea, select { font-family: inherit; }
   }
 }
 .lc-root.inline .lc-panel { max-height: none; margin: 0; }
-.lc-head { background: radial-gradient(130% 120% at 0% 0%, color-mix(in srgb, var(--lc-primary) 36%, #ffffff) 0%, color-mix(in srgb, var(--lc-primary) 14%, #ffffff) 55%, #f8fafc 100%); color: #0f172a; padding: 13px 16px; display: flex; align-items: center; gap: 11px; flex: none; position: relative; border-bottom: 1px solid rgba(226, 232, 240, 0.85); }
+.lc-head { background: var(--lc-primary); color: var(--lc-header-text); padding: 14px 14px 14px 16px; display: flex; align-items: center; gap: 12px; flex: none; position: relative; }
 .lc-head img.logo { height: 32px; max-width: 96px; object-fit: contain; }
-.lc-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: none; background: #ffffff; color: var(--lc-primary); display: grid; place-items: center; font-weight: 700; font-size: 15px; box-shadow: 0 2px 8px rgba(15,23,42,.08); border: 1px solid rgba(226, 232, 240, 0.7); overflow: hidden; }
-.lc-title { font-weight: 700; font-size: 15px; color: #0f172a; line-height: 1.25; }
-.lc-sub { color: #475569; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; margin-top: 1px; }
-.lc-dot { width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25); }
-.lc-dot.off { background: #94a3b8; box-shadow: none; }
+.lc-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex: none; background: rgba(255,255,255,.25); display: grid; place-items: center; font-weight: 700; }
+.lc-title { font-weight: 700; font-size: 1.05em; }
+.lc-sub { opacity: .85; font-size: .86em; display: flex; align-items: center; gap: 6px; }
+.lc-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; }
+.lc-dot.off { background: #94a3b8; }
 .lc-grow { flex: 1; min-width: 0; }
-.lc-icon { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.5); color: #475569; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; padding: 0; flex: none; transition: all .16s ease; }
-.lc-icon:hover { background: #ffffff; color: #0f172a; box-shadow: 0 2px 8px rgba(15,23,42,.1); transform: scale(1.04); }
-.lc-icon svg { width: 15px; height: 15px; }
+.lc-icon { background: transparent; border: 0; color: inherit; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; padding: 0; }
+.lc-icon:hover { background: rgba(255,255,255,.18); }
 .lc-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; overscroll-behavior: contain; }
 .lc-row { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
 .lc-row.me { justify-content: flex-end; }

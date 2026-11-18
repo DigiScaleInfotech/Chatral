@@ -387,12 +387,7 @@ export default function ChatWindow({
                 {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
                 <div className="lc-grow">
                   <div className="lc-title">{mode === 'offline' || mode === 'offline_sent' ? m.offlineTitle : m.title}</div>
-                  {m.subtitle && (
-                    <div className="lc-sub">
-                      {mode === 'chat' && <span className="lc-online-dot" aria-hidden="true"></span>}
-                      <span>{m.subtitle}</span>
-                    </div>
-                  )}
+                  {m.subtitle && <div className="lc-sub">{m.subtitle}</div>}
                 </div>
                 {menuItems.length > 0 && mode === 'chat' && (
                   <button className="lc-icon" onClick={() => setMenuOpen((v) => !v)} aria-label="Chat menu" aria-haspopup="menu" aria-expanded={menuOpen}>{Icon.menu}</button>
