@@ -439,8 +439,10 @@ export default function ChatWindow({
                 {mode === 'chat' && !panel && (
                   <>
                     <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
-                    {/* The greeting is an intro, not a chat message */}
-                    {m.greeting && messages.length === 0 && <Message m={{ senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />}
+                    {/* The greeting stays visible until real bot messages exist in the conversation */}
+                    {m.greeting && !messages.some((x) => x.senderType === 'BOT') && (
+                      <Message m={{ id: 'greeting', senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />
+                    )}
                     {messages.map((msg, i) => (
                       <Message key={msg.clientMsgId || msg.id} m={msg} cfg={cfg} Attachment={Attachment}
                         showName={msg.senderType !== 'VISITOR' && (i === 0 || messages[i - 1].senderType === 'VISITOR' || messages[i - 1].senderName !== msg.senderName)}

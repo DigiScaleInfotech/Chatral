@@ -153,12 +153,12 @@ r.post('/:key/messages', limiter(30), loadStore, loadVisitor, notBanned, asyncRo
     const att = await prisma.attachment.findFirst({ where: { id: input.attachmentId, storeId: req.store.id, conversation: { visitorId: req.visitor.id } } });
     if (!att) throw httpError(400, 'Attachment not found');
   }
-  const cfg = input.prechat ? await getPublishedConfig(req.store) : null;
-  // Pre-chat: the welcome text becomes the first message of a new chat (unless a trigger message already is).
+  const cfg = await getPublishedConfig(req.store);
+  // The welcome text becomes the first message of a new chat (unless a trigger message already is).
   if (cfg && !proactive && cfg.messages?.greeting?.trim()) proactive = { body: cfg.messages.greeting.trim(), senderName: cfg.agentName, senderAvatar: cfg.avatarUrl || null, meta: { event: 'welcome' } };
   const { prechat, newChat, ...msg } = input;
   const out = await sendVisitorMessage(req.store, req.visitor, { ...msg, body: input.body.trim(), proactive, newChat });
-  if (cfg && out.created) {
+  if (input.prechat && cfg && out.created) {
     const wait = (cfg.messages?.afterPrechat ?? DEFAULT_WIDGET_CONFIG.messages.afterPrechat).trim();
     // Skip if a trigger already posted the same text (never show it twice).
     const dup = wait && await prisma.message.findFirst({ where: { conversationId: out.conv.id, senderType: 'BOT', body: wait }, select: { id: true } });

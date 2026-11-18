@@ -529,7 +529,8 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         convRef.current = { id: r.conversationId, status: r.status };
         try { store.set(`lc_conv_${storeKey}`, r.conversationId); } catch {}
         resumed.current = true;
-        if (proactiveRef.current) { const pid = proactiveRef.current.executionId; proactiveRef.current = null; setMessages((l) => l.filter((m) => m.proactiveOf !== pid)); syncAfterCreate(r.conversationId); }
+        if (proactiveRef.current) { const pid = proactiveRef.current.executionId; proactiveRef.current = null; setMessages((l) => l.filter((m) => m.proactiveOf !== pid)); }
+        await syncAfterCreate(r.conversationId);
       }
       lastSeq.current = Math.max(lastSeq.current, r.message.seq);
       setMessages((list) => merge(list, [{ ...r.message, clientMsgId, state: undefined }]));
