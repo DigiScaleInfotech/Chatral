@@ -822,6 +822,32 @@ export default function LandingPage() {
           transform: scale(0.98) !important;
         }
 
+        .btn-brand-whatsapp {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: #ffffff;
+          color: #16a34a;
+          border: 1.5px solid #22c55e;
+          border-radius: 12px;
+          cursor: pointer;
+          font-weight: 600;
+          box-shadow: 0 2px 6px rgba(22, 163, 74, 0.08);
+          transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+          user-select: none;
+          transform: none !important;
+        }
+        .btn-brand-whatsapp:hover {
+          background: #f0fdf4;
+          border-color: #16a34a;
+          color: #15803d;
+          transform: none !important;
+          box-shadow: 0 2px 10px rgba(22, 163, 74, 0.16);
+        }
+        .btn-brand-whatsapp:active {
+          transform: scale(0.98) !important;
+        }
+
         .btn-cta-banner {
           display: inline-flex;
           align-items: center;
@@ -3048,7 +3074,7 @@ export default function LandingPage() {
                 </div>
                 <button
                   onClick={() => window.open('https://wa.me/?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
-                  className="btn-brand-primary"
+                  className="btn-brand-whatsapp"
                   style={{
                     width: '100%',
                     justifyContent: 'center',
@@ -3058,7 +3084,7 @@ export default function LandingPage() {
                     fontFamily: 'inherit',
                   }}
                 >
-                  <RollText text="Chat on WhatsApp" />
+                  <RollText text="Chat on WhatsApp" secondaryColor="#15803d" />
                 </button>
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: '#9aa0ac', marginTop: 8 }}>
                   Tailored onboarding • Dedicated support

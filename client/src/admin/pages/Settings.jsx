@@ -1549,15 +1549,16 @@ function SubscriptionPlan({ store, reload, can }) {
               </Button>
             ) : (
               <Button
-                type="primary"
                 block
                 style={{
                   height: 42,
                   borderRadius: 8,
-                  background: '#2563eb',
-                  borderColor: '#2563eb',
+                  background: '#ffffff',
+                  border: '1.5px solid #22c55e',
+                  color: '#16a34a',
                   fontWeight: 600,
                   fontSize: 14,
+                  boxShadow: '0 2px 6px rgba(22, 163, 74, 0.08)',
                 }}
                 onClick={() => window.open('https://wa.me/?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
               >
