@@ -6,38 +6,10 @@ import {
 import {
   PlusOutlined, EditOutlined, DeleteOutlined, QuestionCircleOutlined,
   SearchOutlined, EyeOutlined, ArrowUpOutlined, ArrowDownOutlined,
-  BookOutlined, ThunderboltOutlined, CloudUploadOutlined, SaveOutlined,
+  BookOutlined, CloudUploadOutlined, SaveOutlined,
 } from '@ant-design/icons';
 import { api, showError } from '../api.js';
 import { useApp } from '../main.jsx';
-
-const TEMPLATES = [
-  {
-    question: 'How do I track my order?',
-    category: 'Orders',
-    answer: 'Once your order has been dispatched, you will receive an email and SMS with the tracking link and courier details. You can also contact our support team here with your Order ID for real-time updates.',
-  },
-  {
-    question: 'What are your delivery times & charges?',
-    category: 'Shipping',
-    answer: 'Standard delivery takes 3 to 5 business days across major cities. We offer Free Shipping on orders above ₹999. Express delivery options are also available at checkout.',
-  },
-  {
-    question: 'What is your return & refund policy?',
-    category: 'Returns',
-    answer: 'We offer a 7-day easy return policy for unused items in original packaging. Once we receive and inspect the returned item, your refund is credited within 3-5 business days.',
-  },
-  {
-    question: 'Do you accept Cash on Delivery (COD)?',
-    category: 'Payment',
-    answer: 'Yes! Cash on Delivery is available on most pincodes. We also accept UPI (GPay, PhonePe, Paytm), Debit/Credit Cards, and Net Banking.',
-  },
-  {
-    question: 'How can I contact customer support?',
-    category: 'Support',
-    answer: 'Our customer support team is available Monday to Saturday, 9:00 AM to 7:00 PM. You can chat with us live using this widget or email us at support@chatral.com.',
-  },
-];
 
 const CATEGORY_COLORS = {
   Setup: 'blue',
@@ -123,15 +95,6 @@ export default function HelpCenter() {
       showOnHome: true,
     });
     setEditing({ isNew: true });
-  };
-
-  const handleApplyTemplate = (tmpl) => {
-    form.setFieldsValue({
-      question: tmpl.question,
-      category: tmpl.category,
-      answer: tmpl.answer,
-      showOnHome: true,
-    });
   };
 
   const handleSaveModal = async () => {
@@ -575,31 +538,13 @@ export default function HelpCenter() {
         centered
         width={560}
       >
-        <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 6 }}>
-            Quick Pre-fill Templates
-          </div>
-          <Space wrap size={[6, 6]}>
-            {TEMPLATES.map((tmpl) => (
-              <Button
-                key={tmpl.question}
-                size="small"
-                icon={<ThunderboltOutlined style={{ color: '#2563eb' }} />}
-                onClick={() => handleApplyTemplate(tmpl)}
-              >
-                {tmpl.category}
-              </Button>
-            ))}
-          </Space>
-        </div>
-
         <Form form={form} layout="vertical" requiredMark={false}>
           <Form.Item
             name="question"
             label="Question / Title"
             rules={[{ required: true, message: 'Please enter the customer question' }]}
           >
-            <Input maxLength={200} placeholder="e.g. How do I install Chatral on my website?" />
+            <Input maxLength={200} placeholder="e.g. How can I get started?" />
           </Form.Item>
 
           <Row gutter={12}>
