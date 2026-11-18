@@ -171,20 +171,18 @@ button, input, textarea, select { font-family: inherit; }
 .lc-tab-badge { position: absolute; top: -1px; right: 22%; min-width: 15px; height: 15px; padding: 0 4px; border-radius: 8px; background: #ef4444; color: #fff; font: 700 9.5px/15px system-ui; text-align: center; }
 
 /* Home Hero with richer mesh gradient & floating brand pill */
-.lc-home-hero { background: radial-gradient(130% 120% at 0% 0%, color-mix(in srgb, var(--lc-primary) 36%, #ffffff) 0%, color-mix(in srgb, var(--lc-primary) 14%, #ffffff) 55%, #f8fafc 100%); padding: 14px 18px 12px; display: flex; flex-direction: column; flex: none; position: relative; gap: 8px; }
-.lc-home-hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-.lc-home-hero-left { display: flex; align-items: center; gap: 11px; min-width: 0; flex: 1; }
-.lc-brand-pill { width: 38px; height: 38px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 8px rgba(15,23,42,.08); display: flex; align-items: center; justify-content: center; overflow: hidden; flex: none; }
-.lc-brand-pill img { width: 24px; height: 24px; object-fit: contain; }
-.lc-brand-initial { font-size: 16px; font-weight: 700; color: var(--lc-primary); line-height: 1; }
-.lc-home-hero-text { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
-.lc-home-close { all: unset; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #475569; background: rgba(255,255,255,.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.5); transition: all .16s ease; flex: none; margin-top: 4px; }
+.lc-home-hero { background: radial-gradient(130% 120% at 0% 0%, color-mix(in srgb, var(--lc-primary) 36%, #ffffff) 0%, color-mix(in srgb, var(--lc-primary) 14%, #ffffff) 55%, #f8fafc 100%); padding: 16px 18px 12px; display: flex; flex-direction: column; flex: none; position: relative; }
+.lc-home-hero-top { display: flex; justify-content: space-between; align-items: center; min-height: 34px; }
+.lc-brand-pill { width: 34px; height: 34px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 8px rgba(15,23,42,.08); display: flex; align-items: center; justify-content: center; overflow: hidden; flex: none; }
+.lc-brand-pill img { width: 22px; height: 22px; object-fit: contain; }
+.lc-brand-initial { font-size: 15px; font-weight: 700; color: var(--lc-primary); line-height: 1; }
+.lc-home-close { all: unset; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #475569; background: rgba(255,255,255,.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.5); transition: all .16s ease; }
 .lc-home-close:hover { background: #ffffff; color: #0f172a; box-shadow: 0 2px 8px rgba(15,23,42,.1); transform: scale(1.04); }
 .lc-home-close svg { width: 15px; height: 15px; }
 
-.lc-home-greeting { font-size: 14.5px; font-weight: 500; color: #475569; line-height: 1.25; margin: 0; }
-.lc-home-title { font-size: 17px; font-weight: 700; color: #0f172a; line-height: 1.25; letter-spacing: -0.3px; margin-top: 1px; }
-.lc-online-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #475569; margin: 0; }
+.lc-home-greeting { font-size: 14.5px; font-weight: 500; color: #475569; line-height: 1.3; margin-top: 10px; }
+.lc-home-title { font-size: 18px; font-weight: 700; color: #0f172a; line-height: 1.25; letter-spacing: -0.3px; margin-top: 2px; }
+.lc-online-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #475569; margin-top: 4px; }
 .lc-online-dot { width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.25); animation: lc-pulse 2s infinite ease-in-out; flex: none; }
 @keyframes lc-pulse { 0%, 100% { box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.25); } 50% { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.08); } }
 

@@ -324,23 +324,19 @@ export default function ChatWindow({
                 <>
                   <div className="lc-home-hero">
                     <div className="lc-home-hero-top">
-                      <div className="lc-home-hero-left">
-                        <div className="lc-brand-pill">
-                          {cfg.logoUrl ? (
-                            <img src={cfg.logoUrl} alt="" />
-                          ) : (
-                            <span className="lc-brand-initial">{initials(cfg.agentName || 'Chatral')}</span>
-                          )}
-                        </div>
-                        <div className="lc-home-hero-text">
-                          <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
-                          <div className="lc-home-title">{m.title || 'How can we help?'}</div>
-                        </div>
+                      <div className="lc-brand-pill">
+                        {cfg.logoUrl ? (
+                          <img src={cfg.logoUrl} alt="" />
+                        ) : (
+                          <span className="lc-brand-initial">{initials(cfg.agentName || 'Chatral')}</span>
+                        )}
                       </div>
                       <button className="lc-home-close" onClick={onToggle} aria-label="Close chat">
                         {Icon.close}
                       </button>
                     </div>
+                    <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
+                    <div className="lc-home-title">{m.title || 'How can we help?'}</div>
                     <div className="lc-online-badge">
                       <span className="lc-online-dot" aria-hidden="true"></span>
                       <span>{m.subtitle || 'Typically replies in a few minutes'}</span>
