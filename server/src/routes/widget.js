@@ -138,6 +138,7 @@ const msgSchema = z.object({
   attachmentId: z.string().max(40).optional().nullable(),
   proactiveExecutionId: z.string().max(40).optional().nullable(),
   prechat: z.boolean().optional(), // this message carries the pre-chat form details
+  newChat: z.boolean().optional(),
 }).refine((m) => m.body.trim() || m.attachmentId, { message: 'Please type a message' });
 
 r.post('/:key/messages', limiter(30), loadStore, loadVisitor, notBanned, asyncRoute(async (req, res) => {
@@ -155,8 +156,8 @@ r.post('/:key/messages', limiter(30), loadStore, loadVisitor, notBanned, asyncRo
   const cfg = input.prechat ? await getPublishedConfig(req.store) : null;
   // Pre-chat: the welcome text becomes the first message of a new chat (unless a trigger message already is).
   if (cfg && !proactive && cfg.messages?.greeting?.trim()) proactive = { body: cfg.messages.greeting.trim(), senderName: cfg.agentName, senderAvatar: cfg.avatarUrl || null, meta: { event: 'welcome' } };
-  const { prechat, ...msg } = input;
-  const out = await sendVisitorMessage(req.store, req.visitor, { ...msg, body: input.body.trim(), proactive });
+  const { prechat, newChat, ...msg } = input;
+  const out = await sendVisitorMessage(req.store, req.visitor, { ...msg, body: input.body.trim(), proactive, newChat });
   if (cfg && out.created) {
     const wait = (cfg.messages?.afterPrechat ?? DEFAULT_WIDGET_CONFIG.messages.afterPrechat).trim();
     // Skip if a trigger already posted the same text (never show it twice).
@@ -227,8 +228,8 @@ r.post('/:key/contact', limiter(10), loadStore, loadVisitor, notBanned, asyncRou
   }
   const merged = Object.keys(attrs).length ? { ...(req.visitor.attributes || {}), ...attrs } : undefined;
   const visitor = await prisma.visitor.update({ where: { id: req.visitor.id }, data: { ...visitorData, ...(merged ? { attributes: merged } : {}) } });
-  let conv = input.conversationId ? await prisma.conversation.findFirst({ where: { id: input.conversationId, storeId: req.store.id, visitorId: visitor.id } }) : null;
-  if (!conv) {
+  let conv = input.conversationId && !req.body?.newChat ? await prisma.conversation.findFirst({ where: { id: input.conversationId, storeId: req.store.id, visitorId: visitor.id } }) : null;
+  if (!conv && !req.body?.newChat) {
     conv = await findResumable(req.store.id, visitor.id, visitor.email);
     if (conv && conv.visitorId !== visitor.id) {
       await prisma.conversation.update({ where: { id: conv.id }, data: { visitorId: visitor.id } });
@@ -287,12 +288,13 @@ const offlineSchema = z.object({
   email: z.string().trim().toLowerCase().email('Please enter a valid email').max(200),
   message: z.string().trim().min(1, 'Please type a message').max(5000),
   clientMsgId: z.string().min(8).max(64),
+  newChat: z.boolean().optional(),
 });
 
 r.post('/:key/offline', limiter(5, 15 * 60_000), loadStore, loadVisitor, notBanned, asyncRoute(async (req, res) => {
   const input = offlineSchema.parse(req.body);
   const visitor = await prisma.visitor.update({ where: { id: req.visitor.id }, data: { name: input.name, email: input.email } });
-  const out = await sendVisitorMessage(req.store, visitor, { clientMsgId: input.clientMsgId, body: input.message, offline: true });
+  const out = await sendVisitorMessage(req.store, visitor, { clientMsgId: input.clientMsgId, body: input.message, offline: true, newChat: input.newChat });
   if (!out.duplicate) {
     emit('trigger', { storeId: req.store.id, event: 'offline_message', visitorId: visitor.id, conversationId: out.conv.id, sourceId: out.message.id, text: input.message });
     emit('webhook', { storeId: req.store.id, event: 'offline_message.created', data: { conversationId: out.conv.id, name: input.name, email: input.email, message: input.message } });

@@ -65,12 +65,12 @@ const lockVisitor = (tx, visitorId) => tx.$executeRaw`SELECT pg_advisory_xact_lo
  * Resumes the eligible conversation (same id + history) or creates one; a qualifying visitor
  * message is the ONLY thing besides explicit resume that moves lastActivityAt/expiresAt.
  */
-export async function sendVisitorMessage(store, visitor, { conversationId, clientMsgId, body, attachmentId = null, proactive = null, offline = false, meta = null }) {
+export async function sendVisitorMessage(store, visitor, { conversationId, clientMsgId, body, attachmentId = null, proactive = null, offline = false, meta = null, newChat = false }) {
   const now = clock.now();
   const result = await prisma.$transaction(async (tx) => {
     await lockVisitor(tx, visitor.id);
     let conv = null;
-    if (conversationId) {
+    if (conversationId && !newChat) {
       conv = await lockConversation(tx, conversationId, store.id);
       if (conv && conv.visitorId !== visitor.id) {
         // If the conversation belongs to another visitor record with the same email, allow resuming it
@@ -85,7 +85,7 @@ export async function sendVisitorMessage(store, visitor, { conversationId, clien
         }
       }
     }
-    if (!conv) {
+    if (!conv && !newChat) {
       const r = await findResumable(store.id, visitor.id, visitor.email, tx);
       if (r) {
         conv = await lockConversation(tx, r.id, store.id);

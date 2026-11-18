@@ -257,9 +257,25 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   const lastSeq = useRef(0);
   const typingTimer = useRef(null);
   const cfgRef = useRef(null);
+  const newChatRef = useRef(false);
   convRef.current = conv;
   openRef.current = open;
   cfgRef.current = cfg;
+
+  const startNewChat = useCallback(() => {
+    setEnded(false);
+    setConv(null);
+    convRef.current = null;
+    setMessages([]);
+    lastSeq.current = 0;
+    setAgentReadSeq(0);
+    setUnread(0);
+    newChatRef.current = true;
+    try {
+      store.set(`lc_conv_${storeKey}`, '');
+      store.set(`lc_msgs_${storeKey}`, '');
+    } catch {}
+  }, [storeKey]);
 
   const call = useCallback(async (path, { method = 'GET', body, raw, headers = {} } = {}) => {
     const res = await fetch(`${api}/api/widget/${storeKey}${path}`, {
@@ -303,16 +319,25 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       setVisitor(s.visitor);
       setAvail(s.availability);
       if (s.conversation) {
-        setConv({ id: s.conversation.id, status: s.conversation.status });
-        try { store.set(`lc_conv_${storeKey}`, s.conversation.id); } catch {}
-        try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(s.conversation.messages.slice(-50))); } catch {}
-        lastSeq.current = s.conversation.lastSeq;
-        setAgentReadSeq(s.conversation.agentReadSeq);
-        setMessages(s.conversation.messages.map(withFormState));
-        setUnread(s.conversation.unreadForVisitor);
-        if (openRef.current && !resumed.current) {
-          resumed.current = true;
-          call('/resume', { method: 'POST', body: { conversationId: s.conversation.id } }).catch(() => {});
+        if (s.conversation.status === 'RESOLVED') {
+          setConv(null);
+          convRef.current = null;
+          setMessages([]);
+          setEnded(false);
+          try { store.set(`lc_conv_${storeKey}`, ''); } catch {}
+          try { store.set(`lc_msgs_${storeKey}`, ''); } catch {}
+        } else {
+          setConv({ id: s.conversation.id, status: s.conversation.status });
+          try { store.set(`lc_conv_${storeKey}`, s.conversation.id); } catch {}
+          try { store.set(`lc_msgs_${storeKey}`, JSON.stringify(s.conversation.messages.slice(-50))); } catch {}
+          lastSeq.current = s.conversation.lastSeq;
+          setAgentReadSeq(s.conversation.agentReadSeq);
+          setMessages(s.conversation.messages.map(withFormState));
+          setUnread(s.conversation.unreadForVisitor);
+          if (openRef.current && !resumed.current) {
+            resumed.current = true;
+            call('/resume', { method: 'POST', body: { conversationId: s.conversation.id } }).catch(() => {});
+          }
         }
       } else {
         setConv(null);
@@ -425,6 +450,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       setAgentReadSeq((s) => Math.max(s, d.agentReadSeq));
     } else if (type === 'conversation') {
       setConv((c) => (c && c.id === d.id ? { ...c, status: d.status } : c));
+      if (d.status === 'RESOLVED') setEnded(true);
     } else if (type === 'proactive') {
       if (!convRef.current) showProactive(d);
     } else if (type === 'config_updated' && d.config) {
@@ -486,7 +512,17 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     if (!p) return;
     setMessages((list) => merge(list, [{ clientMsgId, state: 'pending' }]));
     try {
-      const r = await call('/messages', { method: 'POST', body: { ...p, conversationId: convRef.current?.id || null, proactiveExecutionId: null } });
+      const isNew = newChatRef.current || !convRef.current;
+      const r = await call('/messages', {
+        method: 'POST',
+        body: {
+          ...p,
+          conversationId: isNew ? null : (convRef.current?.id || null),
+          proactiveExecutionId: null,
+          ...(isNew ? { newChat: true } : {}),
+        },
+      });
+      newChatRef.current = false;
       outbox.current.delete(clientMsgId);
       if (!convRef.current || convRef.current.id !== r.conversationId) {
         setConv({ id: r.conversationId, status: r.status });
@@ -747,7 +783,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         setConv((c) => (c ? { ...c, status: 'RESOLVED' } : c));
         setEnded(true);
       } : null}
-      ended={ended} onStartNew={() => setEnded(false)}
+      ended={ended} onStartNew={startNewChat}
       canUpload={!!conv && cfg.behavior?.fileUpload !== false}
       preview={(mobile ? cfg.behavior?.messagePreviewMobile : cfg.behavior?.messagePreviewDesktop) === false ? null : preview}
       onDismissPreview={() => setPreview(null)}
@@ -760,9 +796,10 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         ...(cfg.behavior?.visitorTypingPreview !== false ? { preview: draft } : {}),
       })}
       onPrechat={async (v) => {
-        const r = await call('/contact', { method: 'POST', body: { values: v } });
+        const isNew = newChatRef.current || !convRef.current;
+        const r = await call('/contact', { method: 'POST', body: { values: v, ...(isNew ? { newChat: true } : {}) } });
         setVisitor((x) => ({ ...x, ...r.visitor }));
-        if (r.conversation) {
+        if (r.conversation && !isNew) {
           setConv({ id: r.conversation.id, status: r.conversation.status });
           convRef.current = { id: r.conversation.id, status: r.conversation.status };
           try { store.set(`lc_conv_${storeKey}`, r.conversation.id); } catch {}
@@ -773,11 +810,13 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         // All answers become the visitor's first message ("Name : …" per line); the server puts the welcome message
         // before it and the "please wait" message after it.
         const details = prechatDetails(cfg.preChatForm?.fields || [], v);
-        if (details) send(details, { prechat: true });
+        if (details) send(details, { prechat: true, ...(isNew ? { newChat: true } : {}) });
       }}
       onOffline={async (v) => {
-        const r = await call('/offline', { method: 'POST', body: { ...v, clientMsgId: uid() } });
+        const isNew = newChatRef.current || !convRef.current;
+        const r = await call('/offline', { method: 'POST', body: { ...v, clientMsgId: uid(), ...(isNew ? { newChat: true } : {}) } });
         setVisitor((x) => ({ ...x, name: v.name, email: v.email }));
+        newChatRef.current = false;
         lastSeq.current = r.message.seq;
         setMessages([r.message]);
         setMode('offline_sent');

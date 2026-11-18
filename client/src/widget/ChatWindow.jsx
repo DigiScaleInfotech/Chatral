@@ -345,7 +345,13 @@ export default function ChatWindow({
 
                   <div className="lc-home-scroll">
                     {/* Send us a message card */}
-                    <div className="lc-send-card" onClick={() => setActiveTab('messages')}>
+                    <div
+                      className="lc-send-card"
+                      onClick={() => {
+                        if (ended) onStartNew?.();
+                        setActiveTab('messages');
+                      }}
+                    >
                       <div className="lc-send-icon-wrap">
                         {Icon.messages}
                       </div>
