@@ -224,17 +224,9 @@ export default function ChatWindow({
   const hasFaqs = faqs.length > 0;
   const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
   const [selectedFaq, setSelectedFaq] = useState(null);
-  const [helpSearch, setHelpSearch] = useState('');
 
   // If mode switches to prechat or offline, force activeTab to messages so the form is visible
   const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
-
-  // Filtered FAQs for search on Home
-  const q = helpSearch.trim().toLowerCase();
-  const filteredFaqs = faqs.filter((f) => {
-    if (!q) return true;
-    return f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q) || (f.category && f.category.toLowerCase().includes(q));
-  });
 
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
 
@@ -328,8 +320,12 @@ export default function ChatWindow({
                 <>
                   <div className="lc-home-hero">
                     <div className="lc-home-hero-top">
-                      {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
-                      <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
+                      {cfg.logoUrl ? (
+                        <img className="logo" src={cfg.logoUrl} alt="" />
+                      ) : cfg.avatarUrl ? (
+                        <Avatar src={cfg.avatarUrl} name={cfg.agentName} />
+                      ) : null}
+                      <button className="lc-icon" onClick={onToggle} aria-label="Close chat" style={{ marginLeft: 'auto' }}>{Icon.close}</button>
                     </div>
                     <div>
                       <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
@@ -356,9 +352,9 @@ export default function ChatWindow({
                     )}
 
                     {/* Send us a message card */}
-                    <div className="lc-card" onClick={() => setActiveTab('messages')}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-                        <div style={{ width: 38, height: 38, borderRadius: 10, background: 'color-mix(in srgb, var(--lc-primary) 12%, transparent)', color: 'var(--lc-primary)', display: 'grid', placeItems: 'center', flex: 'none' }}>
+                    <div className="lc-card-send" onClick={() => setActiveTab('messages')}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                        <div className="lc-card-send-icon">
                           {Icon.messages}
                         </div>
                         <div style={{ minWidth: 0 }}>
@@ -369,68 +365,32 @@ export default function ChatWindow({
                       <div className="lc-card-arrow" style={{ color: 'var(--lc-primary)' }}>{Icon.chevronRight}</div>
                     </div>
 
-                    {/* Search for help box */}
-                    <div className="lc-faq-search-box">
-                      {Icon.search}
-                      <input
-                        type="search"
-                        className="lc-faq-search-input"
-                        placeholder="Search for help..."
-                        value={helpSearch}
-                        onChange={(e) => setHelpSearch(e.target.value)}
-                        aria-label="Search for help"
-                      />
-                      {helpSearch && (
-                        <button
-                          type="button"
-                          className="lc-icon"
-                          style={{ width: 22, height: 22 }}
-                          onClick={() => setHelpSearch('')}
-                          aria-label="Clear search"
-                        >
-                          {Icon.close}
-                        </button>
-                      )}
-                    </div>
-
                     {/* FAQ list */}
-                    <div style={{ marginTop: 2 }}>
-                      <div style={{ fontSize: '0.78em', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8, paddingLeft: 2 }}>
-                        {q ? `Search Results (${filteredFaqs.length})` : 'Frequently Asked Questions'}
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {filteredFaqs.map((faq) => (
-                          <div
-                            key={faq.id}
-                            className="lc-card"
-                            onClick={() => setSelectedFaq(faq)}
-                          >
-                            <div className="lc-card-main">
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-                                {faq.category && <span style={{ fontSize: '0.7em', padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#475569', fontWeight: 600 }}>{faq.category}</span>}
-                                <span className="lc-card-title" style={{ margin: 0 }}>{faq.question}</span>
-                              </div>
-                              <div className="lc-card-desc">{faq.answer}</div>
-                            </div>
-                            <div className="lc-card-arrow">{Icon.chevronRight}</div>
-                          </div>
-                        ))}
-
-                        {filteredFaqs.length === 0 && (
-                          <div style={{ textAlign: 'center', padding: '24px 14px', background: '#fff', borderRadius: 12, border: '1px dashed #cbd5e1', color: '#64748b' }}>
-                            <div style={{ fontWeight: 600, color: '#0f172a', marginBottom: 4 }}>No articles found</div>
-                            <div style={{ fontSize: '0.85em', marginBottom: 12 }}>We couldn't find an answer for "{helpSearch}". Talk to us directly!</div>
-                            <button
-                              type="button"
-                              className="lc-btn"
-                              onClick={() => setActiveTab('messages')}
+                    {faqs.length > 0 && (
+                      <div style={{ marginTop: 2 }}>
+                        <div style={{ fontSize: '0.74em', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6, paddingLeft: 2 }}>
+                          Frequently Asked Questions
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                          {faqs.map((faq) => (
+                            <div
+                              key={faq.id}
+                              className="lc-card"
+                              onClick={() => setSelectedFaq(faq)}
                             >
-                              Send us a message
-                            </button>
-                          </div>
-                        )}
+                              <div className="lc-card-main">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                                  {faq.category && <span style={{ fontSize: '0.68em', padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#475569', fontWeight: 600 }}>{faq.category}</span>}
+                                  <span className="lc-card-title" style={{ margin: 0 }}>{faq.question}</span>
+                                </div>
+                                <div className="lc-card-desc">{faq.answer}</div>
+                              </div>
+                              <div className="lc-card-arrow">{Icon.chevronRight}</div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </>
               )}

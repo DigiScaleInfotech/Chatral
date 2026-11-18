@@ -70,13 +70,12 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(screen.getByRole('button', { name: 'Send' })).toBeTruthy();
   });
 
-  it('filters articles right on Home using real-time search box', () => {
+  it('renders clean FAQ cards directly on Home without search box', () => {
     render(<ChatWindow {...base} messages={[]} />);
-    const search = screen.getByLabelText('Search for help');
-    expect(search).toBeTruthy();
-    fireEvent.change(search, { target: { value: 'COD' } });
+    expect(screen.queryByLabelText('Search for help')).toBeNull();
+    expect(screen.getByText('How do I track my order status?')).toBeTruthy();
+    expect(screen.getByText('What is your return & exchange policy?')).toBeTruthy();
     expect(screen.getByText('Do you offer Cash on Delivery (COD)?')).toBeTruthy();
-    expect(screen.queryByText('How do I track my order status?')).toBeNull();
   });
 
   it('shows Recent message card on Home screen when conversation has messages', () => {
