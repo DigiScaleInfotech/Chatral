@@ -446,16 +446,36 @@ r.get('/stores/:storeId/faqs', requireStore('AGENT'), asyncRoute(async (req, res
   const store = await prisma.store.findUnique({ where: { id: req.params.storeId } });
   if (!store) throw httpError(404, 'Store not found');
   const cfg = await getPublishedConfig(store);
-  res.json(cfg.faqs || DEFAULT_WIDGET_CONFIG.faqs);
+  const faqs = Array.isArray(cfg?.faqs) ? cfg.faqs : [];
+  res.json({
+    faqs,
+    helpCenterEnabled: cfg?.helpCenterEnabled !== false,
+  });
 }));
 
 r.put('/stores/:storeId/faqs', requireStore('ADMIN'), asyncRoute(async (req, res) => {
-  const faqs = z.array(faqItemSchema).max(50).parse(req.body);
+  let faqs;
+  let helpCenterEnabled;
+  if (Array.isArray(req.body)) {
+    faqs = z.array(faqItemSchema).max(50).parse(req.body);
+  } else if (req.body && typeof req.body === 'object') {
+    faqs = z.array(faqItemSchema).max(50).parse(req.body.faqs || []);
+    if (typeof req.body.helpCenterEnabled === 'boolean') {
+      helpCenterEnabled = req.body.helpCenterEnabled;
+    }
+  } else {
+    throw httpError(400, 'Invalid request body');
+  }
+
   const storeId = req.params.storeId;
   const store = await prisma.store.findUnique({ where: { id: storeId } });
   if (!store) throw httpError(404, 'Store not found');
   const current = await getPublishedConfig(store);
-  const updatedConfig = { ...current, faqs };
+  const updatedConfig = {
+    ...current,
+    faqs,
+    ...(helpCenterEnabled !== undefined ? { helpCenterEnabled } : {}),
+  };
 
   await prisma.widgetConfig.upsert({
     where: { storeId_version: { storeId, version: 0 } },
@@ -472,7 +492,7 @@ r.put('/stores/:storeId/faqs', requireStore('ADMIN'), asyncRoute(async (req, res
 
   toStoreVisitors(storeId, 'config_updated', { config: updatedConfig });
   toAgents(storeId, 'widget_published', { version: v, config: updatedConfig });
-  res.json(faqs);
+  res.json({ faqs, helpCenterEnabled: updatedConfig.helpCenterEnabled !== false });
 }));
 
 // ---------- Saved replies ----------

@@ -220,8 +220,10 @@ export default function ChatWindow({
   const m = cfg.messages;
 
   // Help Center & FAQ states
+  const helpCenterEnabled = cfg?.helpCenterEnabled !== false;
   const faqs = Array.isArray(cfg?.faqs) ? cfg.faqs : [];
-  const hasFaqs = faqs.length > 0;
+  const homeFaqs = faqs.filter((f) => f.showOnHome !== false);
+  const hasFaqs = helpCenterEnabled && faqs.length > 0 && homeFaqs.length > 0;
   const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
   const [selectedFaq, setSelectedFaq] = useState(null);
 
@@ -229,8 +231,7 @@ export default function ChatWindow({
   const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
 
   // Featured cards (shown on Home)
-  const homeFaqs = faqs.filter((f) => f.showOnHome !== false);
-  const featuredFaqs = homeFaqs.length > 0 ? homeFaqs : faqs;
+  const featuredFaqs = homeFaqs;
 
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
 

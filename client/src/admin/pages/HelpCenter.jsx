@@ -62,6 +62,7 @@ export default function HelpCenter() {
   const { storeId, can } = useApp();
   const { message } = App.useApp();
   const [faqs, setFaqs] = useState([]);
+  const [helpCenterEnabled, setHelpCenterEnabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
@@ -74,9 +75,19 @@ export default function HelpCenter() {
     setLoading(true);
     api(`/stores/${storeId}/faqs`)
       .then((data) => {
-        setFaqs(Array.isArray(data) ? data : []);
-        if (data && data.length && !previewFaq) {
-          setPreviewFaq(data[0]);
+        if (Array.isArray(data)) {
+          setFaqs(data);
+          setHelpCenterEnabled(true);
+          if (data.length && !previewFaq) {
+            setPreviewFaq(data[0]);
+          }
+        } else if (data && typeof data === 'object') {
+          const list = Array.isArray(data.faqs) ? data.faqs : [];
+          setFaqs(list);
+          setHelpCenterEnabled(data.helpCenterEnabled !== false);
+          if (list.length && !previewFaq) {
+            setPreviewFaq(list[0]);
+          }
         }
       })
       .catch((e) => showError(e, { message }))
@@ -87,15 +98,22 @@ export default function HelpCenter() {
     load();
   }, [storeId]);
 
-  const saveList = async (newList) => {
+  const saveList = async (newList, newEnabled = helpCenterEnabled) => {
     setSaving(true);
     try {
-      await api(`/stores/${storeId}/faqs`, {
+      const res = await api(`/stores/${storeId}/faqs`, {
         method: 'PUT',
-        body: newList,
+        body: {
+          faqs: newList,
+          helpCenterEnabled: newEnabled,
+        },
       });
-      setFaqs(newList);
-      message.success('Help Center FAQs published to live widget!');
+      const returnedList = Array.isArray(res?.faqs) ? res.faqs : newList;
+      setFaqs(returnedList);
+      if (typeof res?.helpCenterEnabled === 'boolean') {
+        setHelpCenterEnabled(res.helpCenterEnabled);
+      }
+      message.success('Help Center settings published to live widget!');
     } catch (e) {
       showError(e, { message });
     } finally {
@@ -227,6 +245,48 @@ export default function HelpCenter() {
       <Row gutter={[20, 20]}>
         {/* Left Column: FAQ List & Manager */}
         <Col xs={24} xl={16}>
+          <Card
+            size="small"
+            style={{
+              marginBottom: 16,
+              background: helpCenterEnabled && faqs.length > 0 ? '#f0fdf4' : '#f8fafc',
+              borderColor: helpCenterEnabled && faqs.length > 0 ? '#bbf7d0' : '#e2e8f0',
+            }}
+          >
+            <Flex justify="space-between" align="center" wrap gap={12}>
+              <Space direction="vertical" size={2}>
+                <Space align="center" size={8}>
+                  <Typography.Text strong style={{ fontSize: 13.5 }}>
+                    {helpCenterEnabled && faqs.length > 0
+                      ? 'Home Screen & FAQs Active'
+                      : 'Messages-Only Mode (No Home Tab)'}
+                  </Typography.Text>
+                  <Tag color={helpCenterEnabled && faqs.length > 0 ? 'success' : 'default'} bordered={false}>
+                    {helpCenterEnabled && faqs.length > 0 ? 'Home + Messages' : 'Only Messages'}
+                  </Tag>
+                </Space>
+                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  {helpCenterEnabled && faqs.length > 0
+                    ? 'Visitors see the Home screen with quick FAQ cards and 2 bottom navigation tabs (Home & Messages).'
+                    : 'Home screen and tabs are hidden. Visitors go straight into live chat messaging.'}
+                </Typography.Text>
+              </Space>
+              {can('ADMIN') && (
+                <Space align="center" size={8}>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: '#475569' }}>Show Home in Widget:</span>
+                  <Switch
+                    checked={helpCenterEnabled}
+                    loading={saving}
+                    onChange={(checked) => {
+                      setHelpCenterEnabled(checked);
+                      saveList(faqs, checked);
+                    }}
+                  />
+                </Space>
+              )}
+            </Flex>
+          </Card>
+
           <Card>
             {/* Search and Category Filter */}
             <Flex justify="space-between" align="center" wrap gap={12} style={{ marginBottom: 16 }}>

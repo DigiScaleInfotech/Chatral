@@ -38,50 +38,8 @@ export const DEFAULT_WIDGET_CONFIG = {
   },
   offlineBehavior: 'form', // form | hide
   sound: true,
-  faqs: [
-    {
-      id: 'faq_install',
-      question: 'How do I install Chatral on my website?',
-      answer: 'Installing Chatral takes less than 2 minutes! Just copy the one-line snippet from your Admin Dashboard and paste it into your website’s <head> tag. It works with WordPress, Shopify, Webflow, Next.js, and any custom site.',
-      category: 'Setup',
-      showOnHome: true,
-    },
-    {
-      id: 'faq_multisite',
-      question: 'Can I use Chatral on multiple websites?',
-      answer: 'Yes! You can add and manage multiple websites or stores from a single Chatral account and monitor all incoming chats from one unified dashboard.',
-      category: 'Accounts',
-      showOnHome: true,
-    },
-    {
-      id: 'faq_customization',
-      question: 'Can I customize the chat widget to match my brand?',
-      answer: 'Absolutely! You can customize theme colors, header mesh gradients, brand logos, agent avatars, welcome greetings, and launcher button styles directly from the Widget Editor.',
-      category: 'Customization',
-      showOnHome: true,
-    },
-    {
-      id: 'faq_triggers',
-      question: 'How do proactive triggers and automated greetings work?',
-      answer: 'You can set up smart triggers based on visitor time on page, scroll depth, exit-intent, or specific page URLs to proactively start conversations and convert visitors into customers.',
-      category: 'Automation',
-      showOnHome: true,
-    },
-    {
-      id: 'faq_security',
-      question: 'Is visitor chat data secure and private?',
-      answer: 'Yes, all chat communications are encrypted with SSL/TLS. We offer automated file retention cleanup (30 days) and visitors can download their full transcripts at any time.',
-      category: 'Security',
-      showOnHome: true,
-    },
-    {
-      id: 'faq_contact_support',
-      question: 'How can I get in touch with the Chatral team?',
-      answer: 'You can chat with our team right here in this widget or reach us via email at support@chatral.com. We typically reply within a few minutes!',
-      category: 'Support',
-      showOnHome: true,
-    },
-  ],
+  helpCenterEnabled: true,
+  faqs: [],
   behavior: {
     fileUpload: true, // visitors may attach files (also enforced by the API)
     agentTyping: true, // show "agent is typing" to visitors
@@ -194,6 +152,7 @@ export const widgetConfigSchema = z.object({
   }),
   offlineBehavior: z.enum(['form', 'hide']),
   sound: z.boolean(),
+  helpCenterEnabled: z.boolean().default(true),
   faqs: z.array(faqItemSchema).max(50).default([]),
   // Optional with defaults so configs saved before these toggles existed stay valid.
   behavior: z.object({

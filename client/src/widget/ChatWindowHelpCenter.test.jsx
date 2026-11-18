@@ -85,4 +85,20 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(screen.queryByText('Recent message')).toBeNull();
     expect(screen.getByText('Send us a message')).toBeTruthy();
   });
+
+  it('renders messages-only mode without Home tab or bottom nav when faqs is empty', () => {
+    const cfgNoFaqs = { ...CONFIG_WITH_FAQS, faqs: [] };
+    render(<ChatWindow {...base} cfg={cfgNoFaqs} messages={[]} />);
+    expect(screen.queryByRole('navigation', { name: 'Chat navigation' })).toBeNull();
+    expect(screen.queryByText('Send us a message')).toBeNull();
+    expect(screen.getByPlaceholderText('Type…')).toBeTruthy();
+  });
+
+  it('renders messages-only mode when helpCenterEnabled is false even if faqs exist', () => {
+    const cfgDisabled = { ...CONFIG_WITH_FAQS, helpCenterEnabled: false };
+    render(<ChatWindow {...base} cfg={cfgDisabled} messages={[]} />);
+    expect(screen.queryByRole('navigation', { name: 'Chat navigation' })).toBeNull();
+    expect(screen.queryByText('Send us a message')).toBeNull();
+    expect(screen.getByPlaceholderText('Type…')).toBeTruthy();
+  });
 });
