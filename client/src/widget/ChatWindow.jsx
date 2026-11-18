@@ -116,13 +116,28 @@ function Form({ fields, submitLabel, onSubmit, extra, className = 'lc-form', ini
 
 /** Header menu (Change name, Email transcript, Sound, Pop out, End chat). Only working options are shown. */
 function Menu({ items, onClose }) {
+  const ref = useRef(null);
   useEffect(() => {
     const onKey = (e) => e.key === 'Escape' && onClose();
+    const onDocClick = (e) => {
+      const path = typeof e.composedPath === 'function' ? e.composedPath() : [];
+      if (ref.current && !ref.current.contains(e.target) && !path.includes(ref.current)) {
+        // Don't close if clicking the toggle button itself (toggle button handles it)
+        const isMenuBtn = path.some((el) => el.getAttribute && el.getAttribute('aria-label') === 'Chat menu');
+        if (!isMenuBtn) {
+          onClose();
+        }
+      }
+    };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onDocClick, true);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onDocClick, true);
+    };
   }, [onClose]);
   return (
-    <div className="lc-menu" role="menu">
+    <div ref={ref} className="lc-menu" role="menu">
       {items.map((it) => (
         <button key={it.key} type="button" role="menuitem" className={`lc-menu-item${it.danger ? ' danger' : ''}`} onClick={() => { onClose(); it.onClick(); }}>
           {it.label}
@@ -234,6 +249,13 @@ export default function ChatWindow({
   const featuredFaqs = homeFaqs;
 
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
+
+  useEffect(() => {
+    if (!open) {
+      setMenuOpen(false);
+      setPanel(null);
+    }
+  }, [open]);
 
   useEffect(() => {
     const el = bodyRef.current;

@@ -151,6 +151,18 @@ describe('header menu', () => {
     expect(screen.getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Change name']);
     expect(screen.queryByLabelText('Minimise chat')).toBeNull();
   });
+
+  it('closes 3-dots menu when chat box is closed and reopened', () => {
+    const { rerender } = render(<ChatWindow cfg={cfg} open={true} onToggle={() => {}} onChangeName={vi.fn()} />);
+    fireEvent.click(screen.getByLabelText('Chat menu'));
+    expect(screen.getByRole('menu')).toBeTruthy();
+
+    // Close the chat box
+    rerender(<ChatWindow cfg={cfg} open={false} onToggle={() => {}} onChangeName={vi.fn()} />);
+    // Reopen the chat box
+    rerender(<ChatWindow cfg={cfg} open={true} onToggle={() => {}} onChangeName={vi.fn()} />);
+    expect(screen.queryByRole('menu')).toBeNull();
+  });
 });
 
 describe('typed pre-chat form', () => {
