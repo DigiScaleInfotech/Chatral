@@ -214,19 +214,23 @@ button, input, textarea, select { font-family: inherit; }
 .lc-recent-name { font-size: 13.5px; font-weight: 600; color: #0f172a; }
 .lc-recent-snippet { font-size: 13px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
 
-/* Unified Help Card (Search + Quick Questions with chevron, Image 2) */
-.lc-help-card { background: #ffffff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 3px 14px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03); border: 1px solid rgba(226, 232, 240, 0.8); display: flex; flex-direction: column; gap: 4px; text-align: left; }
-.lc-help-search-row { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; border-radius: 10px; padding: 10px 14px; gap: 8px; transition: all .15s ease; }
-.lc-help-search-row:focus-within { background: #ffffff; box-shadow: 0 0 0 2px var(--lc-primary); }
-.lc-help-search-input { border: 0; outline: 0; background: transparent; font: inherit; font-size: 13.5px; color: #0f172a; flex: 1; }
+/* Prominent Search for help card */
+.lc-help-search-card { background: #ffffff; border-radius: 16px; padding: 14px 18px; box-shadow: 0 3px 14px -2px rgba(15,23,42,.05), 0 1px 3px rgba(15,23,42,.03); border: 1px solid rgba(226, 232, 240, 0.85); display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: text; transition: all .18s cubic-bezier(0.16, 1, 0.3, 1); }
+.lc-help-search-card:hover { border-color: color-mix(in srgb, var(--lc-primary) 40%, #cbd5e1); box-shadow: 0 6px 20px -3px rgba(15,23,42,.08); }
+.lc-help-search-card:focus-within { border-color: var(--lc-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lc-primary) 15%, transparent), 0 6px 20px -3px rgba(15,23,42,.08); }
+.lc-help-search-input { border: 0; outline: 0; background: transparent; font: inherit; font-size: 15px; font-weight: 500; color: #0f172a; flex: 1; padding: 2px 0; }
 .lc-help-search-input::placeholder { color: #64748b; font-weight: 500; }
 .lc-help-search-icon { color: var(--lc-primary); flex: none; display: grid; place-items: center; }
-.lc-help-list { display: flex; flex-direction: column; margin-top: 4px; }
-.lc-help-item { all: unset; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 2px; font-size: 14px; font-weight: 500; color: #334155; border-top: 1px solid #f1f5f9; transition: all .15s ease; text-align: left; }
-.lc-help-item:first-child { border-top: none; }
-.lc-help-item:hover { color: var(--lc-primary); }
+.lc-help-search-icon svg { width: 20px; height: 20px; }
+
+/* Search Results Card (only shown when actively searching) */
+.lc-search-results-card { background: #ffffff; border-radius: 16px; padding: 12px 16px; box-shadow: 0 4px 18px -2px rgba(15,23,42,.07); border: 1px solid rgba(226, 232, 240, 0.85); display: flex; flex-direction: column; gap: 2px; text-align: left; }
+.lc-search-results-head { font-size: 11.5px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 4px 8px; border-bottom: 1px solid #f1f5f9; }
+.lc-help-item { all: unset; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 4px; font-size: 14px; font-weight: 500; color: #334155; border-top: 1px solid #f1f5f9; transition: all .15s ease; text-align: left; }
+.lc-help-item:first-of-type { border-top: none; }
+.lc-help-item:hover { color: var(--lc-primary); padding-left: 6px; }
 .lc-help-item-arrow { color: var(--lc-primary); flex: none; display: grid; place-items: center; }
-.lc-help-empty { padding: 14px 4px; text-align: center; color: #64748b; font-size: 13px; }
+.lc-help-empty { padding: 16px 4px; text-align: center; color: #64748b; font-size: 13.5px; }
 
 /* Article view */
 .lc-faq-article-view { flex: 1; overflow-y: auto; padding: 18px 18px; background: #ffffff; display: flex; flex-direction: column; gap: 12px; overscroll-behavior: contain; }

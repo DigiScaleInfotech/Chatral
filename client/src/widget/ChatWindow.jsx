@@ -235,10 +235,9 @@ export default function ChatWindow({
     return f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q) || (f.category && f.category.toLowerCase().includes(q));
   });
 
-  // Top 2 featured cards (Image 1: 'Getting Started', 'How to post a product')
-  const featuredFaqs = !q ? faqs.slice(0, 2) : [];
-  // Quick questions list inside the Help Card (Image 2)
-  const quickFaqs = q ? filteredFaqs : (faqs.length > 2 ? faqs.slice(2) : faqs);
+  // Top featured cards (shown when not searching)
+  const homeFaqs = faqs.filter((f) => f.showOnHome !== false);
+  const featuredFaqs = !q ? (homeFaqs.length > 0 ? homeFaqs : faqs).slice(0, 3) : [];
 
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
 
@@ -388,40 +387,57 @@ export default function ChatWindow({
                       </div>
                     ))}
 
-                    {/* Help Card with Search & Quick Articles (Image 2) */}
+                    {/* Prominent Search for help Card (clean, bigger, without questions underneath) */}
                     {faqs.length > 0 && (
-                      <div className="lc-help-card">
-                        <div className="lc-help-search-row">
-                          <input
-                            type="search"
-                            className="lc-help-search-input"
-                            placeholder="Search for help"
-                            value={helpSearch}
-                            onChange={(e) => setHelpSearch(e.target.value)}
-                            aria-label="Search for help"
-                          />
+                      <div className="lc-help-search-card">
+                        <input
+                          type="search"
+                          className="lc-help-search-input"
+                          placeholder="Search for help"
+                          value={helpSearch}
+                          onChange={(e) => setHelpSearch(e.target.value)}
+                          aria-label="Search for help"
+                        />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          {helpSearch && (
+                            <button
+                              type="button"
+                              onClick={() => setHelpSearch('')}
+                              aria-label="Clear search"
+                              style={{ all: 'unset', cursor: 'pointer', color: '#94a3b8', display: 'grid', placeItems: 'center', width: 20, height: 20 }}
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                            </button>
+                          )}
                           <div className="lc-help-search-icon">
                             {Icon.search}
                           </div>
                         </div>
-                        <div className="lc-help-list">
-                          {quickFaqs.map((faq) => (
-                            <button
-                              key={faq.id}
-                              type="button"
-                              className="lc-help-item"
-                              onClick={() => setSelectedFaq(faq)}
-                            >
-                              <span>{faq.question}</span>
-                              <span className="lc-help-item-arrow">{Icon.chevronRight}</span>
-                            </button>
-                          ))}
-                          {quickFaqs.length === 0 && (
-                            <div className="lc-help-empty">
-                              No answers found for "{helpSearch}". Talk to us directly!
-                            </div>
-                          )}
+                      </div>
+                    )}
+
+                    {/* Search Results (only shown when actively searching) */}
+                    {q && (
+                      <div className="lc-search-results-card">
+                        <div className="lc-search-results-head">
+                          Search Results ({filteredFaqs.length})
                         </div>
+                        {filteredFaqs.map((faq) => (
+                          <button
+                            key={faq.id}
+                            type="button"
+                            className="lc-help-item"
+                            onClick={() => setSelectedFaq(faq)}
+                          >
+                            <span>{faq.question}</span>
+                            <span className="lc-help-item-arrow">{Icon.chevronRight}</span>
+                          </button>
+                        ))}
+                        {filteredFaqs.length === 0 && (
+                          <div className="lc-help-empty">
+                            No answers found for "{helpSearch}". Feel free to chat with us directly!
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
