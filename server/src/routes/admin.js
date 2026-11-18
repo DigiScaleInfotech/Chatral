@@ -443,26 +443,42 @@ r.delete('/stores/:storeId/widget/versions', requireStore('ADMIN'), asyncRoute(a
 // ---------- Help Center / FAQs ----------
 
 r.get('/stores/:storeId/faqs', requireStore('AGENT'), asyncRoute(async (req, res) => {
-  const store = await prisma.store.findUnique({ where: { id: req.params.storeId } });
+  const storeId = req.params.storeId;
+  const store = await prisma.store.findUnique({ where: { id: storeId } });
   if (!store) throw httpError(404, 'Store not found');
-  const cfg = await getPublishedConfig(store);
-  const faqs = Array.isArray(cfg?.faqs) ? cfg.faqs : [];
+  const [draft, published] = await Promise.all([
+    prisma.widgetConfig.findUnique({ where: { storeId_version: { storeId, version: 0 } } }),
+    getPublishedConfig(store),
+  ]);
+  const activeCfg = draft ? { ...DEFAULT_WIDGET_CONFIG, ...draft.config } : published;
+  const draftFaqs = Array.isArray(activeCfg?.faqs) ? activeCfg.faqs : [];
+  const pubFaqs = Array.isArray(published?.faqs) ? published.faqs : [];
+  const draftEnabled = activeCfg?.helpCenterEnabled !== false;
+  const pubEnabled = published?.helpCenterEnabled !== false;
+
   res.json({
-    faqs,
-    helpCenterEnabled: cfg?.helpCenterEnabled !== false,
+    faqs: draftFaqs,
+    helpCenterEnabled: draftEnabled,
+    publishedFaqs: pubFaqs,
+    publishedHelpCenterEnabled: pubEnabled,
+    hasUnpublished: JSON.stringify(draftFaqs) !== JSON.stringify(pubFaqs) || draftEnabled !== pubEnabled,
   });
 }));
 
 r.put('/stores/:storeId/faqs', requireStore('ADMIN'), asyncRoute(async (req, res) => {
   let faqs;
   let helpCenterEnabled;
+  let shouldPublish = false;
+
   if (Array.isArray(req.body)) {
     faqs = z.array(faqItemSchema).max(50).parse(req.body);
+    shouldPublish = true;
   } else if (req.body && typeof req.body === 'object') {
     faqs = z.array(faqItemSchema).max(50).parse(req.body.faqs || []);
     if (typeof req.body.helpCenterEnabled === 'boolean') {
       helpCenterEnabled = req.body.helpCenterEnabled;
     }
+    shouldPublish = req.body.publish === true;
   } else {
     throw httpError(400, 'Invalid request body');
   }
@@ -470,29 +486,43 @@ r.put('/stores/:storeId/faqs', requireStore('ADMIN'), asyncRoute(async (req, res
   const storeId = req.params.storeId;
   const store = await prisma.store.findUnique({ where: { id: storeId } });
   if (!store) throw httpError(404, 'Store not found');
-  const current = await getPublishedConfig(store);
+
+  const draftRow = await prisma.widgetConfig.findUnique({ where: { storeId_version: { storeId, version: 0 } } });
+  const current = draftRow ? { ...DEFAULT_WIDGET_CONFIG, ...draftRow.config } : await getPublishedConfig(store);
   const updatedConfig = {
     ...current,
     faqs,
     ...(helpCenterEnabled !== undefined ? { helpCenterEnabled } : {}),
   };
 
+  // Always update DRAFT (so changes stay saved in admin panel)
   await prisma.widgetConfig.upsert({
     where: { storeId_version: { storeId, version: 0 } },
     create: { storeId, version: 0, status: 'DRAFT', config: updatedConfig, createdById: req.user.id },
     update: { config: updatedConfig, createdById: req.user.id },
   });
 
-  const last = await prisma.widgetConfig.findFirst({ where: { storeId }, orderBy: { version: 'desc' } });
-  const v = (last?.version || 0) + 1;
-  await prisma.widgetConfig.create({
-    data: { storeId, version: v, status: 'PUBLISHED', config: updatedConfig, note: 'Updated FAQs', createdById: req.user.id },
-  });
-  await prisma.store.update({ where: { id: storeId }, data: { publishedVersion: v } });
+  // ONLY publish live if shouldPublish is true!
+  let publishedVersion = store.publishedVersion;
+  if (shouldPublish) {
+    const last = await prisma.widgetConfig.findFirst({ where: { storeId }, orderBy: { version: 'desc' } });
+    const v = (last?.version || 0) + 1;
+    await prisma.widgetConfig.create({
+      data: { storeId, version: v, status: 'PUBLISHED', config: updatedConfig, note: 'Updated FAQs', createdById: req.user.id },
+    });
+    await prisma.store.update({ where: { id: storeId }, data: { publishedVersion: v } });
+    publishedVersion = v;
 
-  toStoreVisitors(storeId, 'config_updated', { config: updatedConfig });
-  toAgents(storeId, 'widget_published', { version: v, config: updatedConfig });
-  res.json({ faqs, helpCenterEnabled: updatedConfig.helpCenterEnabled !== false });
+    toStoreVisitors(storeId, 'config_updated', { config: updatedConfig });
+    toAgents(storeId, 'widget_published', { version: v, config: updatedConfig });
+  }
+
+  res.json({
+    faqs,
+    helpCenterEnabled: updatedConfig.helpCenterEnabled !== false,
+    published: shouldPublish,
+    publishedVersion,
+  });
 }));
 
 // ---------- Saved replies ----------

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  App, Button, Card, Col, Empty, Flex, Form, Input, Modal, Popconfirm, Row, Select,
+  App, Button, Card, Col, Empty, Flex, Form, Input, Modal, Popconfirm, Row,
   Space, Switch, Table, Tag, Tooltip, Typography,
 } from 'antd';
 import {
@@ -11,29 +11,17 @@ import {
 import { api, showError } from '../api.js';
 import { useApp } from '../main.jsx';
 
-const CATEGORY_COLORS = {
-  Setup: 'blue',
-  Accounts: 'cyan',
-  Customization: 'geekblue',
-  Automation: 'purple',
-  Security: 'green',
-  Support: 'orange',
-  Orders: 'blue',
-  Shipping: 'purple',
-  Returns: 'orange',
-  Payment: 'green',
-  General: 'default',
-};
-
 export default function HelpCenter() {
   const { storeId, can } = useApp();
   const { message } = App.useApp();
   const [faqs, setFaqs] = useState([]);
+  const [publishedFaqs, setPublishedFaqs] = useState([]);
   const [helpCenterEnabled, setHelpCenterEnabled] = useState(true);
+  const [publishedHelpCenterEnabled, setPublishedHelpCenterEnabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
   const [search, setSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [editing, setEditing] = useState(null);
   const [previewFaq, setPreviewFaq] = useState(null);
   const [form] = Form.useForm();
@@ -44,14 +32,21 @@ export default function HelpCenter() {
       .then((data) => {
         if (Array.isArray(data)) {
           setFaqs(data);
+          setPublishedFaqs(data);
           setHelpCenterEnabled(true);
+          setPublishedHelpCenterEnabled(true);
           if (data.length && !previewFaq) {
             setPreviewFaq(data[0]);
           }
         } else if (data && typeof data === 'object') {
           const list = Array.isArray(data.faqs) ? data.faqs : [];
+          const pubList = Array.isArray(data.publishedFaqs) ? data.publishedFaqs : list;
           setFaqs(list);
-          setHelpCenterEnabled(data.helpCenterEnabled !== false);
+          setPublishedFaqs(pubList);
+          const enabled = data.helpCenterEnabled !== false;
+          const pubEnabled = data.publishedHelpCenterEnabled !== undefined ? data.publishedHelpCenterEnabled !== false : enabled;
+          setHelpCenterEnabled(enabled);
+          setPublishedHelpCenterEnabled(pubEnabled);
           if (list.length && !previewFaq) {
             setPreviewFaq(list[0]);
           }
@@ -65,22 +60,23 @@ export default function HelpCenter() {
     load();
   }, [storeId]);
 
-  const saveList = async (newList, newEnabled = helpCenterEnabled) => {
+  const hasUnpublished =
+    JSON.stringify(faqs) !== JSON.stringify(publishedFaqs) ||
+    helpCenterEnabled !== publishedHelpCenterEnabled;
+
+  const saveDraft = async (newList, newEnabled = helpCenterEnabled) => {
     setSaving(true);
     try {
-      const res = await api(`/stores/${storeId}/faqs`, {
+      await api(`/stores/${storeId}/faqs`, {
         method: 'PUT',
         body: {
           faqs: newList,
           helpCenterEnabled: newEnabled,
+          publish: false,
         },
       });
-      const returnedList = Array.isArray(res?.faqs) ? res.faqs : newList;
-      setFaqs(returnedList);
-      if (typeof res?.helpCenterEnabled === 'boolean') {
-        setHelpCenterEnabled(res.helpCenterEnabled);
-      }
-      message.success('Help Center settings published to live widget!');
+      setFaqs(newList);
+      setHelpCenterEnabled(newEnabled);
     } catch (e) {
       showError(e, { message });
     } finally {
@@ -88,10 +84,30 @@ export default function HelpCenter() {
     }
   };
 
+  const handlePublish = async () => {
+    setPublishing(true);
+    try {
+      await api(`/stores/${storeId}/faqs`, {
+        method: 'PUT',
+        body: {
+          faqs,
+          helpCenterEnabled,
+          publish: true,
+        },
+      });
+      setPublishedFaqs(faqs);
+      setPublishedHelpCenterEnabled(helpCenterEnabled);
+      message.success('Help Center FAQs published to live widget!');
+    } catch (e) {
+      showError(e, { message });
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   const handleOpenAdd = () => {
     form.resetFields();
     form.setFieldsValue({
-      category: 'General',
       showOnHome: true,
     });
     setEditing({ isNew: true });
@@ -105,16 +121,29 @@ export default function HelpCenter() {
         const newId = `faq_${Date.now()}`;
         const newFaq = {
           id: newId,
-          ...values,
+          question: values.question.trim(),
+          answer: values.answer.trim(),
+          category: 'General',
+          showOnHome: values.showOnHome !== false,
         };
         updated = [...(faqs || []), newFaq];
       } else {
         updated = (faqs || []).map((f) =>
-          f.id === editing.id ? { ...f, ...values } : f
+          f.id === editing.id
+            ? {
+                ...f,
+                question: values.question.trim(),
+                answer: values.answer.trim(),
+                showOnHome: values.showOnHome !== false,
+              }
+            : f
         );
       }
-      await saveList(updated);
+      setFaqs(updated);
+      if (!previewFaq && updated.length) setPreviewFaq(updated[0]);
+      await saveDraft(updated, helpCenterEnabled);
       setEditing(null);
+      message.info('FAQ saved to admin panel. Click "Save & Publish" to push live.');
     } catch (e) {
       showError(e, { message, form });
     }
@@ -122,17 +151,19 @@ export default function HelpCenter() {
 
   const handleDelete = async (id) => {
     const updated = (faqs || []).filter((f) => f.id !== id);
-    await saveList(updated);
+    setFaqs(updated);
     if (previewFaq?.id === id) {
       setPreviewFaq(updated[0] || null);
     }
+    await saveDraft(updated, helpCenterEnabled);
   };
 
   const handleToggleHome = async (id, checked) => {
     const updated = (faqs || []).map((f) =>
       f.id === id ? { ...f, showOnHome: checked } : f
     );
-    await saveList(updated);
+    setFaqs(updated);
+    await saveDraft(updated, helpCenterEnabled);
   };
 
   const handleMove = async (index, direction) => {
@@ -142,18 +173,17 @@ export default function HelpCenter() {
     const updated = [...faqs];
     const [moved] = updated.splice(index, 1);
     updated.splice(targetIdx, 0, moved);
-    await saveList(updated);
+    setFaqs(updated);
+    await saveDraft(updated, helpCenterEnabled);
   };
 
-  const categories = ['ALL', ...new Set((faqs || []).map((f) => f.category || 'General'))];
-
   const filtered = (faqs || []).filter((f) => {
-    const matchCat = categoryFilter === 'ALL' || f.category === categoryFilter;
-    const matchQuery =
-      !search ||
-      f.question.toLowerCase().includes(search.toLowerCase()) ||
-      f.answer.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchQuery;
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return (
+      (f.question && f.question.toLowerCase().includes(q)) ||
+      (f.answer && f.answer.toLowerCase().includes(q))
+    );
   });
 
   return (
@@ -177,13 +207,13 @@ export default function HelpCenter() {
             <Button
               type="primary"
               icon={<CloudUploadOutlined />}
-              loading={saving}
-              onClick={() => saveList(faqs || [])}
+              loading={publishing}
+              onClick={handlePublish}
               style={{
                 background: '#10b981',
                 borderColor: '#10b981',
                 fontWeight: 600,
-                boxShadow: '0 2px 6px rgba(16, 185, 129, 0.25)',
+                boxShadow: hasUnpublished ? '0 0 0 2px rgba(16, 185, 129, 0.4)' : undefined,
               }}
             >
               Save & Publish to Live Widget
@@ -237,7 +267,7 @@ export default function HelpCenter() {
                     loading={saving}
                     onChange={(checked) => {
                       setHelpCenterEnabled(checked);
-                      saveList(faqs, checked);
+                      saveDraft(faqs, checked);
                     }}
                   />
                 </Space>
@@ -246,25 +276,21 @@ export default function HelpCenter() {
           </Card>
 
           <Card>
-            {/* Search and Category Filter */}
+            {/* Search Filter */}
             <Flex justify="space-between" align="center" wrap gap={12} style={{ marginBottom: 16 }}>
               <Input
                 placeholder="Search questions or answers…"
                 prefix={<SearchOutlined style={{ color: '#94a3b8' }} />}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{ maxWidth: 280 }}
+                style={{ maxWidth: 320 }}
                 allowClear
               />
-              <Space wrap>
-                <span style={{ fontSize: 12, color: '#64748b' }}>Category:</span>
-                <Select
-                  value={categoryFilter}
-                  onChange={setCategoryFilter}
-                  style={{ width: 140 }}
-                  options={categories.map((c) => ({ label: c, value: c }))}
-                />
-              </Space>
+              {hasUnpublished && (
+                <Tag color="warning" bordered={false} style={{ fontWeight: 500 }}>
+                  ● Unpublished changes in draft
+                </Tag>
+              )}
             </Flex>
 
             <Table
@@ -313,20 +339,6 @@ export default function HelpCenter() {
                         {r.answer}
                       </div>
                     </div>
-                  ),
-                },
-                {
-                  title: 'CATEGORY',
-                  width: 120,
-                  dataIndex: 'category',
-                  render: (cat) => (
-                    <Tag
-                      color={CATEGORY_COLORS[cat] || 'default'}
-                      bordered={false}
-                      style={{ fontWeight: 600 }}
-                    >
-                      {cat || 'General'}
-                    </Tag>
                   ),
                 },
                 {
@@ -411,26 +423,16 @@ export default function HelpCenter() {
               ]}
             />
 
-            {can('ADMIN') && (
-              <Flex justify="space-between" align="center" style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #f1f5f9' }}>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  {(faqs || []).length} total FAQs • {(faqs || []).filter((f) => f?.showOnHome).length} displayed on Home greeting
+            <Flex justify="space-between" align="center" style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #f1f5f9' }}>
+              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                {(faqs || []).length} total FAQs • {(faqs || []).filter((f) => f?.showOnHome !== false).length} displayed on Home greeting
+              </Typography.Text>
+              {hasUnpublished && (
+                <Typography.Text type="warning" style={{ fontSize: 12, fontWeight: 500 }}>
+                  Draft saved in admin. Not published to widget yet.
                 </Typography.Text>
-                <Button
-                  type="primary"
-                  icon={<CloudUploadOutlined />}
-                  loading={saving}
-                  onClick={() => saveList(faqs || [])}
-                  style={{
-                    background: '#10b981',
-                    borderColor: '#10b981',
-                    fontWeight: 600,
-                  }}
-                >
-                  Save & Publish to Live Widget
-                </Button>
-              </Flex>
-            )}
+              )}
+            </Flex>
           </Card>
         </Col>
 
@@ -472,10 +474,7 @@ export default function HelpCenter() {
               <div style={{ padding: '14px 14px 18px', background: '#ffffff', minHeight: 280 }}>
                 {previewFaq ? (
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                      <Tag color={CATEGORY_COLORS[previewFaq.category] || 'default'} bordered={false}>
-                        {previewFaq.category || 'General'}
-                      </Tag>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: 10 }}>
                       <span style={{ fontSize: 11, color: '#94a3b8' }}>Instant Answer</span>
                     </div>
 
@@ -530,7 +529,7 @@ export default function HelpCenter() {
       <Modal
         open={!!editing}
         title={editing?.isNew ? 'Create New FAQ / Article' : 'Edit FAQ Article'}
-        okText={editing?.isNew ? 'Publish FAQ' : 'Save Changes'}
+        okText={editing?.isNew ? 'Save FAQ' : 'Save Changes'}
         confirmLoading={saving}
         onOk={handleSaveModal}
         onCancel={() => setEditing(null)}
@@ -547,35 +546,14 @@ export default function HelpCenter() {
             <Input maxLength={200} placeholder="e.g. How can I get started?" />
           </Form.Item>
 
-          <Row gutter={12}>
-            <Col span={14}>
-              <Form.Item
-                name="category"
-                label="Category"
-                rules={[{ required: true, message: 'Select or type category' }]}
-              >
-                <Select
-                  options={[
-                    { label: 'Orders', value: 'Orders' },
-                    { label: 'Shipping', value: 'Shipping' },
-                    { label: 'Returns', value: 'Returns' },
-                    { label: 'Payment', value: 'Payment' },
-                    { label: 'Support', value: 'Support' },
-                    { label: 'General', value: 'General' },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={10}>
-              <Form.Item
-                name="showOnHome"
-                label="Show on Home"
-                valuePropName="checked"
-              >
-                <Switch checkedChildren="Yes" unCheckedChildren="No" />
-              </Form.Item>
-            </Col>
-          </Row>
+          <Form.Item
+            name="showOnHome"
+            label="Show on Home Screen"
+            valuePropName="checked"
+            extra="When enabled, this FAQ appears as a quick card on the widget's home greeting."
+          >
+            <Switch checkedChildren="Yes" unCheckedChildren="No" />
+          </Form.Item>
 
           <Form.Item
             name="answer"
