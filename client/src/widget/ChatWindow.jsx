@@ -310,6 +310,23 @@ export default function ChatWindow({
     if (now - typingRef.current > 2000) { typingRef.current = now; onTyping?.(true, v); }
   }
 
+  function handleSendMessage() {
+    // If there is an existing active (not resolved/ended) chat, resume it instead of creating a new one
+    const activeChat = (chats || []).find((c) => c.status !== 'RESOLVED' && !c.ended);
+    if (activeChat) {
+      setSelectedChat(null);
+      onSelectChat?.(activeChat);
+      setInConversation(true);
+    } else if (!ended && messages.length > 0) {
+      setSelectedChat(null);
+      setInConversation(true);
+    } else {
+      setSelectedChat(null);
+      onStartNew?.();
+      setInConversation(true);
+    }
+  }
+
   const displayMessages = selectedChat ? (selectedChat.messages || []) : messages;
   const lastBotIdx = displayMessages.length && displayMessages[displayMessages.length - 1].senderType === 'BOT' ? displayMessages.length - 1 : -1;
   const lastSeenVisitorSeq = [...displayMessages].reverse().find((x) => x.senderType === 'VISITOR' && x.seq && x.seq <= agentReadSeq)?.seq;
@@ -369,7 +386,7 @@ export default function ChatWindow({
                         className="lc-btn"
                         onClick={() => {
                           setSelectedFaq(null);
-                          setInConversation(true);
+                          handleSendMessage();
                           setActiveTab('messages');
                         }}
                       >
@@ -406,8 +423,7 @@ export default function ChatWindow({
                     <div
                       className="lc-send-card"
                       onClick={() => {
-                        if (ended) onStartNew?.();
-                        setInConversation(true);
+                        handleSendMessage();
                         setActiveTab('messages');
                       }}
                     >
@@ -471,13 +487,21 @@ export default function ChatWindow({
                             role="button"
                             tabIndex={0}
                             onClick={() => {
-                              setSelectedChat(chat);
+                              if (chat.status === 'RESOLVED' || chat.ended) {
+                                setSelectedChat(chat);
+                              } else {
+                                setSelectedChat(null);
+                              }
                               onSelectChat?.(chat);
                               setInConversation(true);
                             }}
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') {
-                                setSelectedChat(chat);
+                                if (chat.status === 'RESOLVED' || chat.ended) {
+                                  setSelectedChat(chat);
+                                } else {
+                                  setSelectedChat(null);
+                                }
                                 onSelectChat?.(chat);
                                 setInConversation(true);
                               }
@@ -510,11 +534,7 @@ export default function ChatWindow({
                       <button
                         type="button"
                         className="lc-btn-send-message"
-                        onClick={() => {
-                          setSelectedChat(null);
-                          onStartNew?.();
-                          setInConversation(true);
-                        }}
+                        onClick={handleSendMessage}
                       >
                         <span>Send us a message</span>
                         {Icon.send}

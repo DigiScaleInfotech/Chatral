@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import ChatWindow from './ChatWindow.jsx';
 
@@ -222,5 +222,56 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(screen.queryByRole('navigation', { name: 'Chat navigation' })).toBeNull();
     expect(screen.queryByText('Send us a message')).toBeNull();
     expect(screen.getByPlaceholderText('Type…')).toBeTruthy();
+  });
+
+  it('resumes existing active chat when clicking Send us a message', () => {
+    const onSelectChat = vi.fn();
+    const onStartNew = vi.fn();
+    const mockChats = [
+      { id: 'c-active', status: 'OPEN', messages: [{ id: 'm1', body: 'Active query', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+    ];
+    render(
+      <ChatWindow
+        {...base}
+        messages={[]}
+        chats={mockChats}
+        onSelectChat={onSelectChat}
+        onStartNew={onStartNew}
+      />
+    );
+    // Switch to Messages tab
+    fireEvent.click(screen.getByRole('button', { name: 'Messages' }));
+
+    // Click Send us a message
+    fireEvent.click(screen.getByText('Send us a message'));
+
+    // Should resume active chat and NOT call onStartNew
+    expect(onSelectChat).toHaveBeenCalledWith(mockChats[0]);
+    expect(onStartNew).not.toHaveBeenCalled();
+  });
+
+  it('starts a new chat when clicking Send us a message if all chats are ended', () => {
+    const onSelectChat = vi.fn();
+    const onStartNew = vi.fn();
+    const mockChats = [
+      { id: 'c-ended', status: 'RESOLVED', messages: [{ id: 'm1', body: 'Ended query', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+    ];
+    render(
+      <ChatWindow
+        {...base}
+        messages={[]}
+        chats={mockChats}
+        onSelectChat={onSelectChat}
+        onStartNew={onStartNew}
+      />
+    );
+    // Switch to Messages tab
+    fireEvent.click(screen.getByRole('button', { name: 'Messages' }));
+
+    // Click Send us a message
+    fireEvent.click(screen.getByText('Send us a message'));
+
+    // Should call onStartNew since no active chat exists
+    expect(onStartNew).toHaveBeenCalled();
   });
 });
