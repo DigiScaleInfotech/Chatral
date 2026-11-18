@@ -13,38 +13,48 @@ import { useApp } from '../main.jsx';
 
 const TEMPLATES = [
   {
-    question: 'How do I track my order?',
-    category: 'Orders',
-    answer: 'Once your order has been dispatched, you will receive an email and SMS with the tracking link and courier details. You can also contact our support team here with your Order ID for real-time updates.',
+    question: 'How do I install Chatral on my website?',
+    category: 'Setup',
+    answer: 'Installing Chatral takes less than 2 minutes! Just copy the one-line snippet from your Admin Dashboard and paste it into your website’s <head> tag. It works with WordPress, Shopify, Webflow, Next.js, and any custom site.',
   },
   {
-    question: 'What are your delivery times & charges?',
-    category: 'Shipping',
-    answer: 'Standard delivery takes 3 to 5 business days across major cities. We offer Free Shipping on orders above ₹999. Express delivery options are also available at checkout.',
+    question: 'Can I use Chatral on multiple websites?',
+    category: 'Accounts',
+    answer: 'Yes! You can add and manage multiple websites or stores from a single Chatral account and monitor all incoming chats from one unified dashboard.',
   },
   {
-    question: 'What is your return & refund policy?',
-    category: 'Returns',
-    answer: 'We offer a 7-day easy return policy for unused items in original packaging. Once we receive and inspect the returned item, your refund is credited within 3-5 business days.',
+    question: 'Can I customize the chat widget to match my brand?',
+    category: 'Customization',
+    answer: 'Absolutely! You can customize theme colors, header mesh gradients, brand logos, agent avatars, welcome greetings, and launcher button styles directly from the Widget Editor.',
   },
   {
-    question: 'Do you accept Cash on Delivery (COD)?',
-    category: 'Payment',
-    answer: 'Yes! Cash on Delivery is available on most pincodes. We also accept UPI (GPay, PhonePe, Paytm), Debit/Credit Cards, and Net Banking.',
+    question: 'How do proactive triggers and automated greetings work?',
+    category: 'Automation',
+    answer: 'You can set up smart triggers based on visitor time on page, scroll depth, exit-intent, or specific page URLs to proactively start conversations and convert visitors into customers.',
   },
   {
-    question: 'How can I contact customer support?',
+    question: 'Is visitor chat data secure and private?',
+    category: 'Security',
+    answer: 'Yes, all chat communications are encrypted with SSL/TLS. We offer automated file retention cleanup (30 days) and visitors can download their full transcripts at any time.',
+  },
+  {
+    question: 'How can I get in touch with the Chatral team?',
     category: 'Support',
-    answer: 'Our customer support team is available Monday to Saturday, 9:00 AM to 7:00 PM. You can chat with us live using this widget or email us at support@chatral.com.',
+    answer: 'You can chat with our team right here in this widget or reach us via email at support@chatral.com. We typically reply within a few minutes!',
   },
 ];
 
 const CATEGORY_COLORS = {
+  Setup: 'blue',
+  Accounts: 'cyan',
+  Customization: 'geekblue',
+  Automation: 'purple',
+  Security: 'green',
+  Support: 'orange',
   Orders: 'blue',
   Shipping: 'purple',
   Returns: 'orange',
   Payment: 'green',
-  Support: 'cyan',
   General: 'default',
 };
 
@@ -534,7 +544,7 @@ export default function HelpCenter() {
             label="Question / Title"
             rules={[{ required: true, message: 'Please enter the customer question' }]}
           >
-            <Input maxLength={200} placeholder="e.g. How do I track my order?" />
+            <Input maxLength={200} placeholder="e.g. How do I install Chatral on my website?" />
           </Form.Item>
 
           <Row gutter={12}>
