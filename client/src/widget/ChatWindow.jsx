@@ -344,23 +344,6 @@ export default function ChatWindow({
                   </div>
 
                   <div className="lc-home-scroll">
-                    {/* Recent message card */}
-                    {lastMsg && (
-                      <div className="lc-recent-card" onClick={() => setActiveTab('messages')}>
-                        <div className="lc-recent-header">
-                          <span className="lc-recent-label">Recent message</span>
-                          <span className="lc-recent-time">{time(lastMsg.createdAt || Date.now())}</span>
-                        </div>
-                        <div className="lc-recent-body">
-                          <Avatar src={lastMsg.senderType === 'VISITOR' ? '' : (lastMsg.senderAvatar || cfg.avatarUrl)} name={lastMsg.senderType === 'VISITOR' ? (visitorName || 'You') : (lastMsg.senderName || cfg.agentName)} />
-                          <div className="lc-recent-content">
-                            <div className="lc-recent-name">{lastMsg.senderType === 'VISITOR' ? 'You' : (lastMsg.senderName || cfg.agentName)}</div>
-                            <div className="lc-recent-snippet">{lastMsg.body || 'Attachment'}</div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
                     {/* Send us a message card */}
                     <div className="lc-send-card" onClick={() => setActiveTab('messages')}>
                       <div className="lc-send-icon-wrap">

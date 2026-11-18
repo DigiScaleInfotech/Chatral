@@ -76,13 +76,13 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(screen.getByText('What is your return & exchange policy?')).toBeTruthy();
   });
 
-  it('shows Recent message card on Home screen when conversation has messages', () => {
+  it('does not show Recent message card on Home screen even when conversation has messages', () => {
     const messages = [
       { id: 'm1', seq: 1, senderType: 'AGENT', senderName: 'Alex', body: 'Your package has been dispatched!', createdAt: new Date().toISOString() },
     ];
     render(<ChatWindow {...base} messages={messages} />);
     fireEvent.click(screen.getByRole('button', { name: 'Home' }));
-    expect(screen.getByText('Recent message')).toBeTruthy();
-    expect(screen.getByText(/Your package has been dispatched!/)).toBeTruthy();
+    expect(screen.queryByText('Recent message')).toBeNull();
+    expect(screen.getByText('Send us a message')).toBeTruthy();
   });
 });
