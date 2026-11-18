@@ -224,9 +224,21 @@ export default function ChatWindow({
   const hasFaqs = faqs.length > 0;
   const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
   const [selectedFaq, setSelectedFaq] = useState(null);
+  const [helpSearch, setHelpSearch] = useState('');
 
   // If mode switches to prechat or offline, force activeTab to messages so the form is visible
   const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
+
+  const q = helpSearch.trim().toLowerCase();
+  const filteredFaqs = faqs.filter((f) => {
+    if (!q) return true;
+    return f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q) || (f.category && f.category.toLowerCase().includes(q));
+  });
+
+  // Top 2 featured cards (Image 1: 'Getting Started', 'How to post a product')
+  const featuredFaqs = !q ? faqs.slice(0, 2) : [];
+  // Quick questions list inside the Help Card (Image 2)
+  const quickFaqs = q ? filteredFaqs : (faqs.length > 2 ? faqs.slice(2) : faqs);
 
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
 
@@ -320,74 +332,95 @@ export default function ChatWindow({
                 <>
                   <div className="lc-home-hero">
                     <div className="lc-home-hero-top">
-                      {cfg.logoUrl ? (
-                        <img className="logo" src={cfg.logoUrl} alt="" />
-                      ) : cfg.avatarUrl ? (
-                        <Avatar src={cfg.avatarUrl} name={cfg.agentName} />
-                      ) : null}
-                      <button className="lc-icon" onClick={onToggle} aria-label="Close chat" style={{ marginLeft: 'auto' }}>{Icon.close}</button>
+                      <div className="lc-brand-pill">
+                        {cfg.logoUrl ? (
+                          <img src={cfg.logoUrl} alt="" />
+                        ) : (
+                          <span className="lc-brand-initial">{initials(cfg.agentName || 'Chatral')}</span>
+                        )}
+                      </div>
+                      <button className="lc-home-close" onClick={onToggle} aria-label="Close chat">
+                        {Icon.close}
+                      </button>
                     </div>
-                    <div>
-                      <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
-                      <div className="lc-home-sub">{m.title || 'How can we help?'}</div>
-                    </div>
+                    <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
+                    <div className="lc-home-title">{m.title || 'How can we help?'}</div>
                   </div>
 
                   <div className="lc-home-scroll">
-                    {lastMsg && (
-                      <div className="lc-card-recent" onClick={() => setActiveTab('messages')}>
-                        <div className="lc-card-recent-head">
-                          <span>Recent message</span>
-                          <span>{time(lastMsg.createdAt || Date.now())}</span>
+                    {/* Recent message card OR Send us a message card */}
+                    {lastMsg ? (
+                      <div className="lc-recent-card" onClick={() => setActiveTab('messages')}>
+                        <div className="lc-recent-header">
+                          <span className="lc-recent-label">Recent message</span>
+                          <span className="lc-recent-time">{time(lastMsg.createdAt || Date.now())}</span>
                         </div>
-                        <div className="lc-card-recent-msg">
+                        <div className="lc-recent-body">
                           <Avatar src={lastMsg.senderType === 'VISITOR' ? '' : (lastMsg.senderAvatar || cfg.avatarUrl)} name={lastMsg.senderType === 'VISITOR' ? (visitorName || 'You') : (lastMsg.senderName || cfg.agentName)} />
-                          <div className="lc-card-recent-text">
-                            <strong>{lastMsg.senderType === 'VISITOR' ? 'You: ' : `${lastMsg.senderName || cfg.agentName}: `}</strong>
-                            {lastMsg.body || 'Attachment'}
+                          <div className="lc-recent-content">
+                            <div className="lc-recent-name">{lastMsg.senderType === 'VISITOR' ? 'You' : (lastMsg.senderName || cfg.agentName)}</div>
+                            <div className="lc-recent-snippet">{lastMsg.body || 'Attachment'}</div>
                           </div>
-                          <div className="lc-card-arrow">{Icon.chevronRight}</div>
                         </div>
+                      </div>
+                    ) : (
+                      <div className="lc-send-card" onClick={() => setActiveTab('messages')}>
+                        <div className="lc-send-icon-wrap">
+                          {Icon.messages}
+                        </div>
+                        <div className="lc-send-text">
+                          <div className="lc-send-title">Send us a message</div>
+                          <div className="lc-send-desc">{m.subtitle || 'We typically reply in a few minutes'}</div>
+                        </div>
+                        <div className="lc-send-arrow">{Icon.chevronRight}</div>
                       </div>
                     )}
 
-                    {/* Send us a message card */}
-                    <div className="lc-card-send" onClick={() => setActiveTab('messages')}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                        <div className="lc-card-send-icon">
-                          {Icon.messages}
-                        </div>
-                        <div style={{ minWidth: 0 }}>
-                          <div className="lc-card-title">Send us a message</div>
-                          <div className="lc-card-desc">{m.subtitle || 'We typically reply in a few minutes'}</div>
-                        </div>
+                    {/* Featured Article Cards (Image 1: Getting Started, How to post a product) */}
+                    {featuredFaqs.map((faq) => (
+                      <div
+                        key={faq.id}
+                        className="lc-card-premium"
+                        onClick={() => setSelectedFaq(faq)}
+                      >
+                        <div className="lc-card-premium-title">{faq.question}</div>
+                        <div className="lc-card-premium-desc">{faq.answer}</div>
                       </div>
-                      <div className="lc-card-arrow" style={{ color: 'var(--lc-primary)' }}>{Icon.chevronRight}</div>
-                    </div>
+                    ))}
 
-                    {/* FAQ list */}
+                    {/* Help Card with Search & Quick Articles (Image 2) */}
                     {faqs.length > 0 && (
-                      <div style={{ marginTop: 2 }}>
-                        <div style={{ fontSize: '0.74em', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6, paddingLeft: 2 }}>
-                          Frequently Asked Questions
+                      <div className="lc-help-card">
+                        <div className="lc-help-search-row">
+                          <input
+                            type="search"
+                            className="lc-help-search-input"
+                            placeholder="Search for help"
+                            value={helpSearch}
+                            onChange={(e) => setHelpSearch(e.target.value)}
+                            aria-label="Search for help"
+                          />
+                          <div className="lc-help-search-icon">
+                            {Icon.search}
+                          </div>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                          {faqs.map((faq) => (
-                            <div
+                        <div className="lc-help-list">
+                          {quickFaqs.map((faq) => (
+                            <button
                               key={faq.id}
-                              className="lc-card"
+                              type="button"
+                              className="lc-help-item"
                               onClick={() => setSelectedFaq(faq)}
                             >
-                              <div className="lc-card-main">
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-                                  {faq.category && <span style={{ fontSize: '0.68em', padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#475569', fontWeight: 600 }}>{faq.category}</span>}
-                                  <span className="lc-card-title" style={{ margin: 0 }}>{faq.question}</span>
-                                </div>
-                                <div className="lc-card-desc">{faq.answer}</div>
-                              </div>
-                              <div className="lc-card-arrow">{Icon.chevronRight}</div>
-                            </div>
+                              <span>{faq.question}</span>
+                              <span className="lc-help-item-arrow">{Icon.chevronRight}</span>
+                            </button>
                           ))}
+                          {quickFaqs.length === 0 && (
+                            <div className="lc-help-empty">
+                              No answers found for "{helpSearch}". Talk to us directly!
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}

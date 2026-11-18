@@ -41,11 +41,10 @@ afterEach(cleanup);
 const base = { cfg: CONFIG_WITH_FAQS, open: true, onToggle: () => {} };
 
 describe('ChatWindow Help Center & FAQ navigation', () => {
-  it('renders streamlined Home screen with greeting, 2 bottom tabs (Home and Messages), and FAQ cards', () => {
+  it('renders streamlined Home screen with greeting, 2 bottom tabs (Home and Messages), brand pill, and featured FAQ cards', () => {
     render(<ChatWindow {...base} messages={[]} visitorName="Hiren" />);
     expect(screen.getByText(/Hi Hiren 👋/)).toBeTruthy();
     expect(screen.getByText('Send us a message')).toBeTruthy();
-    expect(screen.getByText('Frequently Asked Questions')).toBeTruthy();
     expect(screen.getByText('How do I track my order status?')).toBeTruthy();
     expect(screen.getByText('What is your return & exchange policy?')).toBeTruthy();
     expect(screen.getByRole('navigation', { name: 'Chat navigation' })).toBeTruthy();
@@ -70,11 +69,11 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(screen.getByRole('button', { name: 'Send' })).toBeTruthy();
   });
 
-  it('renders clean FAQ cards directly on Home without search box', () => {
+  it('filters questions inside the Help Card using the search input', () => {
     render(<ChatWindow {...base} messages={[]} />);
-    expect(screen.queryByLabelText('Search for help')).toBeNull();
-    expect(screen.getByText('How do I track my order status?')).toBeTruthy();
-    expect(screen.getByText('What is your return & exchange policy?')).toBeTruthy();
+    const search = screen.getByLabelText('Search for help');
+    expect(search).toBeTruthy();
+    fireEvent.change(search, { target: { value: 'COD' } });
     expect(screen.getByText('Do you offer Cash on Delivery (COD)?')).toBeTruthy();
   });
 
