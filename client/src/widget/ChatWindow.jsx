@@ -285,7 +285,7 @@ export default function ChatWindow({
     onEmailTranscript && { key: 'transcript', label: 'Email transcript', onClick: () => setPanel('transcript') },
     onDownloadTranscript && { key: 'download', label: 'Download transcript', onClick: async () => { try { await onDownloadTranscript(); setNotice('Transcript downloaded.'); } catch (e) { setNotice(e.message || 'Could not download the transcript.'); } } },
     onToggleSound && { key: 'sound', label: soundOn ? 'Sound off' : 'Sound on', onClick: () => { onToggleSound(); setNotice(soundOn ? 'Sound is off.' : 'Sound is on.'); } },
-    onEndChat && { key: 'end', label: 'End this chat session', danger: true, onClick: () => setPanel('end') },
+    !ended && onEndChat && { key: 'end', label: 'End this chat session', danger: true, onClick: () => setPanel('end') },
   ].filter(Boolean);
   const done = (msg) => { setPanel(null); setNotice(msg); };
 
@@ -455,7 +455,24 @@ export default function ChatWindow({
                 {mode === 'chat' && panel === 'end' && (
                   <div className="lc-form">
                     <div className="lc-note">End this chat? You can start a new chat at any time.</div>
-                    <button type="button" className="lc-btn" onClick={async () => { try { await onEndChat(); done('Chat ended. Thanks for reaching out!'); } catch (e) { setNotice(e.message || 'Could not end the chat.'); setPanel(null); } }}>End chat</button>
+                    <button
+                      type="button"
+                      className="lc-btn"
+                      onClick={() => {
+                        setPanel(null);
+                        setNotice('Chat ended. Thanks for reaching out!');
+                        try {
+                          const p = onEndChat?.();
+                          if (p && typeof p.catch === 'function') {
+                            p.catch((e) => setNotice(e.message || 'Could not end the chat.'));
+                          }
+                        } catch (e) {
+                          setNotice(e.message || 'Could not end the chat.');
+                        }
+                      }}
+                    >
+                      End chat
+                    </button>
                     <button type="button" className="lc-link" onClick={() => setPanel(null)}>Cancel</button>
                   </div>
                 )}

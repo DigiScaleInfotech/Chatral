@@ -775,6 +775,8 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       soundOn={soundOn}
       onToggleSound={cfg.sound ? () => setSoundOn((v) => { store.set(`lc_sound_${storeKey}`, v ? 'off' : 'on'); return !v; }) : null}
       onEndChat={conv ? async () => {
+        setConv((c) => (c ? { ...c, status: 'RESOLVED' } : c));
+        setEnded(true);
         if (convRef.current?.id && convRef.current?.status !== 'RESOLVED') {
           try {
             await call(`/conversations/${convRef.current.id}/end`, { method: 'POST' });
@@ -782,8 +784,6 @@ export default function ChatApp({ api, storeKey, popout = false }) {
             console.warn('[livechat] Could not end chat:', e);
           }
         }
-        setConv((c) => (c ? { ...c, status: 'RESOLVED' } : c));
-        setEnded(true);
       } : null}
       ended={ended} onStartNew={startNewChat}
       canUpload={!!conv && cfg.behavior?.fileUpload !== false}
