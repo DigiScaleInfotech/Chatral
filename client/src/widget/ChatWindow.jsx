@@ -337,11 +337,15 @@ export default function ChatWindow({
                     </div>
                     <div className="lc-home-greeting">Hi {visitorName ? visitorName : 'there'} 👋</div>
                     <div className="lc-home-title">{m.title || 'How can we help?'}</div>
+                    <div className="lc-online-badge">
+                      <span className="lc-online-dot" aria-hidden="true"></span>
+                      <span>{m.subtitle || 'Typically replies in a few minutes'}</span>
+                    </div>
                   </div>
 
                   <div className="lc-home-scroll">
-                    {/* Recent message card OR Send us a message card */}
-                    {lastMsg ? (
+                    {/* Recent message card */}
+                    {lastMsg && (
                       <div className="lc-recent-card" onClick={() => setActiveTab('messages')}>
                         <div className="lc-recent-header">
                           <span className="lc-recent-label">Recent message</span>
@@ -355,28 +359,32 @@ export default function ChatWindow({
                           </div>
                         </div>
                       </div>
-                    ) : (
-                      <div className="lc-send-card" onClick={() => setActiveTab('messages')}>
-                        <div className="lc-send-icon-wrap">
-                          {Icon.messages}
-                        </div>
-                        <div className="lc-send-text">
-                          <div className="lc-send-title">Send us a message</div>
-                          <div className="lc-send-desc">{m.subtitle || 'We typically reply in a few minutes'}</div>
-                        </div>
-                        <div className="lc-send-arrow">{Icon.chevronRight}</div>
-                      </div>
                     )}
 
-                    {/* Featured Article Cards */}
+                    {/* Send us a message card */}
+                    <div className="lc-send-card" onClick={() => setActiveTab('messages')}>
+                      <div className="lc-send-icon-wrap">
+                        {Icon.messages}
+                      </div>
+                      <div className="lc-send-text">
+                        <div className="lc-send-title">Send us a message</div>
+                        <div className="lc-send-desc">{m.subtitle || 'We typically reply in a few minutes'}</div>
+                      </div>
+                      <div className="lc-send-arrow">{Icon.chevronRight}</div>
+                    </div>
+
+                    {/* Featured Article Cards with Chevron */}
                     {featuredFaqs.map((faq) => (
                       <div
                         key={faq.id}
                         className="lc-card-premium"
                         onClick={() => setSelectedFaq(faq)}
                       >
-                        <div className="lc-card-premium-title">{faq.question}</div>
-                        <div className="lc-card-premium-desc">{faq.answer}</div>
+                        <div className="lc-card-premium-main">
+                          <div className="lc-card-premium-title">{faq.question}</div>
+                          <div className="lc-card-premium-desc">{faq.answer}</div>
+                        </div>
+                        <div className="lc-card-premium-arrow">{Icon.chevronRight}</div>
                       </div>
                     ))}
                   </div>
