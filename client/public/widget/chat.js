@@ -87,16 +87,16 @@ button, input, textarea, select { font-family: inherit; }
   }
 }
 .lc-root.inline .lc-panel { max-height: none; margin: 0; }
-.lc-head { background: #ffffff; color: #0f172a; padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex: none; position: relative; border-bottom: 1px solid #eef2f6; }
+.lc-head { background: radial-gradient(135% 125% at 0% 0%, color-mix(in srgb, var(--lc-primary) 54%, #ffffff) 0%, color-mix(in srgb, var(--lc-primary) 26%, #ffffff) 52%, color-mix(in srgb, var(--lc-primary) 10%, #ffffff) 100%); color: #0f172a; padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex: none; position: relative; border-bottom: 1px solid color-mix(in srgb, var(--lc-primary) 18%, #e2e8f0); }
 .lc-head img.logo { height: 28px; max-width: 90px; object-fit: contain; }
-.lc-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: none; background: #f1f5f9; color: var(--lc-primary); display: grid; place-items: center; font-weight: 700; font-size: 14px; border: 1px solid #e2e8f0; overflow: hidden; }
+.lc-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: none; background: #ffffff; color: var(--lc-primary); display: grid; place-items: center; font-weight: 700; font-size: 14px; box-shadow: 0 2px 6px rgba(15,23,42,.08); border: 1px solid rgba(255,255,255,0.8); overflow: hidden; }
 .lc-title { font-weight: 700; font-size: 14px; color: #0f172a; line-height: 1.25; }
-.lc-sub { color: #64748b; font-size: 12px; line-height: 1.25; display: flex; align-items: center; gap: 5px; margin-top: 1px; }
+.lc-sub { color: #475569; font-size: 12px; line-height: 1.25; display: flex; align-items: center; gap: 5px; margin-top: 1px; }
 .lc-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block; }
 .lc-dot.off { background: #94a3b8; }
 .lc-grow { flex: 1; min-width: 0; }
-.lc-icon { background: transparent; border: 0; color: #64748b; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; padding: 0; flex: none; transition: all .15s ease; }
-.lc-icon:hover { background: #f1f5f9; color: #0f172a; }
+.lc-icon { background: transparent; border: 0; color: #475569; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; padding: 0; flex: none; transition: all .15s ease; }
+.lc-icon:hover { background: rgba(255, 255, 255, 0.65); color: #0f172a; }
 .lc-icon svg { width: 16px; height: 16px; }
 .lc-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; overscroll-behavior: contain; }
 .lc-row { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
