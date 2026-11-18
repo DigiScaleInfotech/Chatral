@@ -224,20 +224,13 @@ export default function ChatWindow({
   const hasFaqs = faqs.length > 0;
   const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
   const [selectedFaq, setSelectedFaq] = useState(null);
-  const [helpSearch, setHelpSearch] = useState('');
 
   // If mode switches to prechat or offline, force activeTab to messages so the form is visible
   const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
 
-  const q = helpSearch.trim().toLowerCase();
-  const filteredFaqs = faqs.filter((f) => {
-    if (!q) return true;
-    return f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q) || (f.category && f.category.toLowerCase().includes(q));
-  });
-
-  // Top featured cards (shown when not searching)
+  // Featured cards (shown on Home)
   const homeFaqs = faqs.filter((f) => f.showOnHome !== false);
-  const featuredFaqs = !q ? (homeFaqs.length > 0 ? homeFaqs : faqs).slice(0, 3) : [];
+  const featuredFaqs = homeFaqs.length > 0 ? homeFaqs : faqs;
 
   const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null;
 
@@ -375,7 +368,7 @@ export default function ChatWindow({
                       </div>
                     )}
 
-                    {/* Featured Article Cards (Image 1: Getting Started, How to post a product) */}
+                    {/* Featured Article Cards */}
                     {featuredFaqs.map((faq) => (
                       <div
                         key={faq.id}
@@ -386,60 +379,6 @@ export default function ChatWindow({
                         <div className="lc-card-premium-desc">{faq.answer}</div>
                       </div>
                     ))}
-
-                    {/* Prominent Search for help Card (clean, bigger, without questions underneath) */}
-                    {faqs.length > 0 && (
-                      <div className="lc-help-search-card">
-                        <input
-                          type="search"
-                          className="lc-help-search-input"
-                          placeholder="Search for help"
-                          value={helpSearch}
-                          onChange={(e) => setHelpSearch(e.target.value)}
-                          aria-label="Search for help"
-                        />
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          {helpSearch && (
-                            <button
-                              type="button"
-                              onClick={() => setHelpSearch('')}
-                              aria-label="Clear search"
-                              style={{ all: 'unset', cursor: 'pointer', color: '#94a3b8', display: 'grid', placeItems: 'center', width: 20, height: 20 }}
-                            >
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
-                            </button>
-                          )}
-                          <div className="lc-help-search-icon">
-                            {Icon.search}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Search Results (only shown when actively searching) */}
-                    {q && (
-                      <div className="lc-search-results-card">
-                        <div className="lc-search-results-head">
-                          Search Results ({filteredFaqs.length})
-                        </div>
-                        {filteredFaqs.map((faq) => (
-                          <button
-                            key={faq.id}
-                            type="button"
-                            className="lc-help-item"
-                            onClick={() => setSelectedFaq(faq)}
-                          >
-                            <span>{faq.question}</span>
-                            <span className="lc-help-item-arrow">{Icon.chevronRight}</span>
-                          </button>
-                        ))}
-                        {filteredFaqs.length === 0 && (
-                          <div className="lc-help-empty">
-                            No answers found for "{helpSearch}". Feel free to chat with us directly!
-                          </div>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </>
               )}
