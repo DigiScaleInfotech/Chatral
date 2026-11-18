@@ -145,6 +145,33 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(selected?.id).toBe('c2');
   });
 
+  it('renders past ended chat as strictly read-only without Start a new chat or message box', () => {
+    const mockChats = [
+      { id: 'c1', status: 'RESOLVED', messages: [{ id: 'm1', body: 'Past resolved message', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+    ];
+    render(
+      <ChatWindow
+        {...base}
+        messages={[]}
+        chats={mockChats}
+      />
+    );
+    // Switch to Messages tab
+    fireEvent.click(screen.getByRole('button', { name: 'Messages' }));
+
+    // Click on past ended chat to view it
+    fireEvent.click(screen.getByText(/Past resolved message/));
+
+    // Message must be readable
+    expect(screen.getByText('Past resolved message')).toBeTruthy();
+    // Must NOT show message box
+    expect(screen.queryByLabelText('Message')).toBeNull();
+    // Must NOT show Start a new chat button inside past chat
+    expect(screen.queryByText('Start a new chat')).toBeNull();
+    // Must show read-only status
+    expect(screen.getByText('This chat has ended')).toBeTruthy();
+  });
+
   it('renders greeting message with smooth entrance animation container in new chat', () => {
     const cfgGreeting = {
       ...CONFIG_WITH_FAQS,

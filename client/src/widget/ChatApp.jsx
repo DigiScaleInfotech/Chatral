@@ -292,6 +292,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
   const typingTimer = useRef(null);
   const cfgRef = useRef(null);
   const newChatRef = useRef(false);
+  const activeDraftChatIdRef = useRef(null);
   convRef.current = conv;
   openRef.current = open;
   cfgRef.current = cfg;
@@ -312,14 +313,14 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     setChats((prevChats) => {
       const now = new Date().toISOString();
       const lastM = currentMsgs[currentMsgs.length - 1];
-      const targetId = currentConvId || (prevChats[0]?.id && prevChats[0]?.status !== 'RESOLVED' ? prevChats[0].id : `chat-${Date.now()}`);
+      const targetId = currentConvId || activeDraftChatIdRef.current || `chat-${Date.now()}`;
 
       const existingIdx = prevChats.findIndex((c) => (currentConvId && c.id === currentConvId) || c.id === targetId);
       let nextChats = [];
       if (existingIdx >= 0) {
         const updated = {
           ...prevChats[existingIdx],
-          id: targetId,
+          id: currentConvId || targetId,
           status: currentStatus,
           updatedAt: lastM?.createdAt || now,
           messages: currentMsgs.slice(-50),
@@ -334,7 +335,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
         nextChats = [updated, ...prevChats.filter((_, i) => i !== existingIdx)];
       } else {
         const newEntry = {
-          id: targetId,
+          id: currentConvId || targetId,
           status: currentStatus,
           createdAt: currentMsgs[0]?.createdAt || now,
           updatedAt: lastM?.createdAt || now,
@@ -368,6 +369,7 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     setAgentReadSeq(0);
     setUnread(0);
     newChatRef.current = true;
+    activeDraftChatIdRef.current = `draft-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     try {
       store.set(`lc_conv_${storeKey}`, '');
       store.set(`lc_msgs_${storeKey}`, '');
@@ -380,6 +382,8 @@ export default function ChatApp({ api, storeKey, popout = false }) {
     convRef.current = { id: chat.id, status: chat.status || 'OPEN' };
     const isEnded = chat.status === 'RESOLVED';
     setEnded(isEnded);
+    newChatRef.current = false;
+    activeDraftChatIdRef.current = null;
     const msgs = Array.isArray(chat.messages) ? chat.messages : [];
     setMessages(msgs);
     lastSeq.current = msgs.reduce((max, m) => Math.max(max, m.seq || 0), 0);
@@ -635,10 +639,17 @@ export default function ChatApp({ api, storeKey, popout = false }) {
       newChatRef.current = false;
       outbox.current.delete(clientMsgId);
       if (!convRef.current || convRef.current.id !== r.conversationId) {
+        const prevDraftId = activeDraftChatIdRef.current;
         setConv({ id: r.conversationId, status: r.status });
         convRef.current = { id: r.conversationId, status: r.status };
         try { store.set(`lc_conv_${storeKey}`, r.conversationId); } catch { }
         resumed.current = true;
+        setChats((prev) => {
+          const updated = prev.map((c) => (prevDraftId && c.id === prevDraftId ? { ...c, id: r.conversationId, status: r.status } : c));
+          try { store.set(`lc_chats_${storeKey}`, JSON.stringify(updated.slice(0, 4))); } catch { }
+          return updated;
+        });
+        activeDraftChatIdRef.current = null;
         if (proactiveRef.current) { const pid = proactiveRef.current.executionId; proactiveRef.current = null; setMessages((l) => l.filter((m) => m.proactiveOf !== pid)); syncAfterCreate(r.conversationId); }
         if (proactiveRef.current) { const pid = proactiveRef.current.executionId; proactiveRef.current = null; setMessages((l) => l.filter((m) => m.proactiveOf !== pid)); }
         await syncAfterCreate(r.conversationId);

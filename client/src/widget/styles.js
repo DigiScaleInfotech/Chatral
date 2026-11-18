@@ -270,5 +270,12 @@ button, input, textarea, select { font-family: inherit; }
 @keyframes lcGreetingIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 @keyframes lcBubbleScale { 0% { opacity: 0; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }
 
+/* Read-only footer for past ended chats */
+.lc-past-readonly-foot { padding: 12px 16px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.lc-past-readonly-text { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #64748b; font-weight: 500; }
+.lc-past-readonly-dot { width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block; flex: none; }
+.lc-past-readonly-dl { all: unset; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--lc-primary); padding: 5px 11px; border-radius: 8px; background: color-mix(in srgb, var(--lc-primary) 10%, transparent); transition: all .15s ease; flex: none; }
+.lc-past-readonly-dl:hover { background: color-mix(in srgb, var(--lc-primary) 18%, transparent); }
+
 @media (prefers-reduced-motion: reduce) { .lc-panel, .lc-typing i, .lc-launcher, .lc-greeting-anim, .lc-greeting-anim .lc-bubble { animation: none; transition: none; } }
 `;

@@ -256,6 +256,7 @@ export default function ChatWindow({
   const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
   const [selectedFaq, setSelectedFaq] = useState(null);
   const [inConversation, setInConversation] = useState(!hasFaqs || mode !== 'chat' || (messages.length > 0 && activeTab === 'messages'));
+  const [selectedChat, setSelectedChat] = useState(null);
 
   // If mode switches to prechat or offline, force activeTab to messages so the form is visible
   const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
@@ -277,6 +278,10 @@ export default function ChatWindow({
             lastMsg,
           }]
         : []);
+
+  const isPastEndedChat = Boolean(
+    selectedChat && (selectedChat.status === 'RESOLVED' || selectedChat.ended)
+  );
 
   useEffect(() => {
     if (!open) {
@@ -305,8 +310,9 @@ export default function ChatWindow({
     if (now - typingRef.current > 2000) { typingRef.current = now; onTyping?.(true, v); }
   }
 
-  const lastBotIdx = messages.length && messages[messages.length - 1].senderType === 'BOT' ? messages.length - 1 : -1;
-  const lastSeenVisitorSeq = [...messages].reverse().find((x) => x.senderType === 'VISITOR' && x.seq && x.seq <= agentReadSeq)?.seq;
+  const displayMessages = selectedChat ? (selectedChat.messages || []) : messages;
+  const lastBotIdx = displayMessages.length && displayMessages[displayMessages.length - 1].senderType === 'BOT' ? displayMessages.length - 1 : -1;
+  const lastSeenVisitorSeq = [...displayMessages].reverse().find((x) => x.senderType === 'VISITOR' && x.seq && x.seq <= agentReadSeq)?.seq;
   const cls = ['lc-root', layout.popout ? 'popout' : layout.inline ? 'inline' : 'fixed', cfg.launcher.position, open ? 'open' : '', layout.mobile && cfg.layout.mobileFullscreen && !layout.popout ? 'mobile-full' : ''].join(' ');
   const menuItems = [
     onChangeName && { key: 'name', label: 'Change name', onClick: () => setPanel('name') },
@@ -465,11 +471,13 @@ export default function ChatWindow({
                             role="button"
                             tabIndex={0}
                             onClick={() => {
+                              setSelectedChat(chat);
                               onSelectChat?.(chat);
                               setInConversation(true);
                             }}
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') {
+                                setSelectedChat(chat);
                                 onSelectChat?.(chat);
                                 setInConversation(true);
                               }
@@ -503,6 +511,7 @@ export default function ChatWindow({
                         type="button"
                         className="lc-btn-send-message"
                         onClick={() => {
+                          setSelectedChat(null);
                           onStartNew?.();
                           setInConversation(true);
                         }}
@@ -517,7 +526,7 @@ export default function ChatWindow({
                 <>
                   <header className="lc-head">
                     {hasFaqs && (
-                      <button className="lc-icon lc-back" onClick={() => setInConversation(false)} aria-label="Back to messages">
+                      <button className="lc-icon lc-back" onClick={() => { setSelectedChat(null); setInConversation(false); }} aria-label="Back to messages">
                         {Icon.back}
                       </button>
                     )}
@@ -588,22 +597,49 @@ export default function ChatWindow({
                       <>
                         <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
                         {/* The greeting stays visible until real bot messages exist in the conversation */}
-                        {m.greeting && !messages.some((x) => x.senderType === 'BOT') && (
+                        {m.greeting && !displayMessages.some((x) => x.senderType === 'BOT') && !selectedChat && (
                           <div className="lc-greeting-anim">
                             <Message m={{ id: 'greeting', senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />
                           </div>
                         )}
-                        {messages.map((msg, i) => (
+                        {displayMessages.map((msg, i) => (
                           <Message key={msg.clientMsgId || msg.id} m={msg} cfg={cfg} Attachment={Attachment}
-                            showName={msg.senderType !== 'VISITOR' && (i === 0 || messages[i - 1].senderType === 'VISITOR' || messages[i - 1].senderName !== msg.senderName)}
+                            showName={msg.senderType !== 'VISITOR' && (i === 0 || displayMessages[i - 1].senderType === 'VISITOR' || displayMessages[i - 1].senderName !== msg.senderName)}
                             onRetry={onRetry} onSuggest={(s) => onSend?.(s)} isLastBot={i === lastBotIdx} onContact={onContact} seen={msg.seq && msg.seq === lastSeenVisitorSeq} />
                         ))}
                         {typing && <div className="lc-row them"><Avatar src={cfg.avatarUrl} name={cfg.agentName} /><div className="lc-bubble lc-typing" aria-label="Agent is typing"><i /><i /><i /></div></div>}
                       </>
                     )}
                   </div>
-                  {mode === 'chat' && !panel && ended && <EndedCard onStartNew={onStartNew} onEmailTranscript={onEmailTranscript} onDownloadTranscript={onDownloadTranscript} />}
-                  {mode === 'chat' && !panel && !ended && (
+                  {mode === 'chat' && !panel && isPastEndedChat && (
+                    <div className="lc-past-readonly-foot">
+                      <div className="lc-past-readonly-text">
+                        <span className="lc-past-readonly-dot" aria-hidden="true" />
+                        <span>This chat has ended</span>
+                      </div>
+                      {onDownloadTranscript && (
+                        <button
+                          type="button"
+                          className="lc-past-readonly-dl"
+                          onClick={() => onDownloadTranscript(selectedChat?.id)}
+                        >
+                          Download transcript
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  {mode === 'chat' && !panel && !isPastEndedChat && ended && (
+                    <EndedCard
+                      onStartNew={() => {
+                        setSelectedChat(null);
+                        onStartNew?.();
+                        setInConversation(true);
+                      }}
+                      onEmailTranscript={onEmailTranscript}
+                      onDownloadTranscript={onDownloadTranscript}
+                    />
+                  )}
+                  {mode === 'chat' && !panel && !ended && !isPastEndedChat && (
                     <form className="lc-foot" onSubmit={submit}>
                       {canUpload && onUpload && (
                         <>
