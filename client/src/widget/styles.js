@@ -237,5 +237,32 @@ button, input, textarea, select { font-family: inherit; }
 .lc-faq-cta-title { font-weight: 600; font-size: 0.95em; color: #0f172a; }
 .lc-faq-cta-sub { font-size: 0.85em; color: #64748b; }
 
+/* Messages Overview Screen (Intercom / Product Hunt Style) */
+.lc-messages-list-canvas { flex: 1; overflow-y: auto; padding: 14px 16px 20px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; overscroll-behavior: contain; }
+.lc-conv-card { background: #ffffff; border-radius: 14px; padding: 13px 15px; cursor: pointer; transition: all .2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 8px -2px rgba(15,23,42,.04), 0 1px 2px rgba(15,23,42,.02); border: 1px solid rgba(226, 232, 240, 0.85); display: flex; align-items: center; gap: 12px; text-align: left; }
+.lc-conv-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -4px rgba(15,23,42,.09); border-color: color-mix(in srgb, var(--lc-primary) 38%, transparent); }
+.lc-conv-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #f1f5f9; flex: none; }
+.lc-conv-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.lc-conv-avatar .lc-avatar { width: 40px; height: 40px; font-size: 15px; }
+.lc-conv-content { min-width: 0; flex: 1; }
+.lc-conv-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.lc-conv-name { font-size: 13.5px; font-weight: 600; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lc-conv-time { font-size: 11px; color: #94a3b8; font-weight: 500; flex: none; margin-left: 8px; }
+.lc-conv-snippet { font-size: 12.5px; color: #64748b; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
+.lc-conv-chevron { color: #94a3b8; flex: none; display: grid; place-items: center; transition: transform .2s ease, color .2s ease; }
+.lc-conv-card:hover .lc-conv-chevron { color: var(--lc-primary); transform: translateX(3px); }
+
+.lc-conv-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; color: #64748b; }
+.lc-conv-empty-icon { width: 48px; height: 48px; border-radius: 50%; background: #eff6ff; color: var(--lc-primary); display: grid; place-items: center; margin-bottom: 12px; }
+.lc-conv-empty-icon svg { width: 24px; height: 24px; }
+.lc-conv-empty-title { font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 4px; }
+.lc-conv-empty-desc { font-size: 12.5px; color: #94a3b8; max-width: 240px; line-height: 1.45; }
+
+.lc-messages-action { margin-top: auto; padding-top: 14px; display: flex; justify-content: center; }
+.lc-btn-send-message { all: unset; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--lc-primary); color: #ffffff; font-weight: 600; font-size: 13.5px; padding: 10px 22px; border-radius: 999px; box-shadow: 0 4px 14px -2px color-mix(in srgb, var(--lc-primary) 35%, rgba(0,0,0,0.12)); transition: all .2s ease; }
+.lc-btn-send-message:hover { transform: translateY(-2px); box-shadow: 0 6px 20px -2px color-mix(in srgb, var(--lc-primary) 50%, rgba(0,0,0,0.18)); filter: brightness(1.05); }
+.lc-btn-send-message:active { transform: scale(0.97); }
+.lc-btn-send-message svg { width: 14px; height: 14px; }
+
 @media (prefers-reduced-motion: reduce) { .lc-panel, .lc-typing i, .lc-launcher { animation: none; transition: none; } }
 `;

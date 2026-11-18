@@ -30,6 +30,19 @@ export function Linkified({ text }) {
 const initials = (n) => (n || '?').trim().slice(0, 1).toUpperCase();
 const time = (d) => new Date(d).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
+function timeAgo(d) {
+  if (!d) return '';
+  const diff = Date.now() - new Date(d).getTime();
+  if (isNaN(diff) || diff < 0) return 'Just now';
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  return `${days}d`;
+}
+
 function Avatar({ src, name }) {
   return src ? <img className="lc-avatar" src={src} alt="" /> : <div className="lc-avatar">{initials(name)}</div>;
 }
@@ -241,6 +254,7 @@ export default function ChatWindow({
   const hasFaqs = helpCenterEnabled && faqs.length > 0 && homeFaqs.length > 0;
   const [activeTab, setActiveTab] = useState(hasFaqs && messages.length === 0 && mode === 'chat' ? 'home' : 'messages');
   const [selectedFaq, setSelectedFaq] = useState(null);
+  const [inConversation, setInConversation] = useState(!hasFaqs || mode !== 'chat' || (messages.length > 0 && activeTab === 'messages'));
 
   // If mode switches to prechat or offline, force activeTab to messages so the form is visible
   const effectiveTab = mode !== 'chat' || !hasFaqs ? 'messages' : activeTab;
@@ -335,6 +349,7 @@ export default function ChatWindow({
                         className="lc-btn"
                         onClick={() => {
                           setSelectedFaq(null);
+                          setInConversation(true);
                           setActiveTab('messages');
                         }}
                       >
@@ -372,6 +387,7 @@ export default function ChatWindow({
                       className="lc-send-card"
                       onClick={() => {
                         if (ended) onStartNew?.();
+                        setInConversation(true);
                         setActiveTab('messages');
                       }}
                     >
@@ -407,111 +423,170 @@ export default function ChatWindow({
 
           {effectiveTab === 'messages' && (
             <>
-              <header className="lc-head">
-                {hasFaqs && (
-                  <button className="lc-icon lc-back" onClick={() => setActiveTab('home')} aria-label="Back to home">
-                    {Icon.back}
-                  </button>
-                )}
-                <div className="lc-head-brand">
-                  {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
-                  <div className="lc-grow">
-                    <div className="lc-title">{mode === 'offline' || mode === 'offline_sent' ? m.offlineTitle : m.title}</div>
-                    {m.subtitle && <div className="lc-sub">{m.subtitle}</div>}
-                  </div>
-                </div>
-                <div className="lc-head-actions">
-                  {menuItems.length > 0 && mode === 'chat' && (
-                    <button className="lc-icon" onClick={() => setMenuOpen((v) => !v)} aria-label="Chat menu" aria-haspopup="menu" aria-expanded={menuOpen}>{Icon.menu}</button>
-                  )}
-                  {/* Phones keep a close button */}
-                  {!layout.inline && !layout.popout && (hasFaqs || (layout.mobile && cfg.layout.mobileFullscreen)) && (
-                    <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
-                  )}
-                </div>
-                {menuOpen && <Menu items={menuItems} onClose={() => setMenuOpen(false)} />}
-              </header>
-              {banner && <div className="lc-banner">{banner}</div>}
-              {notice && !banner && <div className="lc-banner info" role="status" onClick={() => setNotice('')}>{notice}</div>}
-              <div className="lc-body" ref={bodyRef} aria-live="polite">
-                {mode === 'prechat' && (
-                  <Form fields={cfg.preChatForm.fields} submitLabel="Start chat" onSubmit={onPrechat} extra={m.greeting ? <div className="lc-note">{m.greeting}</div> : null} />
-                )}
-                {mode === 'offline' && (
-                  <Form fields={[{ key: 'name', label: 'Name', required: true }, { key: 'email', label: 'Email', required: true }, { key: 'message', label: 'Message', required: true, multiline: true }]}
-                    submitLabel="Send message" onSubmit={onOffline} extra={<><div className="lc-note">{m.offlineText}</div><div className="lc-retention" role="note">{retentionNotice(cfg)}</div></>} />
-                )}
-                {mode === 'offline_sent' && <div className="lc-center">✓<br />{m.offlineThanks}</div>}
-                {mode === 'chat' && panel === 'name' && (
-                  <Form fields={[{ key: 'name', type: 'name', label: 'Your name', required: true }]} initial={{ name: visitorName }} submitLabel="Save name"
-                    extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
-                    onSubmit={async (v) => { await onChangeName(v.name.trim()); done('Your name was updated.'); }} />
-                )}
-                {mode === 'chat' && panel === 'transcript' && (
-                  <Form fields={[{ key: 'email', type: 'email', label: 'Send the transcript to', required: true }]} submitLabel="Send transcript"
-                    extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
-                    onSubmit={async (v) => { await onEmailTranscript(v.email.trim()); done('Transcript sent. Check your inbox.'); }} />
-                )}
-                {mode === 'chat' && panel === 'end' && (
-                  <div className="lc-form">
-                    <div className="lc-note">End this chat? You can start a new chat at any time.</div>
-                    <button
-                      type="button"
-                      className="lc-btn"
-                      onClick={() => {
-                        setPanel(null);
-                        setNotice('Chat ended. Thanks for reaching out!');
-                        try {
-                          const p = onEndChat?.();
-                          if (p && typeof p.catch === 'function') {
-                            p.catch((e) => setNotice(e.message || 'Could not end the chat.'));
-                          }
-                        } catch (e) {
-                          setNotice(e.message || 'Could not end the chat.');
-                        }
-                      }}
-                    >
-                      End chat
-                    </button>
-                    <button type="button" className="lc-link" onClick={() => setPanel(null)}>Cancel</button>
-                  </div>
-                )}
-                {mode === 'chat' && !panel && (
-                  <>
-                    <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
-                    {/* The greeting stays visible until real bot messages exist in the conversation */}
-                    {m.greeting && !messages.some((x) => x.senderType === 'BOT') && (
-                      <Message m={{ id: 'greeting', senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />
+              {!inConversation && hasFaqs && mode === 'chat' ? (
+                <>
+                  <header className="lc-head">
+                    <div className="lc-grow">
+                      <div className="lc-title" style={{ fontSize: 17, fontWeight: 700 }}>Messages</div>
+                    </div>
+                    {!layout.inline && !layout.popout && (
+                      <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
                     )}
-                    {messages.map((msg, i) => (
-                      <Message key={msg.clientMsgId || msg.id} m={msg} cfg={cfg} Attachment={Attachment}
-                        showName={msg.senderType !== 'VISITOR' && (i === 0 || messages[i - 1].senderType === 'VISITOR' || messages[i - 1].senderName !== msg.senderName)}
-                        onRetry={onRetry} onSuggest={(s) => onSend?.(s)} isLastBot={i === lastBotIdx} onContact={onContact} seen={msg.seq && msg.seq === lastSeenVisitorSeq} />
-                    ))}
-                    {typing && <div className="lc-row them"><Avatar src={cfg.avatarUrl} name={cfg.agentName} /><div className="lc-bubble lc-typing" aria-label="Agent is typing"><i /><i /><i /></div></div>}
-                  </>
-                )}
-              </div>
-              {mode === 'chat' && !panel && ended && <EndedCard onStartNew={onStartNew} onEmailTranscript={onEmailTranscript} onDownloadTranscript={onDownloadTranscript} />}
-              {mode === 'chat' && !panel && !ended && (
-                <form className="lc-foot" onSubmit={submit}>
-                  {canUpload && onUpload && (
-                    <>
-                      <button type="button" className="lc-icon" onClick={() => fileRef.current?.click()} aria-label="Attach a file">{Icon.clip}</button>
-                      <input ref={fileRef} type="file" hidden accept="image/png,image/jpeg,image/gif,image/webp,application/pdf,text/plain"
-                        onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) onUpload(f); }} />
-                    </>
+                  </header>
+                  <div className="lc-messages-list-canvas">
+                    {messages.length > 0 ? (
+                      <div
+                        className="lc-conv-card"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => setInConversation(true)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') setInConversation(true); }}
+                      >
+                        <div className="lc-conv-avatar">
+                          {cfg.logoUrl ? <img src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName || 'Support'} />}
+                        </div>
+                        <div className="lc-conv-content">
+                          <div className="lc-conv-top">
+                            <span className="lc-conv-name">{lastMsg?.senderName || cfg.agentName || 'Support'}</span>
+                            <span className="lc-conv-time">{timeAgo(lastMsg?.createdAt)}</span>
+                          </div>
+                          <div className="lc-conv-snippet">
+                            {lastMsg?.senderType === 'VISITOR' ? 'You: ' : ''}{lastMsg?.body || (lastMsg?.attachmentId ? 'Attachment' : 'How can we help?')}
+                          </div>
+                        </div>
+                        <div className="lc-conv-chevron">{Icon.chevronRight}</div>
+                      </div>
+                    ) : (
+                      <div className="lc-conv-empty">
+                        <div className="lc-conv-empty-icon">{Icon.messages}</div>
+                        <div className="lc-conv-empty-title">No messages yet</div>
+                        <div className="lc-conv-empty-desc">Send us a message and we will get back to you as soon as possible.</div>
+                      </div>
+                    )}
+                    <div className="lc-messages-action">
+                      <button
+                        type="button"
+                        className="lc-btn-send-message"
+                        onClick={() => {
+                          if (ended) onStartNew?.();
+                          setInConversation(true);
+                        }}
+                      >
+                        <span>Send us a message</span>
+                        {Icon.send}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <header className="lc-head">
+                    {hasFaqs && (
+                      <button className="lc-icon lc-back" onClick={() => setInConversation(false)} aria-label="Back to messages">
+                        {Icon.back}
+                      </button>
+                    )}
+                    <div className="lc-head-brand">
+                      {cfg.logoUrl ? <img className="logo" src={cfg.logoUrl} alt="" /> : <Avatar src={cfg.avatarUrl} name={cfg.agentName} />}
+                      <div className="lc-grow">
+                        <div className="lc-title">{mode === 'offline' || mode === 'offline_sent' ? m.offlineTitle : m.title}</div>
+                        {m.subtitle && <div className="lc-sub">{m.subtitle}</div>}
+                      </div>
+                    </div>
+                    <div className="lc-head-actions">
+                      {menuItems.length > 0 && mode === 'chat' && (
+                        <button className="lc-icon" onClick={() => setMenuOpen((v) => !v)} aria-label="Chat menu" aria-haspopup="menu" aria-expanded={menuOpen}>{Icon.menu}</button>
+                      )}
+                      {/* Phones keep a close button */}
+                      {!layout.inline && !layout.popout && (hasFaqs || (layout.mobile && cfg.layout.mobileFullscreen)) && (
+                        <button className="lc-icon" onClick={onToggle} aria-label="Close chat">{Icon.close}</button>
+                      )}
+                    </div>
+                    {menuOpen && <Menu items={menuItems} onClose={() => setMenuOpen(false)} />}
+                  </header>
+                  {banner && <div className="lc-banner">{banner}</div>}
+                  {notice && !banner && <div className="lc-banner info" role="status" onClick={() => setNotice('')}>{notice}</div>}
+                  <div className="lc-body" ref={bodyRef} aria-live="polite">
+                    {mode === 'prechat' && (
+                      <Form fields={cfg.preChatForm.fields} submitLabel="Start chat" onSubmit={onPrechat} extra={m.greeting ? <div className="lc-note">{m.greeting}</div> : null} />
+                    )}
+                    {mode === 'offline' && (
+                      <Form fields={[{ key: 'name', label: 'Name', required: true }, { key: 'email', label: 'Email', required: true }, { key: 'message', label: 'Message', required: true, multiline: true }]}
+                        submitLabel="Send message" onSubmit={onOffline} extra={<><div className="lc-note">{m.offlineText}</div><div className="lc-retention" role="note">{retentionNotice(cfg)}</div></>} />
+                    )}
+                    {mode === 'offline_sent' && <div className="lc-center">✓<br />{m.offlineThanks}</div>}
+                    {mode === 'chat' && panel === 'name' && (
+                      <Form fields={[{ key: 'name', type: 'name', label: 'Your name', required: true }]} initial={{ name: visitorName }} submitLabel="Save name"
+                        extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
+                        onSubmit={async (v) => { await onChangeName(v.name.trim()); done('Your name was updated.'); }} />
+                    )}
+                    {mode === 'chat' && panel === 'transcript' && (
+                      <Form fields={[{ key: 'email', type: 'email', label: 'Send the transcript to', required: true }]} submitLabel="Send transcript"
+                        extra={<button type="button" className="lc-link" onClick={() => setPanel(null)}>← Back to chat</button>}
+                        onSubmit={async (v) => { await onEmailTranscript(v.email.trim()); done('Transcript sent. Check your inbox.'); }} />
+                    )}
+                    {mode === 'chat' && panel === 'end' && (
+                      <div className="lc-form">
+                        <div className="lc-note">End this chat? You can start a new chat at any time.</div>
+                        <button
+                          type="button"
+                          className="lc-btn"
+                          onClick={() => {
+                            setPanel(null);
+                            setNotice('Chat ended. Thanks for reaching out!');
+                            try {
+                              const p = onEndChat?.();
+                              if (p && typeof p.catch === 'function') {
+                                p.catch((e) => setNotice(e.message || 'Could not end the chat.'));
+                              }
+                            } catch (e) {
+                              setNotice(e.message || 'Could not end the chat.');
+                            }
+                          }}
+                        >
+                          End chat
+                        </button>
+                        <button type="button" className="lc-link" onClick={() => setPanel(null)}>Cancel</button>
+                      </div>
+                    )}
+                    {mode === 'chat' && !panel && (
+                      <>
+                        <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
+                        {/* The greeting stays visible until real bot messages exist in the conversation */}
+                        {m.greeting && !messages.some((x) => x.senderType === 'BOT') && (
+                          <Message m={{ id: 'greeting', senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />
+                        )}
+                        {messages.map((msg, i) => (
+                          <Message key={msg.clientMsgId || msg.id} m={msg} cfg={cfg} Attachment={Attachment}
+                            showName={msg.senderType !== 'VISITOR' && (i === 0 || messages[i - 1].senderType === 'VISITOR' || messages[i - 1].senderName !== msg.senderName)}
+                            onRetry={onRetry} onSuggest={(s) => onSend?.(s)} isLastBot={i === lastBotIdx} onContact={onContact} seen={msg.seq && msg.seq === lastSeenVisitorSeq} />
+                        ))}
+                        {typing && <div className="lc-row them"><Avatar src={cfg.avatarUrl} name={cfg.agentName} /><div className="lc-bubble lc-typing" aria-label="Agent is typing"><i /><i /><i /></div></div>}
+                      </>
+                    )}
+                  </div>
+                  {mode === 'chat' && !panel && ended && <EndedCard onStartNew={onStartNew} onEmailTranscript={onEmailTranscript} onDownloadTranscript={onDownloadTranscript} />}
+                  {mode === 'chat' && !panel && !ended && (
+                    <form className="lc-foot" onSubmit={submit}>
+                      {canUpload && onUpload && (
+                        <>
+                          <button type="button" className="lc-icon" onClick={() => fileRef.current?.click()} aria-label="Attach a file">{Icon.clip}</button>
+                          <input ref={fileRef} type="file" hidden accept="image/png,image/jpeg,image/gif,image/webp,application/pdf,text/plain"
+                            onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) onUpload(f); }} />
+                        </>
+                      )}
+                      <textarea rows={1} value={text} placeholder={m.placeholder} aria-label="Message" maxLength={5000}
+                        onChange={(e) => changed(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }} />
+                      <button type="submit" className="lc-icon lc-send" disabled={!text.trim()} aria-label="Send">{Icon.send}</button>
+                    </form>
                   )}
-                  <textarea rows={1} value={text} placeholder={m.placeholder} aria-label="Message" maxLength={5000}
-                    onChange={(e) => changed(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }} />
-                  <button type="submit" className="lc-icon lc-send" disabled={!text.trim()} aria-label="Send">{Icon.send}</button>
-                </form>
+                </>
               )}
             </>
           )}
 
-          {hasFaqs && mode === 'chat' && (
+          {hasFaqs && mode === 'chat' && (!inConversation || effectiveTab === 'home') && (
             <nav className="lc-tabs" aria-label="Chat navigation">
               <button
                 type="button"
@@ -527,9 +602,10 @@ export default function ChatWindow({
               </button>
               <button
                 type="button"
-                className={`lc-tab ${effectiveTab === 'messages' ? 'active' : ''}`}
+                className={`lc-tab ${effectiveTab === 'messages' && !inConversation ? 'active' : ''}`}
                 onClick={() => {
                   setSelectedFaq(null);
+                  setInConversation(false);
                   setActiveTab('messages');
                 }}
                 aria-label="Messages"

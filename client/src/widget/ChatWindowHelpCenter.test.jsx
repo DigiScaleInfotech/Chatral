@@ -81,9 +81,35 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
       { id: 'm1', seq: 1, senderType: 'AGENT', senderName: 'Alex', body: 'Your package has been dispatched!', createdAt: new Date().toISOString() },
     ];
     render(<ChatWindow {...base} messages={messages} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Back to messages' }));
     fireEvent.click(screen.getByRole('button', { name: 'Home' }));
     expect(screen.queryByText('Recent message')).toBeNull();
     expect(screen.getByText('Send us a message')).toBeTruthy();
+  });
+
+  it('hides bottom tabs during active chat conversation and shows Messages list overview on back button', () => {
+    const messages = [
+      { id: 'm1', seq: 1, senderType: 'VISITOR', senderName: 'User', body: 'Our Problem Is Hear', createdAt: new Date().toISOString() },
+    ];
+    render(<ChatWindow {...base} messages={messages} />);
+    // Bottom tabs must be hidden during active conversation
+    expect(screen.queryByRole('navigation', { name: 'Chat navigation' })).toBeNull();
+    expect(screen.getByLabelText('Message')).toBeTruthy();
+
+    // Click header back button to exit conversation
+    fireEvent.click(screen.getByRole('button', { name: 'Back to messages' }));
+
+    // Now on Messages list overview screen: tabs are visible and conversation snippet is displayed
+    expect(screen.getByRole('navigation', { name: 'Chat navigation' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Home' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Messages' })).toBeTruthy();
+    expect(screen.getByText(/Our Problem Is Hear/)).toBeTruthy();
+    expect(screen.getByText('Send us a message')).toBeTruthy();
+
+    // Clicking the conversation card returns to active chat
+    fireEvent.click(screen.getByText(/Our Problem Is Hear/));
+    expect(screen.queryByRole('navigation', { name: 'Chat navigation' })).toBeNull();
+    expect(screen.getByLabelText('Message')).toBeTruthy();
   });
 
   it('renders messages-only mode without Home tab or bottom nav when faqs is empty', () => {
