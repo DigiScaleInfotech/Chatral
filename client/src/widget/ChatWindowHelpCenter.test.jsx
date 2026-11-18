@@ -184,6 +184,30 @@ describe('ChatWindow Help Center & FAQ navigation', () => {
     expect(container.querySelector('.lc-greeting-anim')).toBeTruthy();
   });
 
+  it('keeps greeting message visible when opening a chat from Messages list', () => {
+    const cfgGreeting = {
+      ...CONFIG_WITH_FAQS,
+      messages: { ...CONFIG_WITH_FAQS.messages, greeting: 'Hi there 👋 How can we help?' },
+    };
+    const mockChats = [
+      { id: 'c1', status: 'RESOLVED', messages: [{ id: 'm1', body: 'Past visitor query', senderType: 'VISITOR' }], updatedAt: new Date().toISOString() },
+    ];
+    render(
+      <ChatWindow
+        {...base}
+        cfg={cfgGreeting}
+        messages={[]}
+        chats={mockChats}
+      />
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Messages' }));
+    fireEvent.click(screen.getByText(/Past visitor query/));
+
+    // Greeting must stay visible at the top
+    expect(screen.getByText(/Hi there 👋 How can we help?/)).toBeTruthy();
+    expect(screen.getByText('Past visitor query')).toBeTruthy();
+  });
+
   it('renders messages-only mode without Home tab or bottom nav when faqs is empty', () => {
     const cfgNoFaqs = { ...CONFIG_WITH_FAQS, faqs: [] };
     render(<ChatWindow {...base} cfg={cfgNoFaqs} messages={[]} />);

@@ -597,8 +597,8 @@ export default function ChatWindow({
                       <>
                         <div className="lc-retention" role="note">{retentionNotice(cfg)}</div>
                         {/* The greeting stays visible until real bot messages exist in the conversation */}
-                        {m.greeting && !displayMessages.some((x) => x.senderType === 'BOT') && !selectedChat && (
-                          <div className="lc-greeting-anim">
+                        {m.greeting && !displayMessages.some((x) => x.senderType === 'BOT') && (
+                          <div className={displayMessages.length === 0 ? "lc-greeting-anim" : ""}>
                             <Message m={{ id: 'greeting', senderType: 'BOT', body: m.greeting, senderName: cfg.agentName }} cfg={cfg} showName />
                           </div>
                         )}
