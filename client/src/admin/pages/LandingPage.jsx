@@ -3219,21 +3219,33 @@ export default function LandingPage() {
                   <td
                     style={{
                       padding: '16px 22px',
-                      fontWeight: 800,
-                      color: '#15803d',
                       background: '#f0fdf4',
                       borderLeft: '2px solid #2563eb',
                       borderRight: '2px solid #2563eb',
-                      fontSize: 15,
                     }}
                   >
-                    ₹508 / mo <span style={{ fontSize: 11, fontWeight: 500, color: '#64748b' }}>(or ₹599 monthly)</span>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: '#15803d' }}>
+                      {currency === 'INR' ? '₹508 / mo' : '$6 / mo'}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+                      Starter Growth (Annual)
+                    </div>
                   </td>
-                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
-                    $29 / mo <span style={{ fontSize: 11 }}>(~₹2,450/mo)</span>
+                  <td style={{ padding: '16px 22px', color: '#475569' }}>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>
+                      {currency === 'INR' ? '₹2,450 / mo' : '$29 / mo'}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+                      {currency === 'INR' ? 'Starter ($29/mo)' : 'Starter tier'}
+                    </div>
                   </td>
-                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
-                    $25 / mo <span style={{ fontSize: 11 }}>(~₹2,100/mo)</span>
+                  <td style={{ padding: '16px 22px', color: '#475569' }}>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>
+                      {currency === 'INR' ? '₹2,100 / mo' : '$25 / mo'}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+                      {currency === 'INR' ? 'Pro ($25/mo)' : 'Pro tier'}
+                    </div>
                   </td>
                 </tr>
 
