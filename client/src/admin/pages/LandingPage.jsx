@@ -3073,7 +3073,7 @@ export default function LandingPage() {
                   <div><CheckOutlined style={{ color: '#2563eb', marginRight: 8 }} /> Priority 24/7 Support</div>
                 </div>
                 <button
-                  onClick={() => window.open('https://wa.me/?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
+                  onClick={() => window.open('https://wa.me/919978987181?text=' + encodeURIComponent('Hi Chatral team, I would like to inquire about the Enterprise Custom Plan for my business.'), '_blank')}
                   className="btn-brand-whatsapp"
                   style={{
                     width: '100%',
