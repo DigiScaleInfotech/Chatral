@@ -3453,36 +3453,71 @@ export default function LandingPage() {
             </table>
           </div>
 
-          {/* Call to action below table */}
+          {/* High-Converting CTA Card below Comparison Table */}
           <div
             style={{
-              marginTop: 28,
-              textAlign: 'center',
+              marginTop: 32,
+              background: 'linear-gradient(135deg, #ffffff 0%, #eff6ff 100%)',
+              border: '1.5px solid #bfdbfe',
+              borderRadius: 18,
+              padding: isMobile ? '24px 18px' : '26px 30px',
               display: 'flex',
               flexDirection: isMobile ? 'column' : 'row',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: 16,
+              justifyContent: 'space-between',
+              gap: 20,
+              boxShadow: '0 10px 28px -6px rgba(37, 99, 235, 0.12)',
             }}
           >
-            <Button
-              type="primary"
-              size="large"
-              onClick={() => navigate('/login?mode=signup')}
-              style={{
-                height: 46,
-                padding: '0 28px',
-                borderRadius: 12,
-                fontSize: 15,
-                fontWeight: 700,
-                background: '#2563eb',
-                boxShadow: '0 8px 20px -4px rgba(37, 99, 235, 0.4)',
-              }}
-            >
-              Start 7-Day Free Trial (No Card Required)
-            </Button>
-            <div style={{ color: '#64748b', fontSize: 13 }}>
-              ⚡ Setup takes under 2 minutes • Cancel anytime
+            <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
+              <div style={{ fontSize: isMobile ? 18 : 20, fontWeight: 800, color: '#0c0d10', letterSpacing: '-0.02em', marginBottom: 6 }}>
+                Switch to Chatral and save up to 80% on live chat
+              </div>
+              <div style={{ fontSize: 13, color: '#475569', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <CheckOutlined style={{ color: '#16a34a', fontSize: 12 }} /> 7-Day Free Trial
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <CheckOutlined style={{ color: '#16a34a', fontSize: 12 }} /> No credit card required
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <CheckOutlined style={{ color: '#16a34a', fontSize: 12 }} /> Cancel anytime
+                </span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <button
+                onClick={() => navigate('/login?mode=signup')}
+                className="btn-brand-primary"
+                style={{
+                  height: 44,
+                  padding: '0 24px',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontFamily: 'inherit',
+                  boxShadow: '0 8px 18px -4px rgba(37, 99, 235, 0.35)',
+                }}
+              >
+                <RollText text="Start Free Trial" />
+                <svg className="btn-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </button>
+              <button
+                onClick={() => window.open('https://wa.me/919978987181?text=' + encodeURIComponent('Hi Chatral team, I would like to learn more about switching to Chatral.'), '_blank')}
+                className="btn-brand-whatsapp"
+                style={{
+                  height: 44,
+                  padding: '0 20px',
+                  borderRadius: 10,
+                  fontSize: 13.5,
+                  fontFamily: 'inherit',
+                }}
+              >
+                <RollText text="Chat on WhatsApp" secondaryColor="#15803d" />
+              </button>
             </div>
           </div>
         </div>
