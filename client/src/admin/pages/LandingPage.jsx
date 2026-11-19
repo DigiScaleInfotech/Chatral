@@ -191,6 +191,7 @@ export default function LandingPage() {
   const [showWidgetPill, setShowWidgetPill] = useState(true);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
 
   // Contact Form state & submission handler
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', topic: 'Schedule a Live Demo', message: '' });
@@ -296,6 +297,52 @@ export default function LandingPage() {
     checkState();
     const timer = setInterval(checkState, 150);
     return () => clearInterval(timer);
+  }, []);
+
+  // Exit-Intent Lead Capture: Detects when visitor is about to close the tab / leave site
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('chatral_exit_intent_dismissed')) return;
+    } catch {
+      // ignore
+    }
+
+    let armed = false;
+    // Arm after 6 seconds so initial mouse adjustments don't trigger it prematurely
+    const armTimer = setTimeout(() => {
+      armed = true;
+    }, 6000);
+
+    const handleMouseLeave = (e) => {
+      if (!armed) return;
+      // Cursor moves upward through top 15px of viewport toward tabs/address bar
+      if (e.clientY <= 15) {
+        try {
+          if (!sessionStorage.getItem('chatral_exit_intent_dismissed')) {
+            sessionStorage.setItem('chatral_exit_intent_dismissed', 'true');
+            setShowExitModal(true);
+            trackEvent('exit_intent_modal_shown');
+          }
+        } catch {
+          setShowExitModal(true);
+        }
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setShowExitModal(false);
+      }
+    };
+
+    document.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(armTimer);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleOpenLiveWidget = () => {
@@ -4389,11 +4436,243 @@ export default function LandingPage() {
         document.body
       )}
 
+      {/* Exit-Intent Lead Capture Modal (Free 1-on-1 Onboarding / WhatsApp Assistance) */}
+      {showExitModal && typeof document !== 'undefined' && createPortal(
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 99999,
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+            animation: 'exitModalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowExitModal(false);
+            }
+          }}
+        >
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: 520,
+              background: '#ffffff',
+              borderRadius: 22,
+              padding: isMobile ? '28px 20px 24px 20px' : '36px 32px 30px 32px',
+              boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(226, 232, 240, 0.8)',
+              animation: 'exitModalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              fontFamily: '"Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            }}
+          >
+            {/* Close ✕ Button */}
+            <button
+              onClick={() => setShowExitModal(false)}
+              aria-label="Close popup"
+              style={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                background: '#f1f5f9',
+                border: 'none',
+                color: '#64748b',
+                fontSize: 15,
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#e2e8f0';
+                e.currentTarget.style.color = '#0f172a';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.color = '#64748b';
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Top Eyebrow Badge */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '4px 12px',
+                background: '#eff6ff',
+                border: '1px solid #bfdbfe',
+                borderRadius: 999,
+                fontSize: 11.5,
+                fontWeight: 700,
+                color: '#2563eb',
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                marginBottom: 14,
+              }}
+            >
+              <ThunderboltOutlined style={{ color: '#2563eb' }} />
+              Free 1-on-1 Store Setup Assistance
+            </div>
+
+            {/* Headline */}
+            <div
+              style={{
+                fontSize: isMobile ? 22 : 25,
+                fontWeight: 800,
+                color: '#0f172a',
+                lineHeight: 1.25,
+                letterSpacing: '-0.02em',
+                marginBottom: 10,
+              }}
+            >
+              Wait! Need help setting up live chat on your store?
+            </div>
+
+            {/* Description */}
+            <p
+              style={{
+                fontSize: 14,
+                lineHeight: 1.6,
+                color: '#475569',
+                marginBottom: 20,
+              }}
+            >
+              Our engineering team will install, test, and match Chatral’s live chat widget to your Shopify, WordPress, or custom store for <strong>100% free</strong> — zero technical hassle.
+            </p>
+
+            {/* 3 Perks Checkmarks Box */}
+            <div
+              style={{
+                background: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: 14,
+                padding: '14px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 9,
+                marginBottom: 22,
+                fontSize: 13,
+                color: '#334155',
+                fontWeight: 500,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <CheckCircleFilled style={{ color: '#16a34a', fontSize: 14 }} />
+                <span><strong>Free Theme Integration:</strong> 1-click embed on Shopify, WooCommerce or Webflow</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <CheckCircleFilled style={{ color: '#16a34a', fontSize: 14 }} />
+                <span><strong>Brand Customization:</strong> Color theme and greeting triggers matched to your brand</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <CheckCircleFilled style={{ color: '#16a34a', fontSize: 14 }} />
+                <span><strong>7-Day Full Access Trial:</strong> Zero credit card or payment details required</span>
+              </div>
+            </div>
+
+            {/* Primary Action Button (WhatsApp) */}
+            <button
+              onClick={() => {
+                trackEvent('exit_intent_whatsapp_click');
+                window.open(
+                  'https://wa.me/919978987181?text=' +
+                    encodeURIComponent('Hi Chatral team, I saw your free setup offer. I would like help installing Chatral on my store. Please guide me.'),
+                  '_blank'
+                );
+                setShowExitModal(false);
+              }}
+              style={{
+                width: '100%',
+                height: 48,
+                background: '#16a34a',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: 12,
+                fontSize: 15,
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+                boxShadow: '0 8px 20px -4px rgba(22, 163, 74, 0.4)',
+                transition: 'all 0.18s ease',
+                marginBottom: 12,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#15803d')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#16a34a')}
+            >
+              <MessageOutlined style={{ fontSize: 17 }} />
+              Chat on WhatsApp for Free Setup →
+            </button>
+
+            {/* Secondary Action Link (Self-serve free trial) */}
+            <div style={{ textAlign: 'center' }}>
+              <button
+                onClick={() => {
+                  setShowExitModal(false);
+                  handleStartFree('exit_intent_modal');
+                }}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#2563eb',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+                onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+              >
+                Or start 7-day free trial on your own →
+              </button>
+            </div>
+
+            {/* Reassurance text */}
+            <div
+              style={{
+                fontSize: 11.5,
+                color: '#94a3b8',
+                textAlign: 'center',
+                marginTop: 14,
+              }}
+            >
+              🔒 Direct response within minutes • No obligation • Cancel anytime
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {/* Global subtle float, pulse & smooth entrance keyframes */}
       <style>{`
         html {
           scroll-behavior: smooth;
+        }
+        @keyframes exitModalFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes exitModalScaleUp {
+          from { opacity: 0; transform: scale(0.93) translateY(12px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
         }
         section[id] {
           scroll-margin-top: 86px;
