@@ -3095,6 +3095,387 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Competitor Comparison Table Section */}
+      <section
+        id="compare"
+        style={{
+          padding: isMobile ? '48px 16px' : '72px 24px',
+          background: '#f8fafc',
+          borderTop: '1px solid #e2e8f0',
+        }}
+      >
+        <div style={{ maxWidth: 1040, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: isMobile ? 32 : 48 }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '4px 14px',
+                background: '#eff6ff',
+                border: '1px solid rgba(37, 99, 235, 0.2)',
+                borderRadius: 999,
+                marginBottom: 14,
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2563eb' }} />
+              <span style={{ color: '#2563eb', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                Chatral vs Alternatives
+              </span>
+            </div>
+            <Typography.Title
+              level={2}
+              style={{
+                color: '#0c0d10',
+                fontSize: isMobile ? 26 : 38,
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                lineHeight: 1.2,
+                margin: '0 0 12px',
+              }}
+            >
+              Why store owners switch to Chatral
+            </Typography.Title>
+            <Typography.Paragraph
+              style={{
+                color: '#5b5f6b',
+                fontSize: isMobile ? 14 : 16,
+                maxWidth: 620,
+                margin: '0 auto',
+                lineHeight: 1.6,
+              }}
+            >
+              High-growth e-commerce brands choose Chatral for faster page load speed, multi-store support, and transparent pricing without seat penalties.
+            </Typography.Paragraph>
+          </div>
+
+          {/* Responsive Comparison Table Container */}
+          <div
+            style={{
+              overflowX: 'auto',
+              borderRadius: 18,
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 12px 32px -8px rgba(15, 23, 42, 0.08)',
+            }}
+          >
+            <table
+              style={{
+                width: '100%',
+                minWidth: 640,
+                borderCollapse: 'collapse',
+                textAlign: 'left',
+                fontSize: 14,
+                fontFamily: 'inherit',
+              }}
+            >
+              <thead>
+                <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f8fafc' }}>
+                  <th style={{ padding: '18px 22px', width: '34%', fontWeight: 700, color: '#475569' }}>
+                    Feature / Capability
+                  </th>
+                  <th
+                    style={{
+                      padding: '18px 22px',
+                      width: '26%',
+                      fontWeight: 800,
+                      color: '#2563eb',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: 16 }}>Chatral 🚀</span>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          background: '#2563eb',
+                          color: '#ffffff',
+                          padding: '2px 8px',
+                          borderRadius: 999,
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Recommended
+                      </span>
+                    </div>
+                  </th>
+                  <th style={{ padding: '18px 22px', width: '20%', fontWeight: 700, color: '#475569' }}>
+                    Tidio
+                  </th>
+                  <th style={{ padding: '18px 22px', width: '20%', fontWeight: 700, color: '#475569' }}>
+                    Crisp
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* 1. Monthly Price */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Starting Price
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 800,
+                      color: '#15803d',
+                      background: '#f0fdf4',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                      fontSize: 15,
+                    }}
+                  >
+                    ₹508 / mo <span style={{ fontSize: 11, fontWeight: 500, color: '#64748b' }}>(or ₹599 monthly)</span>
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    $29 / mo <span style={{ fontSize: 11 }}>(~₹2,450/mo)</span>
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    $25 / mo <span style={{ fontSize: 11 }}>(~₹2,100/mo)</span>
+                  </td>
+                </tr>
+
+                {/* 2. Active Stores */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Active Stores Included
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#2563eb',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    3 Stores included
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    1 Store only
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    1 Store only
+                  </td>
+                </tr>
+
+                {/* 3. Team Member Seats */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Team Member Seats
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#2563eb',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    3 Team Agents
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    1-2 Seats max
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    2 Seats max
+                  </td>
+                </tr>
+
+                {/* 4. Live Chat Conversations */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Live Chat Conversations
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    <CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Unlimited
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    Capped / Pay per chat
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    <CheckOutlined style={{ color: '#64748b', marginRight: 6 }} /> Unlimited
+                  </td>
+                </tr>
+
+                {/* 5. Widget Page Load Impact (Speed) */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Widget Speed & Size
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#15803d',
+                      background: '#f0fdf4',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    ⚡ ~67 KB <span style={{ fontSize: 11, fontWeight: 500 }}>(Zero store slowdown)</span>
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#dc2626' }}>
+                    ⚠️ ~1,200 KB (Heavy)
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#d97706' }}>
+                    ⚠️ ~400 KB
+                  </td>
+                </tr>
+
+                {/* 6. Automated Sales Triggers */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Automated Sales Triggers
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    <CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Included
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    Paid Add-on
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    Paid Plus tier ($95/mo)
+                  </td>
+                </tr>
+
+                {/* 7. Live Visitor Tracking */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Real-Time Visitor Tracking
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    <CheckOutlined style={{ color: '#2563eb', marginRight: 6 }} /> Real-time active cart view
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    Limited
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    Included
+                  </td>
+                </tr>
+
+                {/* 8. Free Trial */}
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Free Trial
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#2563eb',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                    }}
+                  >
+                    7 Days Full Access <span style={{ fontSize: 11, fontWeight: 500 }}>(No card required)</span>
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    7 Days Limited
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    14 Days Basic
+                  </td>
+                </tr>
+
+                {/* 9. Support & Onboarding */}
+                <tr>
+                  <td style={{ padding: '16px 22px', fontWeight: 600, color: '#0f172a' }}>
+                    Support Channel
+                  </td>
+                  <td
+                    style={{
+                      padding: '16px 22px',
+                      fontWeight: 700,
+                      color: '#2563eb',
+                      background: '#eff6ff',
+                      borderLeft: '2px solid #2563eb',
+                      borderRight: '2px solid #2563eb',
+                      borderBottom: '2px solid #2563eb',
+                    }}
+                  >
+                    Priority 24/7 WhatsApp & Email
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    Email Queue
+                  </td>
+                  <td style={{ padding: '16px 22px', color: '#64748b' }}>
+                    Chat & Email
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Call to action below table */}
+          <div
+            style={{
+              marginTop: 28,
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 16,
+            }}
+          >
+            <Button
+              type="primary"
+              size="large"
+              onClick={() => navigate('/login?mode=signup')}
+              style={{
+                height: 46,
+                padding: '0 28px',
+                borderRadius: 12,
+                fontSize: 15,
+                fontWeight: 700,
+                background: '#2563eb',
+                boxShadow: '0 8px 20px -4px rgba(37, 99, 235, 0.4)',
+              }}
+            >
+              Start 7-Day Free Trial (No Card Required)
+            </Button>
+            <div style={{ color: '#64748b', fontSize: 13 }}>
+              ⚡ Setup takes under 2 minutes • Cancel anytime
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 6. FAQ Section (Centered, Clean & Spacious with Hero Blue Ambient Glow) */}
       <section
         id="faq"
