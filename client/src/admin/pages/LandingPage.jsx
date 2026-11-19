@@ -3488,7 +3488,7 @@ export default function LandingPage() {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
               <button
-                onClick={() => navigate('/login?mode=signup')}
+                onClick={() => handleStartFree('comparison_cta')}
                 className="btn-brand-primary"
                 style={{
                   height: 44,
