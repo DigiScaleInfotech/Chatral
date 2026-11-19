@@ -3520,6 +3520,26 @@ export default function LandingPage() {
               </button>
             </div>
           </div>
+
+          {/* Dedicated In-depth Comparison SEO link */}
+          <div style={{ marginTop: 18, textAlign: 'center' }}>
+            <Link
+              to="/compare/tidio"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: 13.5,
+                fontWeight: 600,
+                color: '#2563eb',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+              onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+            >
+              Read our complete Chatral vs Tidio in-depth comparison guide <ArrowRightOutlined style={{ fontSize: 12 }} />
+            </Link>
+          </div>
         </div>
       </section>
 

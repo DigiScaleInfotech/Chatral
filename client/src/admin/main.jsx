@@ -43,6 +43,7 @@ import Platform from './pages/Platform.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
 import TermsOfService from './pages/TermsOfService.jsx';
+import CompareTidio from './pages/CompareTidio.jsx';
 
 const Ctx = createContext(null);
 export const useApp = () => useContext(Ctx);
@@ -808,6 +809,8 @@ createRoot(document.getElementById('root')).render(
         <WidgetVisibilityManager />
         <Routes>
           <Route path="/landing" element={<LandingPage />} />
+          <Route path="/compare/tidio" element={<CompareTidio />} />
+          <Route path="/tidio-alternative" element={<Navigate to="/compare/tidio" replace />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/login" element={<Login />} />
