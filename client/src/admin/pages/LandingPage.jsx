@@ -179,12 +179,12 @@ function RollText({ text, secondaryColor }) {
 }
 
 // Automated Single-Box Real Software Video Simulation Showcase
-// Uses EXACT real screenshots provided directly from the live Chatral application
+// Uses 100% real full-screen screenshots: Full Website Hero -> Real Inbox -> Real Live Conversation -> Real Visitors -> Real Widget Designer
 function HeroVideoShowcase({ isMobile }) {
-  const TOTAL_CYCLE = 20000; // 20-second continuous video cycle
+  const TOTAL_CYCLE = 20000; // 20-second continuous loop
   const [timeMs, setTimeMs] = useState(0);
 
-  // 60ms tick for 60fps smooth cursor movement and scene transitions
+  // 60ms tick for smooth 60fps cursor movement and scene transitions
   useEffect(() => {
     const interval = 60;
     const timer = setInterval(() => {
@@ -193,57 +193,57 @@ function HeroVideoShowcase({ isMobile }) {
     return () => clearInterval(timer);
   }, []);
 
-  // Four Core Scenes using the User's EXACT Real Software Screenshots:
-  // Scene 1: Website with Live Chat Widget Integration (0ms - 4800ms)
-  // Scene 2: Real Admin Inbox & Active Conversation (4800ms - 10000ms)
+  // Scenes:
+  // Scene 1: Full Real Website Hero + Live Chat Widget Integration (0ms - 5000ms)
+  // Scene 2: Real Admin Inbox & Active Conversation (5000ms - 10000ms)
   // Scene 3: Real Admin Visitors Tracking (10000ms - 15000ms)
   // Scene 4: Real Admin Widget Designer (15000ms - 20000ms)
-  const isScene1 = timeMs < 4800;
-  const isScene2 = timeMs >= 4800 && timeMs < 10000;
+  const isScene1 = timeMs < 5000;
+  const isScene2 = timeMs >= 5000 && timeMs < 10000;
   const isScene3 = timeMs >= 10000 && timeMs < 15000;
   const isScene4 = timeMs >= 15000;
 
   // Scene 1 micro-steps
-  const widgetPopped = timeMs >= 1600 && timeMs < 4800;
-  const visitorTypingText = "Hi! How fast can we install Chatral?";
-  const typedCount = timeMs >= 2000 && timeMs < 3800
-    ? Math.min(visitorTypingText.length, Math.floor(((timeMs - 2000) / 1800) * visitorTypingText.length))
-    : timeMs >= 3800 ? visitorTypingText.length : 0;
+  const widgetPopped = timeMs >= 1500 && timeMs < 5000;
+  const visitorTypingText = "Hi! How fast can we install Chatral on our website?";
+  const typedCount = timeMs >= 1900 && timeMs < 3700
+    ? Math.min(visitorTypingText.length, Math.floor(((timeMs - 1900) / 1800) * visitorTypingText.length))
+    : timeMs >= 3700 ? visitorTypingText.length : 0;
   const currentVisitorTyped = visitorTypingText.slice(0, typedCount);
-  const messageSentInWidget = timeMs >= 3900 && timeMs < 4800;
+  const messageSentInWidget = timeMs >= 3900 && timeMs < 5000;
 
   // Scene 2 micro-steps: Inbox list -> Click Keval Vaghani -> Opened Conversation
-  const showConversationDetail = timeMs >= 6200 && timeMs < 10000;
+  const showConversationDetail = timeMs >= 6400 && timeMs < 10000;
 
   // Smooth realistic mouse cursor coordinates
   const getCursor = () => {
-    // Scene 1: Moves to bottom-right chat launcher and clicks, then types and sends
-    if (timeMs < 1700) {
-      const p = Math.min(1, Math.max(0, (timeMs - 300) / 1300));
-      return { x: 50 + (96 - 50) * p, y: 50 + (93 - 50) * p, click: timeMs >= 1500 && timeMs < 1700, visible: true };
+    // Scene 1: Moves to bottom-right chat bubble and clicks, then types and sends
+    if (timeMs < 1600) {
+      const p = Math.min(1, Math.max(0, (timeMs - 200) / 1300));
+      return { x: 50 + (94.5 - 50) * p, y: 50 + (91.5 - 50) * p, click: timeMs >= 1400 && timeMs < 1600, visible: true };
     }
     if (timeMs < 3800) {
-      // Resting on input field in widget
-      const p = Math.min(1, Math.max(0, (timeMs - 1700) / 800));
-      return { x: 96 + (86 - 96) * p, y: 93 + (87 - 93) * p, click: false, visible: true };
+      // Moves to input field in widget
+      const p = Math.min(1, Math.max(0, (timeMs - 1600) / 600));
+      return { x: 94.5 + (86 - 94.5) * p, y: 91.5 + (88 - 91.5) * p, click: false, visible: true };
     }
-    if (timeMs < 4400) {
+    if (timeMs < 4300) {
       // Moves to send button and clicks
       const p = Math.min(1, Math.max(0, (timeMs - 3800) / 300));
-      return { x: 86 + (95 - 86) * p, y: 87, click: timeMs >= 4000 && timeMs < 4250, visible: true };
+      return { x: 86 + (95 - 86) * p, y: 88, click: timeMs >= 4000 && timeMs < 4250, visible: true };
     }
-    if (timeMs < 4800) {
-      return { x: 95, y: 87, click: false, visible: false };
+    if (timeMs < 5000) {
+      return { x: 95, y: 88, click: false, visible: false };
     }
 
     // Scene 2: Moves to Keval Vaghani in conversation list and clicks, then hovers over reply
-    if (timeMs < 6400) {
-      const p = Math.min(1, Math.max(0, (timeMs - 4900) / 1100));
-      return { x: 50 + (24 - 50) * p, y: 50 + (34 - 50) * p, click: timeMs >= 5900 && timeMs < 6200, visible: true };
+    if (timeMs < 6600) {
+      const p = Math.min(1, Math.max(0, (timeMs - 5100) / 1100));
+      return { x: 50 + (24 - 50) * p, y: 50 + (35 - 50) * p, click: timeMs >= 6100 && timeMs < 6400, visible: true };
     }
     if (timeMs < 10000) {
-      const p = Math.min(1, Math.max(0, (timeMs - 6400) / 1200));
-      return { x: 24 + (58 - 24) * p, y: 34 + (42 - 34) * p, click: false, visible: true };
+      const p = Math.min(1, Math.max(0, (timeMs - 6600) / 1200));
+      return { x: 24 + (58 - 24) * p, y: 35 + (42 - 35) * p, click: false, visible: true };
     }
 
     // Scene 3: Moves to Visitors in left sidebar and clicks, then views visitor row
@@ -285,19 +285,19 @@ function HeroVideoShowcase({ isMobile }) {
         boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.05)',
       }}
     >
-      {/* Simulation Screen Container (Matches 1024x590 Exact Aspect Ratio) */}
+      {/* Simulation Screen Container (1024x590 Exact Aspect Ratio with Zero Distortion) */}
       <div
         style={{
           position: 'relative',
           width: '100%',
-          aspectRatio: isMobile ? '16 / 10' : '1024 / 590',
+          aspectRatio: '1024 / 590',
           background: '#0c1017',
           overflow: 'hidden',
           userSelect: 'none',
         }}
       >
         {/* ========================================================================= */}
-        {/* SCENE 1: REAL CHATRAL WEBSITE WITH LIVE WIDGET (0ms - 4800ms)             */}
+        {/* SCENE 1: FULL REAL CHATRAL WEBSITE HERO WITH LIVE CHAT (0ms - 5000ms)    */}
         {/* ========================================================================= */}
         {isScene1 && (
           <div
@@ -307,14 +307,14 @@ function HeroVideoShowcase({ isMobile }) {
               animation: 'fadeIn 0.25s ease-in-out',
             }}
           >
-            {/* Real Screenshot: Storefront / Landing Page */}
+            {/* Real Full Screen Screenshot of Chatral Website Hero */}
             <img
-              src="/chatral-screenshot-storefront.png"
-              alt="Chatral Live Storefront"
+              src="/chatral-screenshot-website-full.png"
+              alt="Chatral Live Website"
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 display: 'block',
               }}
             />
@@ -324,10 +324,10 @@ function HeroVideoShowcase({ isMobile }) {
               <div
                 style={{
                   position: 'absolute',
-                  right: isMobile ? 8 : 20,
-                  bottom: isMobile ? 56 : 74,
-                  width: isMobile ? 290 : 330,
-                  height: isMobile ? 320 : 380,
+                  right: isMobile ? 8 : 18,
+                  bottom: isMobile ? 48 : 62,
+                  width: isMobile ? 260 : 310,
+                  height: isMobile ? 270 : 330,
                   background: '#ffffff',
                   borderRadius: 16,
                   boxShadow: '0 20px 50px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.08)',
@@ -343,7 +343,7 @@ function HeroVideoShowcase({ isMobile }) {
                   style={{
                     background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                     color: '#ffffff',
-                    padding: '12px 14px',
+                    padding: isMobile ? '8px 10px' : '10px 14px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -352,28 +352,28 @@ function HeroVideoShowcase({ isMobile }) {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div
                       style={{
-                        width: 30,
-                        height: 30,
+                        width: 26,
+                        height: 26,
                         borderRadius: '50%',
                         background: 'rgba(255,255,255,0.2)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontWeight: 700,
-                        fontSize: 13,
+                        fontSize: 12,
                       }}
                     >
                       C
                     </div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: 13 }}>Chatral Support</div>
+                      <div style={{ fontWeight: 700, fontSize: 12 }}>Chatral Support</div>
                       <div style={{ fontSize: 10, opacity: 0.9, display: 'flex', alignItems: 'center', gap: 4 }}>
                         <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#4ade80' }} />
                         Replies in under 1 min
                       </div>
                     </div>
                   </div>
-                  <span style={{ fontSize: 10, background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: 999 }}>
+                  <span style={{ fontSize: 9, background: 'rgba(255,255,255,0.2)', padding: '2px 6px', borderRadius: 999 }}>
                     Live Widget
                   </span>
                 </div>
@@ -382,47 +382,47 @@ function HeroVideoShowcase({ isMobile }) {
                 <div
                   style={{
                     flex: 1,
-                    padding: 12,
+                    padding: 10,
                     background: '#f8fafc',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 10,
+                    gap: 8,
                     overflowY: 'auto',
                   }}
                 >
                   {/* Bot Welcome Message */}
-                  <div style={{ maxWidth: '85%', alignSelf: 'flex-start' }}>
+                  <div style={{ maxWidth: '88%', alignSelf: 'flex-start' }}>
                     <div
                       style={{
                         background: '#ffffff',
                         border: '1px solid #e2e8f0',
                         color: '#0f172a',
-                        padding: '8px 12px',
-                        borderRadius: '12px 12px 12px 2px',
-                        fontSize: 12,
-                        lineHeight: 1.4,
+                        padding: '7px 10px',
+                        borderRadius: '10px 10px 10px 2px',
+                        fontSize: 11,
+                        lineHeight: 1.35,
                       }}
                     >
-                      👋 Welcome to Chatral! Ask us anything or test our live response time right now.
+                      👋 Welcome to Chatral! Ask us anything or test our live response speed right now.
                     </div>
                     <span style={{ fontSize: 9, color: '#94a3b8', marginLeft: 4 }}>Support Agent • Just now</span>
                   </div>
 
                   {/* Visitor's Typed Message */}
                   {messageSentInWidget && (
-                    <div style={{ maxWidth: '85%', alignSelf: 'flex-end', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                    <div style={{ maxWidth: '88%', alignSelf: 'flex-end', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                       <div
                         style={{
                           background: '#2563eb',
                           color: '#ffffff',
-                          padding: '8px 12px',
-                          borderRadius: '12px 12px 2px 12px',
-                          fontSize: 12,
-                          lineHeight: 1.4,
+                          padding: '7px 10px',
+                          borderRadius: '10px 10px 2px 10px',
+                          fontSize: 11,
+                          lineHeight: 1.35,
                           boxShadow: '0 2px 6px rgba(37, 99, 235, 0.25)',
                         }}
                       >
-                        Hi! How fast can we install Chatral?
+                        Hi! How fast can we install Chatral on our website?
                       </div>
                       <span style={{ fontSize: 9, color: '#94a3b8', marginRight: 4, marginTop: 2 }}>Sent just now ✓</span>
                     </div>
@@ -432,7 +432,7 @@ function HeroVideoShowcase({ isMobile }) {
                 {/* Widget Input Box */}
                 <div
                   style={{
-                    padding: '8px 10px',
+                    padding: '6px 8px',
                     borderTop: '1px solid #e2e8f0',
                     background: '#ffffff',
                     display: 'flex',
@@ -443,23 +443,23 @@ function HeroVideoShowcase({ isMobile }) {
                   <div
                     style={{
                       flex: 1,
-                      padding: '6px 10px',
+                      padding: '5px 8px',
                       background: '#f1f5f9',
-                      borderRadius: 16,
-                      fontSize: 12,
+                      borderRadius: 14,
+                      fontSize: 11,
                       color: currentVisitorTyped ? '#0f172a' : '#94a3b8',
-                      minHeight: 16,
+                      minHeight: 14,
                     }}
                   >
                     {currentVisitorTyped || 'Type your message...'}
-                    {!messageSentInWidget && timeMs >= 2000 && (
-                      <span style={{ display: 'inline-block', width: 2, height: 12, background: '#2563eb', marginLeft: 2, verticalAlign: 'middle' }} />
+                    {!messageSentInWidget && timeMs >= 1900 && (
+                      <span style={{ display: 'inline-block', width: 2, height: 11, background: '#2563eb', marginLeft: 2, verticalAlign: 'middle' }} />
                     )}
                   </div>
                   <div
                     style={{
-                      width: 28,
-                      height: 28,
+                      width: 26,
+                      height: 26,
                       borderRadius: '50%',
                       background: '#2563eb',
                       display: 'flex',
@@ -478,7 +478,7 @@ function HeroVideoShowcase({ isMobile }) {
         )}
 
         {/* ========================================================================= */}
-        {/* SCENE 2: REAL ADMIN INBOX & ACTIVE CONVERSATION (4800ms - 10000ms)         */}
+        {/* SCENE 2: REAL ADMIN INBOX & ACTIVE CONVERSATION (5000ms - 10000ms)         */}
         {/* ========================================================================= */}
         {isScene2 && (
           <div
@@ -495,7 +495,7 @@ function HeroVideoShowcase({ isMobile }) {
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 display: 'block',
               }}
             />
@@ -520,7 +520,7 @@ function HeroVideoShowcase({ isMobile }) {
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 display: 'block',
               }}
             />
@@ -545,36 +545,12 @@ function HeroVideoShowcase({ isMobile }) {
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 display: 'block',
               }}
             />
           </div>
         )}
-
-        {/* Top-Right Floating Real Software Indicator Badge */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 10,
-            right: 12,
-            background: 'rgba(12, 16, 23, 0.75)',
-            backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            borderRadius: 999,
-            padding: '4px 12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: 11,
-            fontWeight: 600,
-            color: '#f8fafc',
-            zIndex: 50,
-          }}
-        >
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
-          <span>Live Chatral Software</span>
-        </div>
 
         {/* Animated Realistic Mouse Cursor */}
         {cursor.visible && (
