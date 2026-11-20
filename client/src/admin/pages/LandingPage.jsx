@@ -2003,16 +2003,27 @@ export default function LandingPage() {
             className="hero-fade-item-1"
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 28 : 44,
+              fontSize: isMobile ? 26 : 40,
               fontWeight: 800,
-              lineHeight: 1.2,
+              lineHeight: 1.24,
               letterSpacing: '-0.03em',
               margin: '0 auto 16px',
-              maxWidth: 780,
+              maxWidth: 980,
             }}
           >
-            Turn Website Visitors into Paying Customers<br />
-            <span style={{ background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <span style={{ display: isMobile ? 'inline' : 'inline-block', whiteSpace: isMobile ? 'normal' : 'nowrap' }}>
+              Turn Website Visitors into Paying Customers
+            </span>
+            <br />
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: isMobile ? 'inline' : 'inline-block',
+                whiteSpace: isMobile ? 'normal' : 'nowrap',
+              }}
+            >
               With Lightning-Fast Live Chat
             </span>
           </Typography.Title>
