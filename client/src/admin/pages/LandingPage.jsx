@@ -179,9 +179,9 @@ function RollText({ text, secondaryColor }) {
 }
 
 // Automated Single-Box Real Software Video Simulation Showcase
-// Full Website Hero with prominent bottom-right Live Widget Launcher -> Smooth Cursor Click -> Live Chat Message -> Real Admin Panel with exact message -> Visitors -> Widget Designer
+// Real live captured admin panel screenshots with pixel-accurate cursor click synchronizations
 function HeroVideoShowcase({ isMobile }) {
-  const TOTAL_CYCLE = 22000; // 22-second complete video cycle
+  const TOTAL_CYCLE = 22000; // 22-second complete continuous cycle
   const [timeMs, setTimeMs] = useState(0);
 
   // 60ms tick for 60fps smooth cursor movement and scene transitions
@@ -194,10 +194,10 @@ function HeroVideoShowcase({ isMobile }) {
   }, []);
 
   // Scenes:
-  // Scene 1: Real Website Hero with visible bottom-right widget launcher -> Click -> Type & Send (0ms - 8000ms)
-  // Scene 2: Real Admin Inbox -> Click Keval Vaghani -> Opened Conversation with exact reply (8000ms - 13500ms)
-  // Scene 3: Real Admin Visitors Tracking (13500ms - 17500ms)
-  // Scene 4: Real Admin Widget Designer (17500ms - 22000ms)
+  // Scene 1: Real Website Hero with visible widget launcher -> Click -> Type & Send (0ms - 8000ms)
+  // Scene 2: Real Live Admin Inbox -> Click Keval Vaghani -> Opened Conversation (8000ms - 13500ms)
+  // Scene 3: Real Live Admin Visitors Tracking (13500ms - 17500ms)
+  // Scene 4: Real Live Admin Widget Designer (17500ms - 22000ms)
   const isScene1 = timeMs < 8000;
   const isScene2 = timeMs >= 8000 && timeMs < 13500;
   const isScene3 = timeMs >= 13500 && timeMs < 17500;
@@ -205,21 +205,22 @@ function HeroVideoShowcase({ isMobile }) {
 
   // Scene 1 micro-steps
   // 0s - 2.5s: Launcher is prominently displayed at bottom right
-  // 2.5s - 3.8s: Cursor moves to launcher
-  // 3.8s - 4.2s: Cursor clicks launcher
-  // 4.2s - 8.0s: Widget expands, types message, sends
+  // 2.5s - 3.8s: Cursor glides to launcher
+  // 3.8s - 4.1s: Cursor clicks launcher
+  // 4.1s - 8.0s: Widget expands, types message, sends
   const widgetPopped = timeMs >= 4000 && timeMs < 8000;
   const visitorTypingText = "Hi! How fast can we install Chatral?";
   const typedCount = timeMs >= 4600 && timeMs < 6600
     ? Math.min(visitorTypingText.length, Math.floor(((timeMs - 4600) / 2000) * visitorTypingText.length))
     : timeMs >= 6600 ? visitorTypingText.length : 0;
   const currentVisitorTyped = visitorTypingText.slice(0, typedCount);
-  const messageSentInWidget = timeMs >= 6800 && timeMs < 8000;
+  const messageSentInWidget = timeMs >= 6900 && timeMs < 8000;
 
-  // Scene 2 micro-steps: Inbox list -> Click Keval Vaghani -> Opened Conversation
+  // Scene 2 micro-steps: Live Inbox list -> Click Keval Vaghani -> Opened Conversation
+  // At 9600ms, cursor clicks Keval Vaghani, and immediately at 9800ms the conversation detail opens!
   const showConversationDetail = timeMs >= 9800 && timeMs < 13500;
 
-  // Smooth realistic mouse cursor coordinates
+  // Pixel-accurate realistic mouse cursor coordinates and click states
   const getCursor = () => {
     // Scene 1: Starts in hero center, moves to bottom-right chat launcher and clicks, then types and sends
     if (timeMs < 2500) {
@@ -227,52 +228,58 @@ function HeroVideoShowcase({ isMobile }) {
       return { x: 50, y: 52, click: false, visible: true };
     }
     if (timeMs < 4100) {
-      // Glides smoothly to bottom-right chat bubble
+      // Glides smoothly to bottom-right chat button (x: 93.5%, y: 90.5%)
       const p = Math.min(1, Math.max(0, (timeMs - 2500) / 1400));
-      return { x: 50 + (93.5 - 50) * p, y: 52 + (90.5 - 52) * p, click: timeMs >= 3900 && timeMs < 4100, visible: true };
+      return { x: 50 + (93.5 - 50) * p, y: 52 + (90.5 - 52) * p, click: timeMs >= 3850 && timeMs < 4100, visible: true };
     }
     if (timeMs < 6600) {
-      // Moves to input field inside open widget
+      // Moves to input field inside open widget (x: 84%, y: 88%)
       const p = Math.min(1, Math.max(0, (timeMs - 4100) / 600));
-      return { x: 93.5 + (85 - 93.5) * p, y: 90.5 + (88 - 90.5) * p, click: false, visible: true };
+      return { x: 93.5 + (84 - 93.5) * p, y: 90.5 + (88 - 90.5) * p, click: false, visible: true };
     }
-    if (timeMs < 7200) {
-      // Moves to send button and clicks
+    if (timeMs < 7300) {
+      // Moves to send button (x: 93.5%, y: 88%) and clicks
       const p = Math.min(1, Math.max(0, (timeMs - 6600) / 300));
-      return { x: 85 + (94 - 85) * p, y: 88, click: timeMs >= 6900 && timeMs < 7150, visible: true };
+      return { x: 84 + (93.5 - 84) * p, y: 88, click: timeMs >= 6900 && timeMs < 7200, visible: true };
     }
     if (timeMs < 8000) {
-      return { x: 94, y: 88, click: false, visible: false };
+      return { x: 93.5, y: 88, click: false, visible: false };
     }
 
-    // Scene 2: In Admin Panel - Moves to Keval Vaghani in conversation list and clicks, then hovers over reply
+    // Scene 2: In Live Admin Inbox - Glides directly onto "Keval Vaghani" in conversation list and clicks!
     if (timeMs < 10000) {
-      const p = Math.min(1, Math.max(0, (timeMs - 8200) / 1400));
-      return { x: 50 + (24 - 50) * p, y: 50 + (35 - 50) * p, click: timeMs >= 9500 && timeMs < 9800, visible: true };
+      // Keval Vaghani row is located precisely at x: 23.5%, y: 39.0%
+      const p = Math.min(1, Math.max(0, (timeMs - 8100) / 1400));
+      return { x: 50 + (23.5 - 50) * p, y: 50 + (39.0 - 50) * p, click: timeMs >= 9550 && timeMs < 9850, visible: true };
     }
     if (timeMs < 13500) {
+      // Once opened, hovers over operator reply in center chat
       const p = Math.min(1, Math.max(0, (timeMs - 10000) / 1200));
-      return { x: 24 + (58 - 24) * p, y: 35 + (42 - 35) * p, click: false, visible: true };
+      return { x: 23.5 + (52.0 - 23.5) * p, y: 39.0 + (45.0 - 39.0) * p, click: false, visible: true };
     }
 
-    // Scene 3: Moves to Visitors in left sidebar and clicks, then views visitor row
-    if (timeMs < 14800) {
-      const p = Math.min(1, Math.max(0, (timeMs - 13500) / 1000));
-      return { x: 58 + (6.5 - 58) * p, y: 42 + (22.5 - 42) * p, click: timeMs >= 14400 && timeMs < 14700, visible: true };
+    // Scene 3: Glides to "Visitors" in left sidebar and clicks!
+    if (timeMs < 14900) {
+      // Visitors in sidebar is located precisely at x: 6.8%, y: 24.5%
+      const p = Math.min(1, Math.max(0, (timeMs - 13500) / 1100));
+      return { x: 52.0 + (6.8 - 52.0) * p, y: 45.0 + (24.5 - 45.0) * p, click: timeMs >= 14550 && timeMs < 14850, visible: true };
     }
     if (timeMs < 17500) {
-      const p = Math.min(1, Math.max(0, (timeMs - 14800) / 1200));
-      return { x: 6.5 + (42 - 6.5) * p, y: 22.5 + (22.0 - 22.5) * p, click: false, visible: true };
+      // Hovers over active visitor monitoring row
+      const p = Math.min(1, Math.max(0, (timeMs - 14900) / 1200));
+      return { x: 6.8 + (35.0 - 6.8) * p, y: 24.5 + (22.0 - 24.5) * p, click: false, visible: true };
     }
 
-    // Scene 4: Moves to Widget design in left sidebar and clicks, then views theme preview
-    if (timeMs < 18800) {
-      const p = Math.min(1, Math.max(0, (timeMs - 17500) / 1000));
-      return { x: 42 + (6.5 - 42) * p, y: 22 + (39.0 - 22) * p, click: timeMs >= 18400 && timeMs < 18700, visible: true };
+    // Scene 4: Glides to "Widget design" in left sidebar and clicks!
+    if (timeMs < 18900) {
+      // Widget design in sidebar is located precisely at x: 6.8%, y: 39.0%
+      const p = Math.min(1, Math.max(0, (timeMs - 17500) / 1100));
+      return { x: 35.0 + (6.8 - 35.0) * p, y: 22.0 + (39.0 - 22.0) * p, click: timeMs >= 18550 && timeMs < 18850, visible: true };
     }
     if (timeMs <= 22000) {
-      const p = Math.min(1, Math.max(0, (timeMs - 18800) / 1200));
-      return { x: 6.5 + (78 - 6.5) * p, y: 39 + (48.0 - 39) * p, click: false, visible: true };
+      // Hovers over live widget customization and preview on right
+      const p = Math.min(1, Math.max(0, (timeMs - 18900) / 1200));
+      return { x: 6.8 + (76.0 - 6.8) * p, y: 39.0 + (46.0 - 39.0) * p, click: false, visible: true };
     }
 
     return { x: 50, y: 50, click: false, visible: true };
@@ -294,7 +301,7 @@ function HeroVideoShowcase({ isMobile }) {
         boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.05)',
       }}
     >
-      {/* Simulation Screen Container (1024x590 Exact Aspect Ratio) */}
+      {/* Simulation Screen Container (1024x590 Exact Aspect Ratio with Zero Cropping) */}
       <div
         style={{
           position: 'relative',
@@ -659,7 +666,7 @@ function HeroVideoShowcase({ isMobile }) {
         )}
 
         {/* ========================================================================= */}
-        {/* SCENE 2: REAL ADMIN INBOX & ACTIVE CONVERSATION (8000ms - 13500ms)        */}
+        {/* SCENE 2: REAL LIVE ADMIN INBOX & ACTIVE CONVERSATION (8000ms - 13500ms)    */}
         {/* ========================================================================= */}
         {isScene2 && (
           <div
@@ -669,10 +676,10 @@ function HeroVideoShowcase({ isMobile }) {
               animation: 'fadeIn 0.25s ease-in-out',
             }}
           >
-            {/* Real Screenshot: Shows Inbox list before click, then Full Conversation detail after click */}
+            {/* Live Captured Screenshot: Shows Inbox list before click, then Full Conversation detail immediately after click */}
             <img
-              src={showConversationDetail ? '/chatral-screenshot-conversation.png' : '/chatral-screenshot-inbox.png'}
-              alt="Chatral Real Admin Panel Inbox"
+              src={showConversationDetail ? '/chatral-live-conversation.png' : '/chatral-live-inbox.png'}
+              alt="Chatral Live Admin Panel Inbox"
               style={{
                 width: '100%',
                 height: '100%',
@@ -684,7 +691,7 @@ function HeroVideoShowcase({ isMobile }) {
         )}
 
         {/* ========================================================================= */}
-        {/* SCENE 3: REAL ADMIN VISITORS TRACKING (13500ms - 17500ms)                 */}
+        {/* SCENE 3: REAL LIVE ADMIN VISITORS TRACKING (13500ms - 17500ms)             */}
         {/* ========================================================================= */}
         {isScene3 && (
           <div
@@ -694,10 +701,10 @@ function HeroVideoShowcase({ isMobile }) {
               animation: 'fadeIn 0.25s ease-in-out',
             }}
           >
-            {/* Real Screenshot: Visitors Analytics Table */}
+            {/* Live Captured Screenshot: Visitors Analytics Table */}
             <img
-              src="/chatral-screenshot-visitors.png"
-              alt="Chatral Real Admin Visitors"
+              src="/chatral-live-visitors.png"
+              alt="Chatral Live Admin Visitors"
               style={{
                 width: '100%',
                 height: '100%',
@@ -709,7 +716,7 @@ function HeroVideoShowcase({ isMobile }) {
         )}
 
         {/* ========================================================================= */}
-        {/* SCENE 4: REAL ADMIN WIDGET DESIGNER (17500ms - 22000ms)                   */}
+        {/* SCENE 4: REAL LIVE ADMIN WIDGET DESIGNER (17500ms - 22000ms)               */}
         {/* ========================================================================= */}
         {isScene4 && (
           <div
@@ -719,10 +726,10 @@ function HeroVideoShowcase({ isMobile }) {
               animation: 'fadeIn 0.25s ease-in-out',
             }}
           >
-            {/* Real Screenshot: Widget Designer & Customization */}
+            {/* Live Captured Screenshot: Widget Designer & Customization */}
             <img
-              src="/chatral-screenshot-widget-designer.jpg"
-              alt="Chatral Real Admin Widget Designer"
+              src="/chatral-live-widget-designer.png"
+              alt="Chatral Live Admin Widget Designer"
               style={{
                 width: '100%',
                 height: '100%',
@@ -740,14 +747,14 @@ function HeroVideoShowcase({ isMobile }) {
               position: 'absolute',
               left: `${cursor.x}%`,
               top: `${cursor.y}%`,
-              transform: `translate(-2px, -2px) scale(${cursor.click ? 0.88 : 1})`,
+              transform: `translate(-2px, -2px) scale(${cursor.click ? 0.86 : 1})`,
               transition: 'left 0.15s ease-out, top 0.15s ease-out, transform 0.12s ease',
               pointerEvents: 'none',
               zIndex: 1000,
             }}
           >
             {/* SVG Mouse Pointer */}
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.4))' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.45))' }}>
               <path
                 d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19841L11.7841 12.3673H5.65376Z"
                 fill="#0f172a"
@@ -765,7 +772,7 @@ function HeroVideoShowcase({ isMobile }) {
                   height: 32,
                   borderRadius: '50%',
                   border: '2px solid #2563eb',
-                  opacity: 0.85,
+                  opacity: 0.9,
                   animation: 'pulse 0.4s ease-out forwards',
                 }}
               />
