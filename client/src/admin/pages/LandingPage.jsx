@@ -11,6 +11,7 @@ import {
   GlobalOutlined, RiseOutlined, SafetyCertificateOutlined,
   CopyOutlined, StarFilled, UserOutlined, SearchOutlined,
   BarChartOutlined, BellOutlined, CheckOutlined,
+  SettingOutlined, MailOutlined, QuestionCircleOutlined,
 } from '@ant-design/icons';
 import { ChatralFullLogo } from '../components/BrandLogo.jsx';
 import { api } from '../api.js';
@@ -177,484 +178,1271 @@ function RollText({ text, secondaryColor }) {
   );
 }
 
-// Automated Single-Box Video Simulation Showcase (Exact Storefront -> Live Chat -> Operator Inbox -> Triggers & Multi-Store Flow)
+// Automated Single-Box Real Software Video Simulation Showcase
+// Real Chatral Storefront Widget -> Real Chatral Admin Panel & Inbox -> Triggers & 1-Click Multi-Store Switcher
 function HeroVideoShowcase({ isMobile }) {
-  const TOTAL_CYCLE = 24000; // 24 seconds continuous video cycle
+  const TOTAL_CYCLE = 21000; // 21-second continuous video cycle
   const [timeMs, setTimeMs] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
 
-  // Playback timer (60ms ticks for smooth 60fps cursor & progress bar)
+  // 60ms tick for smooth 60fps cursor animation & real-time transitions
   useEffect(() => {
-    if (!isPlaying) return;
     const interval = 60;
     const timer = setInterval(() => {
       setTimeMs((prev) => (prev + interval) % TOTAL_CYCLE);
     }, interval);
     return () => clearInterval(timer);
-  }, [isPlaying]);
+  }, []);
 
-  // Jump to specific chapter / timeline point
-  const handleSeek = (targetMs) => {
-    setTimeMs(targetMs % TOTAL_CYCLE);
-    setIsPlaying(true);
-  };
+  // Cycle timeline phases:
+  // Phase 1: Real Chatral Website + Live Chat Widget Integration (0ms - 7500ms)
+  // Phase 2: Real Chatral Admin Panel - Operator Inbox & Instant Reply (7500ms - 14500ms)
+  // Phase 3: Real Chatral Admin Panel - Automated Triggers & 1-Click Store Switcher (14500ms - 21000ms)
+  const isPhase1 = timeMs < 7500;
+  const isPhase2 = timeMs >= 7500 && timeMs < 14500;
+  const isPhase3 = timeMs >= 14500;
 
-  // Determine current active scene
-  // Scene 1: Storefront (0 - 8000ms)
-  // Scene 2: Live Operator Inbox (8000 - 16000ms)
-  // Scene 3: Admin Triggers & Multi-Store (16000 - 24000ms)
-  const isScene1 = timeMs < 8000;
-  const isScene2 = timeMs >= 8000 && timeMs < 16000;
-  const isScene3 = timeMs >= 16000;
+  // Phase 1 detailed micro-steps
+  const widgetPopped = timeMs >= 1800 && timeMs < 7500;
+  const visitorTypingText = "Hi! How fast can we install Chatral?";
+  const typedCount = timeMs >= 2400 && timeMs < 5000
+    ? Math.min(visitorTypingText.length, Math.floor(((timeMs - 2400) / 2200) * visitorTypingText.length))
+    : timeMs >= 5000 ? visitorTypingText.length : 0;
+  const currentVisitorTyped = visitorTypingText.slice(0, typedCount);
+  const messageSentInWidget = timeMs >= 5200 && timeMs < 7500;
 
-  // Scene 1 States
-  const widgetOpen = timeMs >= 3000;
-  const visitorTypedTarget = 'Is Size 9 in stock for express delivery?';
-  let visitorTypedText = '';
-  if (timeMs >= 4600 && timeMs < 6600) {
-    const charsCount = Math.min(visitorTypedTarget.length, Math.floor(((timeMs - 4600) / 1900) * visitorTypedTarget.length));
-    visitorTypedText = visitorTypedTarget.slice(0, charsCount);
-  } else if (timeMs >= 6600) {
-    visitorTypedText = visitorTypedTarget;
-  }
-  const visitorMsgSent = timeMs >= 7000;
-  const visitorAgentTyping = timeMs >= 7400;
+  // Phase 2 detailed micro-steps
+  const adminChatSelected = timeMs >= 8600;
+  const agentTyping = timeMs >= 9800 && timeMs < 11800;
+  const agentReplied = timeMs >= 11800;
+  const isSeen = timeMs >= 13200;
 
-  // Scene 2 States (Inbox)
-  const inboxChatActive = timeMs >= 9200;
-  const agentCannedClicked = timeMs >= 11800;
-  const agentReplySent = timeMs >= 13400;
+  // Phase 3 detailed micro-steps
+  const triggersViewActive = timeMs >= 15200 && timeMs < 17800;
+  const storeDropdownOpen = timeMs >= 18000;
+  const storeSwitched = timeMs >= 19600;
 
-  // Scene 3 States (Admin Triggers & Store Switcher)
-  const storeDropdownOpen = timeMs >= 20200 && timeMs < 21800;
-  const storeSwitched = timeMs >= 21800;
-
-  // Virtual Cursor interpolation across the 3 scenes
+  // Smooth realistic mouse cursor coordinates
   const getCursor = () => {
-    // SCENE 1: Storefront (0 - 8000ms)
-    if (timeMs < 1500) {
-      return { x: 38, y: 46, clicking: false };
+    // Phase 1: Website & Widget
+    if (timeMs < 1800) {
+      // Moves towards bottom-right floating launcher
+      const p = Math.min(1, Math.max(0, (timeMs - 400) / 1400));
+      return { x: 50 + (91 - 50) * p, y: 50 + (91 - 50) * p, click: timeMs >= 1650 && timeMs < 1850, visible: true };
     }
-    if (timeMs < 2900) {
-      // Moves towards bottom right launcher
-      const p = (timeMs - 1500) / 1400;
-      return { x: 38 + p * 50, y: 46 + p * 38, clicking: false }; // arrives at (88, 84)
+    if (timeMs < 2400) {
+      return { x: 91, y: 91, click: false, visible: true };
     }
-    if (timeMs < 3400) {
-      // Clicks launcher
-      return { x: 88, y: 84, clicking: true };
+    if (timeMs < 5000) {
+      // Moves to input field inside widget
+      const p = Math.min(1, Math.max(0, (timeMs - 2400) / 1000));
+      return { x: 91 + (84 - 91) * p, y: 91 + (88 - 91) * p, click: false, visible: true };
     }
-    if (timeMs < 4500) {
-      // Moves into widget input field
-      const p = (timeMs - 3400) / 1100;
-      return { x: 88 - p * 13, y: 84, clicking: false }; // (75, 84)
+    if (timeMs < 5500) {
+      // Moves to send button and clicks
+      const p = Math.min(1, Math.max(0, (timeMs - 5000) / 300));
+      return { x: 84 + (94 - 84) * p, y: 88, click: timeMs >= 5200 && timeMs < 5400, visible: true };
     }
-    if (timeMs < 4900) {
-      // Clicks input field
-      return { x: 75, y: 84, clicking: true };
-    }
-    if (timeMs < 6600) {
-      // Typing in input field
-      return { x: 75, y: 84, clicking: false };
-    }
-    if (timeMs < 7100) {
-      // Moves to send button
-      const p = (timeMs - 6600) / 500;
-      return { x: 75 + p * 14, y: 84, clicking: false }; // (89, 84)
-    }
-    if (timeMs < 7700) {
-      // Clicks send button
-      return { x: 89, y: 84, clicking: true };
-    }
-    if (timeMs < 8000) {
-      return { x: 89, y: 84, clicking: false };
+    if (timeMs < 7500) {
+      return { x: 94, y: 88, click: false, visible: false };
     }
 
-    // SCENE 2: Live Inbox (8000 - 16000ms)
-    if (timeMs < 9200) {
-      // Glides to Sarah's conversation in conversation list
-      const p = (timeMs - 8000) / 1200;
-      return { x: 60 - p * 37, y: 60 - p * 34, clicking: false }; // arrives at (23, 26)
+    // Phase 2: Real Admin Inbox
+    if (timeMs < 8800) {
+      // Moves to conversation item in inbox and clicks
+      const p = Math.min(1, Math.max(0, (timeMs - 7800) / 800));
+      return { x: 50 + (28 - 50) * p, y: 50 + (32 - 50) * p, click: timeMs >= 8500 && timeMs < 8750, visible: true };
     }
-    if (timeMs < 9700) {
-      // Clicks Sarah's chat
-      return { x: 23, y: 26, clicking: true };
+    if (timeMs < 12000) {
+      // Moves into chat center
+      const p = Math.min(1, Math.max(0, (timeMs - 9000) / 1200));
+      return { x: 28 + (56 - 28) * p, y: 32 + (55 - 32) * p, click: false, visible: true };
     }
-    if (timeMs < 11800) {
-      // Moves to Quick Reply pill "/express-shipping"
-      const p = (timeMs - 9700) / 2100;
-      return { x: 23 + p * 21, y: 26 + p * 59, clicking: false }; // arrives at (44, 85)
+    if (timeMs < 14500) {
+      // Glides towards visitor intel panel
+      const p = Math.min(1, Math.max(0, (timeMs - 12000) / 1200));
+      return { x: 56 + (88 - 56) * p, y: 55 + (28 - 55) * p, click: false, visible: true };
     }
-    if (timeMs < 12300) {
-      // Clicks saved reply
-      return { x: 44, y: 85, clicking: true };
-    }
-    if (timeMs < 13300) {
-      // Moves to Send Reply button
-      const p = (timeMs - 12300) / 1000;
-      return { x: 44 + p * 20, y: 85, clicking: false }; // arrives at (64, 85)
-    }
-    if (timeMs < 13900) {
-      // Clicks Send button
-      return { x: 64, y: 85, clicking: true };
-    }
+
+    // Phase 3: Triggers & Multi-Store Switcher
     if (timeMs < 16000) {
-      // Glides towards left sidebar
-      const p = (timeMs - 13900) / 2100;
-      return { x: 64 - p * 57.5, y: 85 - p * 61, clicking: false }; // arrives at (6.5, 24)
+      // Moves to Triggers in dark sidebar and clicks
+      const p = Math.min(1, Math.max(0, (timeMs - 14600) / 800));
+      return { x: 88 + (7 - 88) * p, y: 28 + (34 - 28) * p, click: timeMs >= 15200 && timeMs < 15500, visible: true };
+    }
+    if (timeMs < 18400) {
+      // Moves to Store Switcher in header and clicks
+      const p = Math.min(1, Math.max(0, (timeMs - 16500) / 1000));
+      return { x: 7 + (22 - 7) * p, y: 34 + (4.5 - 34) * p, click: timeMs >= 17800 && timeMs < 18200, visible: true };
+    }
+    if (timeMs <= 21000) {
+      // Moves to demo store in dropdown and clicks
+      const p = Math.min(1, Math.max(0, (timeMs - 18600) / 800));
+      return { x: 22, y: 4.5 + (16 - 4.5) * p, click: timeMs >= 19400 && timeMs < 19800, visible: true };
     }
 
-    // SCENE 3: Admin Triggers & Multi-Store (16000 - 24000ms)
-    if (timeMs < 17200) {
-      return { x: 6.5, y: 24, clicking: false };
-    }
-    if (timeMs < 17700) {
-      // Clicks "Triggers" in sidebar
-      return { x: 6.5, y: 24, clicking: true };
-    }
-    if (timeMs < 19200) {
-      // Hovers on Cart Abandonment Trigger
-      return { x: 42, y: 36, clicking: false };
-    }
-    if (timeMs < 20200) {
-      // Moves to top store switcher "Aura Threads ▾"
-      const p = (timeMs - 19200) / 1000;
-      return { x: 42 - p * 7, y: 36 - p * 31.5, clicking: false }; // arrives at (35, 4.5)
-    }
-    if (timeMs < 20700) {
-      // Clicks store dropdown
-      return { x: 35, y: 4.5, clicking: true };
-    }
-    if (timeMs < 21600) {
-      // Moves down to "2. Peak Audio Hub"
-      const p = (timeMs - 20700) / 900;
-      return { x: 35, y: 4.5 + p * 9, clicking: false }; // arrives at (35, 13.5)
-    }
-    if (timeMs < 22100) {
-      // Clicks "Peak Audio Hub"
-      return { x: 35, y: 13.5, clicking: true };
-    }
-    return { x: 50, y: 50, clicking: false };
+    return { x: 50, y: 50, click: false, visible: true };
   };
 
   const cursor = getCursor();
-  const currentSec = Math.floor(timeMs / 1000);
-  const formattedSec = currentSec < 10 ? `0:0${currentSec}` : `0:${currentSec}`;
-  const progressPercent = ((timeMs / TOTAL_CYCLE) * 100).toFixed(1);
 
   return (
     <div
       style={{
-        background: '#ffffff',
-        border: '1px solid #e6e7eb',
-        borderRadius: 20,
-        overflow: 'hidden',
-        boxShadow: '0 24px 60px -12px rgba(12, 13, 16, 0.1), 0 2px 6px rgba(12, 13, 16, 0.04)',
-        textAlign: 'left',
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: isMobile ? 520 : 660,
-        height: isMobile ? 'auto' : 660,
         position: 'relative',
+        width: '100%',
+        maxWidth: 1080,
+        margin: '0 auto',
+        borderRadius: isMobile ? 14 : 20,
+        overflow: 'hidden',
+        background: '#0c1017',
+        border: '1px solid rgba(226, 232, 240, 0.8)',
+        boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(15, 23, 42, 0.05)',
       }}
     >
-      <style>{`
-        @keyframes cursorClickPulse {
-          0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
-          100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
-        }
-        @keyframes fadeScaleIn {
-          from { opacity: 0; transform: scale(0.96); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
-
-      {/* Animated Mouse Cursor (Simulating live user & operator interactions) */}
-      {!isMobile && (
-        <div
-          style={{
-            position: 'absolute',
-            left: `${cursor.x}%`,
-            top: `${cursor.y}%`,
-            transform: 'translate(-2px, -2px)',
-            transition: 'left 0.4s cubic-bezier(0.2, 0.9, 0.3, 1), top 0.4s cubic-bezier(0.2, 0.9, 0.3, 1)',
-            zIndex: 90,
-            pointerEvents: 'none',
-          }}
-        >
-          {cursor.clicking && (
-            <span
-              style={{
-                position: 'absolute',
-                left: 2,
-                top: 2,
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                border: '2.5px solid #2563eb',
-                background: 'rgba(37, 99, 235, 0.22)',
-                transform: 'translate(-50%, -50%)',
-                animation: 'cursorClickPulse 0.4s ease-out forwards',
-              }}
-            />
-          )}
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.35))' }}>
-            <path
-              d="M5.5 3.2L18.8 12.8L12.5 13.9L16 20.8L13.2 22.2L9.7 15.3L5.5 19.5V3.2Z"
-              fill="#0f172a"
-              stroke="#ffffff"
-              strokeWidth="1.8"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-      )}
-
-      {/* Top Browser Bar */}
+      {/* Main Simulation Viewport (Responsive Fixed Aspect Ratio Container) */}
       <div
         style={{
-          height: 44,
-          background: '#f8fafc',
-          borderBottom: '1px solid #e2e8f0',
-          padding: '0 16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexShrink: 0,
+          position: 'relative',
+          width: '100%',
+          height: isMobile ? 480 : 580,
+          background: isPhase1 ? '#f8fafc' : '#ffffff',
+          overflow: 'hidden',
+          userSelect: 'none',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308', display: 'inline-block' }} />
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-        </div>
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
-            borderRadius: 6,
-            padding: '3px 14px',
-            fontSize: 12,
-            color: '#475569',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            maxWidth: 420,
-            width: '100%',
-            justifyContent: 'center',
-            fontWeight: 500,
-          }}
-        >
-          <span style={{ color: '#16a34a' }}>🔒</span>
-          <span>
-            {isScene1
-              ? 'aurathreads.com/products/all-weather-jacket'
-              : isScene2
-              ? 'app.chatral.com/inbox'
-              : 'app.chatral.com/triggers'}
-          </span>
-        </div>
-        <div style={{ fontSize: 11, fontWeight: 600, color: '#2563eb', background: '#eff6ff', padding: '3px 8px', borderRadius: 4 }}>
-          {isScene1 ? 'Cart (1) • ₹2,499' : isScene2 ? 'Live Operator: Online 🟢' : '3 / 3 Stores Synced'}
-        </div>
-      </div>
-
-      {/* Main Video Body (Switches seamlessly between 3 scenes) */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
-        {/* SCENE 1: Website Storefront Widget (Customer Perspective) */}
-        {isScene1 && (
+        {/* ========================================================================= */}
+        {/* SCENE 1: REAL CHATRAL WEBSITE WITH LIVE CHAT WIDGET INTEGRATION (0s - 7.5s) */}
+        {/* ========================================================================= */}
+        {isPhase1 && (
           <div
             style={{
-              flex: 1,
+              position: 'absolute',
+              inset: 0,
+              background: 'radial-gradient(ellipse 90% 60% at 50% 0%, #edf5ff 0%, #f6faff 50%, #ffffff 100%)',
               display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
-              padding: isMobile ? 14 : 20,
-              gap: 20,
-              background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
-              overflowY: 'auto',
-              position: 'relative',
+              flexDirection: 'column',
+              animation: 'fadeIn 0.3s ease-in-out',
             }}
           >
-            {/* Product Card on Left */}
+            {/* Real Chatral Website Header */}
             <div
               style={{
-                flex: isMobile ? 'none' : '1.1',
-                background: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: 14,
-                padding: isMobile ? 14 : 20,
                 display: 'flex',
-                flexDirection: 'column',
+                alignItems: 'center',
                 justifyContent: 'space-between',
+                padding: isMobile ? '12px 16px' : '16px 36px',
+                borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+                background: 'rgba(255, 255, 255, 0.85)',
+                backdropFilter: 'blur(8px)',
               }}
             >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                  <span style={{ background: '#fef3c7', color: '#b45309', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 999 }}>
-                    🔥 Bestseller
-                  </span>
-                  <span style={{ color: '#16a34a', fontSize: 11.5, fontWeight: 600 }}>
-                    ✓ In Stock (Ships in 24h)
-                  </span>
-                </div>
-                <div style={{ fontSize: isMobile ? 17 : 20, fontWeight: 800, color: '#0f172a', marginBottom: 6 }}>
-                  All-Weather Performance Runner
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-                  <div style={{ color: '#f59e0b', fontSize: 12 }}>⭐⭐⭐⭐⭐</div>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: '#0f172a' }}>4.9</span>
-                  <span style={{ fontSize: 11.5, color: '#64748b' }}>(182 customer reviews)</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 14 }}>
-                  <span style={{ fontSize: 22, fontWeight: 800, color: '#0f172a' }}>₹2,499</span>
-                  <span style={{ fontSize: 13, color: '#94a3b8', textDecoration: 'line-through' }}>₹3,499</span>
-                  <span style={{ fontSize: 11.5, fontWeight: 700, color: '#16a34a' }}>Save 28%</span>
-                </div>
-                <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Select Size:</div>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    {['UK 7', 'UK 8', 'UK 9 (Selected)', 'UK 10'].map((s, idx) => (
-                      <span
-                        key={idx}
-                        style={{
-                          padding: '4px 10px',
-                          borderRadius: 6,
-                          fontSize: 11,
-                          fontWeight: 600,
-                          border: idx === 2 ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                          background: idx === 2 ? '#eff6ff' : '#ffffff',
-                          color: idx === 2 ? '#2563eb' : '#475569',
-                        }}
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <ChatralFullLogo height={isMobile ? 26 : 30} />
+              </div>
+              <div style={{ display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: 28, fontSize: 13, color: '#475569', fontWeight: 500 }}>
+                <span>Features</span>
+                <span>How it works</span>
+                <span>Pricing</span>
+                <span>FAQ</span>
               </div>
               <div>
                 <button
                   type="button"
                   style={{
-                    width: '100%',
-                    padding: '11px 0',
-                    background: '#0f172a',
+                    background: '#2563eb',
                     color: '#ffffff',
                     border: 'none',
-                    borderRadius: 10,
-                    fontSize: 13,
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    marginBottom: 8,
+                    borderRadius: 999,
+                    padding: isMobile ? '6px 14px' : '8px 18px',
+                    fontSize: isMobile ? 11 : 13,
+                    fontWeight: 600,
+                    cursor: 'default',
                   }}
                 >
-                  Add to Bag • ₹2,499
+                  Start Free →
                 </button>
-                <div style={{ textAlign: 'center', fontSize: 11, color: '#64748b' }}>
-                  ⚡ 67KB Chatral widget loaded • Page loads in 0.4s
-                </div>
               </div>
             </div>
 
-            {/* Right: Floating Chat Widget or Launcher */}
-            <div style={{ flex: isMobile ? 'none' : '0.9', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', minHeight: 380 }}>
-              {!widgetOpen ? (
-                /* Closed Floating Launcher Button in Bottom Right */
-                <div style={{ position: 'absolute', bottom: 16, right: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 12, padding: '7px 12px', fontSize: 12, fontWeight: 600, color: '#1e293b', boxShadow: '0 8px 24px -4px rgba(0,0,0,0.12)', whiteSpace: 'nowrap' }}>
-                    👋 Need size advice? We're online!
+            {/* Real Chatral Hero Preview */}
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                padding: '0 20px',
+                position: 'relative',
+              }}
+            >
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '4px 12px',
+                  background: '#eef4ff',
+                  border: '1px solid rgba(37, 99, 235, 0.2)',
+                  borderRadius: 999,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: '#2563eb',
+                  marginBottom: 14,
+                }}
+              >
+                <span>Trusted by 25+ modern stores</span>
+              </div>
+
+              <h2
+                style={{
+                  fontSize: isMobile ? 20 : 32,
+                  fontWeight: 800,
+                  color: '#0f172a',
+                  lineHeight: 1.25,
+                  maxWidth: 620,
+                  margin: 0,
+                  letterSpacing: '-0.025em',
+                }}
+              >
+                Turn Website Visitors into Paying Customers{' '}
+                <span style={{ color: '#2563eb' }}>With Lightning-Fast Live Chat</span>
+              </h2>
+
+              <p
+                style={{
+                  fontSize: isMobile ? 12 : 14,
+                  color: '#64748b',
+                  maxWidth: 520,
+                  margin: '12px auto 20px',
+                  lineHeight: 1.5,
+                }}
+              >
+                Install our lightweight 67KB live chat widget in 2 minutes. Talk to online shoppers in real time, see cart items, and boost conversions.
+              </p>
+
+              <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+                <span
+                  style={{
+                    background: '#2563eb',
+                    color: '#fff',
+                    padding: '8px 18px',
+                    borderRadius: 8,
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
+                >
+                  Start free trial →
+                </span>
+                <span
+                  style={{
+                    background: '#ffffff',
+                    color: '#334155',
+                    border: '1px solid #cbd5e1',
+                    padding: '8px 18px',
+                    borderRadius: 8,
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
+                >
+                  Book a demo
+                </span>
+              </div>
+            </div>
+
+            {/* Bottom-Right Floating Chatral Live Widget Launcher */}
+            <div
+              style={{
+                position: 'absolute',
+                right: isMobile ? 14 : 26,
+                bottom: isMobile ? 14 : 24,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                zIndex: 30,
+              }}
+            >
+              {/* Launcher Tooltip Pill ("See Chatral live in action! →") */}
+              <div
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  padding: '7px 14px',
+                  borderRadius: 999,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: '#1e293b',
+                  boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <span>💬 See Chatral live in action! →</span>
+              </div>
+
+              {/* Launcher Blue Circular Bubble */}
+              <div
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                  boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#ffffff',
+                  fontSize: 22,
+                  cursor: 'pointer',
+                  transform: widgetPopped ? 'rotate(90deg) scale(0.95)' : 'scale(1)',
+                  transition: 'transform 0.25s ease',
+                }}
+              >
+                <MessageOutlined />
+              </div>
+            </div>
+
+            {/* Popped Open Chatral Storefront Widget Window */}
+            {widgetPopped && (
+              <div
+                style={{
+                  position: 'absolute',
+                  right: isMobile ? 12 : 24,
+                  bottom: isMobile ? 74 : 86,
+                  width: isMobile ? 310 : 340,
+                  height: isMobile ? 370 : 410,
+                  background: '#ffffff',
+                  borderRadius: 18,
+                  boxShadow: '0 20px 45px -10px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(0,0,0,0.08)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  zIndex: 35,
+                  animation: 'slideUpWidget 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+              >
+                {/* Widget Header */}
+                <div
+                  style={{
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    color: '#ffffff',
+                    padding: '14px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div
+                      style={{
+                        width: 34,
+                        height: 34,
+                        borderRadius: '50%',
+                        background: 'rgba(255,255,255,0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        fontSize: 14,
+                      }}
+                    >
+                      C
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: 14 }}>Chatral Support</div>
+                      <div style={{ fontSize: 11, opacity: 0.85, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80' }} />
+                        Typically replies in under 1 min
+                      </div>
+                    </div>
+                  </div>
+                  <span style={{ fontSize: 10, background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: 999 }}>
+                    Live Widget
+                  </span>
+                </div>
+
+                {/* Widget Message Feed */}
+                <div
+                  style={{
+                    flex: 1,
+                    padding: 14,
+                    overflowY: 'auto',
+                    background: '#f8fafc',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 12,
+                  }}
+                >
+                  {/* Automated Welcome Bot Message */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '85%' }}>
+                    <div
+                      style={{
+                        background: '#ffffff',
+                        border: '1px solid #e2e8f0',
+                        color: '#1e293b',
+                        padding: '10px 14px',
+                        borderRadius: '14px 14px 14px 2px',
+                        fontSize: 13,
+                        lineHeight: 1.45,
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
+                      }}
+                    >
+                      👋 Welcome to Chatral! Ask us anything or test our live response speed right now.
+                    </div>
+                    <span style={{ fontSize: 10, color: '#94a3b8', marginTop: 3, marginLeft: 4 }}>Support Agent • Just now</span>
+                  </div>
+
+                  {/* Visitor's Sent Message */}
+                  {messageSentInWidget && (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', alignSelf: 'flex-end', maxWidth: '85%' }}>
+                      <div
+                        style={{
+                          background: '#2563eb',
+                          color: '#ffffff',
+                          padding: '10px 14px',
+                          borderRadius: '14px 14px 2px 14px',
+                          fontSize: 13,
+                          lineHeight: 1.45,
+                          boxShadow: '0 2px 6px rgba(37, 99, 235, 0.25)',
+                        }}
+                      >
+                        Hi! How fast can we install Chatral?
+                      </div>
+                      <span style={{ fontSize: 10, color: '#94a3b8', marginTop: 3, marginRight: 4 }}>Sent just now ✓</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Widget Input Box */}
+                <div
+                  style={{
+                    padding: '10px 12px',
+                    borderTop: '1px solid #e2e8f0',
+                    background: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <div
+                    style={{
+                      flex: 1,
+                      padding: '8px 12px',
+                      background: '#f1f5f9',
+                      borderRadius: 20,
+                      fontSize: 13,
+                      color: currentVisitorTyped ? '#0f172a' : '#94a3b8',
+                      minHeight: 18,
+                    }}
+                  >
+                    {currentVisitorTyped || 'Type your message...'}
+                    {!messageSentInWidget && timeMs >= 2400 && (
+                      <span style={{ display: 'inline-block', width: 2, height: 13, background: '#2563eb', marginLeft: 2, verticalAlign: 'middle', animation: 'blink 0.8s infinite' }} />
+                    )}
                   </div>
                   <div
                     style={{
-                      position: 'relative',
-                      width: 56,
-                      height: 56,
+                      width: 32,
+                      height: 32,
                       borderRadius: '50%',
                       background: '#2563eb',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: '#ffffff',
-                      boxShadow: '0 10px 25px -3px rgba(37,99,235,0.4)',
+                      fontSize: 13,
                       cursor: 'pointer',
                     }}
                   >
-                    <MessageOutlined style={{ fontSize: 24 }} />
-                    <span style={{ position: 'absolute', bottom: 2, right: 2, width: 12, height: 12, borderRadius: '50%', background: '#22c55e', border: '2px solid #ffffff' }} />
+                    <SendOutlined />
                   </div>
                 </div>
-              ) : (
-                /* Expanded Live Chat Window */
-                <div style={{ background: '#ffffff', border: '1.5px solid #bfdbfe', borderRadius: 16, boxShadow: '0 12px 30px -6px rgba(37, 99, 235, 0.2)', display: 'flex', flexDirection: 'column', overflow: 'hidden', height: 420 }}>
-                  {/* Widget Header */}
-                  <div style={{ background: '#2563eb', padding: '12px 16px', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ position: 'relative' }}>
-                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#ffffff', color: '#2563eb', fontWeight: 800, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          A
-                        </div>
-                        <span style={{ position: 'absolute', bottom: 0, right: 0, width: 8, height: 8, borderRadius: '50%', background: '#22c55e', border: '1.5px solid #ffffff' }} />
-                      </div>
-                      <div>
-                        <div style={{ fontSize: 13, fontWeight: 700 }}>Aura Support</div>
-                        <div style={{ fontSize: 10.5, opacity: 0.9 }}>Typically replies in under 1 min</div>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: 11, background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: 999 }}>
-                      Live Widget
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* SCENES 2 & 3: REAL CHATRAL ADMIN PANEL (7.5s - 21.0s) */}
+        {/* ========================================================================= */}
+        {!isPhase1 && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              background: '#ffffff',
+              animation: 'fadeIn 0.3s ease-in-out',
+            }}
+          >
+            {/* Real Left Dark Sidebar (#0c1017) */}
+            <div
+              style={{
+                width: isMobile ? 60 : 210,
+                background: '#0c1017',
+                borderRight: '1px solid #1e293b',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                padding: isMobile ? '14px 6px' : '16px 12px',
+                flexShrink: 0,
+              }}
+            >
+              {/* Top: Logo & Menu Items */}
+              <div>
+                {/* Chatral Logo */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: isMobile ? '0 4px' : '0 8px', marginBottom: 20 }}>
+                  <div
+                    style={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: 8,
+                      background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: 14,
+                    }}
+                  >
+                    C
+                  </div>
+                  {!isMobile && (
+                    <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 16, letterSpacing: '-0.02em' }}>
+                      Chatral
                     </span>
+                  )}
+                </div>
+
+                {/* Sidebar Menu Items */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  {/* Inbox (Active in Phase 2) */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: isMobile ? 'center' : 'space-between',
+                      padding: isMobile ? '8px 0' : '8px 12px',
+                      borderRadius: 8,
+                      background: !triggersViewActive ? '#1e293b' : 'transparent',
+                      color: !triggersViewActive ? '#ffffff' : '#94a3b8',
+                      fontSize: 13,
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <MessageOutlined style={{ fontSize: 15, color: !triggersViewActive ? '#38bdf8' : 'inherit' }} />
+                      {!isMobile && <span>Inbox</span>}
+                    </div>
+                    {!isMobile && (
+                      <span
+                        style={{
+                          background: '#2563eb',
+                          color: '#ffffff',
+                          fontSize: 11,
+                          padding: '1px 6px',
+                          borderRadius: 999,
+                          fontWeight: 700,
+                        }}
+                      >
+                        1
+                      </span>
+                    )}
                   </div>
 
-                  {/* Widget Messages Area */}
-                  <div style={{ flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, background: '#f8fafc', fontSize: 12, overflowY: 'auto' }}>
-                    {/* Proactive Automated Greeting */}
-                    <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 12px 2px', border: '1px solid #e2e8f0', color: '#334155', lineHeight: 1.5 }}>
-                      👋 Welcome to Aura Threads! Looking for size advice or delivery times?
+                  {/* Tickets */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: isMobile ? '8px 0' : '8px 12px',
+                      justifyContent: isMobile ? 'center' : 'flex-start',
+                      borderRadius: 8,
+                      color: '#94a3b8',
+                      fontSize: 13,
+                      fontWeight: 500,
+                    }}
+                  >
+                    <MailOutlined style={{ fontSize: 15 }} />
+                    {!isMobile && <span>Tickets</span>}
+                  </div>
+
+                  {/* Visitors */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: isMobile ? '8px 0' : '8px 12px',
+                      justifyContent: isMobile ? 'center' : 'flex-start',
+                      borderRadius: 8,
+                      color: '#94a3b8',
+                      fontSize: 13,
+                      fontWeight: 500,
+                    }}
+                  >
+                    <UserOutlined style={{ fontSize: 15 }} />
+                    {!isMobile && <span>Visitors</span>}
+                  </div>
+
+                  {/* Saved replies */}
+                  {!isMobile && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '8px 12px',
+                        borderRadius: 8,
+                        color: '#94a3b8',
+                        fontSize: 13,
+                        fontWeight: 500,
+                      }}
+                    >
+                      <CopyOutlined style={{ fontSize: 15 }} />
+                      <span>Saved replies</span>
+                    </div>
+                  )}
+
+                  {/* Triggers (Active in Phase 3) */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: isMobile ? '8px 0' : '8px 12px',
+                      justifyContent: isMobile ? 'center' : 'flex-start',
+                      borderRadius: 8,
+                      background: triggersViewActive ? '#1e293b' : 'transparent',
+                      color: triggersViewActive ? '#38bdf8' : '#94a3b8',
+                      fontSize: 13,
+                      fontWeight: triggersViewActive ? 700 : 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <ThunderboltOutlined style={{ fontSize: 15, color: triggersViewActive ? '#38bdf8' : 'inherit' }} />
+                    {!isMobile && <span>Triggers</span>}
+                  </div>
+
+                  {/* Widget design */}
+                  {!isMobile && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '8px 12px',
+                        borderRadius: 8,
+                        color: '#94a3b8',
+                        fontSize: 13,
+                        fontWeight: 500,
+                      }}
+                    >
+                      <SettingOutlined style={{ fontSize: 15 }} />
+                      <span>Widget design</span>
+                    </div>
+                  )}
+
+                  {/* Reports */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: isMobile ? '8px 0' : '8px 12px',
+                      justifyContent: isMobile ? 'center' : 'flex-start',
+                      borderRadius: 8,
+                      color: '#94a3b8',
+                      fontSize: 13,
+                      fontWeight: 500,
+                    }}
+                  >
+                    <BarChartOutlined style={{ fontSize: 15 }} />
+                    {!isMobile && <span>Reports</span>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Active Store Badge */}
+              <div
+                style={{
+                  background: '#131b26',
+                  borderRadius: 8,
+                  padding: isMobile ? '6px 4px' : '10px 12px',
+                  border: '1px solid #1e293b',
+                  textAlign: isMobile ? 'center' : 'left',
+                }}
+              >
+                {!isMobile && (
+                  <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', fontWeight: 700, marginBottom: 2 }}>
+                    ACTIVE STORE
+                  </div>
+                )}
+                <div style={{ fontSize: isMobile ? 10 : 12, fontWeight: 700, color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {storeSwitched ? "demo's Store" : 'Chatral Store'}
+                </div>
+                {!isMobile && (
+                  <div style={{ fontSize: 10, color: '#38bdf8', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span>👑 Lifetime Access</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right Admin Content Area */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#f8fafc', minWidth: 0, position: 'relative' }}>
+              {/* Admin Top Header Bar */}
+              <div
+                style={{
+                  height: 48,
+                  background: '#ffffff',
+                  borderBottom: '1px solid #e2e8f0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0 16px',
+                  position: 'relative',
+                  zIndex: 20,
+                }}
+              >
+                {/* Store Switcher Button */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, position: 'relative' }}>
+                  <button
+                    type="button"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      background: storeDropdownOpen ? '#eff6ff' : '#f1f5f9',
+                      border: storeDropdownOpen ? '1px solid #3b82f6' : '1px solid #e2e8f0',
+                      borderRadius: 8,
+                      padding: '5px 12px',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <ShopOutlined style={{ color: '#2563eb' }} />
+                    <span>{storeSwitched ? "demo's Store" : 'Chatral Store'}</span>
+                    <span style={{ fontSize: 9, color: '#64748b' }}>▾</span>
+                  </button>
+
+                  <span
+                    style={{
+                      background: '#f1f5f9',
+                      border: '1px solid #e2e8f0',
+                      color: '#475569',
+                      padding: '3px 8px',
+                      borderRadius: 6,
+                      fontSize: 11,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Super admin
+                  </span>
+                </div>
+
+                {/* Right Profile & Sound */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 14, color: '#64748b' }}>🔊</span>
+                  <div
+                    style={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: '50%',
+                      background: '#7c3aed',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 700,
+                      fontSize: 12,
+                    }}
+                  >
+                    C
+                  </div>
+                </div>
+
+                {/* 1-Click Multi-Store Dropdown Popover */}
+                {storeDropdownOpen && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 48,
+                      left: 16,
+                      width: 230,
+                      background: '#ffffff',
+                      borderRadius: 10,
+                      border: '1px solid #e2e8f0',
+                      boxShadow: '0 12px 30px rgba(0,0,0,0.12)',
+                      padding: 6,
+                      zIndex: 100,
+                      animation: 'fadeIn 0.15s ease',
+                    }}
+                  >
+                    <div style={{ padding: '6px 8px', fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+                      Select Active Store
                     </div>
 
-                    {/* Visitor Sent Message */}
-                    {visitorMsgSent && (
-                      <div style={{ alignSelf: 'flex-end', maxWidth: '85%', background: '#2563eb', color: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 2px 12px', lineHeight: 1.5, animation: 'fadeScaleIn 0.25s ease' }}>
-                        <div>Is Size 9 in stock for express delivery?</div>
-                        <div style={{ fontSize: 9.5, opacity: 0.8, textAlign: 'right', marginTop: 2 }}>Just now ✓</div>
+                    {/* Store 1: Chatral Store */}
+                    <div
+                      style={{
+                        padding: '8px 10px',
+                        borderRadius: 6,
+                        background: !storeSwitched ? '#eff6ff' : 'transparent',
+                        color: !storeSwitched ? '#2563eb' : '#0f172a',
+                        fontWeight: !storeSwitched ? 700 : 500,
+                        fontSize: 12,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: !storeSwitched ? '#2563eb' : '#cbd5e1' }} />
+                        <span>Chatral Store</span>
                       </div>
-                    )}
+                      {!storeSwitched && <CheckOutlined style={{ fontSize: 11 }} />}
+                    </div>
 
-                    {/* Typing Indicator */}
-                    {visitorAgentTyping && (
-                      <div style={{ alignSelf: 'flex-start', background: '#e0e7ff', padding: '6px 10px', borderRadius: 999, fontSize: 10.5, color: '#3730a3', display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span>Rahul is typing</span>
-                        <span>...</span>
+                    {/* Store 2: demo's Store */}
+                    <div
+                      style={{
+                        padding: '8px 10px',
+                        borderRadius: 6,
+                        background: storeSwitched ? '#eff6ff' : 'transparent',
+                        color: storeSwitched ? '#2563eb' : '#0f172a',
+                        fontWeight: storeSwitched ? 700 : 500,
+                        fontSize: 12,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: storeSwitched ? '#2563eb' : '#cbd5e1' }} />
+                        <span>demo&apos;s Store</span>
                       </div>
-                    )}
+                      {storeSwitched && <CheckOutlined style={{ fontSize: 11 }} />}
+                    </div>
+
+                    {/* Store 3: Keval Vaghani's Store */}
+                    <div
+                      style={{
+                        padding: '8px 10px',
+                        borderRadius: 6,
+                        color: '#0f172a',
+                        fontSize: 12,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                      }}
+                    >
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#cbd5e1' }} />
+                      <span>Keval Vaghani&apos;s Store</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Main Body: Switch between Inbox (Phase 2) and Triggers (Phase 3) */}
+              {!triggersViewActive ? (
+                /* Phase 2: Live Operator Inbox */
+                <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+                  {/* Left Column: Conversations List */}
+                  <div
+                    style={{
+                      width: isMobile ? 120 : 220,
+                      background: '#ffffff',
+                      borderRight: '1px solid #e2e8f0',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {/* Search & Tabs */}
+                    <div style={{ padding: '10px 10px 6px', borderBottom: '1px solid #f1f5f9' }}>
+                      <div
+                        style={{
+                          background: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: 6,
+                          padding: '5px 8px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          fontSize: 11,
+                          color: '#94a3b8',
+                        }}
+                      >
+                        <SearchOutlined style={{ fontSize: 12 }} />
+                        {!isMobile && <span>Search name, email...</span>}
+                      </div>
+
+                      <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: '#2563eb', borderBottom: '2px solid #2563eb', paddingBottom: 2 }}>
+                          Inbox
+                        </span>
+                        <span style={{ fontSize: 11, color: '#64748b' }}>Trash</span>
+                        <span style={{ fontSize: 11, color: '#64748b' }}>Spam</span>
+                      </div>
+                    </div>
+
+                    {/* Active Conversation Item (Keval Vaghani) */}
+                    <div
+                      style={{
+                        padding: '10px 10px',
+                        background: adminChatSelected ? '#eff6ff' : '#ffffff',
+                        borderLeft: adminChatSelected ? '3px solid #2563eb' : '3px solid transparent',
+                        borderBottom: '1px solid #f1f5f9',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e' }} />
+                          <span style={{ fontWeight: 700, fontSize: 12, color: '#0f172a' }}>Keval Vaghani</span>
+                        </div>
+                        <span style={{ fontSize: 10, color: '#94a3b8' }}>Just now</span>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: '#64748b',
+                          marginTop: 3,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        Hi! How fast can we install...
+                      </div>
+                    </div>
+
+                    {/* Other Mock Conversations */}
+                    <div style={{ padding: '10px', borderBottom: '1px solid #f1f5f9', opacity: 0.65 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontWeight: 600, fontSize: 12, color: '#334155' }}>Sarah Jenkins</span>
+                        <span style={{ fontSize: 10, color: '#94a3b8' }}>24m</span>
+                      </div>
+                      <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>Can we customize widget?</div>
+                    </div>
                   </div>
 
-                  {/* Widget Input Bar */}
-                  <div style={{ padding: '8px 12px', background: '#ffffff', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <input
-                      readOnly
-                      value={visitorMsgSent ? '' : visitorTypedText}
-                      placeholder={visitorMsgSent ? 'Type a reply...' : 'Ask a question...'}
-                      style={{ flex: 1, border: 'none', outline: 'none', fontSize: 12, color: '#0f172a', background: 'transparent' }}
-                    />
+                  {/* Middle Column: Chat Window */}
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#ffffff', minWidth: 0 }}>
+                    {/* Chat Header */}
+                    <div
+                      style={{
+                        height: 44,
+                        padding: '0 16px',
+                        borderBottom: '1px solid #e2e8f0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
+                        <span style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>Keval Vaghani</span>
+                        <span style={{ fontSize: 11, color: '#64748b' }}>• Live on chatral.com</span>
+                      </div>
+                      <button
+                        type="button"
+                        style={{
+                          background: 'transparent',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: 6,
+                          padding: '3px 10px',
+                          fontSize: 11,
+                          fontWeight: 600,
+                          color: '#2563eb',
+                        }}
+                      >
+                        Resolve chat
+                      </button>
+                    </div>
+
+                    {/* Messages Body */}
+                    <div
+                      style={{
+                        flex: 1,
+                        padding: 16,
+                        overflowY: 'auto',
+                        background: '#fafafa',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 12,
+                      }}
+                    >
+                      {/* Incoming Customer Message */}
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
+                        <span style={{ fontSize: 10, color: '#94a3b8', marginBottom: 2 }}>Visitor • Just now</span>
+                        <div
+                          style={{
+                            background: '#ffffff',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '12px 12px 12px 2px',
+                            padding: '10px 14px',
+                            fontSize: 13,
+                            color: '#0f172a',
+                            lineHeight: 1.4,
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                          }}
+                        >
+                          Hi! How fast can we install Chatral on our website?
+                        </div>
+                      </div>
+
+                      {/* Operator Typing Indicator */}
+                      {agentTyping && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#eff6ff', borderRadius: 12, width: 'fit-content' }}>
+                          <span style={{ fontSize: 11, color: '#2563eb', fontWeight: 600 }}>Operator is typing</span>
+                          <span style={{ display: 'inline-flex', gap: 2 }}>
+                            <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#2563eb', animation: 'bounce 1s infinite' }} />
+                            <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#2563eb', animation: 'bounce 1s infinite 0.2s' }} />
+                            <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#2563eb', animation: 'bounce 1s infinite 0.4s' }} />
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Operator Reply Bubble */}
+                      {agentReplied && (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', alignSelf: 'flex-end', maxWidth: '85%' }}>
+                          <span style={{ fontSize: 10, color: '#94a3b8', marginBottom: 2 }}>Support Agent • Just now</span>
+                          <div
+                            style={{
+                              background: '#2563eb',
+                              color: '#ffffff',
+                              borderRadius: '12px 12px 2px 12px',
+                              padding: '10px 14px',
+                              fontSize: 13,
+                              lineHeight: 1.45,
+                              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)',
+                            }}
+                          >
+                            Under 2 minutes! Just paste 1 script tag on your website and talk to visitors in real time 🚀
+                          </div>
+                          {isSeen && (
+                            <span style={{ fontSize: 10, color: '#2563eb', marginTop: 3, fontWeight: 600 }}>
+                              Seen ✓✓
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Chat Reply Input */}
+                    <div
+                      style={{
+                        padding: '10px 14px',
+                        borderTop: '1px solid #e2e8f0',
+                        background: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                      }}
+                    >
+                      <div
+                        style={{
+                          flex: 1,
+                          padding: '8px 12px',
+                          background: '#f8fafc',
+                          borderRadius: 8,
+                          border: '1px solid #e2e8f0',
+                          fontSize: 12,
+                          color: '#94a3b8',
+                        }}
+                      >
+                        Type a reply or use saved replies...
+                      </div>
+                      <button
+                        type="button"
+                        style={{
+                          background: '#2563eb',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: 6,
+                          padding: '7px 16px',
+                          fontSize: 12,
+                          fontWeight: 600,
+                        }}
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Visitor Intel Panel (Desktop Only) */}
+                  {!isMobile && (
+                    <div
+                      style={{
+                        width: 200,
+                        background: '#ffffff',
+                        borderLeft: '1px solid #e2e8f0',
+                        padding: 14,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 12,
+                        fontSize: 12,
+                      }}
+                    >
+                      <div style={{ fontWeight: 700, fontSize: 12, color: '#0f172a', borderBottom: '1px solid #f1f5f9', paddingBottom: 6 }}>
+                        Visitor Details
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Name</div>
+                        <div style={{ fontWeight: 600, color: '#0f172a' }}>Keval Vaghani</div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Channel</div>
+                        <div style={{ color: '#334155' }}>Website Live Widget</div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Location</div>
+                        <div style={{ color: '#334155' }}>Gujarat, India 🇮🇳</div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Active Page</div>
+                        <div style={{ color: '#2563eb', fontWeight: 600 }}>chatral.com/</div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Browser & Device</div>
+                        <div style={{ color: '#334155' }}>Chrome • macOS</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* Phase 3: Automated Triggers & Smart Rules View */
+                <div
+                  style={{
+                    flex: 1,
+                    padding: isMobile ? 12 : 20,
+                    background: '#f8fafc',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 14,
+                    overflowY: 'auto',
+                    animation: 'fadeIn 0.25s ease',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: isMobile ? 15 : 18, fontWeight: 800, color: '#0f172a' }}>
+                        Automated Triggers
+                      </h3>
+                      <p style={{ margin: '2px 0 0', fontSize: 12, color: '#64748b' }}>
+                        Engage visitors automatically based on time, scroll depth, and exit intent.
+                      </p>
+                    </div>
                     <button
                       type="button"
                       style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: '50%',
-                        background: visitorTypedText ? '#2563eb' : '#94a3b8',
-                        border: 'none',
+                        background: '#2563eb',
                         color: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        transition: 'background 0.2s',
+                        border: 'none',
+                        borderRadius: 8,
+                        padding: '6px 14px',
+                        fontSize: 12,
+                        fontWeight: 600,
                       }}
                     >
-                      <SendOutlined style={{ fontSize: 11 }} />
+                      + Create Trigger
                     </button>
+                  </div>
+
+                  {/* Trigger Card 1: Abandoned Cart Recovery */}
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 12,
+                      padding: 14,
+                      display: 'flex',
+                      flexDirection: isMobile ? 'column' : 'row',
+                      justifyContent: 'space-between',
+                      alignItems: isMobile ? 'flex-start' : 'center',
+                      gap: 10,
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 16 }}>🛒</span>
+                        <span style={{ fontWeight: 700, fontSize: 14, color: '#0f172a' }}>Cart Abandonment Saver</span>
+                        <span style={{ background: '#dcfce7', color: '#16a34a', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 999 }}>
+                          Active 🟢
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>
+                        Fires when visitor has items in cart and remains idle for 45 seconds. Offers 10% instant discount.
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <div style={{ textAlign: isMobile ? 'left' : 'right' }}>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: '#2563eb' }}>98.4%</div>
+                        <div style={{ fontSize: 10, color: '#94a3b8' }}>Open Rate</div>
+                      </div>
+                      <div style={{ width: 36, height: 20, background: '#2563eb', borderRadius: 10, position: 'relative' }}>
+                        <div style={{ width: 16, height: 16, background: '#fff', borderRadius: '50%', position: 'absolute', top: 2, right: 2 }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Trigger Card 2: First-Time Visitor Greeting */}
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 12,
+                      padding: 14,
+                      display: 'flex',
+                      flexDirection: isMobile ? 'column' : 'row',
+                      justifyContent: 'space-between',
+                      alignItems: isMobile ? 'flex-start' : 'center',
+                      gap: 10,
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 16 }}>👋</span>
+                        <span style={{ fontWeight: 700, fontSize: 14, color: '#0f172a' }}>First-Time Visitor Welcome</span>
+                        <span style={{ background: '#dcfce7', color: '#16a34a', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 999 }}>
+                          Active 🟢
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>
+                        Displays a welcoming tooltip after 8 seconds on landing page to answer questions before bounce.
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <div style={{ textAlign: isMobile ? 'left' : 'right' }}>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: '#2563eb' }}>41.8%</div>
+                        <div style={{ fontSize: 10, color: '#94a3b8' }}>Conversion</div>
+                      </div>
+                      <div style={{ width: 36, height: 20, background: '#2563eb', borderRadius: 10, position: 'relative' }}>
+                        <div style={{ width: 16, height: 16, background: '#fff', borderRadius: '50%', position: 'absolute', top: 2, right: 2 }} />
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -662,466 +1450,50 @@ function HeroVideoShowcase({ isMobile }) {
           </div>
         )}
 
-        {/* SCENE 2: Live Operator Inbox (Agent Perspective) */}
-        {isScene2 && (
-          <div style={{ flex: 1, display: 'flex', height: '100%', minHeight: 0, position: 'relative' }}>
-            {/* Alert Notification Toast */}
-            {timeMs < 10500 && (
-              <div style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)', zIndex: 60, background: '#1e293b', color: '#ffffff', padding: '6px 14px', borderRadius: 999, fontSize: 11.5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 20px rgba(0,0,0,0.25)', animation: 'fadeScaleIn 0.3s ease' }}>
-                <span>🔔</span>
-                <span>New Message: Sarah Jenkins • Cart: ₹2,499</span>
-              </div>
-            )}
-
-            {/* 1. Left Dark Sidebar */}
-            <div style={{ width: 170, flexShrink: 0, background: '#070b13', borderRight: '1px solid #172133', display: isMobile ? 'none' : 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '14px 10px' }}>
-              <div>
-                <div style={{ padding: '4px 8px 14px' }}>
-                  <ChatralFullLogo height={20} dark={true} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#162238', color: '#ffffff', padding: '7px 10px', fontSize: 12, borderRadius: 6, fontWeight: 600 }}>
-                    <MessageOutlined style={{ color: '#38bdf8' }} /> <span>Inbox</span>
-                    <span style={{ marginLeft: 'auto', background: '#ef4444', color: '#ffffff', fontSize: 9.5, fontWeight: 700, padding: '1px 5px', borderRadius: 999 }}>1</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
-                    <ThunderboltOutlined /> <span>Triggers</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
-                    <ShopOutlined /> <span>Multi-Store</span>
-                  </div>
-                </div>
-              </div>
-              <div style={{ background: '#0d1524', border: '1px solid #1b283d', borderRadius: 6, padding: '6px 8px' }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: '#64748b' }}>STORE</div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#4ade80' }}>Aura Threads 🟢</div>
-              </div>
-            </div>
-
-            {/* 2. Middle Conversation List */}
-            <div style={{ width: isMobile ? '100%' : 220, flexShrink: 0, background: '#ffffff', borderRight: '1px solid #eef2f6', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ padding: '10px 12px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>Open Chats (1)</span>
-                <span style={{ fontSize: 10, background: '#dbeafe', color: '#1d4ed8', padding: '1px 6px', borderRadius: 999, fontWeight: 600 }}>Live</span>
-              </div>
-              <div style={{ flex: 1, overflowY: 'auto' }}>
-                {/* Sarah's Conversation Item */}
-                <div style={{ padding: '10px 12px', background: inboxChatActive ? '#eff6ff' : '#ffffff', borderLeft: inboxChatActive ? '3px solid #2563eb' : '3px solid transparent', borderBottom: '1px solid #f8fafc', cursor: 'pointer' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e' }} />
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>Sarah Jenkins</span>
-                    </div>
-                    <span style={{ fontSize: 10, color: '#64748b' }}>Just now</span>
-                  </div>
-                  <div style={{ fontSize: 11, color: '#475569', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 4 }}>
-                    Is Size 9 in stock for express...
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: 9.5, background: '#fef3c7', color: '#b45309', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>Cart: ₹2,499</span>
-                    <span style={{ width: 14, height: 14, borderRadius: '50%', background: '#2563eb', color: '#ffffff', fontSize: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>1</span>
-                  </div>
-                </div>
-                {/* Chat 2 */}
-                <div style={{ padding: '10px 12px', borderBottom: '1px solid #f8fafc', opacity: 0.7 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: '#334155' }}>Alex Cooper</span>
-                    <span style={{ fontSize: 10, color: '#94a3b8' }}>14m</span>
-                  </div>
-                  <div style={{ fontSize: 11, color: '#64748b' }}>Thanks for the quick refund!</div>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Center Chat Box */}
-            <div style={{ flex: 1, display: isMobile ? 'none' : 'flex', flexDirection: 'column', background: '#f8fafc' }}>
-              {/* Chat Header */}
-              <div style={{ height: 44, padding: '0 16px', background: '#ffffff', borderBottom: '1px solid #eef2f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
-                  <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>Sarah Jenkins</span>
-                  <span style={{ fontSize: 11, color: '#64748b' }}>• /products/all-weather-jacket</span>
-                </div>
-                <span style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>Active Online</span>
-              </div>
-
-              {/* Messages Transcript */}
-              <div style={{ flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto' }}>
-                <div style={{ alignSelf: 'flex-start', maxWidth: '80%', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px 10px 10px 2px', padding: '8px 12px', fontSize: 12, color: '#1e293b' }}>
-                  <div>Is Size 9 in stock for express delivery?</div>
-                  <div style={{ fontSize: 9.5, color: '#94a3b8', marginTop: 2 }}>Sarah • Just now</div>
-                </div>
-
-                {agentReplySent && (
-                  <div style={{ alignSelf: 'flex-end', maxWidth: '80%', background: '#2563eb', color: '#ffffff', borderRadius: '10px 10px 2px 10px', padding: '8px 12px', fontSize: 12, animation: 'fadeScaleIn 0.25s ease' }}>
-                    <div>Yes! UK 9 is in stock. Ships within 2 hours with express delivery 🚀</div>
-                    <div style={{ fontSize: 9.5, opacity: 0.85, textAlign: 'right', marginTop: 2 }}>Delivered & Seen ✓✓</div>
-                  </div>
-                )}
-              </div>
-
-              {/* Bottom Quick Reply & Send */}
-              <div style={{ padding: '8px 12px', background: '#ffffff', borderTop: '1px solid #eef2f6', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: '#64748b' }}>QUICK REPLIES:</span>
-                  <span style={{ fontSize: 10.5, fontWeight: 600, background: agentCannedClicked ? '#dbeafe' : '#f1f5f9', color: agentCannedClicked ? '#1d4ed8' : '#475569', padding: '2px 8px', borderRadius: 4, cursor: 'pointer', border: agentCannedClicked ? '1px solid #93c5fd' : '1px solid transparent' }}>
-                    ⚡ /express-shipping
-                  </span>
-                  <span style={{ fontSize: 10.5, color: '#64748b', background: '#f8fafc', padding: '2px 8px', borderRadius: 4 }}>
-                    🏷️ /coupon-discount
-                  </span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <input
-                    readOnly
-                    value={agentReplySent ? '' : agentCannedClicked ? 'Yes! UK 9 is in stock. Ships within 2 hours with express delivery 🚀' : ''}
-                    placeholder={agentReplySent ? 'Reply sent...' : 'Click quick reply or type message...'}
-                    style={{ flex: 1, border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, outline: 'none' }}
-                  />
-                  <button type="button" style={{ height: 30, padding: '0 12px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: 11.5, fontWeight: 600, cursor: 'pointer' }}>
-                    Send
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. Right Visitor Intel Panel */}
-            <div style={{ width: isMobile ? 'none' : 190, flexShrink: 0, background: '#ffffff', borderLeft: '1px solid #eef2f6', display: isMobile ? 'none' : 'flex', flexDirection: 'column', padding: 12, gap: 10, fontSize: 11 }}>
-              <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0f172a', borderBottom: '1px solid #f1f5f9', paddingBottom: 6 }}>
-                Visitor Intel
-              </div>
-              <div>
-                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>NAME</div>
-                <div style={{ fontWeight: 600, color: '#0f172a' }}>Sarah Jenkins</div>
-              </div>
-              <div>
-                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>LIVE CART VALUE</div>
-                <div style={{ fontWeight: 800, color: '#16a34a', fontSize: 13 }}>₹2,499</div>
-                <div style={{ color: '#64748b', fontSize: 10 }}>1x All-Weather Runner UK 9</div>
-              </div>
-              <div>
-                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>LOCATION</div>
-                <div style={{ color: '#0f172a' }}>Mumbai, India 🇮🇳</div>
-              </div>
-              <div>
-                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>DEVICE & SPEED</div>
-                <div style={{ color: '#0f172a' }}>macOS • Chrome (0.4s)</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SCENE 3: Admin Triggers & 1-Click Store Switcher */}
-        {isScene3 && (
-          <div style={{ flex: 1, display: 'flex', height: '100%', minHeight: 0, position: 'relative' }}>
-            {/* Store Switch Success Toast */}
-            {storeSwitched && (
-              <div style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)', zIndex: 60, background: '#059669', color: '#ffffff', padding: '6px 14px', borderRadius: 999, fontSize: 11.5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 20px rgba(0,0,0,0.25)', animation: 'fadeScaleIn 0.3s ease' }}>
-                <span>✓</span>
-                <span>Switched to Store 2: Peak Audio Hub in 1 click!</span>
-              </div>
-            )}
-
-            {/* Left Dark Sidebar */}
-            <div style={{ width: 170, flexShrink: 0, background: '#070b13', borderRight: '1px solid #172133', display: isMobile ? 'none' : 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '14px 10px' }}>
-              <div>
-                <div style={{ padding: '4px 8px 14px' }}>
-                  <ChatralFullLogo height={20} dark={true} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
-                    <MessageOutlined /> <span>Inbox</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#162238', color: '#ffffff', padding: '7px 10px', fontSize: 12, borderRadius: 6, fontWeight: 600 }}>
-                    <ThunderboltOutlined style={{ color: '#38bdf8' }} /> <span>Triggers</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
-                    <ShopOutlined /> <span>Multi-Store</span>
-                  </div>
-                </div>
-              </div>
-              <div style={{ background: '#0d1524', border: '1px solid #1b283d', borderRadius: 6, padding: '6px 8px' }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: '#64748b' }}>STORES INCLUDED</div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#4ade80' }}>3 / 3 Active</div>
-              </div>
-            </div>
-
-            {/* Admin Main Body */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-              {/* Admin Top Header with 1-Click Store Switcher */}
-              <div style={{ height: 46, borderBottom: '1px solid #f1f5f9', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', position: 'relative' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>Active Store:</span>
-                  <div style={{ position: 'relative' }}>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ffffff', border: '1.5px solid #2563eb', borderRadius: 6, padding: '3px 10px', fontSize: 12, fontWeight: 700, color: '#2563eb', cursor: 'pointer' }}>
-                      <span>{storeSwitched ? '🎧 Peak Audio Hub' : '🏪 Aura Threads'}</span>
-                      <span style={{ fontSize: 10 }}>▾</span>
-                    </div>
-                    {/* Dropdown Menu when clicked */}
-                    {storeDropdownOpen && (
-                      <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, width: 200, background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 8, boxShadow: '0 10px 25px rgba(0,0,0,0.15)', zIndex: 70, padding: 4 }}>
-                        <div style={{ padding: '6px 10px', fontSize: 11.5, color: '#64748b', borderBottom: '1px solid #f1f5f9' }}>
-                          Switch Store (1-Click):
-                        </div>
-                        <div style={{ padding: '6px 10px', fontSize: 11.5, fontWeight: 600, color: '#0f172a', borderRadius: 4, background: '#f1f5f9' }}>
-                          1. Aura Threads (Active)
-                        </div>
-                        <div style={{ padding: '6px 10px', fontSize: 11.5, fontWeight: 600, color: '#2563eb', borderRadius: 4, background: '#eff6ff', border: '1px solid #93c5fd' }}>
-                          2. Peak Audio Hub (Clicking...)
-                        </div>
-                        <div style={{ padding: '6px 10px', fontSize: 11.5, color: '#475569', borderRadius: 4 }}>
-                          3. Luxe Wellness
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <span style={{ fontSize: 10.5, background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: 999, fontWeight: 600 }}>
-                    1-Click Switcher
-                  </span>
-                </div>
-                <button type="button" style={{ height: 28, padding: '0 12px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
-                  + New Trigger
-                </button>
-              </div>
-
-              {/* Content Columns: Triggers on Left, Multi-Store on Right */}
-              <div style={{ flex: 1, padding: isMobile ? 14 : 20, display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 16 }}>
-                {/* Left: Automated Triggers */}
-                <div style={{ flex: 1.2 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: '#0f172a', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <ThunderboltOutlined style={{ color: '#2563eb' }} />
-                    Automated Sales Triggers (Auto-pilot Revenue)
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <div style={{ background: '#ffffff', border: '1.5px solid #86efac', borderRadius: 10, padding: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>🛒 Cart Abandonment Recovery</span>
-                        <span style={{ fontSize: 10, fontWeight: 700, background: '#dcfce7', color: '#15803d', padding: '2px 7px', borderRadius: 999 }}>
-                          ACTIVE (34% Converted)
-                        </span>
-                      </div>
-                      <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
-                        When visitor is on <code>/checkout</code> for &gt; 30 seconds:
-                      </div>
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
-                        "Need help completing your order? Use code <strong style={{ color: '#2563eb' }}>SAVE10</strong> for ₹200 off!"
-                      </div>
-                    </div>
-
-                    <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>👋 First-Time Shopper Greeting</span>
-                        <span style={{ fontSize: 10, fontWeight: 700, background: '#eff6ff', color: '#2563eb', padding: '2px 7px', borderRadius: 999 }}>
-                          ACTIVE
-                        </span>
-                      </div>
-                      <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
-                        When visitor views 2nd product page:
-                      </div>
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
-                        "Welcome! Let us know if you need any sizing or fit recommendations."
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right: Multi-Store Box */}
-                <div style={{ flex: 0.8, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>
-                      Multi-Store Setup (3 Stores Included)
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                      <div style={{ background: '#ffffff', border: !storeSwitched ? '1.5px solid #2563eb' : '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, fontWeight: 600, color: !storeSwitched ? '#2563eb' : '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span>1. Aura Threads</span>
-                        <span>{!storeSwitched ? 'Active 🟢' : 'Switch →'}</span>
-                      </div>
-                      <div style={{ background: '#ffffff', border: storeSwitched ? '1.5px solid #2563eb' : '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, fontWeight: 600, color: storeSwitched ? '#2563eb' : '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span>2. Peak Audio Hub</span>
-                        <span>{storeSwitched ? 'Active 🟢' : 'Switch →'}</span>
-                      </div>
-                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span>3. Luxe Wellness</span>
-                        <span style={{ color: '#2563eb' }}>Switch →</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
-                    <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>
-                      Ultra-Lightweight Engine
-                    </div>
-                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>
-                      ✓ 67 KB single script • 0 lag
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Integrated Bottom Video Player Controls Bar */}
-      <div
-        style={{
-          background: '#0f172a',
-          borderTop: '1px solid #1e293b',
-          padding: '10px 16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 8,
-          color: '#ffffff',
-          flexShrink: 0,
-        }}
-      >
-        {/* Progress Timeline Scrubber */}
-        <div
-          onClick={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const ratio = Math.max(0, Math.min(1, clickX / rect.width));
-            handleSeek(ratio * TOTAL_CYCLE);
-          }}
-          style={{
-            width: '100%',
-            height: 5,
-            background: '#334155',
-            borderRadius: 999,
-            position: 'relative',
-            cursor: 'pointer',
-            overflow: 'hidden',
-          }}
-        >
+        {/* Animated Realistic Mouse Cursor */}
+        {cursor.visible && (
           <div
             style={{
-              width: `${progressPercent}%`,
-              height: '100%',
-              background: '#3b82f6',
-              borderRadius: 999,
-              transition: 'width 0.08s linear',
+              position: 'absolute',
+              left: `${cursor.x}%`,
+              top: `${cursor.y}%`,
+              transform: `translate(-2px, -2px) scale(${cursor.click ? 0.88 : 1})`,
+              transition: 'left 0.15s ease-out, top 0.15s ease-out, transform 0.12s ease',
+              pointerEvents: 'none',
+              zIndex: 1000,
             }}
-          />
-        </div>
-
-        {/* Controls Row: Play/Pause, Chapters & Time Indicator */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: isMobile ? 'wrap' : 'nowrap',
-            gap: 8,
-          }}
-        >
-          {/* Left: Play/Pause, Restart & Time */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button
-              type="button"
-              onClick={() => setIsPlaying(!isPlaying)}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: '#ffffff',
-                fontSize: 16,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                padding: 0,
-              }}
-            >
-              {isPlaying ? <PauseCircleOutlined style={{ fontSize: 18 }} /> : <PlayCircleOutlined style={{ fontSize: 18 }} />}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleSeek(0)}
-              title="Restart from beginning"
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: '#94a3b8',
-                fontSize: 13,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                padding: 0,
-              }}
-            >
-              <RedoOutlined />
-            </button>
-
-            <span style={{ fontSize: 11.5, color: '#94a3b8', fontFamily: 'monospace' }}>
-              {formattedSec} / 0:24
-            </span>
+          >
+            {/* SVG Mouse Pointer */}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.35))' }}>
+              <path
+                d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19841L11.7841 12.3673H5.65376Z"
+                fill="#0f172a"
+                stroke="#ffffff"
+                strokeWidth="1.5"
+              />
+            </svg>
+            {cursor.click && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: -8,
+                  left: -8,
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  border: '2px solid #2563eb',
+                  opacity: 0.8,
+                  animation: 'pulse 0.4s ease-out forwards',
+                }}
+              />
+            )}
           </div>
-
-          {/* Middle: Chapter Indicators (Clickable to jump scene) */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-            <button
-              type="button"
-              onClick={() => handleSeek(0)}
-              style={{
-                background: isScene1 ? '#1d4ed8' : 'rgba(255,255,255,0.08)',
-                color: isScene1 ? '#ffffff' : '#94a3b8',
-                border: isScene1 ? '1px solid #3b82f6' : '1px solid transparent',
-                borderRadius: 999,
-                padding: '3px 10px',
-                fontSize: 11,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              🛍️ 1. Storefront Widget
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleSeek(8000)}
-              style={{
-                background: isScene2 ? '#1d4ed8' : 'rgba(255,255,255,0.08)',
-                color: isScene2 ? '#ffffff' : '#94a3b8',
-                border: isScene2 ? '1px solid #3b82f6' : '1px solid transparent',
-                borderRadius: 999,
-                padding: '3px 10px',
-                fontSize: 11,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              💬 2. Live Operator Inbox
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleSeek(16000)}
-              style={{
-                background: isScene3 ? '#1d4ed8' : 'rgba(255,255,255,0.08)',
-                color: isScene3 ? '#ffffff' : '#94a3b8',
-                border: isScene3 ? '1px solid #3b82f6' : '1px solid transparent',
-                borderRadius: 999,
-                padding: '3px 10px',
-                fontSize: 11,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              ⚙️ 3. Triggers & Multi-Store
-            </button>
-          </div>
-
-          {/* Right: Live Demo Indicator */}
-          <div style={{ display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#38bdf8' }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38bdf8' }} />
-            <span>Interactive Live Demo</span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
 }
+
 
 export default function LandingPage() {
   const nav = useNavigate();
