@@ -2003,16 +2003,16 @@ export default function LandingPage() {
             className="hero-fade-item-1"
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 26 : 40,
+              fontSize: isMobile ? 26 : 38,
               fontWeight: 800,
-              lineHeight: 1.24,
+              lineHeight: 1.25,
               letterSpacing: '-0.03em',
               margin: '0 auto 16px',
-              maxWidth: 980,
+              maxWidth: 820,
             }}
           >
             <span style={{ display: isMobile ? 'inline' : 'inline-block', whiteSpace: isMobile ? 'normal' : 'nowrap' }}>
-              Turn Website Visitors into Paying Customers
+              Convert Visitors into Customers
             </span>
             <br />
             <span
