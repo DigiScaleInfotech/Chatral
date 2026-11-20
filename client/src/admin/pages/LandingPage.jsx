@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import {
   ArrowRightOutlined, CheckCircleFilled, MessageOutlined,
-  SendOutlined, RocketOutlined, PlayCircleOutlined,
+  SendOutlined, RocketOutlined, PlayCircleOutlined, PauseCircleOutlined, RedoOutlined,
   ShopOutlined, TeamOutlined, LockOutlined, ThunderboltOutlined,
   GlobalOutlined, RiseOutlined, SafetyCertificateOutlined,
   CopyOutlined, StarFilled, UserOutlined, SearchOutlined,
@@ -177,6 +177,952 @@ function RollText({ text, secondaryColor }) {
   );
 }
 
+// Automated Single-Box Video Simulation Showcase (Exact Storefront -> Live Chat -> Operator Inbox -> Triggers & Multi-Store Flow)
+function HeroVideoShowcase({ isMobile }) {
+  const TOTAL_CYCLE = 24000; // 24 seconds continuous video cycle
+  const [timeMs, setTimeMs] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  // Playback timer (60ms ticks for smooth 60fps cursor & progress bar)
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = 60;
+    const timer = setInterval(() => {
+      setTimeMs((prev) => (prev + interval) % TOTAL_CYCLE);
+    }, interval);
+    return () => clearInterval(timer);
+  }, [isPlaying]);
+
+  // Jump to specific chapter / timeline point
+  const handleSeek = (targetMs) => {
+    setTimeMs(targetMs % TOTAL_CYCLE);
+    setIsPlaying(true);
+  };
+
+  // Determine current active scene
+  // Scene 1: Storefront (0 - 8000ms)
+  // Scene 2: Live Operator Inbox (8000 - 16000ms)
+  // Scene 3: Admin Triggers & Multi-Store (16000 - 24000ms)
+  const isScene1 = timeMs < 8000;
+  const isScene2 = timeMs >= 8000 && timeMs < 16000;
+  const isScene3 = timeMs >= 16000;
+
+  // Scene 1 States
+  const widgetOpen = timeMs >= 3000;
+  const visitorTypedTarget = 'Is Size 9 in stock for express delivery?';
+  let visitorTypedText = '';
+  if (timeMs >= 4600 && timeMs < 6600) {
+    const charsCount = Math.min(visitorTypedTarget.length, Math.floor(((timeMs - 4600) / 1900) * visitorTypedTarget.length));
+    visitorTypedText = visitorTypedTarget.slice(0, charsCount);
+  } else if (timeMs >= 6600) {
+    visitorTypedText = visitorTypedTarget;
+  }
+  const visitorMsgSent = timeMs >= 7000;
+  const visitorAgentTyping = timeMs >= 7400;
+
+  // Scene 2 States (Inbox)
+  const inboxChatActive = timeMs >= 9200;
+  const agentCannedClicked = timeMs >= 11800;
+  const agentReplySent = timeMs >= 13400;
+
+  // Scene 3 States (Admin Triggers & Store Switcher)
+  const storeDropdownOpen = timeMs >= 20200 && timeMs < 21800;
+  const storeSwitched = timeMs >= 21800;
+
+  // Virtual Cursor interpolation across the 3 scenes
+  const getCursor = () => {
+    // SCENE 1: Storefront (0 - 8000ms)
+    if (timeMs < 1500) {
+      return { x: 38, y: 46, clicking: false };
+    }
+    if (timeMs < 2900) {
+      // Moves towards bottom right launcher
+      const p = (timeMs - 1500) / 1400;
+      return { x: 38 + p * 50, y: 46 + p * 38, clicking: false }; // arrives at (88, 84)
+    }
+    if (timeMs < 3400) {
+      // Clicks launcher
+      return { x: 88, y: 84, clicking: true };
+    }
+    if (timeMs < 4500) {
+      // Moves into widget input field
+      const p = (timeMs - 3400) / 1100;
+      return { x: 88 - p * 13, y: 84, clicking: false }; // (75, 84)
+    }
+    if (timeMs < 4900) {
+      // Clicks input field
+      return { x: 75, y: 84, clicking: true };
+    }
+    if (timeMs < 6600) {
+      // Typing in input field
+      return { x: 75, y: 84, clicking: false };
+    }
+    if (timeMs < 7100) {
+      // Moves to send button
+      const p = (timeMs - 6600) / 500;
+      return { x: 75 + p * 14, y: 84, clicking: false }; // (89, 84)
+    }
+    if (timeMs < 7700) {
+      // Clicks send button
+      return { x: 89, y: 84, clicking: true };
+    }
+    if (timeMs < 8000) {
+      return { x: 89, y: 84, clicking: false };
+    }
+
+    // SCENE 2: Live Inbox (8000 - 16000ms)
+    if (timeMs < 9200) {
+      // Glides to Sarah's conversation in conversation list
+      const p = (timeMs - 8000) / 1200;
+      return { x: 60 - p * 37, y: 60 - p * 34, clicking: false }; // arrives at (23, 26)
+    }
+    if (timeMs < 9700) {
+      // Clicks Sarah's chat
+      return { x: 23, y: 26, clicking: true };
+    }
+    if (timeMs < 11800) {
+      // Moves to Quick Reply pill "/express-shipping"
+      const p = (timeMs - 9700) / 2100;
+      return { x: 23 + p * 21, y: 26 + p * 59, clicking: false }; // arrives at (44, 85)
+    }
+    if (timeMs < 12300) {
+      // Clicks saved reply
+      return { x: 44, y: 85, clicking: true };
+    }
+    if (timeMs < 13300) {
+      // Moves to Send Reply button
+      const p = (timeMs - 12300) / 1000;
+      return { x: 44 + p * 20, y: 85, clicking: false }; // arrives at (64, 85)
+    }
+    if (timeMs < 13900) {
+      // Clicks Send button
+      return { x: 64, y: 85, clicking: true };
+    }
+    if (timeMs < 16000) {
+      // Glides towards left sidebar
+      const p = (timeMs - 13900) / 2100;
+      return { x: 64 - p * 57.5, y: 85 - p * 61, clicking: false }; // arrives at (6.5, 24)
+    }
+
+    // SCENE 3: Admin Triggers & Multi-Store (16000 - 24000ms)
+    if (timeMs < 17200) {
+      return { x: 6.5, y: 24, clicking: false };
+    }
+    if (timeMs < 17700) {
+      // Clicks "Triggers" in sidebar
+      return { x: 6.5, y: 24, clicking: true };
+    }
+    if (timeMs < 19200) {
+      // Hovers on Cart Abandonment Trigger
+      return { x: 42, y: 36, clicking: false };
+    }
+    if (timeMs < 20200) {
+      // Moves to top store switcher "Aura Threads ▾"
+      const p = (timeMs - 19200) / 1000;
+      return { x: 42 - p * 7, y: 36 - p * 31.5, clicking: false }; // arrives at (35, 4.5)
+    }
+    if (timeMs < 20700) {
+      // Clicks store dropdown
+      return { x: 35, y: 4.5, clicking: true };
+    }
+    if (timeMs < 21600) {
+      // Moves down to "2. Peak Audio Hub"
+      const p = (timeMs - 20700) / 900;
+      return { x: 35, y: 4.5 + p * 9, clicking: false }; // arrives at (35, 13.5)
+    }
+    if (timeMs < 22100) {
+      // Clicks "Peak Audio Hub"
+      return { x: 35, y: 13.5, clicking: true };
+    }
+    return { x: 50, y: 50, clicking: false };
+  };
+
+  const cursor = getCursor();
+  const currentSec = Math.floor(timeMs / 1000);
+  const formattedSec = currentSec < 10 ? `0:0${currentSec}` : `0:${currentSec}`;
+  const progressPercent = ((timeMs / TOTAL_CYCLE) * 100).toFixed(1);
+
+  return (
+    <div
+      style={{
+        background: '#ffffff',
+        border: '1px solid #e6e7eb',
+        borderRadius: 20,
+        overflow: 'hidden',
+        boxShadow: '0 24px 60px -12px rgba(12, 13, 16, 0.1), 0 2px 6px rgba(12, 13, 16, 0.04)',
+        textAlign: 'left',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: isMobile ? 520 : 660,
+        height: isMobile ? 'auto' : 660,
+        position: 'relative',
+      }}
+    >
+      <style>{`
+        @keyframes cursorClickPulse {
+          0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+        }
+        @keyframes fadeScaleIn {
+          from { opacity: 0; transform: scale(0.96); }
+          to { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+
+      {/* Animated Mouse Cursor (Simulating live user & operator interactions) */}
+      {!isMobile && (
+        <div
+          style={{
+            position: 'absolute',
+            left: `${cursor.x}%`,
+            top: `${cursor.y}%`,
+            transform: 'translate(-2px, -2px)',
+            transition: 'left 0.4s cubic-bezier(0.2, 0.9, 0.3, 1), top 0.4s cubic-bezier(0.2, 0.9, 0.3, 1)',
+            zIndex: 90,
+            pointerEvents: 'none',
+          }}
+        >
+          {cursor.clicking && (
+            <span
+              style={{
+                position: 'absolute',
+                left: 2,
+                top: 2,
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                border: '2.5px solid #2563eb',
+                background: 'rgba(37, 99, 235, 0.22)',
+                transform: 'translate(-50%, -50%)',
+                animation: 'cursorClickPulse 0.4s ease-out forwards',
+              }}
+            />
+          )}
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.35))' }}>
+            <path
+              d="M5.5 3.2L18.8 12.8L12.5 13.9L16 20.8L13.2 22.2L9.7 15.3L5.5 19.5V3.2Z"
+              fill="#0f172a"
+              stroke="#ffffff"
+              strokeWidth="1.8"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+      )}
+
+      {/* Top Browser Bar */}
+      <div
+        style={{
+          height: 44,
+          background: '#f8fafc',
+          borderBottom: '1px solid #e2e8f0',
+          padding: '0 16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexShrink: 0,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308', display: 'inline-block' }} />
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+        </div>
+        <div
+          style={{
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
+            borderRadius: 6,
+            padding: '3px 14px',
+            fontSize: 12,
+            color: '#475569',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            maxWidth: 420,
+            width: '100%',
+            justifyContent: 'center',
+            fontWeight: 500,
+          }}
+        >
+          <span style={{ color: '#16a34a' }}>🔒</span>
+          <span>
+            {isScene1
+              ? 'aurathreads.com/products/all-weather-jacket'
+              : isScene2
+              ? 'app.chatral.com/inbox'
+              : 'app.chatral.com/triggers'}
+          </span>
+        </div>
+        <div style={{ fontSize: 11, fontWeight: 600, color: '#2563eb', background: '#eff6ff', padding: '3px 8px', borderRadius: 4 }}>
+          {isScene1 ? 'Cart (1) • ₹2,499' : isScene2 ? 'Live Operator: Online 🟢' : '3 / 3 Stores Synced'}
+        </div>
+      </div>
+
+      {/* Main Video Body (Switches seamlessly between 3 scenes) */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
+        {/* SCENE 1: Website Storefront Widget (Customer Perspective) */}
+        {isScene1 && (
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              padding: isMobile ? 14 : 20,
+              gap: 20,
+              background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+              overflowY: 'auto',
+              position: 'relative',
+            }}
+          >
+            {/* Product Card on Left */}
+            <div
+              style={{
+                flex: isMobile ? 'none' : '1.1',
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: 14,
+                padding: isMobile ? 14 : 20,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <span style={{ background: '#fef3c7', color: '#b45309', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 999 }}>
+                    🔥 Bestseller
+                  </span>
+                  <span style={{ color: '#16a34a', fontSize: 11.5, fontWeight: 600 }}>
+                    ✓ In Stock (Ships in 24h)
+                  </span>
+                </div>
+                <div style={{ fontSize: isMobile ? 17 : 20, fontWeight: 800, color: '#0f172a', marginBottom: 6 }}>
+                  All-Weather Performance Runner
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  <div style={{ color: '#f59e0b', fontSize: 12 }}>⭐⭐⭐⭐⭐</div>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: '#0f172a' }}>4.9</span>
+                  <span style={{ fontSize: 11.5, color: '#64748b' }}>(182 customer reviews)</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 14 }}>
+                  <span style={{ fontSize: 22, fontWeight: 800, color: '#0f172a' }}>₹2,499</span>
+                  <span style={{ fontSize: 13, color: '#94a3b8', textDecoration: 'line-through' }}>₹3,499</span>
+                  <span style={{ fontSize: 11.5, fontWeight: 700, color: '#16a34a' }}>Save 28%</span>
+                </div>
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Select Size:</div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    {['UK 7', 'UK 8', 'UK 9 (Selected)', 'UK 10'].map((s, idx) => (
+                      <span
+                        key={idx}
+                        style={{
+                          padding: '4px 10px',
+                          borderRadius: 6,
+                          fontSize: 11,
+                          fontWeight: 600,
+                          border: idx === 2 ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                          background: idx === 2 ? '#eff6ff' : '#ffffff',
+                          color: idx === 2 ? '#2563eb' : '#475569',
+                        }}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  style={{
+                    width: '100%',
+                    padding: '11px 0',
+                    background: '#0f172a',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: 10,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    marginBottom: 8,
+                  }}
+                >
+                  Add to Bag • ₹2,499
+                </button>
+                <div style={{ textAlign: 'center', fontSize: 11, color: '#64748b' }}>
+                  ⚡ 67KB Chatral widget loaded • Page loads in 0.4s
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Floating Chat Widget or Launcher */}
+            <div style={{ flex: isMobile ? 'none' : '0.9', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', minHeight: 380 }}>
+              {!widgetOpen ? (
+                /* Closed Floating Launcher Button in Bottom Right */
+                <div style={{ position: 'absolute', bottom: 16, right: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 12, padding: '7px 12px', fontSize: 12, fontWeight: 600, color: '#1e293b', boxShadow: '0 8px 24px -4px rgba(0,0,0,0.12)', whiteSpace: 'nowrap' }}>
+                    👋 Need size advice? We're online!
+                  </div>
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: 56,
+                      height: 56,
+                      borderRadius: '50%',
+                      background: '#2563eb',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#ffffff',
+                      boxShadow: '0 10px 25px -3px rgba(37,99,235,0.4)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <MessageOutlined style={{ fontSize: 24 }} />
+                    <span style={{ position: 'absolute', bottom: 2, right: 2, width: 12, height: 12, borderRadius: '50%', background: '#22c55e', border: '2px solid #ffffff' }} />
+                  </div>
+                </div>
+              ) : (
+                /* Expanded Live Chat Window */
+                <div style={{ background: '#ffffff', border: '1.5px solid #bfdbfe', borderRadius: 16, boxShadow: '0 12px 30px -6px rgba(37, 99, 235, 0.2)', display: 'flex', flexDirection: 'column', overflow: 'hidden', height: 420 }}>
+                  {/* Widget Header */}
+                  <div style={{ background: '#2563eb', padding: '12px 16px', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ position: 'relative' }}>
+                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#ffffff', color: '#2563eb', fontWeight: 800, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          A
+                        </div>
+                        <span style={{ position: 'absolute', bottom: 0, right: 0, width: 8, height: 8, borderRadius: '50%', background: '#22c55e', border: '1.5px solid #ffffff' }} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 700 }}>Aura Support</div>
+                        <div style={{ fontSize: 10.5, opacity: 0.9 }}>Typically replies in under 1 min</div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: 11, background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: 999 }}>
+                      Live Widget
+                    </span>
+                  </div>
+
+                  {/* Widget Messages Area */}
+                  <div style={{ flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, background: '#f8fafc', fontSize: 12, overflowY: 'auto' }}>
+                    {/* Proactive Automated Greeting */}
+                    <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 12px 2px', border: '1px solid #e2e8f0', color: '#334155', lineHeight: 1.5 }}>
+                      👋 Welcome to Aura Threads! Looking for size advice or delivery times?
+                    </div>
+
+                    {/* Visitor Sent Message */}
+                    {visitorMsgSent && (
+                      <div style={{ alignSelf: 'flex-end', maxWidth: '85%', background: '#2563eb', color: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 2px 12px', lineHeight: 1.5, animation: 'fadeScaleIn 0.25s ease' }}>
+                        <div>Is Size 9 in stock for express delivery?</div>
+                        <div style={{ fontSize: 9.5, opacity: 0.8, textAlign: 'right', marginTop: 2 }}>Just now ✓</div>
+                      </div>
+                    )}
+
+                    {/* Typing Indicator */}
+                    {visitorAgentTyping && (
+                      <div style={{ alignSelf: 'flex-start', background: '#e0e7ff', padding: '6px 10px', borderRadius: 999, fontSize: 10.5, color: '#3730a3', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span>Rahul is typing</span>
+                        <span>...</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Widget Input Bar */}
+                  <div style={{ padding: '8px 12px', background: '#ffffff', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                      readOnly
+                      value={visitorMsgSent ? '' : visitorTypedText}
+                      placeholder={visitorMsgSent ? 'Type a reply...' : 'Ask a question...'}
+                      style={{ flex: 1, border: 'none', outline: 'none', fontSize: 12, color: '#0f172a', background: 'transparent' }}
+                    />
+                    <button
+                      type="button"
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: '50%',
+                        background: visitorTypedText ? '#2563eb' : '#94a3b8',
+                        border: 'none',
+                        color: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s',
+                      }}
+                    >
+                      <SendOutlined style={{ fontSize: 11 }} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* SCENE 2: Live Operator Inbox (Agent Perspective) */}
+        {isScene2 && (
+          <div style={{ flex: 1, display: 'flex', height: '100%', minHeight: 0, position: 'relative' }}>
+            {/* Alert Notification Toast */}
+            {timeMs < 10500 && (
+              <div style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)', zIndex: 60, background: '#1e293b', color: '#ffffff', padding: '6px 14px', borderRadius: 999, fontSize: 11.5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 20px rgba(0,0,0,0.25)', animation: 'fadeScaleIn 0.3s ease' }}>
+                <span>🔔</span>
+                <span>New Message: Sarah Jenkins • Cart: ₹2,499</span>
+              </div>
+            )}
+
+            {/* 1. Left Dark Sidebar */}
+            <div style={{ width: 170, flexShrink: 0, background: '#070b13', borderRight: '1px solid #172133', display: isMobile ? 'none' : 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '14px 10px' }}>
+              <div>
+                <div style={{ padding: '4px 8px 14px' }}>
+                  <ChatralFullLogo height={20} dark={true} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#162238', color: '#ffffff', padding: '7px 10px', fontSize: 12, borderRadius: 6, fontWeight: 600 }}>
+                    <MessageOutlined style={{ color: '#38bdf8' }} /> <span>Inbox</span>
+                    <span style={{ marginLeft: 'auto', background: '#ef4444', color: '#ffffff', fontSize: 9.5, fontWeight: 700, padding: '1px 5px', borderRadius: 999 }}>1</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
+                    <ThunderboltOutlined /> <span>Triggers</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
+                    <ShopOutlined /> <span>Multi-Store</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: '#0d1524', border: '1px solid #1b283d', borderRadius: 6, padding: '6px 8px' }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: '#64748b' }}>STORE</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#4ade80' }}>Aura Threads 🟢</div>
+              </div>
+            </div>
+
+            {/* 2. Middle Conversation List */}
+            <div style={{ width: isMobile ? '100%' : 220, flexShrink: 0, background: '#ffffff', borderRight: '1px solid #eef2f6', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '10px 12px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>Open Chats (1)</span>
+                <span style={{ fontSize: 10, background: '#dbeafe', color: '#1d4ed8', padding: '1px 6px', borderRadius: 999, fontWeight: 600 }}>Live</span>
+              </div>
+              <div style={{ flex: 1, overflowY: 'auto' }}>
+                {/* Sarah's Conversation Item */}
+                <div style={{ padding: '10px 12px', background: inboxChatActive ? '#eff6ff' : '#ffffff', borderLeft: inboxChatActive ? '3px solid #2563eb' : '3px solid transparent', borderBottom: '1px solid #f8fafc', cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e' }} />
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>Sarah Jenkins</span>
+                    </div>
+                    <span style={{ fontSize: 10, color: '#64748b' }}>Just now</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#475569', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 4 }}>
+                    Is Size 9 in stock for express...
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: 9.5, background: '#fef3c7', color: '#b45309', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>Cart: ₹2,499</span>
+                    <span style={{ width: 14, height: 14, borderRadius: '50%', background: '#2563eb', color: '#ffffff', fontSize: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>1</span>
+                  </div>
+                </div>
+                {/* Chat 2 */}
+                <div style={{ padding: '10px 12px', borderBottom: '1px solid #f8fafc', opacity: 0.7 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: '#334155' }}>Alex Cooper</span>
+                    <span style={{ fontSize: 10, color: '#94a3b8' }}>14m</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#64748b' }}>Thanks for the quick refund!</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Center Chat Box */}
+            <div style={{ flex: 1, display: isMobile ? 'none' : 'flex', flexDirection: 'column', background: '#f8fafc' }}>
+              {/* Chat Header */}
+              <div style={{ height: 44, padding: '0 16px', background: '#ffffff', borderBottom: '1px solid #eef2f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
+                  <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>Sarah Jenkins</span>
+                  <span style={{ fontSize: 11, color: '#64748b' }}>• /products/all-weather-jacket</span>
+                </div>
+                <span style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>Active Online</span>
+              </div>
+
+              {/* Messages Transcript */}
+              <div style={{ flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto' }}>
+                <div style={{ alignSelf: 'flex-start', maxWidth: '80%', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px 10px 10px 2px', padding: '8px 12px', fontSize: 12, color: '#1e293b' }}>
+                  <div>Is Size 9 in stock for express delivery?</div>
+                  <div style={{ fontSize: 9.5, color: '#94a3b8', marginTop: 2 }}>Sarah • Just now</div>
+                </div>
+
+                {agentReplySent && (
+                  <div style={{ alignSelf: 'flex-end', maxWidth: '80%', background: '#2563eb', color: '#ffffff', borderRadius: '10px 10px 2px 10px', padding: '8px 12px', fontSize: 12, animation: 'fadeScaleIn 0.25s ease' }}>
+                    <div>Yes! UK 9 is in stock. Ships within 2 hours with express delivery 🚀</div>
+                    <div style={{ fontSize: 9.5, opacity: 0.85, textAlign: 'right', marginTop: 2 }}>Delivered & Seen ✓✓</div>
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom Quick Reply & Send */}
+              <div style={{ padding: '8px 12px', background: '#ffffff', borderTop: '1px solid #eef2f6', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: '#64748b' }}>QUICK REPLIES:</span>
+                  <span style={{ fontSize: 10.5, fontWeight: 600, background: agentCannedClicked ? '#dbeafe' : '#f1f5f9', color: agentCannedClicked ? '#1d4ed8' : '#475569', padding: '2px 8px', borderRadius: 4, cursor: 'pointer', border: agentCannedClicked ? '1px solid #93c5fd' : '1px solid transparent' }}>
+                    ⚡ /express-shipping
+                  </span>
+                  <span style={{ fontSize: 10.5, color: '#64748b', background: '#f8fafc', padding: '2px 8px', borderRadius: 4 }}>
+                    🏷️ /coupon-discount
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <input
+                    readOnly
+                    value={agentReplySent ? '' : agentCannedClicked ? 'Yes! UK 9 is in stock. Ships within 2 hours with express delivery 🚀' : ''}
+                    placeholder={agentReplySent ? 'Reply sent...' : 'Click quick reply or type message...'}
+                    style={{ flex: 1, border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, outline: 'none' }}
+                  />
+                  <button type="button" style={{ height: 30, padding: '0 12px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: 11.5, fontWeight: 600, cursor: 'pointer' }}>
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Right Visitor Intel Panel */}
+            <div style={{ width: isMobile ? 'none' : 190, flexShrink: 0, background: '#ffffff', borderLeft: '1px solid #eef2f6', display: isMobile ? 'none' : 'flex', flexDirection: 'column', padding: 12, gap: 10, fontSize: 11 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0f172a', borderBottom: '1px solid #f1f5f9', paddingBottom: 6 }}>
+                Visitor Intel
+              </div>
+              <div>
+                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>NAME</div>
+                <div style={{ fontWeight: 600, color: '#0f172a' }}>Sarah Jenkins</div>
+              </div>
+              <div>
+                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>LIVE CART VALUE</div>
+                <div style={{ fontWeight: 800, color: '#16a34a', fontSize: 13 }}>₹2,499</div>
+                <div style={{ color: '#64748b', fontSize: 10 }}>1x All-Weather Runner UK 9</div>
+              </div>
+              <div>
+                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>LOCATION</div>
+                <div style={{ color: '#0f172a' }}>Mumbai, India 🇮🇳</div>
+              </div>
+              <div>
+                <div style={{ color: '#64748b', fontSize: 10, fontWeight: 600 }}>DEVICE & SPEED</div>
+                <div style={{ color: '#0f172a' }}>macOS • Chrome (0.4s)</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SCENE 3: Admin Triggers & 1-Click Store Switcher */}
+        {isScene3 && (
+          <div style={{ flex: 1, display: 'flex', height: '100%', minHeight: 0, position: 'relative' }}>
+            {/* Store Switch Success Toast */}
+            {storeSwitched && (
+              <div style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)', zIndex: 60, background: '#059669', color: '#ffffff', padding: '6px 14px', borderRadius: 999, fontSize: 11.5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 20px rgba(0,0,0,0.25)', animation: 'fadeScaleIn 0.3s ease' }}>
+                <span>✓</span>
+                <span>Switched to Store 2: Peak Audio Hub in 1 click!</span>
+              </div>
+            )}
+
+            {/* Left Dark Sidebar */}
+            <div style={{ width: 170, flexShrink: 0, background: '#070b13', borderRight: '1px solid #172133', display: isMobile ? 'none' : 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '14px 10px' }}>
+              <div>
+                <div style={{ padding: '4px 8px 14px' }}>
+                  <ChatralFullLogo height={20} dark={true} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
+                    <MessageOutlined /> <span>Inbox</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#162238', color: '#ffffff', padding: '7px 10px', fontSize: 12, borderRadius: 6, fontWeight: 600 }}>
+                    <ThunderboltOutlined style={{ color: '#38bdf8' }} /> <span>Triggers</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', padding: '7px 10px', fontSize: 12, borderRadius: 6 }}>
+                    <ShopOutlined /> <span>Multi-Store</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: '#0d1524', border: '1px solid #1b283d', borderRadius: 6, padding: '6px 8px' }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: '#64748b' }}>STORES INCLUDED</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#4ade80' }}>3 / 3 Active</div>
+              </div>
+            </div>
+
+            {/* Admin Main Body */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+              {/* Admin Top Header with 1-Click Store Switcher */}
+              <div style={{ height: 46, borderBottom: '1px solid #f1f5f9', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', position: 'relative' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>Active Store:</span>
+                  <div style={{ position: 'relative' }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ffffff', border: '1.5px solid #2563eb', borderRadius: 6, padding: '3px 10px', fontSize: 12, fontWeight: 700, color: '#2563eb', cursor: 'pointer' }}>
+                      <span>{storeSwitched ? '🎧 Peak Audio Hub' : '🏪 Aura Threads'}</span>
+                      <span style={{ fontSize: 10 }}>▾</span>
+                    </div>
+                    {/* Dropdown Menu when clicked */}
+                    {storeDropdownOpen && (
+                      <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, width: 200, background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 8, boxShadow: '0 10px 25px rgba(0,0,0,0.15)', zIndex: 70, padding: 4 }}>
+                        <div style={{ padding: '6px 10px', fontSize: 11.5, color: '#64748b', borderBottom: '1px solid #f1f5f9' }}>
+                          Switch Store (1-Click):
+                        </div>
+                        <div style={{ padding: '6px 10px', fontSize: 11.5, fontWeight: 600, color: '#0f172a', borderRadius: 4, background: '#f1f5f9' }}>
+                          1. Aura Threads (Active)
+                        </div>
+                        <div style={{ padding: '6px 10px', fontSize: 11.5, fontWeight: 600, color: '#2563eb', borderRadius: 4, background: '#eff6ff', border: '1px solid #93c5fd' }}>
+                          2. Peak Audio Hub (Clicking...)
+                        </div>
+                        <div style={{ padding: '6px 10px', fontSize: 11.5, color: '#475569', borderRadius: 4 }}>
+                          3. Luxe Wellness
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <span style={{ fontSize: 10.5, background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: 999, fontWeight: 600 }}>
+                    1-Click Switcher
+                  </span>
+                </div>
+                <button type="button" style={{ height: 28, padding: '0 12px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+                  + New Trigger
+                </button>
+              </div>
+
+              {/* Content Columns: Triggers on Left, Multi-Store on Right */}
+              <div style={{ flex: 1, padding: isMobile ? 14 : 20, display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 16 }}>
+                {/* Left: Automated Triggers */}
+                <div style={{ flex: 1.2 }}>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#0f172a', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <ThunderboltOutlined style={{ color: '#2563eb' }} />
+                    Automated Sales Triggers (Auto-pilot Revenue)
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div style={{ background: '#ffffff', border: '1.5px solid #86efac', borderRadius: 10, padding: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>🛒 Cart Abandonment Recovery</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, background: '#dcfce7', color: '#15803d', padding: '2px 7px', borderRadius: 999 }}>
+                          ACTIVE (34% Converted)
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
+                        When visitor is on <code>/checkout</code> for &gt; 30 seconds:
+                      </div>
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
+                        "Need help completing your order? Use code <strong style={{ color: '#2563eb' }}>SAVE10</strong> for ₹200 off!"
+                      </div>
+                    </div>
+
+                    <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>👋 First-Time Shopper Greeting</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, background: '#eff6ff', color: '#2563eb', padding: '2px 7px', borderRadius: 999 }}>
+                          ACTIVE
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
+                        When visitor views 2nd product page:
+                      </div>
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
+                        "Welcome! Let us know if you need any sizing or fit recommendations."
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Multi-Store Box */}
+                <div style={{ flex: 0.8, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>
+                      Multi-Store Setup (3 Stores Included)
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                      <div style={{ background: '#ffffff', border: !storeSwitched ? '1.5px solid #2563eb' : '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, fontWeight: 600, color: !storeSwitched ? '#2563eb' : '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>1. Aura Threads</span>
+                        <span>{!storeSwitched ? 'Active 🟢' : 'Switch →'}</span>
+                      </div>
+                      <div style={{ background: '#ffffff', border: storeSwitched ? '1.5px solid #2563eb' : '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, fontWeight: 600, color: storeSwitched ? '#2563eb' : '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>2. Peak Audio Hub</span>
+                        <span>{storeSwitched ? 'Active 🟢' : 'Switch →'}</span>
+                      </div>
+                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>3. Luxe Wellness</span>
+                        <span style={{ color: '#2563eb' }}>Switch →</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
+                    <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>
+                      Ultra-Lightweight Engine
+                    </div>
+                    <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>
+                      ✓ 67 KB single script • 0 lag
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Integrated Bottom Video Player Controls Bar */}
+      <div
+        style={{
+          background: '#0f172a',
+          borderTop: '1px solid #1e293b',
+          padding: '10px 16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+          color: '#ffffff',
+          flexShrink: 0,
+        }}
+      >
+        {/* Progress Timeline Scrubber */}
+        <div
+          onClick={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+            handleSeek(ratio * TOTAL_CYCLE);
+          }}
+          style={{
+            width: '100%',
+            height: 5,
+            background: '#334155',
+            borderRadius: 999,
+            position: 'relative',
+            cursor: 'pointer',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              width: `${progressPercent}%`,
+              height: '100%',
+              background: '#3b82f6',
+              borderRadius: 999,
+              transition: 'width 0.08s linear',
+            }}
+          />
+        </div>
+
+        {/* Controls Row: Play/Pause, Chapters & Time Indicator */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: isMobile ? 'wrap' : 'nowrap',
+            gap: 8,
+          }}
+        >
+          {/* Left: Play/Pause, Restart & Time */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button
+              type="button"
+              onClick={() => setIsPlaying(!isPlaying)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#ffffff',
+                fontSize: 16,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: 0,
+              }}
+            >
+              {isPlaying ? <PauseCircleOutlined style={{ fontSize: 18 }} /> : <PlayCircleOutlined style={{ fontSize: 18 }} />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSeek(0)}
+              title="Restart from beginning"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#94a3b8',
+                fontSize: 13,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: 0,
+              }}
+            >
+              <RedoOutlined />
+            </button>
+
+            <span style={{ fontSize: 11.5, color: '#94a3b8', fontFamily: 'monospace' }}>
+              {formattedSec} / 0:24
+            </span>
+          </div>
+
+          {/* Middle: Chapter Indicators (Clickable to jump scene) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => handleSeek(0)}
+              style={{
+                background: isScene1 ? '#1d4ed8' : 'rgba(255,255,255,0.08)',
+                color: isScene1 ? '#ffffff' : '#94a3b8',
+                border: isScene1 ? '1px solid #3b82f6' : '1px solid transparent',
+                borderRadius: 999,
+                padding: '3px 10px',
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              🛍️ 1. Storefront Widget
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSeek(8000)}
+              style={{
+                background: isScene2 ? '#1d4ed8' : 'rgba(255,255,255,0.08)',
+                color: isScene2 ? '#ffffff' : '#94a3b8',
+                border: isScene2 ? '1px solid #3b82f6' : '1px solid transparent',
+                borderRadius: 999,
+                padding: '3px 10px',
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              💬 2. Live Operator Inbox
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSeek(16000)}
+              style={{
+                background: isScene3 ? '#1d4ed8' : 'rgba(255,255,255,0.08)',
+                color: isScene3 ? '#ffffff' : '#94a3b8',
+                border: isScene3 ? '1px solid #3b82f6' : '1px solid transparent',
+                borderRadius: 999,
+                padding: '3px 10px',
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              ⚙️ 3. Triggers & Multi-Store
+            </button>
+          </div>
+
+          {/* Right: Live Demo Indicator */}
+          <div style={{ display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#38bdf8' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38bdf8' }} />
+            <span>Interactive Live Demo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const nav = useNavigate();
   const location = useLocation();
@@ -188,24 +1134,9 @@ export default function LandingPage() {
   const [activeTab, setActiveTab] = useState('all');
   const [openFaq, setOpenFaq] = useState(null);
   const [heroActiveConvId, setHeroActiveConvId] = useState('chatral');
-  const [showcaseTab, setShowcaseTab] = useState('storefront'); // 'storefront' | 'inbox' | 'admin'
-  const [showcaseAutoPlay, setShowcaseAutoPlay] = useState(true);
   const [showWidgetPill, setShowWidgetPill] = useState(true);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Auto-rotate product tour tabs every 6 seconds until user clicks
-  useEffect(() => {
-    if (!showcaseAutoPlay) return;
-    const tabs = ['storefront', 'inbox', 'admin'];
-    const timer = setInterval(() => {
-      setShowcaseTab((curr) => {
-        const nextIdx = (tabs.indexOf(curr) + 1) % tabs.length;
-        return tabs[nextIdx];
-      });
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [showcaseAutoPlay]);
 
   // Contact Form state & submission handler
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', topic: 'Schedule a Live Demo', message: '' });
@@ -1141,1318 +2072,10 @@ export default function LandingPage() {
           </Flex>
         </div>
 
-        {/* Interactive Tour Navigation Tabs */}
-        <div style={{ maxWidth: 1080, margin: '36px auto 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              background: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(12px)',
-              border: '1.5px solid #dbeafe',
-              borderRadius: 999,
-              padding: 4,
-              boxShadow: '0 4px 18px -2px rgba(37, 99, 235, 0.1)',
-              gap: 4,
-              flexWrap: isMobile ? 'wrap' : 'nowrap',
-              justifyContent: 'center',
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => { setShowcaseTab('storefront'); setShowcaseAutoPlay(false); }}
-              style={{
-                background: showcaseTab === 'storefront' ? '#2563eb' : 'transparent',
-                color: showcaseTab === 'storefront' ? '#ffffff' : '#475569',
-                border: 'none',
-                borderRadius: 999,
-                padding: '8px 18px',
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 7,
-                transition: 'all 0.2s ease',
-                boxShadow: showcaseTab === 'storefront' ? '0 4px 12px rgba(37, 99, 235, 0.28)' : 'none',
-              }}
-            >
-              <span>🛍️</span>
-              <span>1. Website Storefront Widget</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { setShowcaseTab('inbox'); setShowcaseAutoPlay(false); }}
-              style={{
-                background: showcaseTab === 'inbox' ? '#2563eb' : 'transparent',
-                color: showcaseTab === 'inbox' ? '#ffffff' : '#475569',
-                border: 'none',
-                borderRadius: 999,
-                padding: '8px 18px',
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 7,
-                transition: 'all 0.2s ease',
-                boxShadow: showcaseTab === 'inbox' ? '0 4px 12px rgba(37, 99, 235, 0.28)' : 'none',
-              }}
-            >
-              <span>💬</span>
-              <span>2. Live Operator Inbox</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { setShowcaseTab('admin'); setShowcaseAutoPlay(false); }}
-              style={{
-                background: showcaseTab === 'admin' ? '#2563eb' : 'transparent',
-                color: showcaseTab === 'admin' ? '#ffffff' : '#475569',
-                border: 'none',
-                borderRadius: 999,
-                padding: '8px 18px',
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 7,
-                transition: 'all 0.2s ease',
-                boxShadow: showcaseTab === 'admin' ? '0 4px 12px rgba(37, 99, 235, 0.28)' : 'none',
-              }}
-            >
-              <span>⚙️</span>
-              <span>3. Admin Triggers & Multi-Store</span>
-            </button>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#64748b' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: showcaseAutoPlay ? '#22c55e' : '#94a3b8' }} />
-            <span>{showcaseAutoPlay ? 'Auto-playing live tour' : 'Manual preview mode'} • Click any tab to explore</span>
-            <button
-              type="button"
-              onClick={() => setShowcaseAutoPlay(!showcaseAutoPlay)}
-              style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: 11.5, fontWeight: 600, cursor: 'pointer', padding: 0 }}
-            >
-              {showcaseAutoPlay ? '(Pause)' : '(Play)'}
-            </button>
-          </div>
+        {/* Single Box Automated Video Simulation Showcase */}
+        <div className="hero-fade-item-3" style={{ maxWidth: 1080, margin: '28px auto 0', position: 'relative' }}>
+          <HeroVideoShowcase isMobile={isMobile} />
         </div>
-
-        {/* Hero Dashboard Showcase (Official Chatral Live Chat Platform UI) */}
-        <div className="hero-fade-item-3" style={{ maxWidth: 1080, margin: '20px auto 0', position: 'relative' }}>
-          <div
-            style={{
-              background: '#ffffff',
-              border: '1px solid #e6e7eb',
-              borderRadius: 20,
-              overflow: 'hidden',
-              boxShadow: '0 24px 60px -12px rgba(12, 13, 16, 0.1), 0 2px 6px rgba(12, 13, 16, 0.04)',
-              textAlign: 'left',
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: isMobile ? 520 : 660,
-              height: isMobile ? 'auto' : 660,
-            }}
-          >
-            {/* View 1: Website Storefront Widget (Customer Perspective) */}
-            {showcaseTab === 'storefront' && (
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#ffffff', height: '100%' }}>
-                {/* Browser Top Bar */}
-                <div
-                  style={{
-                    height: 44,
-                    background: '#f8fafc',
-                    borderBottom: '1px solid #e2e8f0',
-                    padding: '0 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
-                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308', display: 'inline-block' }} />
-                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-                  </div>
-                  <div
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: 6,
-                      padding: '3px 14px',
-                      fontSize: 12,
-                      color: '#475569',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      maxWidth: 420,
-                      width: '100%',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <span style={{ color: '#16a34a' }}>🔒</span>
-                    <span>aurathreads.com/products/all-weather-jacket</span>
-                  </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: '#2563eb', background: '#eff6ff', padding: '3px 8px', borderRadius: 4 }}>
-                    Cart (1) • ₹2,499
-                  </div>
-                </div>
-
-                {/* Storefront Body: Product on Left, Live Chat Widget on Right */}
-                <div
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: isMobile ? 'column' : 'row',
-                    padding: isMobile ? '16px' : '24px 28px',
-                    gap: 24,
-                    background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
-                    overflowY: 'auto',
-                  }}
-                >
-                  {/* Left: Product Mockup */}
-                  <div
-                    style={{
-                      flex: isMobile ? 'none' : '1.1',
-                      background: '#ffffff',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: 14,
-                      padding: isMobile ? '16px' : '22px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                        <span style={{ background: '#fef3c7', color: '#b45309', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 999 }}>
-                          🔥 Bestseller
-                        </span>
-                        <span style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>
-                          ✓ In Stock (Ships in 24h)
-                        </span>
-                      </div>
-
-                      <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: '#0f172a', marginBottom: 6 }}>
-                        All-Weather Performance Runner
-                      </div>
-                      <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>
-                        ⭐⭐⭐⭐⭐ <strong style={{ color: '#0f172a' }}>4.9</strong> (182 customer reviews)
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 16 }}>
-                        <span style={{ fontSize: 24, fontWeight: 800, color: '#0f172a' }}>₹2,499</span>
-                        <span style={{ fontSize: 14, color: '#94a3b8', textDecoration: 'line-through' }}>₹3,499</span>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: '#16a34a' }}>Save 28%</span>
-                      </div>
-
-                      <div style={{ marginBottom: 14 }}>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Select Size:</div>
-                        <div style={{ display: 'flex', gap: 8 }}>
-                          {['UK 7', 'UK 8', 'UK 9 (Selected)', 'UK 10'].map((sz, i) => (
-                            <span
-                              key={i}
-                              style={{
-                                padding: '5px 10px',
-                                borderRadius: 6,
-                                fontSize: 11.5,
-                                fontWeight: 600,
-                                border: i === 2 ? '2px solid #2563eb' : '1px solid #e2e8f0',
-                                background: i === 2 ? '#eff6ff' : '#ffffff',
-                                color: i === 2 ? '#2563eb' : '#475569',
-                              }}
-                            >
-                              {sz}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button
-                        type="button"
-                        style={{
-                          width: '100%',
-                          height: 42,
-                          background: '#0f172a',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: 8,
-                          fontSize: 13.5,
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          marginBottom: 8,
-                        }}
-                      >
-                        Add to Bag • ₹2,499
-                      </button>
-                      <div style={{ fontSize: 11.5, color: '#64748b', textAlign: 'center' }}>
-                        ⚡ 67KB Chatral script loaded — Page loads in 0.4s
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right: Live Chatral Widget Opened on Storefront */}
-                  <div
-                    style={{
-                      flex: isMobile ? 'none' : '0.9',
-                      background: '#ffffff',
-                      border: '1.5px solid #bfdbfe',
-                      borderRadius: 16,
-                      boxShadow: '0 12px 30px -6px rgba(37, 99, 235, 0.2)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      overflow: 'hidden',
-                      minHeight: 380,
-                    }}
-                  >
-                    {/* Widget Header */}
-                    <div style={{ background: '#2563eb', padding: '12px 16px', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ position: 'relative' }}>
-                          <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#ffffff', color: '#2563eb', fontWeight: 800, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            A
-                          </div>
-                          <span style={{ position: 'absolute', bottom: 0, right: 0, width: 8, height: 8, borderRadius: '50%', background: '#22c55e', border: '1.5px solid #ffffff' }} />
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 13, fontWeight: 700 }}>Aura Support</div>
-                          <div style={{ fontSize: 10.5, opacity: 0.9 }}>Typically replies in under 1 min</div>
-                        </div>
-                      </div>
-                      <span style={{ fontSize: 11, background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: 999 }}>
-                        Live Widget
-                      </span>
-                    </div>
-
-                    {/* Widget Chat Body */}
-                    <div style={{ flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, background: '#f8fafc', fontSize: 12, overflowY: 'auto' }}>
-                      {/* Automated trigger greeting */}
-                      <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 12px 2px', border: '1px solid #e2e8f0', color: '#334155', lineHeight: 1.5 }}>
-                        👋 Welcome to Aura Threads! Looking for size advice or delivery times?
-                      </div>
-
-                      {/* Visitor message */}
-                      <div style={{ alignSelf: 'flex-end', maxWidth: '85%', background: '#2563eb', color: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 2px 12px', lineHeight: 1.5 }}>
-                        Hi! I'm 5'10. Is UK 9 true to size? Can I exchange if it doesn't fit?
-                      </div>
-
-                      {/* Typing indicator */}
-                      <div style={{ alignSelf: 'flex-start', background: '#e0e7ff', padding: '6px 10px', borderRadius: 999, fontSize: 10.5, color: '#3730a3', display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span>Rahul is typing</span>
-                        <span>...</span>
-                      </div>
-
-                      {/* Agent response */}
-                      <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 12px 2px', border: '1px solid #e2e8f0', color: '#0f172a', lineHeight: 1.5 }}>
-                        Yes! UK 9 is true to size. Plus we offer <strong>7-day free hassle-free exchanges</strong>. Use coupon <span style={{ color: '#2563eb', fontWeight: 700 }}>RUN10</span> for ₹300 off today! 🚀
-                      </div>
-
-                      {/* Visitor closing */}
-                      <div style={{ alignSelf: 'flex-end', maxWidth: '85%', background: '#2563eb', color: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 2px 12px', lineHeight: 1.5 }}>
-                        Awesome! Placing order with RUN10 now. Thanks! 🙌
-                      </div>
-                    </div>
-
-                    {/* Widget Input */}
-                    <div style={{ padding: '8px 12px', background: '#ffffff', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <input
-                        readOnly
-                        value="Order confirmed! Excited to receive it."
-                        style={{ flex: 1, border: 'none', outline: 'none', fontSize: 12, color: '#0f172a', background: 'transparent' }}
-                      />
-                      <button type="button" style={{ width: 28, height: 28, borderRadius: '50%', background: '#2563eb', border: 'none', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                        <SendOutlined style={{ fontSize: 11 }} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Highlight Strip */}
-                <div style={{ padding: '10px 18px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, color: '#475569' }}>
-                  <span>🛍️ <strong>Storefront Experience:</strong> Visitors get instant answers right on product pages, eliminating hesitation.</span>
-                  <span style={{ fontWeight: 600, color: '#2563eb' }}>Step 1 of 3</span>
-                </div>
-              </div>
-            )}
-
-            {/* View 2: Live Operator Inbox (Agent Perspective) */}
-            {showcaseTab === 'inbox' && (
-              <div style={{ flex: 1, display: 'flex', height: '100%', minHeight: 0 }}>
-            {/* 1. Dark Left Navigation Sidebar (matching Chatral app shell) */}
-            <div
-              style={{
-                width: 200,
-                flexShrink: 0,
-                background: '#070b13',
-                borderRight: '1px solid #172133',
-                display: isMobile ? 'none' : 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                padding: '16px 10px 14px',
-              }}
-            >
-              <div>
-                {/* Brand Logo in Sidebar */}
-                <div style={{ display: 'flex', alignItems: 'center', padding: '4px 8px 18px' }}>
-                  <ChatralFullLogo height={22} dark={true} />
-                </div>
-
-                {/* Sidebar Menu Items */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {/* 1. Inbox (Active) */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      background: '#162238',
-                      color: '#ffffff',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontWeight: 600,
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    <span>Inbox</span>
-                  </div>
-
-                  {/* 2. Tickets */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                      <polyline points="22,6 12,13 2,6"/>
-                    </svg>
-                    <span>Tickets</span>
-                  </div>
-
-                  {/* 3. Visitors */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    </svg>
-                    <span>Visitors</span>
-                  </div>
-
-                  {/* 4. Saved replies */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                      <polyline points="14 2 14 8 20 8"/>
-                      <line x1="16" y1="13" x2="8" y2="13"/>
-                      <line x1="16" y1="17" x2="8" y2="17"/>
-                    </svg>
-                    <span>Saved replies</span>
-                  </div>
-
-                  {/* 5. Triggers */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                    </svg>
-                    <span>Triggers</span>
-                  </div>
-
-                  {/* 6. Widget design */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="13.5" cy="6.5" r=".5"/>
-                      <circle cx="17.5" cy="10.5" r=".5"/>
-                      <circle cx="8.5" cy="7.5" r=".5"/>
-                      <circle cx="6.5" cy="12.5" r=".5"/>
-                      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
-                    </svg>
-                    <span>Widget design</span>
-                  </div>
-
-                  {/* 7. Reports */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="18" y1="20" x2="18" y2="10"/>
-                      <line x1="12" y1="20" x2="12" y2="4"/>
-                      <line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                    <span>Reports</span>
-                  </div>
-
-                  {/* 8. Activity Analytics */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                      <polyline points="17 6 23 6 23 12"/>
-                    </svg>
-                    <span>Activity Analytics</span>
-                  </div>
-
-                  {/* 9. Store settings */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="3"/>
-                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                    </svg>
-                    <span>Store settings</span>
-                  </div>
-
-                  <div style={{ borderTop: '1px solid #1a2436', margin: '6px 4px' }} />
-
-                  {/* 10. Platform */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#94a3b8',
-                      borderRadius: 7,
-                      padding: '7px 10px',
-                      fontSize: 12.5,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                      <line x1="8" y1="21" x2="16" y2="21"/>
-                      <line x1="12" y1="17" x2="12" y2="21"/>
-                    </svg>
-                    <span>Platform</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Active Store Box - Chatral */}
-              <div
-                style={{
-                  background: '#0d1524',
-                  border: '1px solid #1b283d',
-                  borderRadius: 10,
-                  padding: '10px 12px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.25)',
-                }}
-              >
-                <div style={{ fontSize: 9.5, fontWeight: 700, color: '#64748b', letterSpacing: '0.06em' }}>
-                  ACTIVE STORE
-                </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: '#ffffff', marginTop: 3 }}>
-                  Chatral
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Right Main Layout (Top Header + 3-Column Workspace) */}
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                minWidth: 0,
-                background: '#ffffff',
-              }}
-            >
-              {/* Top Header Bar */}
-              <div
-                style={{
-                  height: 52,
-                  borderBottom: '1px solid #f1f3f7',
-                  padding: '0 18px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: '#ffffff',
-                }}
-              >
-                {/* Left controls - Chatral store dropdown */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <button
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: 4,
-                      display: 'flex',
-                      alignItems: 'center',
-                      color: '#64748b',
-                    }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="3" y1="12" x2="21" y2="12"/>
-                      <line x1="3" y1="6" x2="21" y2="6"/>
-                      <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                  </button>
-
-                  <div
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      padding: '4px 10px',
-                      borderRadius: 6,
-                      border: '1px solid #e2e8f0',
-                      background: '#ffffff',
-                      fontSize: 12.5,
-                      fontWeight: 500,
-                      color: '#0f172a',
-                    }}
-                  >
-                    <span>Chatral</span>
-                    <span style={{ fontSize: 10, color: '#94a3b8' }}>▾</span>
-                  </div>
-
-                  <span
-                    style={{
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: 4,
-                      padding: '2px 8px',
-                      fontSize: 11,
-                      fontWeight: 500,
-                      color: '#475569',
-                    }}
-                  >
-                    Super admin
-                  </span>
-                </div>
-
-                {/* Right controls - Profile circle with 'C' */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ color: '#64748b', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-                    </svg>
-                  </div>
-
-                  <div
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: '50%',
-                      background: '#9333ea',
-                      color: '#ffffff',
-                      fontSize: 12,
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 1px 3px rgba(147, 51, 234, 0.3)',
-                    }}
-                  >
-                    C
-                  </div>
-                </div>
-              </div>
-
-              {/* Workspace 3-Column Content Area */}
-              <div
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  height: isMobile ? 'auto' : 608,
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Column 1: Conversations List */}
-                <div
-                  style={{
-                    width: isMobile ? '100%' : 295,
-                    flexShrink: 0,
-                    borderRight: isMobile ? 'none' : '1px solid #f1f3f7',
-                    background: '#ffffff',
-                    padding: '14px 12px',
-                    display: isMobile ? (heroActiveConvId ? 'none' : 'flex') : 'flex',
-                    flexDirection: 'column',
-                    gap: 10,
-                    overflowY: 'auto',
-                  }}
-                >
-                  {/* Conversations Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>Conversations</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#94a3b8' }}>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                      </div>
-                    </div>
-                    <span
-                      style={{
-                        background: '#eff6ff',
-                        color: '#2563eb',
-                        border: '1px solid #dbeafe',
-                        borderRadius: 4,
-                        padding: '2px 7px',
-                        fontSize: 10.5,
-                        fontWeight: 600,
-                      }}
-                    >
-                      Super Admin
-                    </span>
-                  </div>
-
-                  {/* Search bar */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      border: '1px solid #e2e8f0',
-                      borderRadius: 6,
-                      padding: '6px 10px',
-                      background: '#ffffff',
-                    }}
-                  >
-                    <SearchOutlined style={{ color: '#94a3b8', fontSize: 12 }} />
-                    <span style={{ color: '#94a3b8', fontSize: 11.5, flex: 1, whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                      Search name, email or message
-                    </span>
-                  </div>
-
-                  {/* Segmented Sub-tabs */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      background: '#f1f5f9',
-                      borderRadius: 6,
-                      padding: 3,
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: 1,
-                        textAlign: 'center',
-                        background: '#ffffff',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
-                        color: '#0f172a',
-                        fontWeight: 600,
-                        fontSize: 11.5,
-                        padding: '3px 0',
-                        borderRadius: 4,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Inbox
-                    </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        textAlign: 'center',
-                        color: '#64748b',
-                        fontSize: 11.5,
-                        padding: '3px 0',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Trash
-                    </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        textAlign: 'center',
-                        color: '#64748b',
-                        fontSize: 11.5,
-                        padding: '3px 0',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Spam
-                    </div>
-                  </div>
-
-                  {/* Status filter chips */}
-                  <div style={{ display: 'flex', gap: 10, fontSize: 11.5, padding: '1px 2px' }}>
-                    <span style={{ color: '#2563eb', fontWeight: 600, cursor: 'pointer' }}>Open 1</span>
-                    <span style={{ color: '#64748b', cursor: 'pointer' }}>Pending 0</span>
-                    <span style={{ color: '#64748b', cursor: 'pointer' }}>Resolved 0</span>
-                    <span style={{ color: '#64748b', cursor: 'pointer' }}>All 1</span>
-                  </div>
-
-                  {/* Dropdowns row */}
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <div
-                      style={{
-                        border: '1px solid #e2e8f0',
-                        borderRadius: 6,
-                        padding: '3px 8px',
-                        fontSize: 11,
-                        color: '#475569',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        background: '#ffffff',
-                      }}
-                    >
-                      <span>All assignees</span>
-                      <span style={{ fontSize: 9, color: '#94a3b8' }}>▾</span>
-                    </div>
-
-                    <div
-                      style={{
-                        border: '1px solid #e2e8f0',
-                        borderRadius: 6,
-                        padding: '3px 8px',
-                        fontSize: 11,
-                        color: '#475569',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        background: '#ffffff',
-                      }}
-                    >
-                      <span>Filter tag</span>
-                      <span style={{ fontSize: 9, color: '#94a3b8' }}>▾</span>
-                    </div>
-                  </div>
-
-                  {/* Conversation List Cards (clean without extra unassign/support/feature tags) */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 2 }}>
-                    {Object.values(heroConversations).map((conv) => {
-                      const isSelected = heroActiveConvId === conv.id;
-                      return (
-                        <div
-                          key={conv.id}
-                          onClick={() => setHeroActiveConvId((prev) => (prev === conv.id ? null : conv.id))}
-                          style={{
-                            border: isSelected ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
-                            borderRadius: 8,
-                            padding: '10px 10px',
-                            background: isSelected ? '#f8fafc' : '#ffffff',
-                            cursor: 'pointer',
-                            transition: 'all 0.15s ease',
-                            boxShadow: isSelected ? '0 2px 6px rgba(37, 99, 235, 0.08)' : 'none',
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              readOnly
-                              style={{ marginTop: 4, cursor: 'pointer' }}
-                            />
-                            <div
-                              style={{
-                                width: 28,
-                                height: 28,
-                                borderRadius: '50%',
-                                background: conv.avatarBg,
-                                border: '1px solid #e2e8f0',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0,
-                                color: conv.avatarColor,
-                                fontSize: 11,
-                                fontWeight: 700,
-                              }}
-                            >
-                              {conv.initials === 'CV' ? <UserOutlined style={{ fontSize: 12 }} /> : conv.initials}
-                            </div>
-
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>{conv.name}</span>
-                                <span style={{ fontSize: 11, color: '#94a3b8' }}>{conv.time}</span>
-                              </div>
-                              <div
-                                style={{
-                                  fontSize: 11.5,
-                                  color: '#64748b',
-                                  marginTop: 3,
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                {conv.preview}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Interactive Helper Hint */}
-                  <div style={{ fontSize: 10.5, color: '#94a3b8', textAlign: 'center', marginTop: 'auto', padding: '6px 0' }}>
-                    💡 Click any chat above to view the live conversation
-                  </div>
-                </div>
-
-                {/* Column 2: Middle Chat Area */}
-                <div
-                  style={{
-                    flex: 1,
-                    minWidth: 0,
-                    borderRight: isMobile ? 'none' : '1px solid #f1f3f7',
-                    background: heroActiveConvId ? '#f8fafc' : '#ffffff',
-                    display: isMobile ? (heroActiveConvId ? 'flex' : 'none') : 'flex',
-                    flexDirection: 'column',
-                    justifyContent: heroActiveConvId ? 'space-between' : 'center',
-                    alignItems: heroActiveConvId ? 'stretch' : 'center',
-                    padding: heroActiveConvId ? 0 : 24,
-                    height: '100%',
-                  }}
-                >
-                  {!heroActiveConvId || !heroConversations[heroActiveConvId] ? (
-                    /* Default empty state matching Image 2 */
-                    <div style={{ textAlign: 'center' }}>
-                      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
-                        <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" />
-                        <polyline points="21 8 16 3 8 3 3 8" />
-                        <line x1="3" y1="8" x2="21" y2="8" />
-                        <path d="M10 12h4" />
-                      </svg>
-                      <div style={{ fontSize: 13.5, color: '#64748b', marginTop: 14, fontWeight: 400 }}>
-                        Select a conversation to start chatting
-                      </div>
-                    </div>
-                  ) : (
-                    /* Active chat conversation for selected customer */
-                    (() => {
-                      const activeConv = heroConversations[heroActiveConvId];
-                      return (
-                        <>
-                          {/* Chat Header - Fixed single line without awkward wrapping */}
-                          <div
-                            style={{
-                              height: 52,
-                              borderBottom: '1px solid #eef2f6',
-                              background: '#ffffff',
-                              padding: '0 16px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              flexShrink: 0,
-                              minWidth: 0,
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
-                              {isMobile && (
-                                <button
-                                  type="button"
-                                  onClick={() => setHeroActiveConvId(null)}
-                                  style={{
-                                    border: '1px solid #dbeafe',
-                                    background: '#eff6ff',
-                                    color: '#2563eb',
-                                    padding: '3px 8px',
-                                    borderRadius: 6,
-                                    fontSize: 11.5,
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    marginRight: 4,
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: 3,
-                                    flexShrink: 0,
-                                  }}
-                                >
-                                  ← List
-                                </button>
-                              )}
-                              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
-                              <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                                {activeConv.name}
-                              </span>
-                              <span style={{ fontSize: 11.5, color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                • Live on Chatral
-                              </span>
-                            </div>
-                            <span style={{ fontSize: 11.5, color: '#2563eb', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: 12 }}>
-                              Resolve chat
-                            </span>
-                          </div>
-
-                          {/* Chat Messages Body */}
-                          <div style={{ flex: 1, padding: 20, display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto' }}>
-                            {activeConv.messages.map((msg, idx) => (
-                              <div
-                                key={idx}
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: msg.sender === 'visitor' ? 'flex-start' : 'flex-end',
-                                  maxWidth: msg.sender === 'visitor' ? '82%' : '85%',
-                                  alignSelf: msg.sender === 'visitor' ? 'flex-start' : 'flex-end',
-                                }}
-                              >
-                                <div style={{ fontSize: 10.5, color: '#94a3b8', marginBottom: 3 }}>
-                                  {msg.name} • {msg.time}
-                                </div>
-                                <div
-                                  style={{
-                                    background: msg.sender === 'visitor' ? '#ffffff' : '#2563eb',
-                                    color: msg.sender === 'visitor' ? '#0f172a' : '#ffffff',
-                                    border: msg.sender === 'visitor' ? '1px solid #e2e8f0' : 'none',
-                                    borderRadius: msg.sender === 'visitor' ? '4px 14px 14px 14px' : '14px 4px 14px 14px',
-                                    padding: '10px 14px',
-                                    fontSize: 12.5,
-                                    lineHeight: 1.5,
-                                    boxShadow: msg.sender === 'visitor' ? '0 1px 2px rgba(0,0,0,0.03)' : '0 1px 3px rgba(37,99,235,0.2)',
-                                  }}
-                                >
-                                  {msg.text}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Chat Input Bar */}
-                          <div style={{ padding: '12px 16px', background: '#ffffff', borderTop: '1px solid #eef2f6', flexShrink: 0 }}>
-                            <div
-                              style={{
-                                border: '1px solid #e2e8f0',
-                                borderRadius: 8,
-                                padding: '8px 12px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                background: '#fafbfd',
-                              }}
-                            >
-                              <span style={{ fontSize: 12, color: '#94a3b8' }}>Type a reply or use saved replies...</span>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b' }}>
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                                <div style={{ background: '#2563eb', color: '#ffffff', borderRadius: 6, padding: '4px 10px', fontSize: 11, fontWeight: 600 }}>Send</div>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      );
-                    })()
-                  )}
-                </div>
-
-                {/* Column 3: Right Details Panel */}
-                <div
-                  style={{
-                    width: isMobile ? '0' : 235,
-                    display: isMobile ? 'none' : 'flex',
-                    flexDirection: 'column',
-                    justifyContent: heroActiveConvId ? 'flex-start' : 'center',
-                    alignItems: heroActiveConvId ? 'stretch' : 'center',
-                    background: '#ffffff',
-                    padding: heroActiveConvId ? 16 : 24,
-                    height: '100%',
-                    flexShrink: 0,
-                  }}
-                >
-                  {!heroActiveConvId || !heroConversations[heroActiveConvId] ? (
-                    /* Default state matching Image 2 */
-                    <div style={{ textAlign: 'center' }}>
-                      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto' }}>
-                        <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" />
-                        <polyline points="21 8 16 3 8 3 3 8" />
-                        <line x1="3" y1="8" x2="21" y2="8" />
-                        <path d="M10 12h4" />
-                      </svg>
-                      <div style={{ fontSize: 13.5, color: '#64748b', marginTop: 14, fontWeight: 400 }}>
-                        No active conversation
-                      </div>
-                    </div>
-                  ) : (
-                    /* Active Visitor Details dynamically reflecting selected customer */
-                    (() => {
-                      const activeConv = heroConversations[heroActiveConvId];
-                      return (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                          <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', borderBottom: '1px solid #f1f3f7', paddingBottom: 8 }}>
-                            Visitor Details
-                          </div>
-
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 11, fontSize: 11.5 }}>
-                            <div>
-                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>NAME</div>
-                              <div style={{ color: '#0f172a', fontWeight: 600, marginTop: 2 }}>{activeConv.name}</div>
-                            </div>
-
-                            <div>
-                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>CHANNEL</div>
-                              <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>{activeConv.channel}</div>
-                            </div>
-
-                            <div>
-                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>LOCATION</div>
-                              <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>{activeConv.location}</div>
-                            </div>
-
-                            <div>
-                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>ACTIVE PAGE</div>
-                              <div style={{ color: '#2563eb', fontWeight: 500, marginTop: 2 }}>{activeConv.page}</div>
-                            </div>
-
-                            <div>
-                              <div style={{ color: '#94a3b8', fontSize: 10, letterSpacing: '0.04em' }}>BROWSER & DEVICE</div>
-                              <div style={{ color: '#0f172a', fontWeight: 500, marginTop: 2 }}>{activeConv.browser}</div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })()
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Highlight Strip for Inbox */}
-            <div style={{ padding: '10px 18px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, color: '#475569' }}>
-              <span>💬 <strong>Live Operator Inbox:</strong> Support agents see what visitors are viewing in real time, inspect their cart, and reply in seconds.</span>
-              <span style={{ fontWeight: 600, color: '#2563eb' }}>Step 2 of 3</span>
-            </div>
-          </div>
-        )}
-
-        {/* View 3: Admin Triggers, Multi-Store & Widget Appearance */}
-        {showcaseTab === 'admin' && (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', background: '#ffffff' }}>
-            <div style={{ flex: 1, display: 'flex', height: '100%' }}>
-              {/* Left Dark Sidebar */}
-              <div style={{ width: 190, flexShrink: 0, background: '#070b13', borderRight: '1px solid #172133', display: isMobile ? 'none' : 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '16px 10px 14px' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', padding: '4px 8px 18px' }}>
-                    <ChatralFullLogo height={22} dark={true} />
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', padding: '7px 10px', fontSize: 12.5, borderRadius: 7 }}>
-                      <MessageOutlined /> <span>Inbox</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#162238', color: '#ffffff', padding: '7px 10px', fontSize: 12.5, borderRadius: 7, fontWeight: 600 }}>
-                      <ThunderboltOutlined style={{ color: '#60a5fa' }} /> <span>Triggers</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', padding: '7px 10px', fontSize: 12.5, borderRadius: 7 }}>
-                      <ShopOutlined /> <span>Multi-Store</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', padding: '7px 10px', fontSize: 12.5, borderRadius: 7 }}>
-                      <BarChartOutlined /> <span>Analytics</span>
-                    </div>
-                  </div>
-                </div>
-                <div style={{ background: '#0d1524', border: '1px solid #1b283d', borderRadius: 8, padding: '8px 10px' }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: '#64748b' }}>STORES INCLUDED</div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', marginTop: 2 }}>3 / 3 Active</div>
-                </div>
-              </div>
-
-              {/* Main Admin Content */}
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-                {/* Admin Header with 1-Click Multi-Store Switcher */}
-                <div style={{ height: 46, borderBottom: '1px solid #f1f5f9', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>Active Store:</span>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 6, padding: '3px 10px', fontSize: 12, fontWeight: 600, color: '#2563eb' }}>
-                      <span>🏪 Aura Threads</span>
-                      <span style={{ fontSize: 10, color: '#94a3b8' }}>▾</span>
-                    </div>
-                    <span style={{ fontSize: 11, background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: 999, fontWeight: 600 }}>
-                      1-Click Switcher
-                    </span>
-                  </div>
-                  <button type="button" style={{ height: 30, padding: '0 12px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: 11.5, fontWeight: 600, cursor: 'pointer' }}>
-                    + New Trigger
-                  </button>
-                </div>
-
-                {/* Content Columns: Triggers on Left, Customizer on Right */}
-                <div style={{ flex: 1, padding: isMobile ? 14 : 20, display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 18 }}>
-                  {/* Left: Automated Triggers */}
-                  <div style={{ flex: 1.2 }}>
-                    <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <ThunderboltOutlined style={{ color: '#2563eb' }} />
-                      Automated Sales Triggers (Auto-pilot Revenue)
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {/* Trigger 1 */}
-                      <div style={{ background: '#ffffff', border: '1.5px solid #86efac', borderRadius: 10, padding: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                          <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>🛒 Cart Abandonment Recovery</span>
-                          <span style={{ fontSize: 10, fontWeight: 700, background: '#dcfce7', color: '#15803d', padding: '2px 7px', borderRadius: 999 }}>
-                            ACTIVE (34% Converted)
-                          </span>
-                        </div>
-                        <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
-                          When visitor is on <code>/checkout</code> for &gt; 35 seconds:
-                        </div>
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
-                          "Need help completing your order? Use code <strong style={{ color: '#2563eb' }}>SAVE10</strong> for ₹200 off!"
-                        </div>
-                      </div>
-
-                      {/* Trigger 2 */}
-                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                          <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>👋 First-Time Shopper Greeting</span>
-                          <span style={{ fontSize: 10, fontWeight: 700, background: '#eff6ff', color: '#2563eb', padding: '2px 7px', borderRadius: 999 }}>
-                            ACTIVE
-                          </span>
-                        </div>
-                        <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
-                          When visitor views 2nd product page:
-                        </div>
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
-                          "Welcome! Let us know if you need any sizing or fit recommendations."
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right: Multi-Store & Widget Customizer */}
-                  <div style={{ flex: 0.8, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                    {/* Multi-Store Box */}
-                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
-                      <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>
-                        Multi-Store Setup (3 Stores Included)
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                        <div style={{ background: '#ffffff', border: '1.5px solid #2563eb', borderRadius: 6, padding: '5px 9px', fontSize: 11, fontWeight: 600, color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <span>1. Aura Threads</span>
-                          <span>Active 🟢</span>
-                        </div>
-                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <span>2. Peak Audio Hub</span>
-                          <span style={{ color: '#2563eb' }}>Switch →</span>
-                        </div>
-                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <span>3. Luxe Wellness</span>
-                          <span style={{ color: '#2563eb' }}>Switch →</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Widget Appearance Customizer */}
-                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
-                      <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>
-                        Widget Branding & Color
-                      </div>
-                      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-                        {['#2563eb', '#10b981', '#9333ea', '#f59e0b'].map((color, i) => (
-                          <span
-                            key={i}
-                            style={{
-                              width: 22,
-                              height: 22,
-                              borderRadius: '50%',
-                              background: color,
-                              border: i === 0 ? '2px solid #0f172a' : 'none',
-                              display: 'inline-block',
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>
-                        ✓ 67 KB Ultra-lightweight script • Zero lag
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Highlight Strip for Admin */}
-            <div style={{ padding: '10px 18px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, color: '#475569' }}>
-              <span>⚙️ <strong>Admin Controls:</strong> Set up automated triggers in 30 seconds and manage up to 3 stores without logging out.</span>
-              <span style={{ fontWeight: 600, color: '#2563eb' }}>Step 3 of 3</span>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
   </section>
 
       {/* 3. Features Bento Grid (Exact Relatik 5-Card Bento Layout) */}
