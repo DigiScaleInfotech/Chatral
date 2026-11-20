@@ -188,9 +188,24 @@ export default function LandingPage() {
   const [activeTab, setActiveTab] = useState('all');
   const [openFaq, setOpenFaq] = useState(null);
   const [heroActiveConvId, setHeroActiveConvId] = useState('chatral');
+  const [showcaseTab, setShowcaseTab] = useState('storefront'); // 'storefront' | 'inbox' | 'admin'
+  const [showcaseAutoPlay, setShowcaseAutoPlay] = useState(true);
   const [showWidgetPill, setShowWidgetPill] = useState(true);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Auto-rotate product tour tabs every 6 seconds until user clicks
+  useEffect(() => {
+    if (!showcaseAutoPlay) return;
+    const tabs = ['storefront', 'inbox', 'admin'];
+    const timer = setInterval(() => {
+      setShowcaseTab((curr) => {
+        const nextIdx = (tabs.indexOf(curr) + 1) % tabs.length;
+        return tabs[nextIdx];
+      });
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [showcaseAutoPlay]);
 
   // Contact Form state & submission handler
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', topic: 'Schedule a Live Demo', message: '' });
@@ -1126,8 +1141,107 @@ export default function LandingPage() {
           </Flex>
         </div>
 
+        {/* Interactive Tour Navigation Tabs */}
+        <div style={{ maxWidth: 1080, margin: '36px auto 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(12px)',
+              border: '1.5px solid #dbeafe',
+              borderRadius: 999,
+              padding: 4,
+              boxShadow: '0 4px 18px -2px rgba(37, 99, 235, 0.1)',
+              gap: 4,
+              flexWrap: isMobile ? 'wrap' : 'nowrap',
+              justifyContent: 'center',
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => { setShowcaseTab('storefront'); setShowcaseAutoPlay(false); }}
+              style={{
+                background: showcaseTab === 'storefront' ? '#2563eb' : 'transparent',
+                color: showcaseTab === 'storefront' ? '#ffffff' : '#475569',
+                border: 'none',
+                borderRadius: 999,
+                padding: '8px 18px',
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 7,
+                transition: 'all 0.2s ease',
+                boxShadow: showcaseTab === 'storefront' ? '0 4px 12px rgba(37, 99, 235, 0.28)' : 'none',
+              }}
+            >
+              <span>🛍️</span>
+              <span>1. Website Storefront Widget</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { setShowcaseTab('inbox'); setShowcaseAutoPlay(false); }}
+              style={{
+                background: showcaseTab === 'inbox' ? '#2563eb' : 'transparent',
+                color: showcaseTab === 'inbox' ? '#ffffff' : '#475569',
+                border: 'none',
+                borderRadius: 999,
+                padding: '8px 18px',
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 7,
+                transition: 'all 0.2s ease',
+                boxShadow: showcaseTab === 'inbox' ? '0 4px 12px rgba(37, 99, 235, 0.28)' : 'none',
+              }}
+            >
+              <span>💬</span>
+              <span>2. Live Operator Inbox</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { setShowcaseTab('admin'); setShowcaseAutoPlay(false); }}
+              style={{
+                background: showcaseTab === 'admin' ? '#2563eb' : 'transparent',
+                color: showcaseTab === 'admin' ? '#ffffff' : '#475569',
+                border: 'none',
+                borderRadius: 999,
+                padding: '8px 18px',
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 7,
+                transition: 'all 0.2s ease',
+                boxShadow: showcaseTab === 'admin' ? '0 4px 12px rgba(37, 99, 235, 0.28)' : 'none',
+              }}
+            >
+              <span>⚙️</span>
+              <span>3. Admin Triggers & Multi-Store</span>
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#64748b' }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: showcaseAutoPlay ? '#22c55e' : '#94a3b8' }} />
+            <span>{showcaseAutoPlay ? 'Auto-playing live tour' : 'Manual preview mode'} • Click any tab to explore</span>
+            <button
+              type="button"
+              onClick={() => setShowcaseAutoPlay(!showcaseAutoPlay)}
+              style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: 11.5, fontWeight: 600, cursor: 'pointer', padding: 0 }}
+            >
+              {showcaseAutoPlay ? '(Pause)' : '(Play)'}
+            </button>
+          </div>
+        </div>
+
         {/* Hero Dashboard Showcase (Official Chatral Live Chat Platform UI) */}
-        <div className="hero-fade-item-3" style={{ maxWidth: 1080, margin: '48px auto 0', position: 'relative' }}>
+        <div className="hero-fade-item-3" style={{ maxWidth: 1080, margin: '20px auto 0', position: 'relative' }}>
           <div
             style={{
               background: '#ffffff',
@@ -1137,10 +1251,237 @@ export default function LandingPage() {
               boxShadow: '0 24px 60px -12px rgba(12, 13, 16, 0.1), 0 2px 6px rgba(12, 13, 16, 0.04)',
               textAlign: 'left',
               display: 'flex',
+              flexDirection: 'column',
               minHeight: isMobile ? 520 : 660,
               height: isMobile ? 'auto' : 660,
             }}
           >
+            {/* View 1: Website Storefront Widget (Customer Perspective) */}
+            {showcaseTab === 'storefront' && (
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#ffffff', height: '100%' }}>
+                {/* Browser Top Bar */}
+                <div
+                  style={{
+                    height: 44,
+                    background: '#f8fafc',
+                    borderBottom: '1px solid #e2e8f0',
+                    padding: '0 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308', display: 'inline-block' }} />
+                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+                  </div>
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 6,
+                      padding: '3px 14px',
+                      fontSize: 12,
+                      color: '#475569',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      maxWidth: 420,
+                      width: '100%',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <span style={{ color: '#16a34a' }}>🔒</span>
+                    <span>aurathreads.com/products/all-weather-jacket</span>
+                  </div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#2563eb', background: '#eff6ff', padding: '3px 8px', borderRadius: 4 }}>
+                    Cart (1) • ₹2,499
+                  </div>
+                </div>
+
+                {/* Storefront Body: Product on Left, Live Chat Widget on Right */}
+                <div
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    padding: isMobile ? '16px' : '24px 28px',
+                    gap: 24,
+                    background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+                    overflowY: 'auto',
+                  }}
+                >
+                  {/* Left: Product Mockup */}
+                  <div
+                    style={{
+                      flex: isMobile ? 'none' : '1.1',
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 14,
+                      padding: isMobile ? '16px' : '22px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                        <span style={{ background: '#fef3c7', color: '#b45309', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 999 }}>
+                          🔥 Bestseller
+                        </span>
+                        <span style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>
+                          ✓ In Stock (Ships in 24h)
+                        </span>
+                      </div>
+
+                      <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: '#0f172a', marginBottom: 6 }}>
+                        All-Weather Performance Runner
+                      </div>
+                      <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>
+                        ⭐⭐⭐⭐⭐ <strong style={{ color: '#0f172a' }}>4.9</strong> (182 customer reviews)
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 16 }}>
+                        <span style={{ fontSize: 24, fontWeight: 800, color: '#0f172a' }}>₹2,499</span>
+                        <span style={{ fontSize: 14, color: '#94a3b8', textDecoration: 'line-through' }}>₹3,499</span>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#16a34a' }}>Save 28%</span>
+                      </div>
+
+                      <div style={{ marginBottom: 14 }}>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Select Size:</div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          {['UK 7', 'UK 8', 'UK 9 (Selected)', 'UK 10'].map((sz, i) => (
+                            <span
+                              key={i}
+                              style={{
+                                padding: '5px 10px',
+                                borderRadius: 6,
+                                fontSize: 11.5,
+                                fontWeight: 600,
+                                border: i === 2 ? '2px solid #2563eb' : '1px solid #e2e8f0',
+                                background: i === 2 ? '#eff6ff' : '#ffffff',
+                                color: i === 2 ? '#2563eb' : '#475569',
+                              }}
+                            >
+                              {sz}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button
+                        type="button"
+                        style={{
+                          width: '100%',
+                          height: 42,
+                          background: '#0f172a',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: 8,
+                          fontSize: 13.5,
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          marginBottom: 8,
+                        }}
+                      >
+                        Add to Bag • ₹2,499
+                      </button>
+                      <div style={{ fontSize: 11.5, color: '#64748b', textAlign: 'center' }}>
+                        ⚡ 67KB Chatral script loaded — Page loads in 0.4s
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Live Chatral Widget Opened on Storefront */}
+                  <div
+                    style={{
+                      flex: isMobile ? 'none' : '0.9',
+                      background: '#ffffff',
+                      border: '1.5px solid #bfdbfe',
+                      borderRadius: 16,
+                      boxShadow: '0 12px 30px -6px rgba(37, 99, 235, 0.2)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      overflow: 'hidden',
+                      minHeight: 380,
+                    }}
+                  >
+                    {/* Widget Header */}
+                    <div style={{ background: '#2563eb', padding: '12px 16px', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div style={{ position: 'relative' }}>
+                          <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#ffffff', color: '#2563eb', fontWeight: 800, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            A
+                          </div>
+                          <span style={{ position: 'absolute', bottom: 0, right: 0, width: 8, height: 8, borderRadius: '50%', background: '#22c55e', border: '1.5px solid #ffffff' }} />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 700 }}>Aura Support</div>
+                          <div style={{ fontSize: 10.5, opacity: 0.9 }}>Typically replies in under 1 min</div>
+                        </div>
+                      </div>
+                      <span style={{ fontSize: 11, background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: 999 }}>
+                        Live Widget
+                      </span>
+                    </div>
+
+                    {/* Widget Chat Body */}
+                    <div style={{ flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, background: '#f8fafc', fontSize: 12, overflowY: 'auto' }}>
+                      {/* Automated trigger greeting */}
+                      <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 12px 2px', border: '1px solid #e2e8f0', color: '#334155', lineHeight: 1.5 }}>
+                        👋 Welcome to Aura Threads! Looking for size advice or delivery times?
+                      </div>
+
+                      {/* Visitor message */}
+                      <div style={{ alignSelf: 'flex-end', maxWidth: '85%', background: '#2563eb', color: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 2px 12px', lineHeight: 1.5 }}>
+                        Hi! I'm 5'10. Is UK 9 true to size? Can I exchange if it doesn't fit?
+                      </div>
+
+                      {/* Typing indicator */}
+                      <div style={{ alignSelf: 'flex-start', background: '#e0e7ff', padding: '6px 10px', borderRadius: 999, fontSize: 10.5, color: '#3730a3', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span>Rahul is typing</span>
+                        <span>...</span>
+                      </div>
+
+                      {/* Agent response */}
+                      <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 12px 2px', border: '1px solid #e2e8f0', color: '#0f172a', lineHeight: 1.5 }}>
+                        Yes! UK 9 is true to size. Plus we offer <strong>7-day free hassle-free exchanges</strong>. Use coupon <span style={{ color: '#2563eb', fontWeight: 700 }}>RUN10</span> for ₹300 off today! 🚀
+                      </div>
+
+                      {/* Visitor closing */}
+                      <div style={{ alignSelf: 'flex-end', maxWidth: '85%', background: '#2563eb', color: '#ffffff', padding: '9px 12px', borderRadius: '12px 12px 2px 12px', lineHeight: 1.5 }}>
+                        Awesome! Placing order with RUN10 now. Thanks! 🙌
+                      </div>
+                    </div>
+
+                    {/* Widget Input */}
+                    <div style={{ padding: '8px 12px', background: '#ffffff', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <input
+                        readOnly
+                        value="Order confirmed! Excited to receive it."
+                        style={{ flex: 1, border: 'none', outline: 'none', fontSize: 12, color: '#0f172a', background: 'transparent' }}
+                      />
+                      <button type="button" style={{ width: 28, height: 28, borderRadius: '50%', background: '#2563eb', border: 'none', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        <SendOutlined style={{ fontSize: 11 }} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Highlight Strip */}
+                <div style={{ padding: '10px 18px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, color: '#475569' }}>
+                  <span>🛍️ <strong>Storefront Experience:</strong> Visitors get instant answers right on product pages, eliminating hesitation.</span>
+                  <span style={{ fontWeight: 600, color: '#2563eb' }}>Step 1 of 3</span>
+                </div>
+              </div>
+            )}
+
+            {/* View 2: Live Operator Inbox (Agent Perspective) */}
+            {showcaseTab === 'inbox' && (
+              <div style={{ flex: 1, display: 'flex', height: '100%', minHeight: 0 }}>
             {/* 1. Dark Left Navigation Sidebar (matching Chatral app shell) */}
             <div
               style={{
@@ -1948,43 +2289,171 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Floating Live Interaction Preview: Storefront Customer View */}
-          <div
-            style={{
-              position: isMobile ? 'static' : 'absolute',
-              bottom: isMobile ? 'auto' : -24,
-              right: isMobile ? 'auto' : 32,
-              marginTop: isMobile ? 18 : 0,
-              background: '#ffffff',
-              border: '1.5px solid #bfdbfe',
-              borderRadius: 16,
-              padding: '14px 18px',
-              boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.28), 0 2px 8px rgba(15, 23, 42, 0.06)',
-              zIndex: 10,
-              maxWidth: isMobile ? '100%' : 330,
-              textAlign: 'left',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#15803d', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                  Customer Storefront View
-                </span>
-              </div>
-              <span style={{ fontSize: 11, color: '#64748b' }}>Live on your website</span>
-            </div>
-            <div style={{ background: '#f8fafc', borderRadius: 8, padding: '7px 11px', fontSize: 12.5, color: '#0f172a', marginBottom: 6, border: '1px solid #f1f5f9' }}>
-              <span style={{ fontWeight: 600, color: '#2563eb' }}>Visitor:</span> "Do you have this in Medium size?"
-            </div>
-            <div style={{ background: '#eff6ff', borderRadius: 8, padding: '7px 11px', fontSize: 12.5, color: '#1e3a8a', border: '1px solid #dbeafe' }}>
-              <span style={{ fontWeight: 600, color: '#15803d' }}>Agent:</span> "Yes! Use code <strong style={{ color: '#2563eb' }}>SAVE10</strong> for 10% off right now 🚀"
+            {/* Bottom Highlight Strip for Inbox */}
+            <div style={{ padding: '10px 18px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, color: '#475569' }}>
+              <span>💬 <strong>Live Operator Inbox:</strong> Support agents see what visitors are viewing in real time, inspect their cart, and reply in seconds.</span>
+              <span style={{ fontWeight: 600, color: '#2563eb' }}>Step 2 of 3</span>
             </div>
           </div>
-        </div>
-      </section>
+        )}
+
+        {/* View 3: Admin Triggers, Multi-Store & Widget Appearance */}
+        {showcaseTab === 'admin' && (
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', background: '#ffffff' }}>
+            <div style={{ flex: 1, display: 'flex', height: '100%' }}>
+              {/* Left Dark Sidebar */}
+              <div style={{ width: 190, flexShrink: 0, background: '#070b13', borderRight: '1px solid #172133', display: isMobile ? 'none' : 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '16px 10px 14px' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '4px 8px 18px' }}>
+                    <ChatralFullLogo height={22} dark={true} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', padding: '7px 10px', fontSize: 12.5, borderRadius: 7 }}>
+                      <MessageOutlined /> <span>Inbox</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#162238', color: '#ffffff', padding: '7px 10px', fontSize: 12.5, borderRadius: 7, fontWeight: 600 }}>
+                      <ThunderboltOutlined style={{ color: '#60a5fa' }} /> <span>Triggers</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', padding: '7px 10px', fontSize: 12.5, borderRadius: 7 }}>
+                      <ShopOutlined /> <span>Multi-Store</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', padding: '7px 10px', fontSize: 12.5, borderRadius: 7 }}>
+                      <BarChartOutlined /> <span>Analytics</span>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ background: '#0d1524', border: '1px solid #1b283d', borderRadius: 8, padding: '8px 10px' }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: '#64748b' }}>STORES INCLUDED</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', marginTop: 2 }}>3 / 3 Active</div>
+                </div>
+              </div>
+
+              {/* Main Admin Content */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+                {/* Admin Header with 1-Click Multi-Store Switcher */}
+                <div style={{ height: 46, borderBottom: '1px solid #f1f5f9', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>Active Store:</span>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 6, padding: '3px 10px', fontSize: 12, fontWeight: 600, color: '#2563eb' }}>
+                      <span>🏪 Aura Threads</span>
+                      <span style={{ fontSize: 10, color: '#94a3b8' }}>▾</span>
+                    </div>
+                    <span style={{ fontSize: 11, background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: 999, fontWeight: 600 }}>
+                      1-Click Switcher
+                    </span>
+                  </div>
+                  <button type="button" style={{ height: 30, padding: '0 12px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: 11.5, fontWeight: 600, cursor: 'pointer' }}>
+                    + New Trigger
+                  </button>
+                </div>
+
+                {/* Content Columns: Triggers on Left, Customizer on Right */}
+                <div style={{ flex: 1, padding: isMobile ? 14 : 20, display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 18 }}>
+                  {/* Left: Automated Triggers */}
+                  <div style={{ flex: 1.2 }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <ThunderboltOutlined style={{ color: '#2563eb' }} />
+                      Automated Sales Triggers (Auto-pilot Revenue)
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      {/* Trigger 1 */}
+                      <div style={{ background: '#ffffff', border: '1.5px solid #86efac', borderRadius: 10, padding: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                          <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>🛒 Cart Abandonment Recovery</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, background: '#dcfce7', color: '#15803d', padding: '2px 7px', borderRadius: 999 }}>
+                            ACTIVE (34% Converted)
+                          </span>
+                        </div>
+                        <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
+                          When visitor is on <code>/checkout</code> for &gt; 35 seconds:
+                        </div>
+                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
+                          "Need help completing your order? Use code <strong style={{ color: '#2563eb' }}>SAVE10</strong> for ₹200 off!"
+                        </div>
+                      </div>
+
+                      {/* Trigger 2 */}
+                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                          <span style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a' }}>👋 First-Time Shopper Greeting</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, background: '#eff6ff', color: '#2563eb', padding: '2px 7px', borderRadius: 999 }}>
+                            ACTIVE
+                          </span>
+                        </div>
+                        <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
+                          When visitor views 2nd product page:
+                        </div>
+                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 10px', fontSize: 11.5, color: '#334155' }}>
+                          "Welcome! Let us know if you need any sizing or fit recommendations."
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Multi-Store & Widget Customizer */}
+                  <div style={{ flex: 0.8, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {/* Multi-Store Box */}
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>
+                        Multi-Store Setup (3 Stores Included)
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                        <div style={{ background: '#ffffff', border: '1.5px solid #2563eb', borderRadius: 6, padding: '5px 9px', fontSize: 11, fontWeight: 600, color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span>1. Aura Threads</span>
+                          <span>Active 🟢</span>
+                        </div>
+                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span>2. Peak Audio Hub</span>
+                          <span style={{ color: '#2563eb' }}>Switch →</span>
+                        </div>
+                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '5px 9px', fontSize: 11, color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span>3. Luxe Wellness</span>
+                          <span style={{ color: '#2563eb' }}>Switch →</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Widget Appearance Customizer */}
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12 }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>
+                        Widget Branding & Color
+                      </div>
+                      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                        {['#2563eb', '#10b981', '#9333ea', '#f59e0b'].map((color, i) => (
+                          <span
+                            key={i}
+                            style={{
+                              width: 22,
+                              height: 22,
+                              borderRadius: '50%',
+                              background: color,
+                              border: i === 0 ? '2px solid #0f172a' : 'none',
+                              display: 'inline-block',
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <div style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>
+                        ✓ 67 KB Ultra-lightweight script • Zero lag
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Highlight Strip for Admin */}
+            <div style={{ padding: '10px 18px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, color: '#475569' }}>
+              <span>⚙️ <strong>Admin Controls:</strong> Set up automated triggers in 30 seconds and manage up to 3 stores without logging out.</span>
+              <span style={{ fontWeight: 600, color: '#2563eb' }}>Step 3 of 3</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
 
       {/* 3. Features Bento Grid (Exact Relatik 5-Card Bento Layout) */}
       <section
