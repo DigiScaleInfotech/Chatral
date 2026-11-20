@@ -2003,12 +2003,12 @@ export default function LandingPage() {
             className="hero-fade-item-1"
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 32 : 54,
+              fontSize: isMobile ? 28 : 44,
               fontWeight: 800,
-              lineHeight: 1.15,
-              letterSpacing: '-0.035em',
-              margin: '0 auto 20px',
-              maxWidth: 860,
+              lineHeight: 1.2,
+              letterSpacing: '-0.03em',
+              margin: '0 auto 16px',
+              maxWidth: 780,
             }}
           >
             Turn Website Visitors into Paying Customers<br />
@@ -2022,14 +2022,14 @@ export default function LandingPage() {
             className="hero-fade-item-2"
             style={{
               color: '#5b5f6b',
-              fontSize: isMobile ? 15 : 17.5,
-              lineHeight: 1.6,
-              maxWidth: 680,
-              margin: '0 auto 34px',
+              fontSize: isMobile ? 14 : 16,
+              lineHeight: 1.55,
+              maxWidth: 600,
+              margin: '0 auto 28px',
               fontWeight: 400,
             }}
           >
-            Install our lightweight 67KB live chat widget in 2 minutes. Talk to online shoppers in real time, see what’s in their cart, and close sales before they leave your store.
+            Ultra-fast live chat built for modern stores. Connect with shoppers in real time, view live cart contents, and close sales before they leave.
           </Typography.Paragraph>
 
           {/* Relatik Hero CTA Buttons with Dynamic Hover Animations */}
