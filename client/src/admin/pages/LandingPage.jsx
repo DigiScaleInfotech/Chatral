@@ -1057,17 +1057,17 @@ export default function LandingPage() {
             className="hero-fade-item-1"
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 34 : 56,
+              fontSize: isMobile ? 32 : 54,
               fontWeight: 800,
-              lineHeight: 1.14,
+              lineHeight: 1.15,
               letterSpacing: '-0.035em',
               margin: '0 auto 20px',
-              maxWidth: 820,
+              maxWidth: 860,
             }}
           >
-            Connect. Support. Resolve.<br />
+            Turn Website Visitors into Paying Customers<br />
             <span style={{ background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Live Chat for Modern Websites
+              With Lightning-Fast Live Chat
             </span>
           </Typography.Title>
 
@@ -1078,12 +1078,12 @@ export default function LandingPage() {
               color: '#5b5f6b',
               fontSize: isMobile ? 15 : 17.5,
               lineHeight: 1.6,
-              maxWidth: 640,
+              maxWidth: 680,
               margin: '0 auto 34px',
               fontWeight: 400,
             }}
           >
-            Connect with your visitors in real-time, support buyers right when it matters, and resolve queries in seconds. The fast, lightweight customer support platform built to convert visitors into customers.
+            Install our lightweight 67KB live chat widget in 2 minutes. Talk to online shoppers in real time, see what’s in their cart, and close sales before they leave your store.
           </Typography.Paragraph>
 
           {/* Relatik Hero CTA Buttons with Dynamic Hover Animations */}
@@ -1127,7 +1127,7 @@ export default function LandingPage() {
         </div>
 
         {/* Hero Dashboard Showcase (Official Chatral Live Chat Platform UI) */}
-        <div className="hero-fade-item-3" style={{ maxWidth: 1080, margin: '48px auto 0' }}>
+        <div className="hero-fade-item-3" style={{ maxWidth: 1080, margin: '48px auto 0', position: 'relative' }}>
           <div
             style={{
               background: '#ffffff',
@@ -1949,6 +1949,40 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+
+          {/* Floating Live Interaction Preview: Storefront Customer View */}
+          <div
+            style={{
+              position: isMobile ? 'static' : 'absolute',
+              bottom: isMobile ? 'auto' : -24,
+              right: isMobile ? 'auto' : 32,
+              marginTop: isMobile ? 18 : 0,
+              background: '#ffffff',
+              border: '1.5px solid #bfdbfe',
+              borderRadius: 16,
+              padding: '14px 18px',
+              boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.28), 0 2px 8px rgba(15, 23, 42, 0.06)',
+              zIndex: 10,
+              maxWidth: isMobile ? '100%' : 330,
+              textAlign: 'left',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#15803d', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                  Customer Storefront View
+                </span>
+              </div>
+              <span style={{ fontSize: 11, color: '#64748b' }}>Live on your website</span>
+            </div>
+            <div style={{ background: '#f8fafc', borderRadius: 8, padding: '7px 11px', fontSize: 12.5, color: '#0f172a', marginBottom: 6, border: '1px solid #f1f5f9' }}>
+              <span style={{ fontWeight: 600, color: '#2563eb' }}>Visitor:</span> "Do you have this in Medium size?"
+            </div>
+            <div style={{ background: '#eff6ff', borderRadius: 8, padding: '7px 11px', fontSize: 12.5, color: '#1e3a8a', border: '1px solid #dbeafe' }}>
+              <span style={{ fontWeight: 600, color: '#15803d' }}>Agent:</span> "Yes! Use code <strong style={{ color: '#2563eb' }}>SAVE10</strong> for 10% off right now 🚀"
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2370,19 +2404,19 @@ export default function LandingPage() {
               margin: '0 0 14px',
             }}
           >
-            From sign-up to success in minutes
+            How Chatral Turns Store Visitors into Customers
           </Typography.Title>
           <Typography.Paragraph
             style={{
               color: '#5b5f6b',
               fontSize: isMobile ? 14.5 : 16,
-              maxWidth: 580,
+              maxWidth: 620,
               margin: '0 auto 48px',
               lineHeight: 1.55,
               fontWeight: 400,
             }}
           >
-            Three simple steps to a workspace your whole team will love using.
+            Three simple steps to connect with shoppers, resolve buyer doubts, and boost daily sales.
           </Typography.Paragraph>
 
           <Row gutter={[24, 24]}>
@@ -2391,36 +2425,36 @@ export default function LandingPage() {
                 step: '01',
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <line x1="19" y1="8" x2="19" y2="14" />
-                    <line x1="22" y1="11" x2="16" y2="11" />
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
                   </svg>
                 ),
-                title: 'Create your account',
-                desc: 'Sign up with your email and set up your workspace in minutes. Pick a pipeline layout and invite your team.',
+                title: 'Install in 2 minutes (1-line code)',
+                desc: 'Copy and paste our featherlight 67KB snippet into your Shopify, WooCommerce, or custom site. Your chat bubble goes live instantly with zero lag.',
               },
               {
                 step: '02',
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                    <path d="M2 12h20" />
                   </svg>
                 ),
-                title: 'Import & organize leads',
-                desc: 'Bring in contacts from spreadsheets or your favorite tools. Sort them into stages, assign owners, and set priorities.',
+                title: 'See live shoppers & auto-greet',
+                desc: 'Watch visitors browse in real-time, see their active cart items, and trigger automated welcome discounts right before they abandon their cart.',
               },
               {
                 step: '03',
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    <path d="M12 7v6" />
+                    <path d="m9 10 3 3 3-3" />
                   </svg>
                 ),
-                title: 'Automate & grow',
-                desc: 'Add workflows, reminders, and follow-ups. Track progress in real time and close more deals with less effort.',
+                title: 'Reply in seconds & close sales',
+                desc: 'Answer shopper questions instantly from your web or mobile inbox. Share product links, send coupon codes, and turn hesitation into revenue.',
               },
             ].map((s, i) => (
               <Col xs={24} md={8} key={i}>
