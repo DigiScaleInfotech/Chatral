@@ -2003,12 +2003,12 @@ export default function LandingPage() {
             className="hero-fade-item-1"
             style={{
               color: '#0c0d10',
-              fontSize: isMobile ? 26 : 38,
+              fontSize: isMobile ? 32 : 48,
               fontWeight: 800,
-              lineHeight: 1.25,
-              letterSpacing: '-0.03em',
-              margin: '0 auto 16px',
-              maxWidth: 820,
+              lineHeight: 1.18,
+              letterSpacing: '-0.035em',
+              margin: '0 auto 18px',
+              maxWidth: 880,
             }}
           >
             <span style={{ display: isMobile ? 'inline' : 'inline-block', whiteSpace: isMobile ? 'normal' : 'nowrap' }}>
@@ -2033,10 +2033,10 @@ export default function LandingPage() {
             className="hero-fade-item-2"
             style={{
               color: '#5b5f6b',
-              fontSize: isMobile ? 14 : 16,
-              lineHeight: 1.55,
-              maxWidth: 600,
-              margin: '0 auto 28px',
+              fontSize: isMobile ? 15 : 17,
+              lineHeight: 1.6,
+              maxWidth: 640,
+              margin: '0 auto 30px',
               fontWeight: 400,
             }}
           >
